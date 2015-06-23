@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+
+    dsh-bio  dishevelled.org bio multimodule build.
+    Copyright (c) 2014-2015 held jointly by the individual authors.
+
+    This library is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as published
+    by the Free Software Foundation; either version 3 of the License, or (at
+    your option) any later version.
+
+    This library is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; with out even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+    License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this library;  if not, write to the Free Software Foundation,
+    Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA.
+
+    > http://www.fsf.org/licensing/licenses/lgpl.html
+    > http://www.opensource.org/licenses/lgpl-license.php
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.dishevelled</groupId>
+    <artifactId>dsh-parent</artifactId>
+    <version>9</version>
+  </parent>
+  <artifactId>dsh-bio</artifactId>
+  <packaging>pom</packaging>
+  <name>dishevelled.org bio</name>
+  <version>1.0-SNAPSHOT</version>
+  <description>dishevelled.org bio multimodule build.</description>
+  <url>http://www.dishevelled.org/bio</url>
+  <inceptionYear>2013</inceptionYear>
+  <scm>
+    <connection>scm:git:git@github.com:heuermh/dishevelled-bio.git</connection>
+    <developerConnection>scm:git:git@github.com:heuermh/dishevelled-bio.git</developerConnection>
+    <url>git@github.com:heuermh/dishevelled-bio.git</url>
+  </scm>
+  <modules>
+    <module>align</module>
+    <module>range</module>
+    <module>read</module>
+    <module>variant</module>
+    <module>tools</module>
+  </modules>
+
+  <properties>
+    <biojava.version>1.9.2</biojava.version>
+    <dsh-bitset.version>3.0</dsh-bitset.version>
+    <dsh-commandline.version>1.1</dsh-commandline.version>
+    <dsh-compress.version>1.1</dsh-compress.version>
+    <jdk.version>1.7</jdk.version>
+    <maven.enforcer.jdk-version>[1.7,)</maven.enforcer.jdk-version>
+    <rtree.version>0.4.1</rtree.version>
+  </properties>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.github.davidmoten</groupId>
+        <artifactId>rtree</artifactId>
+        <version>${rtree.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.biojava</groupId>
+        <artifactId>alignment</artifactId>
+        <version>${biojava.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.biojava</groupId>
+        <artifactId>core</artifactId>
+        <version>${biojava.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>commons-pool</groupId>
+            <artifactId>commons-pool</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.biojava</groupId>
+        <artifactId>sequencing</artifactId>
+        <version>${biojava.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.dishevelled</groupId>
+        <artifactId>dsh-bitset</artifactId>
+        <version>${dsh-bitset.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.dishevelled</groupId>
+        <artifactId>dsh-commandline</artifactId>
+        <version>${dsh-commandline.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.dishevelled</groupId>
+        <artifactId>dsh-compress</artifactId>
+        <version>${dsh-compress.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>templating-maven-plugin</artifactId>
+          <version>1.0-alpha-3</version>
+        </plugin>
+        <plugin>
+          <groupId>pl.project13.maven</groupId>
+          <artifactId>git-commit-id-plugin</artifactId>
+          <version>2.1.11</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>1.4</version>
+        <executions>
+          <execution>
+            <id>enforce-java</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireJavaVersion>
+                  <version>${maven.enforcer.jdk-version}</version>
+                </requireJavaVersion>
+              </rules>    
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <reporting>
+    <plugins>
+      <plugin>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <!-- todo:  must manually update the copyright dates here -->
+          <bottom>Copyright (c) 2013-2015 held jointly by the individual authors. Licensed under the &lt;a href="http://www.fsf.org/licensing/licenses/lgpl.html"&gt;GNU Lesser General Public License&lt;a&gt; (LGPL).</bottom>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jxr-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>cobertura-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting>
+</project>
