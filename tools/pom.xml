@@ -160,7 +160,27 @@
           <installArtifacts>false</installArtifacts>
           <programs>
             <program>
-              <id>dsh-bio-intersect-bed</id>
+              <id>dsh-fasta-to-fastq</id>
+              <mainClass>org.dishevelled.bio.tools.FastaToFastq</mainClass>
+            </program>
+            <program>
+              <id>dsh-fastq-description</id>
+              <mainClass>org.dishevelled.bio.tools.FastqDescription</mainClass>
+            </program>
+            <program>
+              <id>dsh-fastq-to-fasta</id>
+              <mainClass>org.dishevelled.bio.tools.FastqToFasta</mainClass>
+            </program>
+            <program>
+              <id>dsh-filter-vcf</id>
+              <mainClass>org.dishevelled.bio.tools.FilterVcf</mainClass>
+            </program>
+            <program>
+              <id>dsh-interleave-fastq</id>
+              <mainClass>org.dishevelled.bio.tools.InterleaveFastq</mainClass>
+            </program>
+            <program>
+              <id>dsh-intersect-bed</id>
               <mainClass>org.dishevelled.bio.tools.IntersectBed</mainClass>
             </program>
           </programs>
