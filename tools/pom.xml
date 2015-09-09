@@ -160,6 +160,14 @@
           <installArtifacts>false</installArtifacts>
           <programs>
             <program>
+              <id>dsh-extract-fasta</id>
+              <mainClass>org.dishevelled.bio.tools.ExtractFasta</mainClass>
+            </program>
+            <program>
+              <id>dsh-extract-fastq</id>
+              <mainClass>org.dishevelled.bio.tools.ExtractFastq</mainClass>
+            </program>
+            <program>
               <id>dsh-fasta-to-fastq</id>
               <mainClass>org.dishevelled.bio.tools.FastaToFastq</mainClass>
             </program>
