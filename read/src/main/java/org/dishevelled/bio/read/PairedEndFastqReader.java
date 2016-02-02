@@ -73,103 +73,6 @@ public final class PairedEndFastqReader {
 
 
     /**
-     * Read the specified paired end reads.  The paired end reads are read fully into RAM before processing.
-     *
-     * @param firstReader first reader, must not be null
-     * @param secondReader second reader, must not be null
-     * @param listener paired end listener, must not be null
-     * @throws IOException if an I/O error occurs
-     * @deprecated by {@link #readPaired(Readable,Readable,PairedEndListener)}, will be removed in version 2.0
-     */
-    public static void readPaired(final Reader firstReader,
-                                  final Reader secondReader,
-                                  final PairedEndListener listener) throws IOException {
-        readPaired((Readable) firstReader, (Readable) secondReader, listener);
-    }
-
-    /**
-     * Read the specified paired end reads.  The paired end reads are read fully into RAM before processing.
-     *
-     * @param firstReadable first readable, must not be null
-     * @param secondReadable second readable, must not be null
-     * @param listener paired end listener, must not be null
-     * @throws IOException if an I/O error occurs
-     * @deprecated by {@link #streamPaired(Readable,Readable,PairedEndListener)}, will be removed in version 2.0
-     */
-    public static void readPaired(final Readable firstReadable,
-                                  final Readable secondReadable,
-                                  final PairedEndListener listener) throws IOException {
-
-        checkNotNull(firstReadable);
-        checkNotNull(secondReadable);
-        checkNotNull(listener);
-
-        // read both FASTQ files into RAM (ick)
-        final List<Fastq> reads = Lists.newArrayList();
-        SangerFastqReader fastqReader = new SangerFastqReader();
-        fastqReader.stream(firstReadable, new StreamListener() {
-                @Override
-                public void fastq(final Fastq fastq) {
-                    reads.add(fastq);
-                }
-            });
-        fastqReader.stream(secondReadable, new StreamListener() {
-                @Override
-                public void fastq(final Fastq fastq) {
-                    reads.add(fastq);
-                }
-            });
-
-        // .. and sort by description
-        Collections.sort(reads, new Ordering<Fastq>() {
-                @Override
-                public int compare(final Fastq left, final Fastq right) {
-                    return left.getDescription().compareTo(right.getDescription());
-                }
-            });
-
-        for (int i = 0, size = reads.size(); i < size; ) {
-            Fastq left = reads.get(i);
-            if ((i + 1) == size) {
-                listener.unpaired(left);
-                break;
-            }
-            Fastq right = reads.get(i + 1);
-
-            if (isLeft(left)) {
-                if (isRight(right)) {
-                    // todo:  assert prefixes match
-                    listener.paired(left, right);
-                    i += 2;
-                }
-                else {
-                    listener.unpaired(right);
-                    i++;
-                }
-            }
-            else {
-                listener.unpaired(left);
-                i++;
-            }
-        }
-    }
-
-    /**
-     * Stream the specified paired end reads.  RAM usage is minimal if the paired end reads are sorted.
-     *
-     * @param firstReader first reader, must not be null
-     * @param secondReader second reader, must not be null
-     * @param listener paired end listener, must not be null
-     * @throws IOException if an I/O error occurs
-     * @deprecated by {@link #streamPaired(Readable,Readable,PairedEndListener)}, will be removed in version 2.0
-     */
-    public static void streamPaired(final Reader firstReader,
-                                    final Reader secondReader,
-                                    final PairedEndListener listener) throws IOException {
-        streamPaired((Readable) firstReader, (Readable) secondReader, listener);
-    }
-
-    /**
      * Stream the specified paired end reads.  RAM usage is minimal if the paired end reads are sorted.
      *
      * @param firstReadable first readable, must not be null
@@ -247,18 +150,6 @@ public final class PairedEndFastqReader {
     /**
      * Stream the specified interleaved paired end reads.  Per the interleaved format, all reads must be sorted and paired.
      *
-     * @param reader reader, must not be null
-     * @param listener paired end listener, must not be null
-     * @throws IOException if an I/O error occurs
-     * @deprecated by {@link #streamInterleaved(Readable,PairedEndListener)}, will be removed in version 2.0
-     */
-    public static void streamInterleaved(final Reader reader, final PairedEndListener listener) throws IOException {
-        streamInterleaved((Readable) reader, listener);
-    }
-
-    /**
-     * Stream the specified interleaved paired end reads.  Per the interleaved format, all reads must be sorted and paired.
-     *
      * @param readable readable, must not be null
      * @param listener paired end listener, must not be null
      * @throws IOException if an I/O error occurs
@@ -300,7 +191,7 @@ public final class PairedEndFastqReader {
      * @param fastq fastq, must not be null
      * @return true if the specified fastq is the left or first read of a paired end read
      */
-    static boolean isLeft(final Fastq fastq) {
+    public static boolean isLeft(final Fastq fastq) {
         checkNotNull(fastq);
         return LEFT.matcher(fastq.getDescription()).matches();
     }
@@ -311,7 +202,7 @@ public final class PairedEndFastqReader {
      * @param fastq fastq, must not be null
      * @return true if the specified fastq is the right or second read of a paired end read
      */
-    static boolean isRight(final Fastq fastq) {
+    public static boolean isRight(final Fastq fastq) {
         checkNotNull(fastq);
         return RIGHT.matcher(fastq.getDescription()).matches();
     }
@@ -322,7 +213,7 @@ public final class PairedEndFastqReader {
      * @param fastq fastq, must not be null
      * @return the prefix of the paired end read name of the specified fastq
      */
-    static String prefix(final Fastq fastq) {
+    public static String prefix(final Fastq fastq) {
         checkNotNull(fastq);
         Matcher m = PREFIX.matcher(fastq.getDescription());
         if (!m.matches()) {

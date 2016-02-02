@@ -31,7 +31,6 @@ import static org.junit.Assert.fail;
 import static org.dishevelled.bio.read.PairedEndFastqReader.isLeft;
 import static org.dishevelled.bio.read.PairedEndFastqReader.isRight;
 import static org.dishevelled.bio.read.PairedEndFastqReader.prefix;
-import static org.dishevelled.bio.read.PairedEndFastqReader.readPaired;
 import static org.dishevelled.bio.read.PairedEndFastqReader.streamInterleaved;
 import static org.dishevelled.bio.read.PairedEndFastqReader.streamPaired;
 
@@ -127,53 +126,6 @@ public final class PairedEndFastqReaderTest {
     public void testPrefixInvalidPrefix() {
         prefix(invalidPrefix);
     }
-
-    @Test(expected=NullPointerException.class)
-    public void testReadPairedNullFirstReader() throws Exception {
-        readPaired(null, secondReader, listener);
-    }
-
-    @Test(expected=NullPointerException.class)
-    public void testReadPairedNullSecondReader() throws Exception {
-        readPaired(firstReader, null, listener);
-    }
-
-    @Test(expected=NullPointerException.class)
-    public void testReadPairedNullListener() throws Exception {
-        readPaired(firstReader, secondReader, null);
-    }
-
-    @Test
-    public void testReadPaired() throws Exception {
-        readPaired(firstReader, secondReader, new PairedEndAdapter() {
-                @Override
-                public void paired(final Fastq left, final Fastq right) {
-                    assertEquals(PairedEndFastqReaderTest.this.left.getDescription(), left.getDescription());
-                    assertEquals(PairedEndFastqReaderTest.this.right.getDescription(), right.getDescription());
-                }
-
-                @Override
-                public void unpaired(final Fastq unpaired) {
-                    fail("unpaired " + unpaired);
-                }
-            });
-    }
-
-    @Test
-    public void testReadPairedUnpaired() throws Exception {
-        readPaired(firstReader, firstReader, new PairedEndAdapter() {
-                @Override
-                public void paired(final Fastq left, final Fastq right) {
-                    fail("paired " + left + " " + right);
-                }
-
-                @Override
-                public void unpaired(final Fastq unpaired) {
-                    assertEquals(PairedEndFastqReaderTest.this.left.getDescription(), left.getDescription());
-                }
-            });
-    }
-
 
     @Test(expected=NullPointerException.class)
     public void testStreamPairedNullFirstReader() throws Exception {

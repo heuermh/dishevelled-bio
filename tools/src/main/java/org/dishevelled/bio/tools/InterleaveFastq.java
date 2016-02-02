@@ -59,7 +59,7 @@ public final class InterleaveFastq implements Callable<Integer> {
     private final File secondFastqFile;
     private final File pairedFile;
     private final File unpairedFile;
-    private static final String USAGE = "dsh-interleave-fastq -1 foo_1.fq.gz -2 foo_2.fq.gz --paired foo.paired.fq.gz --unpaired foo.unpaired.fq.gz";
+    private static final String USAGE = "dsh-interleave-fastq -1 foo_1.fq.gz -2 foo_2.fq.gz -p foo.paired.fq.gz -u foo.unpaired.fq.gz";
 
 
     /**
