@@ -204,6 +204,10 @@
               <id>dsh-split-fastq</id>
               <mainClass>org.dishevelled.bio.tools.SplitFastq</mainClass>
             </program>
+            <program>
+              <id>dsh-bio</id>
+              <mainClass>org.dishevelled.bio.tools.Tools</mainClass>
+            </program>
           </programs>
         </configuration>
         <executions>
