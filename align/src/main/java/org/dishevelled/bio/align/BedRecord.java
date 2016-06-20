@@ -253,7 +253,7 @@ public final class BedRecord {
     }
 
     /**
-     * Return the name for this BED record, if any
+     * Return the name for this BED record, if any.
      *
      * @return the name for this BED record, if any
      */
@@ -262,7 +262,7 @@ public final class BedRecord {
     }
 
     /**
-     * Return the score for this BED record, if any
+     * Return the score for this BED record, if any.
      *
      * @return the score for this BED record, if any
      */
@@ -271,7 +271,7 @@ public final class BedRecord {
     }
 
     /**
-     * Return the strand for this BED record, if any
+     * Return the strand for this BED record, if any.
      *
      * @return the strand for this BED record, if any
      */
