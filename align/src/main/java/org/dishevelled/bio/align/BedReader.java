@@ -107,7 +107,7 @@ public final class BedReader {
         {
             try {
                 lineNumber++;
-                return isHeader(line) ? true : listener.record(BedRecord.valueOf(line));
+                return isHeader(line) || listener.record(BedRecord.valueOf(line));
             }
             catch (IllegalArgumentException | NullPointerException e) {
                 throw new IOException("could not read BED record at line " + lineNumber + ", caught " + e.getMessage(), e);

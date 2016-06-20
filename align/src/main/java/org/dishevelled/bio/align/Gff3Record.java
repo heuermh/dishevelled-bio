@@ -23,7 +23,6 @@
 */
 package org.dishevelled.bio.align;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Iterator;
@@ -214,7 +213,7 @@ public final class Gff3Record {
      */
     static ListMultimap<String, String> parseAttributes(final String attributes) {
         checkNotNull(attributes);
-        ImmutableListMultimap.Builder builder = ImmutableListMultimap.builder();
+        ImmutableListMultimap.Builder<String, String> builder = ImmutableListMultimap.builder();
         for (String token : attributes.split(";")) {
             String[] entry = token.split("=");
             builder.put(entry[0], entry[1]);
@@ -249,6 +248,16 @@ public final class Gff3Record {
     }
 
     /**
+     * Return true if the specified value is the missing value (<code>"."</code>).
+     *
+     * @param value value
+     * @return true if the specified value is the missing value (<code>"."</code>)
+     */
+    static boolean isMissingValue(final String value) {
+        return ".".equals(value);
+    }
+
+    /**
      * Return a new GFF3 record parsed from the specified value.
      *
      * @param value value to parse
@@ -267,9 +276,9 @@ public final class Gff3Record {
         String featureType = tokens.get(2);
         long start = Long.parseLong(tokens.get(3)) - 1L; // GFF3 coordinate system is 1-based
         long end = Long.parseLong(tokens.get(4)); // GFF3 ranges are closed
-        Double score = tokens.get(5).equals(".") ? null : Double.parseDouble(tokens.get(5));
-        String strand = tokens.get(6).equals(".") ? null : tokens.get(6);
-        Integer phase = tokens.get(7).equals(".") ? null : Integer.parseInt(tokens.get(7));
+        Double score = isMissingValue(tokens.get(5)) ? null : Double.parseDouble(tokens.get(5));
+        String strand = isMissingValue(tokens.get(6)) ? null : tokens.get(6);
+        Integer phase = isMissingValue(tokens.get(7)) ? null : Integer.parseInt(tokens.get(7));
         ListMultimap<String, String> attributes = parseAttributes(tokens.get(8));
         return new Gff3Record(seqid, source, featureType, start, end, score, strand, phase, attributes);
     }

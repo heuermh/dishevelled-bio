@@ -104,7 +104,7 @@ public final class StreamingVcfParser {
                         for (int i = 0, size = genomeIds.size(); i < size; i++) {
                             genomes.add(new VcfGenome(genomeIds.get(i), Double.parseDouble(mixtures.get(i)), descriptions.get(i)));
                         }
-                        samples.put(id, new VcfSample(id, genomes.toArray(new VcfGenome[0])));
+                        samples.put(id, new VcfSample(id, genomes.toArray(new VcfGenome[genomes.size()])));
                     }
                 }
 

@@ -129,7 +129,7 @@ public final class Alignments {
         if (Iterables.isEmpty(ranges)) {
             return -1L;
         }
-        return Ordering.natural().max(lengths(ranges)).longValue();
+        return Ordering.natural().max(lengths(ranges));
     }
 
     /**
@@ -185,7 +185,7 @@ public final class Alignments {
      */
     static boolean isGapSymbol(final Symbol symbol) {
         return AlphabetManager.getGapSymbol().equals(symbol)
-            || DNATools.getDNA().getGapSymbol().equals(symbol);
+                || DNATools.getDNA().getGapSymbol().equals(symbol);
     }
 
     /**

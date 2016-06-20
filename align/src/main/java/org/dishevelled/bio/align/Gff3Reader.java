@@ -107,7 +107,7 @@ public final class Gff3Reader {
         {
             try {
                 lineNumber++;                
-                return isHeader(line) ? true : listener.record(Gff3Record.valueOf(line));
+                return isHeader(line) ||  listener.record(Gff3Record.valueOf(line));
             }
             catch (IllegalArgumentException | NullPointerException e) {
                 throw new IOException("could not read GFF3 record at line " + lineNumber + ", caught " + e.getMessage(), e);

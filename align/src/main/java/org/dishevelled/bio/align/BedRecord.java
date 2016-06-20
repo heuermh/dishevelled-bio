@@ -26,6 +26,7 @@ package org.dishevelled.bio.align;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -142,8 +143,8 @@ public final class BedRecord {
         this.itemRgb = itemRgb;
         this.blockCount = blockCount;
         if (blockCount > 0) {
-            this.blockSizes = (long[]) blockSizes.clone();
-            this.blockStarts = (long[]) blockStarts.clone();
+            this.blockSizes = blockSizes.clone();
+            this.blockStarts = blockStarts.clone();
         }
         else {
             this.blockSizes = blockSizes;
@@ -377,8 +378,8 @@ public final class BedRecord {
             && Objects.equals(thickEnd, bedRecord.thickEnd)
             && Objects.equals(itemRgb, bedRecord.itemRgb)
             && Objects.equals(blockCount, bedRecord.blockCount)
-            && Objects.equals(blockSizes, bedRecord.blockSizes)
-            && Objects.equals(blockStarts, bedRecord.blockStarts);
+            && Arrays.equals(blockSizes, bedRecord.blockSizes)
+            && Arrays.equals(blockStarts, bedRecord.blockStarts);
     }
 
     @Override
