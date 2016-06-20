@@ -49,10 +49,10 @@ import com.google.common.collect.Range;
 import com.google.common.collect.RangeSet;
 import com.google.common.collect.TreeRangeSet;
 
-import org.dishevelled.bio.align.BedListener;
-import org.dishevelled.bio.align.BedReader;
-import org.dishevelled.bio.align.BedRecord;
-import org.dishevelled.bio.align.BedWriter;
+import org.dishevelled.bio.feature.BedListener;
+import org.dishevelled.bio.feature.BedReader;
+import org.dishevelled.bio.feature.BedRecord;
+import org.dishevelled.bio.feature.BedWriter;
 
 import org.dishevelled.bio.range.tree.RangeList;
 import org.dishevelled.bio.range.tree.RangeTree;

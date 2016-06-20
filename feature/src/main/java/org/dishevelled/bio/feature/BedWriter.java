@@ -1,6 +1,6 @@
 /*
 
-    dsh-bio-align  Sequence alignment.
+    dsh-bio-feature  Sequence features.
     Copyright (c) 2013-2016 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
@@ -21,7 +21,7 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.align;
+package org.dishevelled.bio.feature;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

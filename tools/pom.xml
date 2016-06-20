@@ -42,6 +42,11 @@
       </dependency>
       <dependency>
         <groupId>org.dishevelled</groupId>
+        <artifactId>dsh-bio-feature</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.dishevelled</groupId>
         <artifactId>dsh-bio-range</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -111,6 +116,11 @@
     <dependency>
       <groupId>org.dishevelled</groupId>
       <artifactId>dsh-bio-align</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.dishevelled</groupId>
+      <artifactId>dsh-bio-feature</artifactId>
       <scope>compile</scope>
     </dependency>
     <dependency>

@@ -1,6 +1,6 @@
 /*
 
-    dsh-bio-align  Sequence alignment.
+    dsh-bio-feature  Sequence features.
     Copyright (c) 2013-2016 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
@@ -21,12 +21,12 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.align;
+package org.dishevelled.bio.feature;
 
 import static org.junit.Assert.assertEquals;
 
-import static org.dishevelled.bio.align.BedReader.read;
-import static org.dishevelled.bio.align.BedWriter.write;
+import static org.dishevelled.bio.feature.Gff3Reader.read;
+import static org.dishevelled.bio.feature.Gff3Writer.write;
 
 import java.io.PrintWriter;
 import java.io.StringReader;
@@ -37,17 +37,17 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Unit test for BedWriter.
+ * Unit test for Gff3Writer.
  */
-public final class BedWriterTest {
-    private BedRecord record;
-    private Iterable<BedRecord> records;
+public final class Gff3WriterTest {
+    private Gff3Record record;
+    private Iterable<Gff3Record> records;
     private StringWriter stringWriter;
     private PrintWriter writer;
 
     @Before
     public void setUp() throws Exception {
-        records = read(new StringReader("chr1\t11873\t14409\tuc001aaa.3\t0\t+\t11873\t11873\t0\t3\t354,109,1189,\t0,739,1347,"));
+        records = read(new StringReader("1\tEnsembl\tgene\t1335276\t1349350\t.\t-\t.\tID=ENSG00000107404;Name=ENSG00000107404;biotype=protein_coding"));
         record = records.iterator().next();
         stringWriter = new StringWriter();
         writer = new PrintWriter(stringWriter);
@@ -60,7 +60,7 @@ public final class BedWriterTest {
 
     @Test(expected=NullPointerException.class)
     public void testWriteNullRecord() throws Exception {
-        write((BedRecord) null, writer);
+        write((Gff3Record) null, writer);
     }
 
     @Test(expected=NullPointerException.class)
@@ -71,13 +71,12 @@ public final class BedWriterTest {
     @Test
     public void testWrite() throws Exception {
         write(record, writer);
-        // note writer does not add trailing commas to blockSizes and blockStarts as examples contain
-        assertEquals("chr1\t11873\t14409\tuc001aaa.3\t0\t+\t11873\t11873\t0\t3\t354,109,1189\t0,739,1347", stringWriter.toString().trim());
+        assertEquals("1\tEnsembl\tgene\t1335276\t1349350\t.\t-\t.\tID=ENSG00000107404;Name=ENSG00000107404;biotype=protein_coding", stringWriter.toString().trim());
     }
 
     @Test(expected=NullPointerException.class)
     public void testWriteIterableNullRecords() throws Exception {
-        write((Iterable<BedRecord>) null, writer);
+        write((Iterable<Gff3Record>) null, writer);
     }
 
     @Test(expected=NullPointerException.class)
@@ -88,7 +87,6 @@ public final class BedWriterTest {
     @Test
     public void testWriteIterable() throws Exception {
         write(records, writer);
-        // note writer does not add trailing commas to blockSizes and blockStarts as examples contain
-        assertEquals("chr1\t11873\t14409\tuc001aaa.3\t0\t+\t11873\t11873\t0\t3\t354,109,1189\t0,739,1347", stringWriter.toString().trim());
+        assertEquals("1\tEnsembl\tgene\t1335276\t1349350\t.\t-\t.\tID=ENSG00000107404;Name=ENSG00000107404;biotype=protein_coding", stringWriter.toString().trim());
     }
 }

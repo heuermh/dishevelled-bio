@@ -1,6 +1,6 @@
 /*
 
-    dsh-bio-align  Sequence alignment.
+    dsh-bio-feature  Sequence features.
     Copyright (c) 2013-2016 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
@@ -21,19 +21,19 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.align;
+package org.dishevelled.bio.feature;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import static org.dishevelled.bio.align.BedRecord.valueOf;
+import static org.dishevelled.bio.feature.BedRecord.valueOf;
 
 import com.google.common.collect.Range;
 
 import org.junit.Test;
 
-import org.dishevelled.bio.align.BedRecord.Format;
+import org.dishevelled.bio.feature.BedRecord.Format;
 
 /**
  * Unit test for BedRecord.

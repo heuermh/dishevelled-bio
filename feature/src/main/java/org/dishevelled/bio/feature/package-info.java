@@ -1,6 +1,6 @@
 /*
 
-    dsh-bio-align  Sequence alignment.
+    dsh-bio-feature  Sequence features.
     Copyright (c) 2013-2016 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
@@ -21,18 +21,8 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.align;
 
 /**
- * GFF3 listener.
+ * Sequence features.
  */
-public interface Gff3Listener {
-
-    /**
-     * Notify this GFF3 listener of a GFF3 record.
-     *
-     * @param record GFF3 record
-     * @return true to continue processing, false to stop
-     */
-    boolean record(Gff3Record record);
-}
+package org.dishevelled.bio.feature;

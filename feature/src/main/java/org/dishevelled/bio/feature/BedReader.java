@@ -1,6 +1,6 @@
 /*
 
-    dsh-bio-align  Sequence alignment.
+    dsh-bio-feature  Sequence features.
     Copyright (c) 2013-2016 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
@@ -21,7 +21,7 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.align;
+package org.dishevelled.bio.feature;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -34,26 +34,26 @@ import com.google.common.io.CharStreams;
 import com.google.common.io.LineProcessor;
 
 /**
- * GFF3 format reader.
+ * BED format reader.
  */
-public final class Gff3Reader {
+public final class BedReader {
 
     /**
      * Private no-arg constructor.
      */
-    private Gff3Reader() {
+    private BedReader() {
         // empty
     }
 
 
     /**
-     * Read zero or more GFF3 records from the specified readable.
+     * Read zero or more BED records from the specified readable.
      *
      * @param readable to read from, must not be null
-     * @return zero or more GFF3 records read from the specified readable
+     * @return zero or more BED records read from the specified readable
      * @throws IOException if an I/O error occurs
      */
-    public static Iterable<Gff3Record> read(final Readable readable) throws IOException {
+    public static Iterable<BedRecord> read(final Readable readable) throws IOException {
         checkNotNull(readable);
         Collect collect = new Collect();
         stream(readable, collect);
@@ -61,37 +61,37 @@ public final class Gff3Reader {
     }
 
     /**
-     * Stream zero or more GFF3 records from the specified readable.
+     * Stream zero or more BED records from the specified readable.
      *
      * @param readable readable to stream from, must not be null
      * @param listener event based listener callback, must not be null
      * @throws IOException if an I/O error occurs
      */
-    public static void stream(final Readable readable, final Gff3Listener listener) throws IOException {
+    public static void stream(final Readable readable, final BedListener listener) throws IOException {
         checkNotNull(readable);
         checkNotNull(listener);
 
-        Gff3LineProcessor lineProcessor = new Gff3LineProcessor(listener);
+        BedLineProcessor lineProcessor = new BedLineProcessor(listener);
         CharStreams.readLines(readable, lineProcessor);
     }
 
     /**
-     * GFF3 line processor.
+     * BED line processor.
      */
-    private static final class Gff3LineProcessor implements LineProcessor<Object> {
+    private static final class BedLineProcessor implements LineProcessor<Object> {
         /** Line number. */
         private long lineNumber = 0;
 
-        /** GFF3 listener. */
-        private final Gff3Listener listener;
+        /** BED listener. */
+        private final BedListener listener;
 
 
         /**
-         * Create a new GFF3 line processor with the specified GFF3 listener.
+         * Create a new BED line processor with the specified BED listener.
          *
-         * @param listener GFF3 listener, must not be null
+         * @param listener BED listener, must not be null
          */
-        private Gff3LineProcessor(final Gff3Listener listener) {
+        private BedLineProcessor(final BedListener listener) {
             checkNotNull(listener);
             this.listener = listener;
         }
@@ -106,22 +106,22 @@ public final class Gff3Reader {
         public boolean processLine(final String line) throws IOException
         {
             try {
-                lineNumber++;                
-                return isHeader(line) ||  listener.record(Gff3Record.valueOf(line));
+                lineNumber++;
+                return isHeader(line) || listener.record(BedRecord.valueOf(line));
             }
             catch (IllegalArgumentException | NullPointerException e) {
-                throw new IOException("could not read GFF3 record at line " + lineNumber + ", caught " + e.getMessage(), e);
+                throw new IOException("could not read BED record at line " + lineNumber + ", caught " + e.getMessage(), e);
             }
         }
 
         /**
-         * Return true if the specified line is a header or comment line in GFF3 format.
+         * Return true if the specified line is a header or comment line in BED format.
          *
          * @param line line
-         * @return true if the specified line is a header or comment line in GFF3 format
+         * @return true if the specified line is a header or comment line in BED format
          */
         private boolean isHeader(final String line) {
-            return line.startsWith("#");
+            return line.startsWith("#") || line.startsWith("browser") || line.startsWith("track"); // || is blank line?
         }
     }
 
@@ -129,23 +129,23 @@ public final class Gff3Reader {
     /**
      * Collect.
      */
-    private static class Collect implements Gff3Listener {
-        /** List of collected GFF3 records. */
-        private final List<Gff3Record> records = new LinkedList<Gff3Record>();
+    private static class Collect implements BedListener {
+        /** List of collected BED records. */
+        private final List<BedRecord> records = new LinkedList<BedRecord>();
 
 
         @Override
-        public boolean record(final Gff3Record record) {
+        public boolean record(final BedRecord record) {
             records.add(record);
             return true;
         }
 
         /**
-         * Return zero or more collected GFF3 records.
+         * Return zero or more collected BED records.
          *
-         * @return zero or more collected GFF3 records
+         * @return zero or more collected BED records
          */
-        Iterable<Gff3Record> records() {
+        Iterable<BedRecord> records() {
             return records;
         }
     }

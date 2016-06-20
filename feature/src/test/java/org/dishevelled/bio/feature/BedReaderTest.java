@@ -1,6 +1,6 @@
 /*
 
-    dsh-bio-align  Sequence alignment.
+    dsh-bio-feature  Sequence features.
     Copyright (c) 2013-2016 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
@@ -21,12 +21,12 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.align;
+package org.dishevelled.bio.feature;
 
 import static org.junit.Assert.assertNotNull;
 
-import static org.dishevelled.bio.align.Gff3Reader.read;
-import static org.dishevelled.bio.align.Gff3Reader.stream;
+import static org.dishevelled.bio.feature.BedReader.read;
+import static org.dishevelled.bio.feature.BedReader.stream;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -35,14 +35,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Unit test for Gff3Reader.
+ * Unit test for BedReader.
  */
-public final class Gff3ReaderTest {
+public final class BedReaderTest {
     private Readable readable;
 
     @Before
     public void setUp() {
-        readable = new StringReader("1\tEnsembl\tgene\t1335276\t1349350\t.\t-\t.\tID=ENSG00000107404;Name=ENSG00000107404;biotype=protein_coding");
+        readable = new StringReader("chr1\t11873\t14409\tuc001aaa.3\t0\t+\t11873\t11873\t0\t3\t354,109,1189,\t0,739,1347,");
     }
 
     @Test(expected=NullPointerException.class)
@@ -52,7 +52,7 @@ public final class Gff3ReaderTest {
 
     @Test
     public void testRead() throws Exception {
-        for (Gff3Record record : read(readable)) {
+        for (BedRecord record : read(readable)) {
             assertNotNull(record);
         }
     }
@@ -64,9 +64,9 @@ public final class Gff3ReaderTest {
 
     @Test(expected=NullPointerException.class)
     public void testStreamNullReadable() throws Exception {
-        stream(null, new Gff3Listener() {
+        stream(null, new BedListener() {
                 @Override
-                public boolean record(final Gff3Record record) {
+                public boolean record(final BedRecord record) {
                     return true;
                 }
             });
@@ -79,9 +79,9 @@ public final class Gff3ReaderTest {
 
     @Test
     public void testStream() throws Exception {
-        stream(readable, new Gff3Listener() {
+        stream(readable, new BedListener() {
                 @Override
-                public boolean record(final Gff3Record record) {
+                public boolean record(final BedRecord record) {
                     assertNotNull(record);
                     return true;
                 }
