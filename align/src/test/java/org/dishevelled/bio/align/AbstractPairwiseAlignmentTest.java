@@ -44,6 +44,8 @@ import org.junit.Test;
 
 /**
  * Abstract unit test for implementations of PairwiseAlignment.
+ *
+ * @author  Michael Heuer
  */
 @SuppressWarnings("deprecation")
 public abstract class AbstractPairwiseAlignmentTest {

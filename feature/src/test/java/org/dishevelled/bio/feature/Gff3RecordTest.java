@@ -35,6 +35,8 @@ import org.junit.Test;
 
 /**
  * Unit test for Gff3Record.
+ *
+ * @author  Michael Heuer
  */
 public final class Gff3RecordTest {
 

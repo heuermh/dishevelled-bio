@@ -25,6 +25,8 @@ package org.dishevelled.bio.align;
 
 /**
  * Unit test for ParallelBiojavaPairwiseAligment configured with a cached thread pool.
+ *
+ * @author  Michael Heuer
  */
 public final class CachedThreadPoolParallelBiojavaPairwiseAlignmentTest extends AbstractPairwiseAlignmentTest {
 

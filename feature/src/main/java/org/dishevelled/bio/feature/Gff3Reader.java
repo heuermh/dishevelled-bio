@@ -35,6 +35,8 @@ import com.google.common.io.LineProcessor;
 
 /**
  * GFF3 format reader.
+ *
+ * @author  Michael Heuer
  */
 public final class Gff3Reader {
 

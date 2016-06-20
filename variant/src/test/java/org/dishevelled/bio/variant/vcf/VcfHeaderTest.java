@@ -34,6 +34,8 @@ import org.junit.Test;
 
 /**
  * Unit test for VcfHeader.
+ *
+ * @author  Michael Heuer
  */
 public final class VcfHeaderTest {
     private String fileFormat;

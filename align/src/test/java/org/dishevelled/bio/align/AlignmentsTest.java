@@ -61,6 +61,8 @@ import org.junit.Test;
 
 /**
  * Unit test for Alignments.
+ *
+ * @author  Michael Heuer
  */
 public final class AlignmentsTest {
     private List<Range<Long>> ranges;

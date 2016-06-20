@@ -25,6 +25,8 @@ package org.dishevelled.bio.feature;
 
 /**
  * BED listener.
+ *
+ * @author  Michael Heuer
  */
 public interface BedListener {
 

@@ -74,6 +74,8 @@ import rx.Observable;
 
 /**
  * Similar to bedtools2 intersect -v.
+ *
+ * @author  Michael Heuer
  */
 public final class IntersectBed implements Callable<Integer> {
     private final File aInputFile;

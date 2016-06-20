@@ -48,6 +48,8 @@ import org.dishevelled.commandline.argument.FileArgument;
 
 /**
  * Output description lines from sequences in FASTQ format.
+ *
+ * @author  Michael Heuer
  */
 public final class FastqDescription implements Callable<Integer> {
     private final File fastqFile;

@@ -36,6 +36,8 @@ import org.junit.Test;
 
 /**
  * Unit test for Ranges.
+ *
+ * @author  Michael Heuer
  */
 public final class RangesTest {
 

@@ -37,6 +37,8 @@ import org.dishevelled.bio.feature.BedRecord.Format;
 
 /**
  * Unit test for BedRecord.
+ *
+ * @author  Michael Heuer
  */
 public final class BedRecordTest {
 

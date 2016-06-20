@@ -25,6 +25,8 @@ package org.dishevelled.bio.feature;
 
 /**
  * GFF3 listener.
+ *
+ * @author  Michael Heuer
  */
 public interface Gff3Listener {
 

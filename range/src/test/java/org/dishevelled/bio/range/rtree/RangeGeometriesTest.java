@@ -44,6 +44,8 @@ import org.junit.Test;
 
 /**
  * Unit test for RangeGeometries.
+ *
+ * @author  Michael Heuer
  */
 public final class RangeGeometriesTest {
 

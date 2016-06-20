@@ -29,6 +29,8 @@ import javax.annotation.concurrent.Immutable;
 
 /**
  * VCF genome.
+ *
+ * @author  Michael Heuer
  */
 @Immutable
 public final class VcfGenome {

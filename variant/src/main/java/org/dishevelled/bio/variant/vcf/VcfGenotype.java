@@ -31,6 +31,8 @@ import com.google.common.collect.ListMultimap;
 
 /**
  * VCF genotype.
+ *
+ * @author  Michael Heuer
  */
 @Immutable
 public final class VcfGenotype {

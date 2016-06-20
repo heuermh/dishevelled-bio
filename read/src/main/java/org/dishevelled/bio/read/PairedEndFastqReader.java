@@ -52,6 +52,8 @@ import org.biojava.bio.program.fastq.StreamListener;
 
 /**
  * Paired end FASTQ reads reader.
+ *
+ * @author  Michael Heuer
  */
 public final class PairedEndFastqReader {
     /** Pattern for the left or first read of a paired end read, relies on convention of "<code> 1</code>" or "<code>\1</code>" in the description line. */

@@ -34,6 +34,8 @@ import org.biojava.bio.alignment.SubstitutionMatrix;
 
 /**
  * Abstract pairwise DNA sequence alignment implementation.
+ *
+ * @author  Michael Heuer
  */
 abstract class AbstractPairwiseAlignment implements PairwiseAlignment {
     /** Substitution matrix. */

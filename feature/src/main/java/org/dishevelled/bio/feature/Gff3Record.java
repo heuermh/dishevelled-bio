@@ -41,6 +41,8 @@ import javax.annotation.concurrent.Immutable;
 
 /**
  * GFF3 record.
+ *
+ * @author  Michael Heuer
  */
 @Immutable
 public final class Gff3Record {

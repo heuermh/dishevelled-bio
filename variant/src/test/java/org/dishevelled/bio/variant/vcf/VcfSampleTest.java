@@ -30,6 +30,8 @@ import org.junit.Test;
 
 /**
  * Unit test for VcfSample.
+ *
+ * @author  Michael Heuer
  */
 public final class VcfSampleTest {
 

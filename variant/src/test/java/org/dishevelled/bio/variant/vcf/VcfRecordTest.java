@@ -40,6 +40,8 @@ import org.junit.Test;
 
 /**
  * Unit test for VcfRecord.
+ *
+ * @author  Michael Heuer
  */
 public final class VcfRecordTest {
     private long lineNumber;

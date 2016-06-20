@@ -32,6 +32,8 @@ import javax.annotation.concurrent.Immutable;
 
 /**
  * VCF sample.
+ *
+ * @author  Michael Heuer
  */
 @Immutable
 public final class VcfSample {

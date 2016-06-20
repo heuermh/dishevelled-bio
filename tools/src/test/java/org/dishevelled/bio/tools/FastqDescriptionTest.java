@@ -31,6 +31,8 @@ import org.junit.Test;
 
 /**
  * Unit test for FastqDescription.
+ *
+ * @author  Michael Heuer
  */
 public final class FastqDescriptionTest {
     private File fastqFile;

@@ -53,6 +53,8 @@ import org.dishevelled.commandline.argument.FileArgument;
 
 /**
  * Convert first and second sequence files in FASTQ format to interleaved FASTQ format.
+ *
+ * @author  Michael Heuer
  */
 public final class InterleaveFastq implements Callable<Integer> {
     private final File firstFastqFile;

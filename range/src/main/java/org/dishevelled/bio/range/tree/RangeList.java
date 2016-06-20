@@ -37,6 +37,7 @@ import org.dishevelled.bio.range.Ranges;
  * Range list.
  *
  * @param <C> range endpoint type
+ * @author  Michael Heuer
  */
 public final class RangeList<C extends Comparable> extends AbstractRangeTree<C> {
     /** List of ranges. */

@@ -38,6 +38,8 @@ import org.junit.Test;
 
 /**
  * Unit test for Gff3Writer.
+ *
+ * @author  Michael Heuer
  */
 public final class Gff3WriterTest {
     private Gff3Record record;

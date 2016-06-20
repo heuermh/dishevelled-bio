@@ -31,6 +31,8 @@ import org.junit.Test;
 
 /**
  * Unit test for ExtractFastq.
+ *
+ * @author  Michael Heuer
  */
 public final class ExtractFastqTest {
     private File inputFastqFile;

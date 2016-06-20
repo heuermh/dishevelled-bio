@@ -38,6 +38,8 @@ import org.junit.Test;
 
 /**
  * Unit test for VcfGenotype.
+ *
+ * @author  Michael Heuer
  */
 public final class VcfGenotypeTest {
     private ListMultimap<String, String> empty;

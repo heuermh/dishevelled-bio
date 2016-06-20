@@ -31,6 +31,8 @@ import org.junit.Test;
 
 /**
  * Unit test for ExtractFasta.
+ *
+ * @author  Michael Heuer
  */
 public final class ExtractFastaTest {
     private File inputFastaFile;

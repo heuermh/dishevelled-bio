@@ -36,6 +36,8 @@ import org.junit.Test;
 
 /**
  * Unit test for Gff3Reader.
+ *
+ * @author  Michael Heuer
  */
 public final class Gff3ReaderTest {
     private Readable readable;

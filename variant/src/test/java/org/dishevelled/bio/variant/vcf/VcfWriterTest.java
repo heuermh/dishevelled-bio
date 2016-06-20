@@ -48,6 +48,8 @@ import org.junit.Test;
 
 /**
  * Unit test for VcfWriter.
+ *
+ * @author  Michael Heuer
  */
 public final class VcfWriterTest {
     private VcfHeader header;

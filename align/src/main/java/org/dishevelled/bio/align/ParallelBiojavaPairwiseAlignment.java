@@ -45,6 +45,8 @@ import org.biojava.bio.seq.Sequence;
 
 /**
  * Parallel implementation of PairwiseAlignment based on Biojava.
+ *
+ * @author  Michael Heuer
  */
 public final class ParallelBiojavaPairwiseAlignment extends AbstractPairwiseAlignment {
     /** Executor service. */

@@ -36,6 +36,8 @@ import org.junit.Test;
 
 /**
  * Unit test for BedReader.
+ *
+ * @author  Michael Heuer
  */
 public final class BedReaderTest {
     private Readable readable;

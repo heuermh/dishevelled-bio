@@ -39,6 +39,8 @@ import org.junit.Test;
 
 /**
  * Abstract unit test for implementations of RangeTree.
+ *
+ * @author  Michael Heuer
  */
 public abstract class AbstractRangeTreeTest {
     protected static final int N = 1000;

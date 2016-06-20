@@ -21,10 +21,6 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-
-/**
- * Guava ranges for genomics.
- */
 package org.dishevelled.bio.range;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -38,6 +34,8 @@ import com.google.common.collect.Range;
 
 /**
  * Utility methods on ranges.
+ *
+ * @author  Michael Heuer
  */
 public final class Ranges {
 

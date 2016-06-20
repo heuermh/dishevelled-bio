@@ -49,6 +49,8 @@ import org.biojava.bio.symbol.GappedSymbolList;
 
 /**
  * Static utility methods on alignments.
+ *
+ * @author  Michael Heuer
  */
 public final class Alignments {
 

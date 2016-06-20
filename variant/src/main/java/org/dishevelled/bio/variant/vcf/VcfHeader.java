@@ -34,6 +34,8 @@ import com.google.common.collect.ImmutableList;
 
 /**
  * VCF header.
+ *
+ * @author  Michael Heuer
  */
 @Immutable
 public final class VcfHeader {

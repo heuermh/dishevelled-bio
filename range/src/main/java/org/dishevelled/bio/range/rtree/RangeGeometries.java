@@ -47,6 +47,8 @@ import com.google.common.collect.Range;
  *   // ...
  * }
  * </pre>
+ *
+ * @author  Michael Heuer
  */
 public final class RangeGeometries {
 
@@ -61,6 +63,7 @@ public final class RangeGeometries {
     /**
      * Create and return a new point geometry from the specified singleton value.
      *
+     * @param <N> value type
      * @param value singleton value, must not be null
      * @return a new point geometry from the specified singleton value
      */
@@ -72,6 +75,7 @@ public final class RangeGeometries {
     /**
      * Create and return a new rectangle geometry from the specified closed range <code>[lower..upper]</code>.
      *
+     * @param <N> value type
      * @param lower lower endpoint, must not be null
      * @param upper upper endpoint, must not be null
      * @return a new rectangle geometry from the specified closed range
@@ -85,6 +89,7 @@ public final class RangeGeometries {
     /**
      * Create and return a new rectangle geometry from the specified closed open range <code>[lower..upper)</code>.
      *
+     * @param <N> value type
      * @param lower lower endpoint, must not be null
      * @param upper upper endpoint, must not be null
      * @return a new rectangle geometry from the specified closed range
@@ -98,6 +103,7 @@ public final class RangeGeometries {
     /**
      * Create and return a new rectangle geometry from the specified open closed range <code>(lower..upper]</code>
      *
+     * @param <N> value type
      * @param lower lower endpoint, must not be null
      * @param upper upper endpoint, must not be null
      * @return a new rectangle geometry from the specified closed range
@@ -111,6 +117,7 @@ public final class RangeGeometries {
     /**
      * Create and return a new rectangle geometry from the specified open range <code>(lower..upper)</code>.
      *
+     * @param <N> value type
      * @param lower lower endpoint, must not be null
      * @param upper upper endpoint, must not be null
      * @return a new rectangle geometry from the specified closed range
@@ -124,6 +131,7 @@ public final class RangeGeometries {
     /**
      * Create and return a new rectangle geometry from the specified range.
      *
+     * @param <N> value type
      * @param range range, must not be null, must not be empty, and must have lower and upper bounds
      * @return a new rectangle geometry from the specified range
      */

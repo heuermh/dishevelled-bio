@@ -31,6 +31,7 @@ import com.google.common.collect.Range;
  * Range tree.
  *
  * @param <C> range endpoint type
+ * @author  Michael Heuer
  */
 public interface RangeTree<C extends Comparable> {
 

@@ -33,6 +33,8 @@ import org.junit.Test;
 
 /**
  * Unit test for GapPenalties.
+ *
+ * @author  Michael Heuer
  */
 public final class GapPenaltiesTest {
 

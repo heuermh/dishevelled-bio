@@ -44,6 +44,8 @@ import org.dishevelled.commandline.Usage;
 
 /**
  * Command line tools.
+ *
+ * @author  Michael Heuer
  */
 public final class Tools implements Callable<Integer> {
     private final String[] args;

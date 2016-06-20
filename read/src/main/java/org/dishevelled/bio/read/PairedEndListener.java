@@ -27,6 +27,8 @@ import org.biojava.bio.program.fastq.Fastq;
 
 /**
  * Paired end FASTQ reads listener.
+ *
+ * @author  Michael Heuer
  */
 public interface PairedEndListener {
 

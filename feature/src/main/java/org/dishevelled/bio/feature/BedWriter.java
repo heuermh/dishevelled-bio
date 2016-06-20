@@ -29,6 +29,8 @@ import java.io.PrintWriter;
 
 /**
  * BED writer.
+ *
+ * @author  Michael Heuer
  */
 public final class BedWriter {
 

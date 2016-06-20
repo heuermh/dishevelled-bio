@@ -44,19 +44,21 @@ import javax.annotation.concurrent.Immutable;
 /**
  * BED record.
  *
- * <p>Supports the same BED formats as <a href="http://bedtools.readthedocs.org/en/latest/content/general-usage.html">bedtools2</a>.
+ * Supports the same BED formats as <a href="http://bedtools.readthedocs.org/en/latest/content/general-usage.html">bedtools2</a>.
  * <ul>
- *   <li>BED3: A BED file where each feature is described by chrom, start, and end.<br/>
+ *   <li>BED3: A BED file where each feature is described by chrom, start, and end.
  *       For example: <code>chr1          11873   14409</code></li>
- *   <li>BED4: A BED file where each feature is described by chrom, start, end, and name.<br/>
+ *   <li>BED4: A BED file where each feature is described by chrom, start, end, and name.
  *       For example: <code>chr1  11873  14409  uc001aaa.3</code></li>
- *   <li>BED5: A BED file where each feature is described by chrom, start, end, name, and score.<br/>
+ *   <li>BED5: A BED file where each feature is described by chrom, start, end, name, and score.
  *       For example: <code>chr1 11873 14409 uc001aaa.3 0</code></li>
- *   <li>BED6: A BED file where each feature is described by chrom, start, end, name, score, and strand.<br/>
+ *   <li>BED6: A BED file where each feature is described by chrom, start, end, name, score, and strand.
  *       For example: <code>chr1 11873 14409 uc001aaa.3 0 +</code></li>
- *   <li>BED12: A BED file where each feature is described by all twelve columns listed above.<br/>
+ *   <li>BED12: A BED file where each feature is described by all twelve columns listed above.
  *       For example: <code>chr1 11873 14409 uc001aaa.3 0 + 11873 11873 0 3 354,109,1189, 0,739,1347,</code></li>
- * </ul></p>
+ * </ul>
+ *
+ * @author  Michael Heuer
  */
 @Immutable
 public final class BedRecord {

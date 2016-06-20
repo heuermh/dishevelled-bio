@@ -62,6 +62,8 @@ import org.dishevelled.commandline.argument.IntegerArgument;
 
 /**
  * Convert sequences in FASTA format to FASTQ format.
+ *
+ * @author  Michael Heuer
  */
 @SuppressWarnings("deprecation")
 public final class FastaToFastq implements Callable<Integer> {

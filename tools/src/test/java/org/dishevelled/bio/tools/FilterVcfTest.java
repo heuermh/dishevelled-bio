@@ -34,6 +34,8 @@ import org.dishevelled.bio.variant.vcf.VcfRecord;
 
 /**
  * Unit test for FilterVcf.
+ *
+ * @author  Michael Heuer
  */
 public final class FilterVcfTest {
     private FilterVcf.Filter filter;

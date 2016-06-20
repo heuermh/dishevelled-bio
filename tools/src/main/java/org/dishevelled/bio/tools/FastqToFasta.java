@@ -48,6 +48,8 @@ import org.dishevelled.commandline.argument.FileArgument;
 
 /**
  * Convert sequences in FASTQ format to FASTA format.
+ *
+ * @author  Michael Heuer
  */
 public final class FastqToFasta implements Callable<Integer> {
     private final File fastqFile;

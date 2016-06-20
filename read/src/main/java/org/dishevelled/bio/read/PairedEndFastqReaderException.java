@@ -25,6 +25,8 @@ package org.dishevelled.bio.read;
 
 /**
  * Runtime exception thrown on error in reading paired end FASTQ reads.
+ *
+ * @author  Michael Heuer
  */
 public final class PairedEndFastqReaderException extends RuntimeException {
 

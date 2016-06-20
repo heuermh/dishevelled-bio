@@ -38,6 +38,8 @@ import org.junit.Test;
 
 /**
  * Unit test for BedWriter.
+ *
+ * @author  Michael Heuer
  */
 public final class BedWriterTest {
     private BedRecord record;

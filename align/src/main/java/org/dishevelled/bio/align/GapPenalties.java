@@ -27,6 +27,8 @@ import javax.annotation.concurrent.Immutable;
 
 /**
  * Gap penalties.
+ *
+ * @author  Michael Heuer
  */
 @Immutable
 public final class GapPenalties {

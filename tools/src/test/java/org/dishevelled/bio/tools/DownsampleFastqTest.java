@@ -36,6 +36,8 @@ import org.junit.Before;
 
 /**
  * Unit test for DownsampleFastq.
+ *
+ * @author  Michael Heuer
  */
 public final class DownsampleFastqTest {
     private File inputFastqFile;

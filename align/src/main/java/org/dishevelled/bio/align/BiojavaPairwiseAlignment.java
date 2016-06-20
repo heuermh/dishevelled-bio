@@ -46,6 +46,8 @@ import org.biojava.bio.seq.Sequence;
 
 /**
  * Serial implementation of PairwiseAlignment based on Biojava.
+ *
+ * @author  Michael Heuer
  */
 public final class BiojavaPairwiseAlignment extends AbstractPairwiseAlignment implements Serializable {
 

@@ -60,6 +60,8 @@ import org.dishevelled.commandline.argument.IntegerArgument;
 
 /**
  * Downsample sequences from a file in interleaved FASTQ format.
+ *
+ * @author  Michael Heuer
  */
 public final class DownsampleInterleavedFastq implements Callable<Integer> {
     private final File inputFastqFile;

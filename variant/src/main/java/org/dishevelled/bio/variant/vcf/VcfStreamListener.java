@@ -25,6 +25,8 @@ package org.dishevelled.bio.variant.vcf;
 
 /**
  * VCF stream listener.
+ *
+ * @author  Michael Heuer
  */
 public interface VcfStreamListener {
 

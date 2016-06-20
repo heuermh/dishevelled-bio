@@ -37,6 +37,8 @@ import com.google.common.io.LineProcessor;
 
 /**
  * Low-level VCF parser.
+ *
+ * @author  Michael Heuer
  */
 public final class VcfParser {
 

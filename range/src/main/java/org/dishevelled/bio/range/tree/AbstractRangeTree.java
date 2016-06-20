@@ -38,6 +38,7 @@ import com.google.common.collect.Range;
  * to be overridden to improve performance.
  *
  * @param <C> range endpoint type
+ * @author  Michael Heuer
  */
 public abstract class AbstractRangeTree<C extends Comparable> implements RangeTree<C> {
 

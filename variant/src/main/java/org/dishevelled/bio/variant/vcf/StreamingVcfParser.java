@@ -37,6 +37,8 @@ import com.google.common.collect.ListMultimap;
 
 /**
  * Streaming VCF parser.
+ *
+ * @author  Michael Heuer
  */
 public final class StreamingVcfParser {
 

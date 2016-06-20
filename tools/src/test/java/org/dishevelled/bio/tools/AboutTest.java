@@ -34,6 +34,8 @@ import org.junit.Test;
 
 /**
  * Unit test for About.
+ *
+ * @author  Michael Heuer
  */
 public final class AboutTest {
 

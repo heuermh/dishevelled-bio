@@ -29,6 +29,8 @@ import java.io.PrintWriter;
 
 /**
  * GFF3 writer.
+ *
+ * @author  Michael Heuer
  */
 public final class Gff3Writer {
 

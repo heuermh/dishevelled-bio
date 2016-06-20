@@ -44,6 +44,8 @@ import org.junit.Test;
 
 /**
  * Unit test for InterleaveFastq.
+ *
+ * @author  Michael Heuer
  */
 public final class InterleaveFastqTest {
     private File firstFastqFile;

@@ -55,6 +55,8 @@ import org.dishevelled.commandline.argument.StringListArgument;
 
 /**
  * Filter variants in VCF format.
+ *
+ * @author  Michael Heuer
  */
 public final class FilterVcf implements Callable<Integer> {
     private final Filter filter;

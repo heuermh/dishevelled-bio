@@ -40,6 +40,8 @@ import com.google.common.io.Resources;
 
 /**
  * VCF reader.
+ *
+ * @author  Michael Heuer
  */
 public final class VcfReader {
 

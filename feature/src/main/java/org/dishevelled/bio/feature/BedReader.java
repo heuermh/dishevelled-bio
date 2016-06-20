@@ -35,6 +35,8 @@ import com.google.common.io.LineProcessor;
 
 /**
  * BED format reader.
+ *
+ * @author  Michael Heuer
  */
 public final class BedReader {
 

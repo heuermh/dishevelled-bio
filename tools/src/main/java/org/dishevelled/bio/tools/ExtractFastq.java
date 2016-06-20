@@ -60,6 +60,8 @@ import org.dishevelled.commandline.argument.StringArgument;
 
 /**
  * Extract matching sequences in FASTQ format.
+ *
+ * @author  Michael Heuer
  */
 @SuppressWarnings("deprecation")
 public final class ExtractFastq implements Callable<Integer> {

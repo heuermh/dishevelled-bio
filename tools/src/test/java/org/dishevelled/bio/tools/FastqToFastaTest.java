@@ -31,6 +31,8 @@ import org.junit.Test;
 
 /**
  * Unit test for FastqToFasta.
+ *
+ * @author  Michael Heuer
  */
 public final class FastqToFastaTest {
     private File fastqFile;

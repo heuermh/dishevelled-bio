@@ -37,6 +37,8 @@ import com.google.common.collect.ListMultimap;
 
 /**
  * VCF record.
+ *
+ * @author  Michael Heuer
  */
 @Immutable
 public final class VcfRecord {

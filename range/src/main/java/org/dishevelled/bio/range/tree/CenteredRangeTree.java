@@ -41,6 +41,7 @@ import org.dishevelled.bio.range.Ranges;
  * Centered range tree.
  *
  * @param <C> range endpoint type
+ * @author  Michael Heuer
  */
 public final class CenteredRangeTree<C extends Comparable> extends AbstractRangeTree<C> {
     /** Cached size. */

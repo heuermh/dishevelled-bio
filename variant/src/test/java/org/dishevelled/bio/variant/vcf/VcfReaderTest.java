@@ -57,6 +57,8 @@ import org.junit.Test;
 
 /**
  * Unit test for VcfReader.
+ *
+ * @author  Michael Heuer
  */
 public final class VcfReaderTest {
     private Readable readable;

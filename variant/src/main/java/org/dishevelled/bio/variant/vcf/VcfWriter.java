@@ -34,6 +34,8 @@ import com.google.common.base.Joiner;
 
 /**
  * VCF writer.
+ *
+ * @author  Michael Heuer
  */
 public final class VcfWriter {
 

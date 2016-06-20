@@ -31,6 +31,8 @@ import org.biojava.bio.alignment.AlignmentPair;
 
 /**
  * Pairwise DNA sequence alignment.
+ *
+ * @author  Michael Heuer
  */
 public interface PairwiseAlignment {
     /** Default local alignment gap penalties, <code>match -1 replace 3 insert 2 delete 2 extend 1</code>. */

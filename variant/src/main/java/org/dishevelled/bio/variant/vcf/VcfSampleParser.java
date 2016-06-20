@@ -37,6 +37,8 @@ import com.google.common.collect.ListMultimap;
 
 /**
  * VCF sample parser.
+ *
+ * @author  Michael Heuer
  */
 public final class VcfSampleParser {
 

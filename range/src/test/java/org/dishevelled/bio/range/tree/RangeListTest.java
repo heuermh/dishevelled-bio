@@ -30,6 +30,8 @@ import com.google.common.collect.Range;
 
 /**
  * Unit test for RangeList.
+ *
+ * @author  Michael Heuer
  */
 public final class RangeListTest extends AbstractRangeTreeTest {
 

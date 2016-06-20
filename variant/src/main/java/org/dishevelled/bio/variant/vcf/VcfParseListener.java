@@ -27,6 +27,8 @@ import java.io.IOException;
 
 /**
  * VCF parse listener.
+ *
+ * @author  Michael Heuer
  */
 public interface VcfParseListener {
 

@@ -36,6 +36,8 @@ import org.junit.Test;
 
 /**
  * Unit test for BiojavaPairwiseAligment.
+ *
+ * @author  Michael Heuer
  */
 public final class BiojavaPairwiseAlignmentTest extends AbstractPairwiseAlignmentTest {
 

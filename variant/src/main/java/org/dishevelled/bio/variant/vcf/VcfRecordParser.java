@@ -32,6 +32,8 @@ import java.util.List;
 
 /**
  * VCF record parser.
+ *
+ * @author  Michael Heuer
  */
 public final class VcfRecordParser {
     /** Arbitrary large capacity for list of VCF records. */

@@ -30,6 +30,8 @@ import com.google.common.collect.Range;
 
 /**
  * Unit test for CenteredRangeTree.
+ *
+ * @author  Michael Heuer
  */
 public final class CenteredRangeTreeTest extends AbstractRangeTreeTest {
 

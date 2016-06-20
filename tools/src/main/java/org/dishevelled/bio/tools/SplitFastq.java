@@ -58,6 +58,8 @@ import org.dishevelled.commandline.argument.FileArgument;
 
 /**
  * Convert interleaved FASTQ format into first and second sequence files in FASTQ format.
+ *
+ * @author  Michael Heuer
  */
 public final class SplitFastq implements Callable<Integer> {
     private final File pairedFile;

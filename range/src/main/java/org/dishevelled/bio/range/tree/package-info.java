@@ -25,4 +25,4 @@
 /**
  * Range tree.
  */
-package org.dishevelled.bio.range;
+package org.dishevelled.bio.range.tree;

@@ -32,6 +32,8 @@ import java.util.List;
 
 /**
  * VCF header parser.
+ *
+ * @author  Michael Heuer
  */
 public final class VcfHeaderParser {
 

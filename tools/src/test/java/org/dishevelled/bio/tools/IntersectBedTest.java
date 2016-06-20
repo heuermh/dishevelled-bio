@@ -36,6 +36,8 @@ import org.junit.Test;
 
 /**
  * Unit test for IntersectBed.
+ *
+ * @author  Michael Heuer
  */
 public final class IntersectBedTest {
     private File aInputFile;
