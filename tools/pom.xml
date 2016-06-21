@@ -85,6 +85,11 @@
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
+      <artifactId>commons-csv</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
       <artifactId>commons-math3</artifactId>
       <scope>compile</scope>
     </dependency>
@@ -172,7 +177,6 @@
         <configuration>
           <repositoryLayout>flat</repositoryLayout>
           <repositoryName>lib</repositoryName>
-          <installArtifacts>false</installArtifacts>
           <programs>
             <program>
               <id>dsh-downsample-fastq</id>
@@ -213,6 +217,10 @@
             <program>
               <id>dsh-split-fastq</id>
               <mainClass>org.dishevelled.bio.tools.SplitFastq</mainClass>
+            </program>
+            <program>
+              <id>dsh-variant-table-to-vcf</id>
+              <mainClass>org.dishevelled.bio.tools.EnsemblVariantTableToVcf</mainClass>
             </program>
             <program>
               <id>dsh-bio</id>
