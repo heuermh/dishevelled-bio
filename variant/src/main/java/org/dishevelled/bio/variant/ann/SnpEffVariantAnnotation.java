@@ -68,13 +68,40 @@ public final class SnpEffVariantAnnotation {
     private final List<String> errors;
     private final int hashCode;
 
-    private SnpEffVariantAnnotation(final String allele, final List<String> annotations, final String annotationImpact, final String geneName, final String geneId,
-                                    final String featureType, final String featureId, final String transcriptBioType, final Integer rank, final String cHgvs, final String pHgvs,
-                                    final Integer cdnaPosition, final Integer cdnaLength, final Integer cdsPosition, final Integer cdsLength, final Integer aminoAcidPosition,
-                                    final Integer aminoAcidLength, final Integer distance, final List<String> errors) {
+
+    /**
+     * Create a new SnpEff variant annotation.
+     *
+     * @param allele allele, if any
+     * @param annotations list of annotations, must not be null
+     * @param annotationImpact annotation impact, if any
+     * @param geneName gene name, if any
+     * @param geneId gene id, if any
+     * @param featureType feature type, if any
+     * @param featureId feature id, if any
+     * @param transcriptBioType transcript bio type, if any
+     * @param rank rank, if any
+     * @param cHgvs HGVS.c annotation, if any
+     * @param pHgvs HGVS.p annotation, if any
+     * @param cdnaPosition cDNA position, if any
+     * @param cdnaLength cDNA length, if any
+     * @param cdsPosition CDS position, if any
+     * @param cdsLength CDS length, if any
+     * @param aminoAcidPosition amino acid position, if any
+     * @param aminoAcidLength amino acid length, if any
+     * @param distance distance, if any
+     * @param errors list of errors, must not be null
+     */
+    private SnpEffVariantAnnotation(final String allele, final List<String> annotations, final String annotationImpact,
+                                    final String geneName, final String geneId, final String featureType, final String featureId,
+                                    final String transcriptBioType, final Integer rank, final String cHgvs, final String pHgvs,
+                                    final Integer cdnaPosition, final Integer cdnaLength, final Integer cdsPosition,
+                                    final Integer cdsLength, final Integer aminoAcidPosition, final Integer aminoAcidLength,
+                                    final Integer distance, final List<String> errors) {
 
         checkNotNull(annotations);
         checkNotNull(errors);
+
         this.allele = allele;
         this.annotations = ImmutableList.copyOf(annotations);
         this.annotationImpact = annotationImpact;
@@ -94,83 +121,181 @@ public final class SnpEffVariantAnnotation {
         this.aminoAcidLength = aminoAcidLength;
         this.distance = distance;
         this.errors = ImmutableList.copyOf(errors);
-        hashCode = Objects.hash(this.allele, this.annotations, this.annotationImpact, this.geneName, this.geneId, this.featureType, this.featureId,
-                this.transcriptBioType, this.rank, this.cHgvs, this.pHgvs, this.cdnaPosition, this.cdnaLength, this.cdsPosition, this.cdsLength,
-                this.aminoAcidPosition, this.aminoAcidLength, this.distance, this.errors);
+
+        hashCode = Objects.hash(this.allele, this.annotations, this.annotationImpact, this.geneName, this.geneId,
+                                this.featureType, this.featureId, this.transcriptBioType, this.rank, this.cHgvs,
+                                this.pHgvs, this.cdnaPosition, this.cdnaLength, this.cdsPosition, this.cdsLength,
+                                this.aminoAcidPosition, this.aminoAcidLength, this.distance, this.errors);
     }
 
+
+    /**
+     * Return the allele for this SnpEff variant annotation, if any.
+     *
+     * @return the allele for this SnpEff variant annotation, if any
+     */
     public String allele() {
         return allele;
     }
 
+    /**
+     * Return the list of annotations for this SnpEff variant annotation.
+     *
+     * @return the list of annotations for this SnpEff variant annotation
+     */
     public List<String> annotations() {
         return annotations;
     }
 
+    /**
+     * Return the annotation impact for this SnpEff variant annotation, if any.
+     *
+     * @return the annotation impact for this SnpEff variant annotation, if any
+     */
     public String annotationImpact() {
         return annotationImpact;
     }
 
+    /**
+     * Return the gene name for this SnpEff variant annotation, if any.
+     *
+     * @return the gene name for this SnpEff variant annotation, if any
+     */
     public String geneName() {
         return geneName;
     }
 
+    /**
+     * Return the gene id for this SnpEff variant annotation, if any.
+     *
+     * @return the gene id for this SnpEff variant annotation, if any
+     */
     public String geneId() {
         return geneId;
     }
 
+    /**
+     * Return the feature type for this SnpEff variant annotation, if any.
+     *
+     * @return the feature type for this SnpEff variant annotation, if any
+     */
     public String featureType() {
         return featureType;
     }
 
+    /**
+     * Return the feature id for this SnpEff variant annotation, if any.
+     *
+     * @return the feature id for this SnpEff variant annotation, if any
+     */
     public String featureId() {
         return featureId;
     }
 
+    /**
+     * Return the transcript bio type for this SnpEff variant annotation, if any.
+     *
+     * @return the transcript bio type for this SnpEff variant annotation, if any
+     */
     public String transcriptBioType() {
         return transcriptBioType;
     }
 
+    /**
+     * Return the rank for this SnpEff variant annotation, if any.
+     *
+     * @return the rank for this SnpEff variant annotation, if any
+     */
     public Integer rank() {
         return rank;
     }
 
+    /**
+     * Return the HGVS.c annotation for this SnpEff variant annotation, if any.
+     *
+     * @return the HGVS.c annotation for this SnpEff variant annotation, if any
+     */
     public String cHgvs() {
         return cHgvs;
     }
 
+    /**
+     * Return the HGVS.p annotation for this SnpEff variant annotation, if any.
+     *
+     * @return the HGVS.p annotation for this SnpEff variant annotation, if any
+     */
     public String pHgvs() {
         return pHgvs;
     }
 
+    /**
+     * Return the cDNA position for this SnpEff variant annotation, if any.
+     *
+     * @return the cDNA position for this SnpEff variant annotation, if any
+     */
     public Integer cdnaPosition() {
         return cdnaPosition;
     }
 
+    /**
+     * Return the cDNA length for this SnpEff variant annotation, if any.
+     *
+     * @return the cDNA length for this SnpEff variant annotation, if any
+     */
     public Integer cdnaLength() {
         return cdnaLength;
     }
 
+    /**
+     * Return the CDS position for this SnpEff variant annotation, if any.
+     *
+     * @return the CDS position for this SnpEff variant annotation, if any
+     */
     public Integer cdsPosition() {
         return cdsPosition;
     }
 
+    /**
+     * Return the CDS length for this SnpEff variant annotation, if any.
+     *
+     * @return the CDS length for this SnpEff variant annotation, if any
+     */
     public Integer cdsLength() {
         return cdsLength;
     }
 
+    /**
+     * Return the amino acid position for this SnpEff variant annotation, if any.
+     *
+     * @return the amino acid position for this SnpEff variant annotation, if any
+     */
     public Integer aminoAcidPosition() {
         return aminoAcidPosition;
     }
 
+    /**
+     * Return the amino acid length for this SnpEff variant annotation, if any.
+     *
+     * @return the amino acid length for this SnpEff variant annotation, if any
+     */
     public Integer aminoAcidLength() {
         return aminoAcidLength;
     }
 
+    /**
+     * Return the distance for this SnpEff variant annotation, if any.
+     *
+     * @return the distance for this SnpEff variant annotation, if any
+     */
     public Integer distance() {
         return distance;
     }
 
+    /**
+     * Return the list of errors for this SnpEff variant annotation.
+     *
+     * @return the list of errors for this SnpEff variant annotation
+     */
     public List<String> errors() {
         return errors;
     }
@@ -191,33 +316,36 @@ public final class SnpEffVariantAnnotation {
         SnpEffVariantAnnotation ann = (SnpEffVariantAnnotation) o;
 
         return Objects.equals(allele, ann.allele)
-                && Objects.equals(annotations, ann.annotations)
-                && Objects.equals(annotationImpact, ann.annotationImpact)
-                && Objects.equals(geneName, ann.geneName)
-                && Objects.equals(geneId, ann.geneId)
-                && Objects.equals(featureType, ann.featureType)
-                && Objects.equals(featureId, ann.featureId)
-                && Objects.equals(transcriptBioType, ann.transcriptBioType)
-                && Objects.equals(rank, ann.rank)
-                && Objects.equals(cHgvs, ann.cHgvs)
-                && Objects.equals(pHgvs, ann.pHgvs)
-                && Objects.equals(cdnaPosition, ann.cdnaPosition)
-                && Objects.equals(cdnaLength, ann.cdnaLength)
-                && Objects.equals(cdsPosition, ann.cdsPosition)
-                && Objects.equals(cdsLength, ann.cdsLength)
-                && Objects.equals(aminoAcidPosition, ann.aminoAcidPosition)
-                && Objects.equals(aminoAcidLength, ann.aminoAcidLength)
-                && Objects.equals(distance, ann.distance)
-                && Objects.equals(errors, ann.errors);
+            && Objects.equals(annotations, ann.annotations)
+            && Objects.equals(annotationImpact, ann.annotationImpact)
+            && Objects.equals(geneName, ann.geneName)
+            && Objects.equals(geneId, ann.geneId)
+            && Objects.equals(featureType, ann.featureType)
+            && Objects.equals(featureId, ann.featureId)
+            && Objects.equals(transcriptBioType, ann.transcriptBioType)
+            && Objects.equals(rank, ann.rank)
+            && Objects.equals(cHgvs, ann.cHgvs)
+            && Objects.equals(pHgvs, ann.pHgvs)
+            && Objects.equals(cdnaPosition, ann.cdnaPosition)
+            && Objects.equals(cdnaLength, ann.cdnaLength)
+            && Objects.equals(cdsPosition, ann.cdsPosition)
+            && Objects.equals(cdsLength, ann.cdsLength)
+            && Objects.equals(aminoAcidPosition, ann.aminoAcidPosition)
+            && Objects.equals(aminoAcidLength, ann.aminoAcidLength)
+            && Objects.equals(distance, ann.distance)
+            && Objects.equals(errors, ann.errors);
     }
 
     @Override
     public String toString() {
         String annotations = Joiner.on("&").join(this.annotations);
         String errors = Joiner.on("&").join(this.errors);
-        return Joiner.on("|").join(nullToEmpty(allele), annotations, nullToEmpty(annotationImpact), nullToEmpty(geneName), nullToEmpty(geneId),
-                nullToEmpty(featureType), nullToEmpty(featureId), nullToEmpty(transcriptBioType), nullToEmpty(rank), nullToEmpty(cHgvs), nullToEmpty(pHgvs),
-                nullToEmpty(cdnaPosition, cdnaLength), nullToEmpty(cdsPosition, cdsLength), nullToEmpty(aminoAcidPosition, aminoAcidLength), nullToEmpty(distance), errors);
+        return Joiner.on("|").join(nullToEmpty(allele), annotations, nullToEmpty(annotationImpact),
+                                   nullToEmpty(geneName), nullToEmpty(geneId), nullToEmpty(featureType),
+                                   nullToEmpty(featureId), nullToEmpty(transcriptBioType), nullToEmpty(rank),
+                                   nullToEmpty(cHgvs), nullToEmpty(pHgvs), nullToEmpty(cdnaPosition, cdnaLength),
+                                   nullToEmpty(cdsPosition, cdsLength), nullToEmpty(aminoAcidPosition, aminoAcidLength),
+                                   nullToEmpty(distance), errors);
     }
 
     /**
@@ -256,16 +384,21 @@ public final class SnpEffVariantAnnotation {
         Integer distance = emptyToNullInteger(tokens.get(14));
         List<String> errors = Splitter.on("&").omitEmptyStrings().splitToList(tokens.get(15));
 
-        return new SnpEffVariantAnnotation(allele, annotations, annotationImpact, geneName, geneId, featureType, featureId, transcriptBioType,
-                rank, cHgvs, pHgvs, cdnaPosition, cdnaLength, cdsPosition, cdsLength, aminoAcidPosition, aminoAcidLength, distance, errors);
+        return new SnpEffVariantAnnotation(allele, annotations, annotationImpact, geneName, geneId,
+                                           featureType, featureId, transcriptBioType, rank, cHgvs, pHgvs,
+                                           cdnaPosition, cdnaLength, cdsPosition, cdsLength, aminoAcidPosition,
+                                           aminoAcidLength, distance, errors);
     }
 
     /**
-     * Return zero or more SnpEff variant annotations parsed from the INFO field ANN values of the specified VCF record.
+     * Return zero or more SnpEff variant annotations parsed from the INFO field ANN values of the
+     * specified VCF record.
      *
      * @param record VCF record to annotate, must not be null
-     * @return zero or more SnpEff variant annotations parsed from the INFO field ANN values of the specified VCF record
-     * @throws IllegalArgumentException if any of the INFO field ANN values are not valid SnpEff variant annotation format
+     * @return zero or more SnpEff variant annotations parsed from the INFO field ANN values of the
+     *    specified VCF record
+     * @throws IllegalArgumentException if any of the INFO field ANN values are not valid SnpEff variant
+     *    annotation format
      * @throws NumberFormatException if a number valued field cannot be parsed as a number
      */
     public static List<SnpEffVariantAnnotation> annotate(final VcfRecord record) {

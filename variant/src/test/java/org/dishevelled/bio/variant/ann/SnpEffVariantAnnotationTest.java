@@ -23,13 +23,13 @@
 */
 package org.dishevelled.bio.variant.ann;
 
+import static org.dishevelled.bio.variant.ann.SnpEffVariantAnnotation.annotate;
+import static org.dishevelled.bio.variant.ann.SnpEffVariantAnnotation.valueOf;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-
-import static org.dishevelled.bio.variant.ann.SnpEffVariantAnnotation.annotate;
-import static org.dishevelled.bio.variant.ann.SnpEffVariantAnnotation.valueOf;
 
 import java.io.StringReader;
 
@@ -46,6 +46,7 @@ import org.junit.Test;
  * @author  Michael Heuer
  */
 public class SnpEffVariantAnnotationTest {
+
     @Test(expected=IllegalArgumentException.class)
     public void testValueOfTooShort() {
         valueOf("T|upstream_gene_variant|MODIFIER|TAS1R3|ENSG00000169962|transcript|ENST00000339381.5|protein_coding||c.-485C>T|||||453");
@@ -93,7 +94,6 @@ public class SnpEffVariantAnnotationTest {
         assertNull(ann.aminoAcidPosition());
         assertNull(ann.aminoAcidLength());
         assertEquals(Integer.valueOf(453), ann.distance());
-        System.out.println("errors=" + ann.errors() + " size=" + ann.errors().size());
         assertTrue(ann.errors().isEmpty());
         assertEquals("T|upstream_gene_variant|MODIFIER|TAS1R3|ENSG00000169962|transcript|ENST00000339381.5|protein_coding||c.-485C>T|||||453|", ann.toString());
     }
