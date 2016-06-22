@@ -374,7 +374,9 @@ public final class SnpEffVariantAnnotation {
 
         List<String> tokens = Splitter.on("|").splitToList(value);
         if (tokens.size() != 16) {
-            throw new IllegalArgumentException("value must have sixteen fields (AlternateAllele | Annotation | Annotation_Impact | Gene_Name | Gene_ID | Feature_Type | Feature_ID | Transcript_BioType | Rank | HGVS.c | HGVS.p | cDNA.pos / cDNA.length | CDS.pos / CDS.length | AA.pos / AA.length | Distance | MESSAGES / WARNINGS / INFO)");
+            throw new IllegalArgumentException("value must have sixteen fields ( Allele | Annotation | Annotation_Impact | "
+                + "Gene_Name | Gene_ID | Feature_Type | Feature_ID | Transcript_BioType | Rank / Total | HGVS.c | HGVS.p | "
+                + "cDNA.pos / cDNA.length | CDS.pos / CDS.length | AA.pos / AA.length | Distance | MESSAGES / WARNINGS / INFO)");
         }
 
         String alternateAllele = emptyToNull(tokens.get(0));
