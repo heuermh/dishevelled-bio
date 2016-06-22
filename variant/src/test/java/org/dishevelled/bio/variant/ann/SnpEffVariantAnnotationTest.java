@@ -76,25 +76,26 @@ public class SnpEffVariantAnnotationTest {
     @Test
     public void testValueOf() {
         SnpEffVariantAnnotation ann = valueOf("T|upstream_gene_variant|MODIFIER|TAS1R3|ENSG00000169962|transcript|ENST00000339381.5|protein_coding||c.-485C>T|||||453|");
-        assertEquals("T", ann.allele());
-        assertTrue(ann.annotations().contains("upstream_gene_variant"));
+        assertEquals("T", ann.alternateAllele());
+        assertTrue(ann.effects().contains("upstream_gene_variant"));
         assertEquals("MODIFIER", ann.annotationImpact());
         assertEquals("TAS1R3", ann.geneName());
         assertEquals("ENSG00000169962", ann.geneId());
         assertEquals("transcript", ann.featureType());
         assertEquals("ENST00000339381.5", ann.featureId());
-        assertEquals("protein_coding", ann.transcriptBioType());
+        assertEquals("protein_coding", ann.biotype());
         assertNull(ann.rank());
-        assertEquals("c.-485C>T", ann.cHgvs());
-        assertNull(ann.pHgvs());
+        assertNull(ann.total());
+        assertEquals("c.-485C>T", ann.transcriptHgvs());
+        assertNull(ann.proteinHgvs());
         assertNull(ann.cdnaPosition());
         assertNull(ann.cdnaLength());
         assertNull(ann.cdsPosition());
         assertNull(ann.cdsLength());
-        assertNull(ann.aminoAcidPosition());
-        assertNull(ann.aminoAcidLength());
+        assertNull(ann.proteinPosition());
+        assertNull(ann.proteinLength());
         assertEquals(Integer.valueOf(453), ann.distance());
-        assertTrue(ann.errors().isEmpty());
+        assertTrue(ann.messages().isEmpty());
         assertEquals("T|upstream_gene_variant|MODIFIER|TAS1R3|ENSG00000169962|transcript|ENST00000339381.5|protein_coding||c.-485C>T|||||453|", ann.toString());
     }
 

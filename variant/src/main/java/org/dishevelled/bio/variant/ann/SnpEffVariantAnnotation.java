@@ -47,104 +47,107 @@ public final class SnpEffVariantAnnotation {
     /*
     ##INFO=<ID=ANN,Number=.,Type=String,Description="Functional annotations: 'Allele | Annotation | Annotation_Impact | Gene_Name | Gene_ID | Feature_Type | Feature_ID | Transcript_BioType | Rank | HGVS.c | HGVS.p | cDNA.pos / cDNA.length | CDS.pos / CDS.length | AA.pos / AA.length | Distance | ERRORS / WARNINGS / INFO' ">
      */
-    private final String allele;
-    private final List<String> annotations;
+    private final String alternateAllele;
+    private final List<String> effects;
     private final String annotationImpact;
     private final String geneName;
     private final String geneId;
     private final String featureType;
     private final String featureId;
-    private final String transcriptBioType;
+    private final String biotype;
     private final Integer rank;
-    private final String cHgvs;
-    private final String pHgvs;
+    private final Integer total;
+    private final String transcriptHgvs;
+    private final String proteinHgvs;
     private final Integer cdnaPosition;
     private final Integer cdnaLength;
     private final Integer cdsPosition;
     private final Integer cdsLength;
-    private final Integer aminoAcidPosition;
-    private final Integer aminoAcidLength;
+    private final Integer proteinPosition;
+    private final Integer proteinLength;
     private final Integer distance;
-    private final List<String> errors;
+    private final List<String> messages;
     private final int hashCode;
 
 
     /**
      * Create a new SnpEff variant annotation.
      *
-     * @param allele allele, if any
-     * @param annotations list of annotations, must not be null
+     * @param alternateAllele alternate allele, if any
+     * @param effects list of effects, must not be null
      * @param annotationImpact annotation impact, if any
      * @param geneName gene name, if any
      * @param geneId gene id, if any
      * @param featureType feature type, if any
      * @param featureId feature id, if any
-     * @param transcriptBioType transcript bio type, if any
-     * @param rank rank, if any
-     * @param cHgvs HGVS.c annotation, if any
-     * @param pHgvs HGVS.p annotation, if any
+     * @param biotype transcript biotype, if any
+     * @param rank intron or exon rank, if any
+     * @param total total number of introns or exons, if any
+     * @param transcriptHgvs HGVS.c annotation, if any
+     * @param proteinHgvs HGVS.p annotation, if any
      * @param cdnaPosition cDNA position, if any
      * @param cdnaLength cDNA length, if any
      * @param cdsPosition CDS position, if any
      * @param cdsLength CDS length, if any
-     * @param aminoAcidPosition amino acid position, if any
-     * @param aminoAcidLength amino acid length, if any
+     * @param proteinPosition protein position, if any
+     * @param proteinLength protein length, if any
      * @param distance distance, if any
-     * @param errors list of errors, must not be null
+     * @param messages list of messages, must not be null
      */
-    private SnpEffVariantAnnotation(final String allele, final List<String> annotations, final String annotationImpact,
+    private SnpEffVariantAnnotation(final String alternateAllele, final List<String> effects, final String annotationImpact,
                                     final String geneName, final String geneId, final String featureType, final String featureId,
-                                    final String transcriptBioType, final Integer rank, final String cHgvs, final String pHgvs,
-                                    final Integer cdnaPosition, final Integer cdnaLength, final Integer cdsPosition,
-                                    final Integer cdsLength, final Integer aminoAcidPosition, final Integer aminoAcidLength,
-                                    final Integer distance, final List<String> errors) {
+                                    final String biotype, final Integer rank, final Integer total, final String transcriptHgvs,
+                                    final String proteinHgvs, final Integer cdnaPosition, final Integer cdnaLength,
+                                    final Integer cdsPosition, final Integer cdsLength, final Integer proteinPosition,
+                                    final Integer proteinLength, final Integer distance, final List<String> messages) {
 
-        checkNotNull(annotations);
-        checkNotNull(errors);
+        checkNotNull(effects);
+        checkNotNull(messages);
 
-        this.allele = allele;
-        this.annotations = ImmutableList.copyOf(annotations);
+        this.alternateAllele = alternateAllele;
+        this.effects = ImmutableList.copyOf(effects);
         this.annotationImpact = annotationImpact;
         this.geneName = geneName;
         this.geneId = geneId;
         this.featureType = featureType;
         this.featureId = featureId;
-        this.transcriptBioType = transcriptBioType;
+        this.biotype = biotype;
         this.rank = rank;
-        this.cHgvs = cHgvs;
-        this.pHgvs = pHgvs;
+        this.total = total;
+        this.transcriptHgvs = transcriptHgvs;
+        this.proteinHgvs = proteinHgvs;
         this.cdnaPosition = cdnaPosition;
         this.cdnaLength = cdnaLength;
         this.cdsPosition = cdsPosition;
         this.cdsLength = cdsLength;
-        this.aminoAcidPosition = aminoAcidPosition;
-        this.aminoAcidLength = aminoAcidLength;
+        this.proteinPosition = proteinPosition;
+        this.proteinLength = proteinLength;
         this.distance = distance;
-        this.errors = ImmutableList.copyOf(errors);
+        this.messages = ImmutableList.copyOf(messages);
 
-        hashCode = Objects.hash(this.allele, this.annotations, this.annotationImpact, this.geneName, this.geneId,
-                                this.featureType, this.featureId, this.transcriptBioType, this.rank, this.cHgvs,
-                                this.pHgvs, this.cdnaPosition, this.cdnaLength, this.cdsPosition, this.cdsLength,
-                                this.aminoAcidPosition, this.aminoAcidLength, this.distance, this.errors);
+        hashCode = Objects.hash(this.alternateAllele, this.effects, this.annotationImpact, this.geneName, this.geneId,
+                                this.featureType, this.featureId, this.biotype, this.rank, this.total, this.transcriptHgvs,
+                                this.proteinHgvs, this.cdnaPosition, this.cdnaLength, this.cdsPosition, this.cdsLength,
+                                this.proteinPosition, this.proteinLength, this.distance, this.messages);
     }
 
 
     /**
-     * Return the allele for this SnpEff variant annotation, if any.
+     * Return the alternate allele for this SnpEff variant annotation, if any.
      *
-     * @return the allele for this SnpEff variant annotation, if any
+     * @return the alternate allele for this SnpEff variant annotation, if any
      */
-    public String allele() {
-        return allele;
+    public String alternateAllele() {
+        return alternateAllele;
     }
 
     /**
-     * Return the list of annotations for this SnpEff variant annotation.
+     * Return the list of effects for this SnpEff variant annotation.
      *
-     * @return the list of annotations for this SnpEff variant annotation
+     * @return the list of effects for this SnpEff variant annotation
      */
-    public List<String> annotations() {
-        return annotations;
+    public List<String> effects() {
+        return effects;
     }
 
     /**
@@ -197,17 +200,26 @@ public final class SnpEffVariantAnnotation {
      *
      * @return the transcript bio type for this SnpEff variant annotation, if any
      */
-    public String transcriptBioType() {
-        return transcriptBioType;
+    public String biotype() {
+        return biotype;
     }
 
     /**
-     * Return the rank for this SnpEff variant annotation, if any.
+     * Return the intron or exon rank for this SnpEff variant annotation, if any.
      *
-     * @return the rank for this SnpEff variant annotation, if any
+     * @return the intorn or exon rank for this SnpEff variant annotation, if any
      */
     public Integer rank() {
         return rank;
+    }
+
+    /**
+     * Return the total number of introns or exons for this SnpEff variant annotation, if any.
+     *
+     * @return the total number of introns or exons for this SnpEff variant annotation, if any
+     */
+    public Integer total() {
+        return total;
     }
 
     /**
@@ -215,8 +227,8 @@ public final class SnpEffVariantAnnotation {
      *
      * @return the HGVS.c annotation for this SnpEff variant annotation, if any
      */
-    public String cHgvs() {
-        return cHgvs;
+    public String transcriptHgvs() {
+        return transcriptHgvs;
     }
 
     /**
@@ -224,8 +236,8 @@ public final class SnpEffVariantAnnotation {
      *
      * @return the HGVS.p annotation for this SnpEff variant annotation, if any
      */
-    public String pHgvs() {
-        return pHgvs;
+    public String proteinHgvs() {
+        return proteinHgvs;
     }
 
     /**
@@ -269,8 +281,8 @@ public final class SnpEffVariantAnnotation {
      *
      * @return the amino acid position for this SnpEff variant annotation, if any
      */
-    public Integer aminoAcidPosition() {
-        return aminoAcidPosition;
+    public Integer proteinPosition() {
+        return proteinPosition;
     }
 
     /**
@@ -278,8 +290,8 @@ public final class SnpEffVariantAnnotation {
      *
      * @return the amino acid length for this SnpEff variant annotation, if any
      */
-    public Integer aminoAcidLength() {
-        return aminoAcidLength;
+    public Integer proteinLength() {
+        return proteinLength;
     }
 
     /**
@@ -292,12 +304,12 @@ public final class SnpEffVariantAnnotation {
     }
 
     /**
-     * Return the list of errors for this SnpEff variant annotation.
+     * Return the list of messages for this SnpEff variant annotation.
      *
-     * @return the list of errors for this SnpEff variant annotation
+     * @return the list of messages for this SnpEff variant annotation
      */
-    public List<String> errors() {
-        return errors;
+    public List<String> messages() {
+        return messages;
     }
 
     @Override
@@ -315,37 +327,38 @@ public final class SnpEffVariantAnnotation {
         }
         SnpEffVariantAnnotation ann = (SnpEffVariantAnnotation) o;
 
-        return Objects.equals(allele, ann.allele)
-            && Objects.equals(annotations, ann.annotations)
+        return Objects.equals(alternateAllele, ann.alternateAllele)
+            && Objects.equals(effects, ann.effects)
             && Objects.equals(annotationImpact, ann.annotationImpact)
             && Objects.equals(geneName, ann.geneName)
             && Objects.equals(geneId, ann.geneId)
             && Objects.equals(featureType, ann.featureType)
             && Objects.equals(featureId, ann.featureId)
-            && Objects.equals(transcriptBioType, ann.transcriptBioType)
+            && Objects.equals(biotype, ann.biotype)
             && Objects.equals(rank, ann.rank)
-            && Objects.equals(cHgvs, ann.cHgvs)
-            && Objects.equals(pHgvs, ann.pHgvs)
+            && Objects.equals(total, ann.total)
+            && Objects.equals(transcriptHgvs, ann.transcriptHgvs)
+            && Objects.equals(proteinHgvs, ann.proteinHgvs)
             && Objects.equals(cdnaPosition, ann.cdnaPosition)
             && Objects.equals(cdnaLength, ann.cdnaLength)
             && Objects.equals(cdsPosition, ann.cdsPosition)
             && Objects.equals(cdsLength, ann.cdsLength)
-            && Objects.equals(aminoAcidPosition, ann.aminoAcidPosition)
-            && Objects.equals(aminoAcidLength, ann.aminoAcidLength)
+            && Objects.equals(proteinPosition, ann.proteinPosition)
+            && Objects.equals(proteinLength, ann.proteinLength)
             && Objects.equals(distance, ann.distance)
-            && Objects.equals(errors, ann.errors);
+            && Objects.equals(messages, ann.messages);
     }
 
     @Override
     public String toString() {
-        String annotations = Joiner.on("&").join(this.annotations);
-        String errors = Joiner.on("&").join(this.errors);
-        return Joiner.on("|").join(nullToEmpty(allele), annotations, nullToEmpty(annotationImpact),
+        String effects = Joiner.on("&").join(this.effects);
+        String messages = Joiner.on("&").join(this.messages);
+        return Joiner.on("|").join(nullToEmpty(alternateAllele), effects, nullToEmpty(annotationImpact),
                                    nullToEmpty(geneName), nullToEmpty(geneId), nullToEmpty(featureType),
-                                   nullToEmpty(featureId), nullToEmpty(transcriptBioType), nullToEmpty(rank),
-                                   nullToEmpty(cHgvs), nullToEmpty(pHgvs), nullToEmpty(cdnaPosition, cdnaLength),
-                                   nullToEmpty(cdsPosition, cdsLength), nullToEmpty(aminoAcidPosition, aminoAcidLength),
-                                   nullToEmpty(distance), errors);
+                                   nullToEmpty(featureId), nullToEmpty(biotype), nullToEmpty(rank, total),
+                                   nullToEmpty(transcriptHgvs), nullToEmpty(proteinHgvs), nullToEmpty(cdnaPosition, cdnaLength),
+                                   nullToEmpty(cdsPosition, cdsLength), nullToEmpty(proteinPosition, proteinLength),
+                                   nullToEmpty(distance), messages);
     }
 
     /**
@@ -361,44 +374,42 @@ public final class SnpEffVariantAnnotation {
 
         List<String> tokens = Splitter.on("|").splitToList(value);
         if (tokens.size() != 16) {
-            throw new IllegalArgumentException("value must have sixteen fields (Allele | Annotation | Annotation_Impact | Gene_Name | Gene_ID | Feature_Type | Feature_ID | Transcript_BioType | Rank | HGVS.c | HGVS.p | cDNA.pos / cDNA.length | CDS.pos / CDS.length | AA.pos / AA.length | Distance | ERRORS / WARNINGS / INFO)");
+            throw new IllegalArgumentException("value must have sixteen fields (AlternateAllele | Annotation | Annotation_Impact | Gene_Name | Gene_ID | Feature_Type | Feature_ID | Transcript_BioType | Rank | HGVS.c | HGVS.p | cDNA.pos / cDNA.length | CDS.pos / CDS.length | AA.pos / AA.length | Distance | MESSAGES / WARNINGS / INFO)");
         }
 
-        String allele = emptyToNull(tokens.get(0));
-        List<String> annotations = Splitter.on("&").omitEmptyStrings().splitToList(tokens.get(1));
+        String alternateAllele = emptyToNull(tokens.get(0));
+        List<String> effects = Splitter.on("&").omitEmptyStrings().splitToList(tokens.get(1));
         String annotationImpact = emptyToNull(tokens.get(2));
         String geneName = emptyToNull(tokens.get(3));
         String geneId = emptyToNull(tokens.get(4));
         String featureType = emptyToNull(tokens.get(5));
         String featureId = emptyToNull(tokens.get(6));
-        String transcriptBioType = emptyToNull(tokens.get(7));
-        Integer rank = emptyToNullInteger(tokens.get(8));
-        String cHgvs = emptyToNull(tokens.get(9));
-        String pHgvs = emptyToNull(tokens.get(10));
+        String biotype = emptyToNull(tokens.get(7));
+        Integer rank = numerator(tokens.get(8));
+        Integer total = denominator(tokens.get(8));
+        String transcriptHgvs = emptyToNull(tokens.get(9));
+        String proteinHgvs = emptyToNull(tokens.get(10));
         Integer cdnaPosition = numerator(tokens.get(11));
         Integer cdnaLength = denominator(tokens.get(11));
         Integer cdsPosition = numerator(tokens.get(12));
         Integer cdsLength = denominator(tokens.get(12));
-        Integer aminoAcidPosition = numerator(tokens.get(13));
-        Integer aminoAcidLength = denominator(tokens.get(13));
+        Integer proteinPosition = numerator(tokens.get(13));
+        Integer proteinLength = denominator(tokens.get(13));
         Integer distance = emptyToNullInteger(tokens.get(14));
-        List<String> errors = Splitter.on("&").omitEmptyStrings().splitToList(tokens.get(15));
+        List<String> messages = Splitter.on("&").omitEmptyStrings().splitToList(tokens.get(15));
 
-        return new SnpEffVariantAnnotation(allele, annotations, annotationImpact, geneName, geneId,
-                                           featureType, featureId, transcriptBioType, rank, cHgvs, pHgvs,
-                                           cdnaPosition, cdnaLength, cdsPosition, cdsLength, aminoAcidPosition,
-                                           aminoAcidLength, distance, errors);
+        return new SnpEffVariantAnnotation(alternateAllele, effects, annotationImpact, geneName, geneId,
+                                           featureType, featureId, biotype, rank, total, transcriptHgvs, proteinHgvs,
+                                           cdnaPosition, cdnaLength, cdsPosition, cdsLength, proteinPosition,
+                                           proteinLength, distance, messages);
     }
 
     /**
-     * Return zero or more SnpEff variant annotations parsed from the INFO field ANN values of the
-     * specified VCF record.
+     * Return zero or more SnpEff variant annotations parsed from the INFO field ANN values of the specified VCF record.
      *
      * @param record VCF record to annotate, must not be null
-     * @return zero or more SnpEff variant annotations parsed from the INFO field ANN values of the
-     *    specified VCF record
-     * @throws IllegalArgumentException if any of the INFO field ANN values are not valid SnpEff variant
-     *    annotation format
+     * @return zero or more SnpEff variant annotations parsed from the INFO field ANN values of the specified VCF record
+     * @throws IllegalArgumentException if any of the INFO field ANN values are not valid SnpEff variant annotation format
      * @throws NumberFormatException if a number valued field cannot be parsed as a number
      */
     public static List<SnpEffVariantAnnotation> annotate(final VcfRecord record) {
