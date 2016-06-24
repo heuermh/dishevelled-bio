@@ -223,6 +223,10 @@
               <mainClass>org.dishevelled.bio.tools.EnsemblVariantTableToVcf</mainClass>
             </program>
             <program>
+              <id>dsh-vcf-samples</id>
+              <mainClass>org.dishevelled.bio.tools.VcfSamples</mainClass>
+            </program>
+            <program>
               <id>dsh-bio</id>
               <mainClass>org.dishevelled.bio.tools.Tools</mainClass>
             </program>

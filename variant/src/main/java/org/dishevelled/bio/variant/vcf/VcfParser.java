@@ -100,6 +100,11 @@ public final class VcfParser {
             // consider using guava Splitter
             String[] tokens = line.split("\t");
 
+            // skip blank lines
+            if (tokens.length == 0) {
+                return true;
+            }
+
             if (tokens[0].startsWith("##")) {
                 // meta-information lines
                 listener.meta(line);

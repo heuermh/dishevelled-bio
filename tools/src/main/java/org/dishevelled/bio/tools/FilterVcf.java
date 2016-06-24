@@ -34,7 +34,15 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import java.util.concurrent.Callable;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Range;
+
+import org.dishevelled.bio.range.Ranges;
 
 import org.dishevelled.bio.variant.vcf.VcfHeader;
 import org.dishevelled.bio.variant.vcf.VcfReader;
@@ -50,7 +58,9 @@ import org.dishevelled.commandline.CommandLineParser;
 import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
+import org.dishevelled.commandline.argument.DoubleArgument;
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.StringArgument;
 import org.dishevelled.commandline.argument.StringListArgument;
 
 /**
@@ -59,22 +69,22 @@ import org.dishevelled.commandline.argument.StringListArgument;
  * @author  Michael Heuer
  */
 public final class FilterVcf implements Callable<Integer> {
-    private final Filter filter;
+    private final List<Filter> filters;
     private final File inputVcfFile;
     private final File outputVcfFile;
-    private static final String USAGE = "dsh-filter-vcf -s rs149201999 -i input.vcf.gz -o output.vcf.gz";
+    private static final String USAGE = "dsh-filter-vcf -d rs149201999 -i input.vcf.gz -o output.vcf.gz";
 
 
     /**
      * Filter variants in VCF format.
      *
-     * @param filter filter, must not be null
+     * @param filters list of filters, must not be null
      * @param inputVcfFile input VCF file, if any
      * @param outputVcfFile output VCF file, if any
      */
-    public FilterVcf(final Filter filter, final File inputVcfFile, final File outputVcfFile) {
-        checkNotNull(filter);
-        this.filter = filter;
+    public FilterVcf(final List<Filter> filters, final File inputVcfFile, final File outputVcfFile) {
+        checkNotNull(filters);
+        this.filters = ImmutableList.copyOf(filters);
         this.inputVcfFile = inputVcfFile;
         this.outputVcfFile = outputVcfFile;
     }
@@ -110,7 +120,11 @@ public final class FilterVcf implements Callable<Integer> {
                         }
 
                         // write out record
-                        if (filter.accept(record)) {
+                        boolean pass = true;
+                        for (Filter filter : filters) {
+                            pass &= filter.accept(record);
+                        }
+                        if (pass) {
                             VcfWriter.writeRecord(samples, record, w);
                         }
                     }
@@ -151,6 +165,49 @@ public final class FilterVcf implements Callable<Integer> {
         }
     }
 
+    static final class RangeFilter implements Filter {
+        private final String chrom;
+        private final Range<Long> range;
+        private final Pattern RANGE = Pattern.compile("^(.*):([0-9]+)-([0-9]+)$");
+
+        RangeFilter(final String value) {
+            checkNotNull(value);
+            Matcher m = RANGE.matcher(value);
+            if (!m.matches()) {
+                throw new IllegalArgumentException("invalid range format, expected chrom:start-end in 0-based coordinates");
+            }
+            this.chrom = m.group(1);
+            long start = Long.parseLong(m.group(2));
+            long end = Long.parseLong(m.group(3));
+            this.range = Range.closedOpen(start, end);
+        }
+
+        @Override
+        public boolean accept(final VcfRecord record) {
+            return chrom.equals(record.getChrom()) && Ranges.intersect(range, Range.singleton(record.getPos() - 1L));
+        }
+    }
+
+    static final class QualFilter implements Filter {
+        private final double qual;
+
+        QualFilter(final double qual) {
+            this.qual = qual;
+        }
+
+        @Override
+        public boolean accept(final VcfRecord record) {
+            return record.getQual() >= qual;
+        }
+    }
+
+    static final class FilterFilter implements Filter {
+        @Override
+        public boolean accept(final VcfRecord record) {
+            return "PASS".equals(record.getFilter());
+        }
+    }
+
     /**
      * Main.
      *
@@ -159,11 +216,14 @@ public final class FilterVcf implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        StringListArgument snpIdFilter = new StringListArgument("s", "snp-ids", "filter by snp id", true);
+        StringListArgument idFilter = new StringListArgument("d", "id", "filter by id, specify as id1,id2,id3", false);
+        StringArgument rangeFilter = new StringArgument("r", "range", "filter by range, specify as chrom:start-end in 0-based coordindates", false);
+        DoubleArgument qualFilter = new DoubleArgument("q", "qual", "filter by quality score", false);
+        Switch filterFilter = new Switch("f", "filter", "filter to records that have passed all filters");
         FileArgument inputVcfFile = new FileArgument("i", "input-vcf-file", "input VCF file, default stdin", false);
         FileArgument outputVcfFile = new FileArgument("o", "output-vcf-file", "output VCF file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, snpIdFilter, inputVcfFile, outputVcfFile);
+        ArgumentList arguments = new ArgumentList(about, help, idFilter, rangeFilter, qualFilter, filterFilter, inputVcfFile, outputVcfFile);
         CommandLine commandLine = new CommandLine(args);
 
         FilterVcf filterVcf = null;
@@ -177,7 +237,20 @@ public final class FilterVcf implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            filterVcf = new FilterVcf(new IdFilter(snpIdFilter.getValue()), inputVcfFile.getValue(), outputVcfFile.getValue());
+            List<Filter> filters = new ArrayList<Filter>();
+            if (idFilter.wasFound()) {
+                filters.add(new IdFilter(idFilter.getValue()));
+            }
+            if (rangeFilter.wasFound()) {
+                filters.add(new RangeFilter(rangeFilter.getValue()));
+            }
+            if (qualFilter.wasFound()) {
+                filters.add(new QualFilter(qualFilter.getValue()));
+            }
+            if (filterFilter.wasFound()) {
+                filters.add(new FilterFilter());
+            }            
+            filterVcf = new FilterVcf(filters, inputVcfFile.getValue(), outputVcfFile.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {
@@ -191,7 +264,7 @@ public final class FilterVcf implements Callable<Integer> {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);
             System.exit(-1);
         }
-        catch (NullPointerException e) {
+        catch (NullPointerException | IllegalArgumentException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);
             System.exit(-1);
         }

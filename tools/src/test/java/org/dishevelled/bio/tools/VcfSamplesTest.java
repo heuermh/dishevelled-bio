@@ -30,37 +30,17 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableList;
-
-import org.dishevelled.bio.variant.vcf.VcfRecord;
-
 /**
- * Unit test for FilterVcf.
+ * Unit test for VcfSamples.
  *
  * @author  Michael Heuer
  */
-public final class FilterVcfTest {
-    private FilterVcf.Filter filter;
+public final class VcfSamplesTest {
     private File inputVcfFile;
-    private File outputVcfFile;
-
-    @Before
-    public void setUp() throws Exception {
-        filter = new FilterVcf.Filter() {
-                @Override
-                public boolean accept(final VcfRecord record) {
-                    return true;
-                }
-            };
-    }
-
-    @Test(expected=NullPointerException.class)
-    public void testConstructorNullFilter() {
-        new FilterVcf(null, inputVcfFile, outputVcfFile);
-    }
+    private File outputSampleFile;
 
     @Test
     public void testConstructor() {
-        assertNotNull(new FilterVcf(ImmutableList.of(filter), inputVcfFile, outputVcfFile));
+        assertNotNull(new VcfSamples(inputVcfFile, outputSampleFile));
     }
 }
