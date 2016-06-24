@@ -55,8 +55,8 @@
     <dsh-bitset.version>3.0</dsh-bitset.version>
     <dsh-commandline.version>1.1</dsh-commandline.version>
     <dsh-compress.version>1.2-SNAPSHOT</dsh-compress.version>
-    <jdk.version>1.7</jdk.version>
-    <maven.enforcer.jdk-version>[1.7,)</maven.enforcer.jdk-version>
+    <jdk.version>1.8</jdk.version>
+    <maven.enforcer.jdk-version>[1.8,)</maven.enforcer.jdk-version>
     <rtree.version>0.4.1</rtree.version>
   </properties>
   <dependencyManagement>
