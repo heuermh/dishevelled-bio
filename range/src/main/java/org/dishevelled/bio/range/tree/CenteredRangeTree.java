@@ -58,7 +58,6 @@ public final class CenteredRangeTree<C extends Comparable> extends AbstractRange
      */
     private CenteredRangeTree(final Iterable<Range<C>> ranges) {
         checkNotNull(ranges);
-        // O(n) hit to cache size
         size = Iterables.size(ranges);
         root = createNode(ranges);
     }
