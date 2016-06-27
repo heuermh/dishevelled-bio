@@ -21,7 +21,7 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.range.tree2;
+package org.dishevelled.bio.range.entrytree;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

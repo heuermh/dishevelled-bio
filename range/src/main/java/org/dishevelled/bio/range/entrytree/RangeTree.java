@@ -21,14 +21,12 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.range.tree2;
-
-import java.util.Set;
+package org.dishevelled.bio.range.entrytree;
 
 import com.google.common.collect.Range;
 
 /**
- * Range tree.
+ * Range tree composed of entries.
  *
  * @param <C> range endpoint type
  * @param <V> value type

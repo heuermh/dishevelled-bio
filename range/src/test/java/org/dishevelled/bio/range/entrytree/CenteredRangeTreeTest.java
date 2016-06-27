@@ -21,8 +21,33 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
+package org.dishevelled.bio.range.entrytree;
+
+import java.util.List;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Range;
 
 /**
- * Range tree.
+ * Unit test for CenteredRangeTree.
+ *
+ * @author  Michael Heuer
  */
-package org.dishevelled.bio.range.tree2;
+public final class CenteredRangeTreeTest extends AbstractRangeTreeTest {
+
+    @Override
+    protected <C extends Comparable> RangeTree<C, String> create(final Range<C>... ranges) {
+        return create(ImmutableList.copyOf(ranges));
+    }
+
+    @Override
+    protected <C extends Comparable> RangeTree<C, String> create(final List<Range<C>> ranges) {
+        int size = ranges.size();
+        List<String> values = Lists.newArrayListWithExpectedSize(ranges.size());
+        for (int i = 0; i < size; i++) {
+            values.add("value" + i);
+        }
+        return CenteredRangeTree.create(ranges, values);
+    }
+}

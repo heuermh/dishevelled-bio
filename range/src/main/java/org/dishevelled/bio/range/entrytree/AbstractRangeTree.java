@@ -21,16 +21,13 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.range.tree2;
+package org.dishevelled.bio.range.entrytree;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
-import java.util.Set;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
 
 /**
