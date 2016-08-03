@@ -54,5 +54,10 @@
       <artifactId>dsh-compress</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.dishevelled</groupId>
+      <artifactId>dsh-graph</artifactId>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 </project>
