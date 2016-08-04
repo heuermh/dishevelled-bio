@@ -115,6 +115,7 @@ public final class Tools implements Callable<Integer> {
         .put("interleave-fastq", new Command("interleave-fastq", "convert first and second sequence files in FASTQ format to interleaved FASTQ format", InterleaveFastq.class))
         //.put("intersect-bed", new Command("intersect-bed", "similar to bedtools2 intersect -v", IntersectBed.class))
         .put("split-fastq", new Command("split-fastq", "convert interleaved FASTQ format into first and second sequence files in FASTQ format", SplitFastq.class))
+        .put("vcf-pedigree", new Command("vcf-pedigree", "extract a pedigree from VCF format", VcfPedigree.class))
         .put("vcf-samples", new Command("vcf-samples", "extract samples from VCF format", VcfSamples.class))
         .build();
 
