@@ -34,6 +34,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.google.common.base.Charsets;
 
 import com.google.common.io.Resources;
@@ -100,6 +103,17 @@ public final class VcfReader {
      */
     public static Iterable<VcfSample> samples(final Readable readable) throws IOException {
         return VcfSampleParser.samples(readable);
+    }
+
+    /**
+     * Read a VCF pedigree from the specified readable.
+     *
+     * @param readable readable to read from, must not be null
+     * @return a VCF pedigree read from the specified readable
+     * @throws IOException if an I/O error occurs
+     */
+    public static VcfPedigree pedigree(final Readable readable) throws IOException {
+        return VcfPedigreeParser.pedigree(readable);
     }
 
     /**
@@ -198,6 +212,49 @@ public final class VcfReader {
         checkNotNull(inputStream);
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             return samples(reader);
+        }
+    }
+
+    /**
+     * Read the VCF pedigree from the specified file.
+     *
+     * @param file file to read from, must not be null
+     * @return the VCF pedigree read from the specified file
+     * @throws IOException if an I/O error occurs
+     */
+    public static VcfPedigree pedigree(final File file) throws IOException {
+        checkNotNull(file);
+        // could also use Files.asCharSource(file, Charsets.UTF_8).openBufferedStream()
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            return pedigree(reader);
+        }
+    }
+
+    /**
+     * Read the VCF pedigree from the specified URL.
+     *
+     * @param url URL to read from, must not be null
+     * @return the VCF pedigree read from the specified URL
+     * @throws IOException if an I/O error occurs
+     */
+    public static VcfPedigree pedigree(final URL url) throws IOException {
+        checkNotNull(url);
+        try (BufferedReader reader = Resources.asCharSource(url, Charsets.UTF_8).openBufferedStream()) {
+            return pedigree(reader);
+        }
+    }
+
+    /**
+     * Read the VCF pedigree from the specified input stream.
+     *
+     * @param inputStream input stream to read from, must not be null
+     * @return the VCF pedigree read from the specified input stream
+     * @throws IOException if an I/O error occurs
+     */
+    public static VcfPedigree pedigree(final InputStream inputStream) throws IOException {
+        checkNotNull(inputStream);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            return pedigree(reader);
         }
     }
 

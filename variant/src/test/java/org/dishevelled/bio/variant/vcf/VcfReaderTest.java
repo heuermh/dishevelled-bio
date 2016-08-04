@@ -31,6 +31,7 @@ import static org.junit.Assert.assertTrue;
 
 import static org.dishevelled.bio.variant.vcf.VcfReader.parse;
 import static org.dishevelled.bio.variant.vcf.VcfReader.header;
+import static org.dishevelled.bio.variant.vcf.VcfReader.pedigree;
 import static org.dishevelled.bio.variant.vcf.VcfReader.records;
 import static org.dishevelled.bio.variant.vcf.VcfReader.samples;
 import static org.dishevelled.bio.variant.vcf.VcfReader.stream;
@@ -46,10 +47,17 @@ import java.io.IOException;
 
 import java.nio.CharBuffer;
 
+import java.util.List;
+
 import com.google.common.collect.ImmutableList;
 
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
+
+import org.dishevelled.bio.variant.vcf.VcfPedigree.Relationship;
+
+import org.dishevelled.graph.Edge;
+import org.dishevelled.graph.Node;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -161,6 +169,22 @@ public final class VcfReaderTest {
     }
 
     @Test(expected=NullPointerException.class)
+    public void testPedigreeNullReadable() throws Exception {
+        pedigree((Readable) null);
+    }
+
+    @Test
+    public void testPedigreeEmptyReadable() throws Exception {
+        pedigree(emptyReadable);
+    }
+
+    @Test
+    public void testPedigree() throws Exception {
+        VcfPedigree pedigree = pedigree(readable);
+        assertTrue(pedigree.getGraph().isEmpty());
+    }
+
+    @Test(expected=NullPointerException.class)
     public void testRecordsNullReadable() throws Exception {
         records((Readable) null);
     }
@@ -237,6 +261,37 @@ public final class VcfReaderTest {
     @Test
     public void testSamplesInputStream() throws Exception {
         validateSamples(samples(createInputStream(VCF)));
+    }
+
+
+    @Test(expected=NullPointerException.class)
+    public void testPedigreeNullFile() throws Exception {
+        pedigree((File) null);
+    }
+
+    @Test
+    public void testPedigreeFile() throws Exception {
+        validatePedigree(pedigree(createFile(VCF)));
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testPedigreeNullURL() throws Exception {
+        pedigree((URL) null);
+    }
+
+    @Test
+    public void testPedigreeURL() throws Exception {
+        validatePedigree(pedigree(createURL(VCF)));
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testPedigreeNullInputStream() throws Exception {
+        pedigree((InputStream) null);
+    }
+
+    @Test
+    public void testPedigreeInputStream() throws Exception {
+        validatePedigree(pedigree(createInputStream(VCF)));
     }
 
 
@@ -472,6 +527,35 @@ public final class VcfReaderTest {
         assertEquals("0/0", record.getGenotypes().get("NA12892-3").getGt());
     }
 
+    @Test
+    public void testRtgJointVariantCallerPedigree() throws Exception {
+        List<String> sampleIds = ImmutableList.of("NA12877-1", "NA12878", "NA12880-1", "NA12883", "NA12889", "NA12890", "NA12891-1", "NA12892-1");
+        VcfPedigree pedigree = pedigree(createInputStream("pedigree.vcf"));
+        assertNotNull(pedigree);
+        assertNotNull(pedigree.getGraph());
+        assertFalse(pedigree.getGraph().isEmpty());
+
+        assertEquals(8, pedigree.getGraph().nodeCount());
+        for (Node<VcfSample, Relationship> node : pedigree.getGraph().nodes()) {
+            assertTrue(sampleIds.contains(node.getValue().getId()));
+        }
+
+        assertEquals(8, pedigree.getGraph().edgeCount());
+        for (Edge<VcfSample, Relationship> edge : pedigree.getGraph().edges()) {
+            VcfSample source = edge.source().getValue();
+            VcfSample target = edge.target().getValue();
+            Relationship relationship = edge.getValue();
+            if ("NA12878".equals(source.getId())) {
+                assertEquals("Mother", relationship.getSourceLabel());
+                assertEquals("Child", relationship.getTargetLabel());
+            }
+            else if ("NA12877-1".equals(source.getId())) {
+                assertEquals("Father", relationship.getSourceLabel());
+                assertEquals("Child", relationship.getTargetLabel());
+            }
+        }
+    }
+
     private static void validateHeader(final VcfHeader header) {
         assertNotNull(header);
         assertEquals("VCFv4.1", header.getFileFormat());
@@ -495,6 +579,10 @@ public final class VcfReaderTest {
             count++;
         }
         assertEquals(2, count);
+    }
+
+    private static void validatePedigree(final VcfPedigree pedigree) {
+        assertNotNull(pedigree);
     }
 
     private static void validateRecord(final VcfRecord record) {

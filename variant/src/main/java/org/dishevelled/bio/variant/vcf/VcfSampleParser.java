@@ -115,11 +115,6 @@ public final class VcfSampleParser {
             }
         }
 
-        @Override
-        public boolean complete() throws IOException {
-            return false;
-        }
-
         /**
          * Return the VCF samples keyed by name.
          *

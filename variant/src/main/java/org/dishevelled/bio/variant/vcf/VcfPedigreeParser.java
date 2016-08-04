@@ -27,10 +27,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Maps;
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ListMultimap;
 
 /**
  * VCF pedigree parser.
@@ -51,27 +55,12 @@ public final class VcfPedigreeParser {
      * Read a VCF pedigree from the specified readable.
      *
      * @param readable readable to read from, must not be null
-     * @param genomes variable number of VCF genomes, must not be null
      * @return a VCF pedigree read from the specified readable
      * @throws IOException if an I/O error occurs
      */
-    public static VcfPedigree pedigree(final Readable readable, final VcfGenome... genomes) throws IOException {
-        checkNotNull(genomes);
-        return pedigree(readable, ImmutableList.copyOf(genomes));
-    }
-
-    /**
-     * Read a VCF pedigree from the specified readable.
-     *
-     * @param readable readable to read from, must not be null
-     * @param genomes zero or more VCF genomes, must not be null
-     * @return a VCF pedigree read from the specified readable
-     * @throws IOException if an I/O error occurs
-     */
-    public static VcfPedigree pedigree(final Readable readable, final Iterable<VcfGenome> genomes) throws IOException {
+    public static VcfPedigree pedigree(final Readable readable) throws IOException {
         checkNotNull(readable);
-        checkNotNull(genomes);
-        ParseListener parseListener = new ParseListener(genomes);
+        ParseListener parseListener = new ParseListener();
         VcfParser.parse(readable, parseListener);
         return parseListener.getPedigree();
     }
@@ -80,27 +69,61 @@ public final class VcfPedigreeParser {
      * Parse listener.
      */
     static final class ParseListener extends VcfParseAdapter {
+        /** List of ##PEDIGREE meta header lines. */
+        private final List<String> pedigreeMetaLines = new ArrayList<String>();
+
         /** VCF pedigree builder. */
         private final VcfPedigree.Builder builder = VcfPedigree.builder();
 
-        /** VCF genomes keyed by id. */
-        private final Map<String, VcfGenome> genomesById = Maps.newHashMap();
+        /** VCF samples keyed by id. */
+        private Map<String, VcfSample> samplesById = new HashMap<String, VcfSample>();
 
-        /**
-         * Create a new parse listener with the specified VCF genomes.
-         *
-         * @param genomes zero or more VCF genomes, must not be null
-         */
-        private ParseListener(final Iterable<VcfGenome> genomes) {
-            checkNotNull(genomes);
-            for (VcfGenome genome : genomes) {
-                genomesById.put(genome.getId(), genome);
+        @Override
+        public void meta(final String meta) throws IOException {
+            // copied from VcfSampleParser.ParseListener
+            if (meta.startsWith("##SAMPLE=")) {
+                ListMultimap<String, String> values = ArrayListMultimap.create();
+                String[] tokens = meta.substring(10).split(",");
+                for (String token : tokens) {
+                    String[] metaTokens = token.split("=");
+                    String key = metaTokens[0];
+                    String[] valueTokens = metaTokens[1].split(";");
+                    for (String valueToken : valueTokens) {
+                        values.put(key, valueToken.replace("\"", "").replace(">", ""));
+                    }
+                }
+
+                String id = values.get("ID").get(0);
+                List<String> genomeIds = values.get("Genomes");
+                List<String> mixtures = values.get("Mixture");
+                List<String> descriptions = values.get("Description");
+
+                List<VcfGenome> genomes = new ArrayList<VcfGenome>(genomeIds.size());
+                for (int i = 0, size = genomeIds.size(); i < size; i++) {
+                    genomes.add(new VcfGenome(genomeIds.get(i), Double.parseDouble(mixtures.get(i)), descriptions.get(i)));
+                }
+                samplesById.put(id, new VcfSample(id, genomes.toArray(new VcfGenome[genomes.size()])));
+            }
+            else if (meta.startsWith("##PEDIGREE=")) {
+                // need to process later, after all samples have been found
+                pedigreeMetaLines.add(meta);
             }
         }
 
         @Override
-        public void meta(final String meta) throws IOException {
+        public void samples(final String... samples) throws IOException {
+            // copied from VcfSampleParser.ParseListener
+            for (String sample : samples) {
+                // add if missing in meta lines
+                if (!samplesById.containsKey(sample)) {
+                    samplesById.put(sample, new VcfSample(sample, new VcfGenome[0]));
+                }
+            }
+
             /*
+
+              VCF 4.2 and earlier spec:
+
               ##PEDIGREE=<Derived=ID2,Original=ID1>
 
               ##PEDIGREE=<Child=CHILD-GENOME-ID,Mother=MOTHER-GENOME-ID,Father=FATHER-GENOME-ID>
@@ -124,8 +147,12 @@ public final class VcfPedigreeParser {
               PRIMARY-TUMOR-GENOME-ID -- Original ---- Derived --> SECONDARY1-TUMOR-GENOME-ID
               PRIMARY-TUMOR-GENOME-ID -- Original ---- Derived --> SECONDARY2-TUMOR-GENOME-ID
 
+              VCF 4.3 spec:
+
+              TBD.
+
              */
-            if (meta.startsWith("##PEDIGREE=")) {
+            for (String meta : pedigreeMetaLines) {
                 // note: need to trim < and > characters
                 String[] tokens = meta.substring(12, meta.length() - 1).split(",");
                 if (tokens.length > 1) {
@@ -133,10 +160,11 @@ public final class VcfPedigreeParser {
                     if (first.length < 2) {
                         throw new IOException("invalid ##PEDIGREE meta header line: " + meta);
                     }
+                    // in VCF 4.3, targetLabel will always be "ID"
                     String targetLabel = first[0];
-                    VcfGenome target = genomesById.get(first[1]);
+                    VcfSample target = samplesById.get(first[1]);
                     if (target == null) {
-                        throw new IOException("VCF genome id " + first[1] + " not found in genomes");
+                        throw new IOException("VCF sample id " + first[1] + " not found in samples");
                     }
 
                     for (int i = 1; i < tokens.length; i++) {
@@ -145,20 +173,15 @@ public final class VcfPedigreeParser {
                             throw new IOException("invalid ##PEDIGREE meta header line: " + meta);
                         }
                         String sourceLabel = next[0];
-                        VcfGenome source = genomesById.get(next[1]);
+                        VcfSample source = samplesById.get(next[1]);
                         if (source == null) {
-                            throw new IOException("VCF genome id " + next[1] + " not found in genomes");
+                            throw new IOException("VCF sample id " + next[1] + " not found in samples");
                         }
 
                         builder.withRelationship(source, sourceLabel, target, targetLabel);
                     }
                 }
             }
-        }
-
-        @Override
-        public boolean complete() throws IOException {
-            return false;
         }
 
         /**

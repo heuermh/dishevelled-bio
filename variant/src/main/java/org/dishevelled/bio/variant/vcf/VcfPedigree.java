@@ -43,27 +43,27 @@ import org.dishevelled.graph.impl.GraphUtils;
  */
 @Immutable
 public final class VcfPedigree {
-    /** Graph of pedigree relationships between genomes. */
-    private final Graph<VcfGenome, Relationship> graph;
+    /** Graph of pedigree relationships between samples. */
+    private final Graph<VcfSample, Relationship> graph;
 
 
     /**
-     * Create a new VCF pedigree with the specified graph of relationships between genomes.
+     * Create a new VCF pedigree with the specified graph of relationships between samples.
      *
-     * @param graph graph of relationships between genomes, must not be null
+     * @param graph graph of relationships between samples, must not be null
      */
-    private VcfPedigree(final Graph<VcfGenome, Relationship> graph) {
+    private VcfPedigree(final Graph<VcfSample, Relationship> graph) {
         checkNotNull(graph);
         this.graph = GraphUtils.unmodifiableGraph(graph);
     }
 
 
     /**
-     * Return the graph of relationships between genomes for this VCF pedigree.
+     * Return the graph of relationships between samples for this VCF pedigree.
      *
-     * @return the graph of relationships between genomes for this VCF pedigree
+     * @return the graph of relationships between samples for this VCF pedigree
      */
-    public Graph<VcfGenome, Relationship> getGraph() {
+    public Graph<VcfSample, Relationship> getGraph() {
         return graph;
     }
 
@@ -123,42 +123,42 @@ public final class VcfPedigree {
      * VCF pedigree builder.
      */
     public static final class Builder {
-        /** Graph of pedigree relationships between genomes. */
-        private final Graph<VcfGenome, Relationship> graph = GraphUtils.createGraph();
+        /** Graph of pedigree relationships between samples. */
+        private final Graph<VcfSample, Relationship> graph = GraphUtils.createGraph();
 
-        /** Map of genomes to nodes. */
-        private final Map<VcfGenome, Node<VcfGenome, Relationship>> nodes = Maps.newHashMap();
+        /** Map of samples to nodes. */
+        private final Map<VcfSample, Node<VcfSample, Relationship>> nodes = Maps.newHashMap();
 
 
         /**
-         * Return the node for the specified genome, creating a new one if necessary.
+         * Return the node for the specified sample, creating a new one if necessary.
          *
-         * @param genome genome, must not be null
-         * @return the node for the specified genome, creating a new one if necessary
+         * @param sample sample, must not be null
+         * @return the node for the specified sample, creating a new one if necessary
          */
-        private Node<VcfGenome, Relationship> createNode(final VcfGenome genome) {
-            checkNotNull(genome);
-            if (!nodes.containsKey(genome)) {
-                nodes.put(genome, graph.createNode(genome));
+        private Node<VcfSample, Relationship> createNode(final VcfSample sample) {
+            checkNotNull(sample);
+            if (!nodes.containsKey(sample)) {
+                nodes.put(sample, graph.createNode(sample));
             }
-            return nodes.get(genome);
+            return nodes.get(sample);
         }
 
         /**
          * Return this VCF pedigree builder configured with the specified relationship.
          *
-         * @param source source genome, must not be null
+         * @param source source sample, must not be null
          * @param sourceLabel source label
-         * @param target target genome, must not be null
+         * @param target target sample, must not be null
          * @param targetLabel target label
          */
-        public Builder withRelationship(final VcfGenome source,
+        public Builder withRelationship(final VcfSample source,
                                         final String sourceLabel,
-                                        final VcfGenome target,
+                                        final VcfSample target,
                                         final String targetLabel) {
 
-            Node<VcfGenome, Relationship> sourceNode = createNode(source);
-            Node<VcfGenome, Relationship> targetNode = createNode(target);
+            Node<VcfSample, Relationship> sourceNode = createNode(source);
+            Node<VcfSample, Relationship> targetNode = createNode(target);
             graph.createEdge(sourceNode, targetNode, new Relationship(sourceLabel, targetLabel));
             return this;
         }
