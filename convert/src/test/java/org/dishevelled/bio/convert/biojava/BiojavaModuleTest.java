@@ -1,0 +1,112 @@
+/*
+
+    dsh-convert  Convert between various data models.
+    Copyright (c) 2013-2016 held jointly by the individual authors.
+
+    This library is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as published
+    by the Free Software Foundation; either version 3 of the License, or (at
+    your option) any later version.
+
+    This library is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; with out even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+    License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this library;  if not, write to the Free Software Foundation,
+    Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA.
+
+    > http://www.fsf.org/licensing/licenses/lgpl.html
+    > http://www.opensource.org/licenses/lgpl-license.php
+
+*/
+package org.dishevelled.bio.convert.biojava;
+
+import static org.junit.Assert.assertNotNull;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.google.inject.Guice;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import org.bdgenomics.convert.Converter;
+import org.bdgenomics.convert.ConversionStringency;
+
+/**
+ * Unit test for BiojavaModule.
+ */
+public final class BiojavaModuleTest {
+    private BiojavaModule module;
+
+    @Before
+    public void setUp() {
+        module = new BiojavaModule();
+    }
+
+    @Test
+    public void testConstructor() {
+        assertNotNull(module);
+    }
+
+    @Test
+    public void testBiojavaModule() {
+        Injector injector = Guice.createInjector(module, new TestModule());
+        Target target = injector.getInstance(Target.class);
+        assertNotNull(target.getBdgFastqVariantToBiojavaFastqVariant());
+        assertNotNull(target.getBiojavaFastqVariantToBdgFastqVariant());
+        assertNotNull(target.getBiojavaFastqToBdgRead());
+        assertNotNull(target.getBdgReadToBiojavaFastq());
+    }
+
+    /**
+     * Injection target.
+     */
+    static class Target {
+        Converter<org.bdgenomics.formats.FastqVariant, org.biojava.bio.program.fastq.FastqVariant> bdgFastqVariantToBiojavaFastqVariant;
+        Converter<org.biojava.bio.program.fastq.FastqVariant, org.bdgenomics.formats.FastqVariant> biojavaFastqVariantToBdgFastqVariant;
+        Converter<Fastq, Read> biojavaFastqToBdgRead;
+        Converter<Read, Fastq> bdgReadToBiojavaFastq;
+
+        @Inject
+        Target(final Converter<org.bdgenomics.formats.FastqVariant, org.biojava.bio.program.fastq.FastqVariant> bdgFastqVariantToBiojavaFastqVariant,
+               final Converter<org.biojava.bio.program.fastq.FastqVariant, org.bdgenomics.formats.FastqVariant> biojavaFastqVariantToBdgFastqVariant,
+               final Converter<Fastq, Read> biojavaFastqToBdgRead,
+               final Converter<Read, Fastq> bdgReadToBiojavaFastq) {
+
+            this.bdgFastqVariantToBiojavaFastqVariant = bdgFastqVariantToBiojavaFastqVariant;
+            this.biojavaFastqVariantToBdgFastqVariant = biojavaFastqVariantToBdgFastqVariant;
+            this.biojavaFastqToBdgRead = biojavaFastqToBdgRead;
+            this.bdgReadToBiojavaFastq = bdgReadToBiojavaFastq;
+        }
+
+        Converter<org.bdgenomics.formats.FastqVariant, org.biojava.bio.program.fastq.FastqVariant> getBdgFastqVariantToBiojavaFastqVariant() {
+            return bdgFastqVariantToBiojavaFastqVariant;
+        }
+
+        Converter<org.biojava.bio.program.fastq.FastqVariant, org.bdgenomics.formats.FastqVariant> getBiojavaFastqVariantToBdgFastqVariant() {
+            return biojavaFastqVariantToBdgFastqVariant;
+        }
+
+        Converter<Fastq, Read> getBiojavaFastqToBdgRead() {
+            return biojavaFastqToBdgRead;
+        }
+
+        Converter<Read, Fastq> getBdgReadToBiojavaFastq() {
+            return bdgReadToBiojavaFastq;
+        }
+    }
+
+    /**
+     * Test module.
+     */
+    class TestModule extends AbstractModule {
+        @Override
+        protected void configure() {
+            bind(Target.class);
+        }
+    }
+}

@@ -51,6 +51,7 @@
   </modules>
 
   <properties>
+    <bdg-convert.version>0.1-SNAPSHOT</bdg-convert.version>
     <biojava.version>1.9.2</biojava.version>
     <commons-csv.version>1.4</commons-csv.version>
     <commons-math3.version>3.6</commons-math3.version>
@@ -59,6 +60,7 @@
     <dsh-compress.version>1.2-SNAPSHOT</dsh-compress.version>
     <dsh-graph.version>1.0</dsh-graph.version>
     <jdk.version>1.8</jdk.version>
+    <jsr305.version>3.0.1</jsr305.version>
     <maven.enforcer.jdk-version>[1.8,)</maven.enforcer.jdk-version>
     <rtree.version>0.4.1</rtree.version>
   </properties>
@@ -70,6 +72,11 @@
         <version>${rtree.version}</version>
       </dependency>
       <dependency>
+        <groupId>com.google.code.findbugs</groupId>
+        <artifactId>jsr305</artifactId>
+        <version>${jsr305.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-csv</artifactId>
         <version>${commons-csv.version}</version>
@@ -78,6 +85,11 @@
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-math3</artifactId>
         <version>${commons-math3.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.bdgenomics.convert</groupId>
+        <artifactId>convert</artifactId>
+        <version>${bdg-convert.version}</version>
       </dependency>
       <dependency>
         <groupId>org.biojava</groupId>
