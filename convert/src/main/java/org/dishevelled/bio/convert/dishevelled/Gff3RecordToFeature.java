@@ -64,9 +64,12 @@ public final class Gff3RecordToFeature extends AbstractConverter<Gff3Record, Fea
     /** Convert String to Strand. */
     private final Converter<String, Strand> strandConverter;
 
+    /** List of GFF3 reserved attribute keys. */
+    private static final List<String> RESERVED_KEYS = ImmutableList.of("Name", "gene_id", "transcript_id", "exon_id", "Target", "Gap", "Derives_from", "Is_circular", "Alias", "Parent", "Note", "Dbxref", "Ontology_term");
+
 
     /**
-     * Package private no-arg constructor.
+     * Convert dishevelled Gff3Record to bdg-formats Feature.
      *
      * @param dbxrefConverter convert String to Dbxref, must not be null
      * @param ontologyTermConverter convert String to OntologyTerm, must not be null
@@ -106,7 +109,7 @@ public final class Gff3RecordToFeature extends AbstractConverter<Gff3Record, Fea
             .setStrand(strandConverter.convert(gff3Record.strand(), stringency, logger))
             .setPhase(gff3Record.phase());
 
-        // 1..1 attributes, last one in wins
+        // 1..1 attributes
         gff3Record.attributes().get("Name").forEach(name -> fb.setName(name));
         gff3Record.attributes().get("gene_id").forEach(geneId -> fb.setGeneId(geneId));
         gff3Record.attributes().get("transcript_id").forEach(transcriptId -> fb.setTranscriptId(transcriptId));
@@ -158,10 +161,13 @@ public final class Gff3RecordToFeature extends AbstractConverter<Gff3Record, Fea
         return fb.build();
     }
 
+    /**
+     * Return true if the specified key is a GFF3 reserved key.
+     *
+     * @param key key
+     * @return true if the specified key is a GFF3 reserved key 
+     */
     static boolean isReservedKey(final String key) {
         return RESERVED_KEYS.contains(key);
     }
-
-    /** List of GFF3 reserved attribute keys. */
-    private static final List<String> RESERVED_KEYS = ImmutableList.of("Name", "gene_id", "transcript_id", "exon_id", "Target", "Gap", "Derives_from", "Is_circular", "Alias", "Parent", "Note", "Dbxref", "Ontology_term");
 }

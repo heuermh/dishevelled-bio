@@ -58,8 +58,8 @@ public final class DishevelledModule extends AbstractModule {
     }
 
     @Provides @Singleton
-    Converter<Feature, BedRecord> createFeatureToBedRecord() {
-        return new FeatureToBedRecord();
+    Converter<Feature, BedRecord> createFeatureToBedRecord(final Converter<Strand, String> strandConverter) {
+        return new FeatureToBedRecord(strandConverter);
     }
 
     @Provides @Singleton
@@ -70,7 +70,9 @@ public final class DishevelledModule extends AbstractModule {
     }
 
     @Provides @Singleton
-    Converter<Feature, Gff3Record> createFeatureToGff3Record() {
-        return new FeatureToGff3Record();
+    Converter<Feature, Gff3Record> createFeatureToGff3Record(final Converter<Dbxref, String> dbxrefConverter,
+                                                             final Converter<OntologyTerm, String> ontologyTermConverter,
+                                                             final Converter<Strand, String> strandConverter) {
+        return new FeatureToGff3Record(dbxrefConverter, ontologyTermConverter, strandConverter);
     }
 }

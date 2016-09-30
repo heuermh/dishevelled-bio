@@ -62,7 +62,7 @@ import javax.annotation.concurrent.Immutable;
  */
 @Immutable
 public final class BedRecord {
-    private final Format format;
+    private final BedFormat format;
     private final String chrom;
     private final long start;
     private final long end;
@@ -76,9 +76,6 @@ public final class BedRecord {
     private final long[] blockSizes;
     private final long[] blockStarts;
     private final int hashCode;
-
-    /** BED format. */
-    enum Format { BED3, BED4, BED5, BED6, BED12 };
 
     /** Empty long array. */
     private static final long[] EMPTY = new long[0];
@@ -104,7 +101,7 @@ public final class BedRecord {
      * @param blockSizes block sizes, must be the same length as block count
      * @param blockStarts block starts, must be the same length as block count
      */
-    private BedRecord(final Format format, final String chrom, final long start, final long end, final String name, final String score, final String strand,
+    private BedRecord(final BedFormat format, final String chrom, final long start, final long end, final String name, final String score, final String strand,
                      final long thickStart, final long thickEnd, final String itemRgb, final int blockCount, final long[] blockSizes, final long[] blockStarts) {
 
         checkNotNull(format);
@@ -164,7 +161,7 @@ public final class BedRecord {
      * @param end end, must be at least zero, and greater than or equal to start
      */
     public BedRecord(final String chrom, final long start, final long end) {
-        this(Format.BED3, chrom, start, end, null, null, null, 0L, 0L, null, 0, EMPTY, EMPTY);
+        this(BedFormat.BED3, chrom, start, end, null, null, null, 0L, 0L, null, 0, EMPTY, EMPTY);
     }
 
     /**
@@ -176,7 +173,7 @@ public final class BedRecord {
      * @param name name
      */
     public BedRecord(final String chrom, final long start, final long end, final String name) {
-        this(Format.BED4, chrom, start, end, name, null, null, 0L, 0L, null, 0, EMPTY, EMPTY);
+        this(BedFormat.BED4, chrom, start, end, name, null, null, 0L, 0L, null, 0, EMPTY, EMPTY);
     }
 
     /**
@@ -189,7 +186,7 @@ public final class BedRecord {
      * @param score score
      */
     public BedRecord(final String chrom, final long start, final long end, final String name, final String score) {
-        this(Format.BED5, chrom, start, end, name, score, null, 0L, 0L, null, 0, EMPTY, EMPTY);
+        this(BedFormat.BED5, chrom, start, end, name, score, null, 0L, 0L, null, 0, EMPTY, EMPTY);
     }
 
     /**
@@ -203,7 +200,7 @@ public final class BedRecord {
      * @param strand strand, if present must be either <code>-</code> or <code>+</code>
      */
     public BedRecord(final String chrom, final long start, final long end, final String name, final String score, final String strand) {
-        this(Format.BED6, chrom, start, end, name, score, strand, 0L, 0L, null, 0, EMPTY, EMPTY);
+        this(BedFormat.BED6, chrom, start, end, name, score, strand, 0L, 0L, null, 0, EMPTY, EMPTY);
     }
 
     /**
@@ -224,7 +221,7 @@ public final class BedRecord {
      */
     public BedRecord(final String chrom, final long start, final long end, final String name, final String score, final String strand,
                      final long thickStart, final long thickEnd, final String itemRgb, final int blockCount, final long[] blockSizes, final long[] blockStarts) {
-        this(Format.BED12, chrom, start, end, name, score, strand, thickStart, thickEnd, itemRgb, blockCount, blockSizes, blockStarts);
+        this(BedFormat.BED12, chrom, start, end, name, score, strand, thickStart, thickEnd, itemRgb, blockCount, blockSizes, blockStarts);
     }
 
 
@@ -341,7 +338,7 @@ public final class BedRecord {
      *
      * @return the format of this BED record
      */
-    public Format format() {
+    public BedFormat format() {
         return format;
     }
 

@@ -36,8 +36,14 @@ import org.junit.Test;
 import org.bdgenomics.convert.Converter;
 import org.bdgenomics.convert.ConversionStringency;
 
+import org.bdgenomics.formats.avro.Read;
+
+import org.biojava.bio.program.fastq.Fastq;
+
 /**
  * Unit test for BiojavaModule.
+ *
+ * @author  Michael Heuer
  */
 public final class BiojavaModuleTest {
     private BiojavaModule module;
@@ -66,14 +72,14 @@ public final class BiojavaModuleTest {
      * Injection target.
      */
     static class Target {
-        Converter<org.bdgenomics.formats.FastqVariant, org.biojava.bio.program.fastq.FastqVariant> bdgFastqVariantToBiojavaFastqVariant;
-        Converter<org.biojava.bio.program.fastq.FastqVariant, org.bdgenomics.formats.FastqVariant> biojavaFastqVariantToBdgFastqVariant;
+        Converter<org.bdgenomics.formats.avro.FastqVariant, org.biojava.bio.program.fastq.FastqVariant> bdgFastqVariantToBiojavaFastqVariant;
+        Converter<org.biojava.bio.program.fastq.FastqVariant, org.bdgenomics.formats.avro.FastqVariant> biojavaFastqVariantToBdgFastqVariant;
         Converter<Fastq, Read> biojavaFastqToBdgRead;
         Converter<Read, Fastq> bdgReadToBiojavaFastq;
 
         @Inject
-        Target(final Converter<org.bdgenomics.formats.FastqVariant, org.biojava.bio.program.fastq.FastqVariant> bdgFastqVariantToBiojavaFastqVariant,
-               final Converter<org.biojava.bio.program.fastq.FastqVariant, org.bdgenomics.formats.FastqVariant> biojavaFastqVariantToBdgFastqVariant,
+        Target(final Converter<org.bdgenomics.formats.avro.FastqVariant, org.biojava.bio.program.fastq.FastqVariant> bdgFastqVariantToBiojavaFastqVariant,
+               final Converter<org.biojava.bio.program.fastq.FastqVariant, org.bdgenomics.formats.avro.FastqVariant> biojavaFastqVariantToBdgFastqVariant,
                final Converter<Fastq, Read> biojavaFastqToBdgRead,
                final Converter<Read, Fastq> bdgReadToBiojavaFastq) {
 
@@ -83,11 +89,11 @@ public final class BiojavaModuleTest {
             this.bdgReadToBiojavaFastq = bdgReadToBiojavaFastq;
         }
 
-        Converter<org.bdgenomics.formats.FastqVariant, org.biojava.bio.program.fastq.FastqVariant> getBdgFastqVariantToBiojavaFastqVariant() {
+        Converter<org.bdgenomics.formats.avro.FastqVariant, org.biojava.bio.program.fastq.FastqVariant> getBdgFastqVariantToBiojavaFastqVariant() {
             return bdgFastqVariantToBiojavaFastqVariant;
         }
 
-        Converter<org.biojava.bio.program.fastq.FastqVariant, org.bdgenomics.formats.FastqVariant> getBiojavaFastqVariantToBdgFastqVariant() {
+        Converter<org.biojava.bio.program.fastq.FastqVariant, org.bdgenomics.formats.avro.FastqVariant> getBiojavaFastqVariantToBdgFastqVariant() {
             return biojavaFastqVariantToBdgFastqVariant;
         }
 

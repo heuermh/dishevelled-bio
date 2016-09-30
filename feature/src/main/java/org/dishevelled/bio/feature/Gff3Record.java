@@ -23,6 +23,7 @@
 */
 package org.dishevelled.bio.feature;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Iterator;
@@ -60,18 +61,32 @@ public final class Gff3Record {
     /**
      * Create a new GFF3 record.
      *
-     * @param seqid seqid
-     * @param source source
-     * @param featureType feature type
-     * @param start start
-     * @param end end
+     * @param seqid seqid, must not be null
+     * @param source source, must not be null
+     * @param featureType feature type, must not be null
+     * @param start start, must be at least 0L
+     * @param end end, must be at least zero, and greater than or equal to start
      * @param score score
-     * @param strand strand
-     * @param phase phase
+     * @param strand strand, if present must be <code>-</code>, <code>+</code>, or <code>?</code>
+     * @param phase phase, if present must be <code>0</code>, <code>1</code>, or <code>2</code>
      * @param attributes attributes, must not be null
      */
-    private Gff3Record(final String seqid, final String source, final String featureType, final long start, final long end, final Double score, final String strand, final Integer phase, final ListMultimap<String, String> attributes) {
-        checkNotNull(attributes, "attributes must not be null");
+    public Gff3Record(final String seqid, final String source, final String featureType, final long start, final long end, final Double score, final String strand, final Integer phase, final ListMultimap<String, String> attributes) {
+        checkNotNull(seqid);
+        checkNotNull(source);
+        checkNotNull(featureType);
+        checkNotNull(attributes);
+        checkArgument(start >= 0L, "start must be at least zero");
+        checkArgument(end >= 0L, "end must be at least zero");
+        checkArgument(end >= start, "end must be greater than or equal to start");
+
+        if (strand != null) {
+            checkArgument("-".equals(strand) || "+".equals(strand) || "?".equals(strand), "if present, strand must be either -, +, or ?");
+        }
+        if (phase != null) {
+            checkArgument(phase > 0 && phase < 4, "if present, phase must be either 0, 1, or 2");
+        }
+
         this.seqid = seqid;
         this.source = source;
         this.featureType = featureType;

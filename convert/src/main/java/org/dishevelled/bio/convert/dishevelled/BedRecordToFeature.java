@@ -23,13 +23,15 @@
 */
 package org.dishevelled.bio.convert.dishevelled;
 
-import static java.util.stream.Collectors.joining;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.concurrent.Immutable;
+
+import com.google.common.base.Joiner;
+
+import com.google.common.primitives.Longs;
 
 import org.bdgenomics.convert.AbstractConverter;
 import org.bdgenomics.convert.Converter;
@@ -56,7 +58,7 @@ public final class BedRecordToFeature extends AbstractConverter<BedRecord, Featu
 
 
     /**
-     * Package private no-arg constructor.
+     * Convert dishevelled BedRecord to bdg-formats Feature.
      *
      * @param strandConverter convert String to Strand, must not be null
      */
@@ -82,10 +84,10 @@ public final class BedRecordToFeature extends AbstractConverter<BedRecord, Featu
             .setStart(bedRecord.start())
             .setEnd(bedRecord.end());
 
-        if (bedRecord.name() != null) {
+        if (bedRecord.format().isAtLeastBED4() && !isMissingValue(bedRecord.name())) {
             fb.setName(bedRecord.name());
         }
-        if (bedRecord.score() != null) {
+        if (bedRecord.format().isAtLeastBED5() && !isMissingValue(bedRecord.score())) {
             try {
                 fb.setScore(Double.valueOf(bedRecord.score()));
             }
@@ -93,21 +95,24 @@ public final class BedRecordToFeature extends AbstractConverter<BedRecord, Featu
                 warnOrThrow(bedRecord, "caught NumberFormatException", e, stringency, logger);
             }
         }
-        if (bedRecord.strand() != null) {
+        if (bedRecord.format().isAtLeastBED6()) {
             fb.setStrand(strandConverter.convert(bedRecord.strand(), stringency, logger));
         }
 
-        //if (bedRecord.format() == BedRecord.Format.BED12) {
-        if (bedRecord.itemRgb() != null) {
+        if (bedRecord.format().isAtLeastBED12()) {
             Map<String, String> attributes = new HashMap<String, String>();
             attributes.put("thickStart", String.valueOf(bedRecord.thickStart()));
             attributes.put("thickEnd", String.valueOf(bedRecord.thickStart()));
             attributes.put("itemRgb", bedRecord.itemRgb());
             attributes.put("blockCount", String.valueOf(bedRecord.blockCount()));
-            attributes.put("blockSizes", Arrays.asList(bedRecord.blockSizes()).stream().map(blockSize -> String.valueOf(blockSize)).collect(joining(",")));
-            attributes.put("blockStarts", Arrays.asList(bedRecord.blockStarts()).stream().map(blockStart -> String.valueOf(blockStart)).collect(joining(",")));
+            attributes.put("blockSizes", Joiner.on(",").join(Longs.asList(bedRecord.blockSizes())));
+            attributes.put("blockStarts", Joiner.on(",").join(Longs.asList(bedRecord.blockStarts())));
             fb.setAttributes(attributes);
         }
         return fb.build();
+    }
+
+    static boolean isMissingValue(final String value) {
+        return ".".equals(value);
     }
 }

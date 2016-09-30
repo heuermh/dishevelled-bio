@@ -33,8 +33,6 @@ import com.google.common.collect.Range;
 
 import org.junit.Test;
 
-import org.dishevelled.bio.feature.BedRecord.Format;
-
 /**
  * Unit test for BedRecord.
  *
@@ -139,7 +137,7 @@ public final class BedRecordTest {
         assertEquals("chr1", record.chrom());
         assertEquals(11873L, record.start());
         assertEquals(14409L, record.end());
-        assertEquals(Format.BED3, record.format());
+        assertEquals(BedFormat.BED3, record.format());
         assertEquals(Range.closedOpen(11873L, 14409L), record.toRange());
         assertEquals("chr1\t11873\t14409", record.toString());
     }
@@ -151,7 +149,7 @@ public final class BedRecordTest {
         assertEquals(11873L, record.start());
         assertEquals(14409L, record.end());
         assertEquals("uc001aaa.3", record.name());
-        assertEquals(Format.BED4, record.format());
+        assertEquals(BedFormat.BED4, record.format());
         assertEquals(Range.closedOpen(11873L, 14409L), record.toRange());
         assertEquals("chr1\t11873\t14409\tuc001aaa.3", record.toString());
     }
@@ -164,7 +162,7 @@ public final class BedRecordTest {
         assertEquals(14409L, record.end());
         assertEquals("uc001aaa.3", record.name());
         assertEquals("0", record.score());
-        assertEquals(Format.BED5, record.format());
+        assertEquals(BedFormat.BED5, record.format());
         assertEquals(Range.closedOpen(11873L, 14409L), record.toRange());
         assertEquals("chr1\t11873\t14409\tuc001aaa.3\t0", record.toString());
     }
@@ -178,7 +176,7 @@ public final class BedRecordTest {
         assertEquals("uc001aaa.3", record.name());
         assertEquals("0", record.score());
         assertEquals("+", record.strand());
-        assertEquals(Format.BED6, record.format());
+        assertEquals(BedFormat.BED6, record.format());
         assertEquals(Range.closedOpen(11873L, 14409L), record.toRange());
         assertEquals("chr1\t11873\t14409\tuc001aaa.3\t0\t+", record.toString());
     }
@@ -204,7 +202,7 @@ public final class BedRecordTest {
         assertEquals(0L, record.blockStarts()[0]);
         assertEquals(739L, record.blockStarts()[1]);
         assertEquals(1347L, record.blockStarts()[2]);
-        assertEquals(Format.BED12, record.format());
+        assertEquals(BedFormat.BED12, record.format());
         assertEquals(Range.closedOpen(11873L, 14409L), record.toRange());
         assertEquals("chr1\t11873\t14409\tuc001aaa.3\t0\t+\t11873\t11873\t0\t3\t354,109,1189\t0,739,1347", record.toString());
     }
