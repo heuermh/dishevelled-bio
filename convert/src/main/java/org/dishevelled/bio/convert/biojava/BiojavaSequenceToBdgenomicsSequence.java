@@ -71,8 +71,12 @@ public final class BiojavaSequenceToBdgenomicsSequence extends AbstractConverter
         org.bdgenomics.formats.avro.Sequence.Builder sb = org.bdgenomics.formats.avro.Sequence.newBuilder()
             .setName(sequence.getName())
             .setSequence(sequence.seqString())
-            .setLength(Long.valueOf(sequence.length()))
-            .setAlphabet(alphabetConverter.convert(sequence.getAlphabet(), stringency, logger));
+            .setLength(Long.valueOf(sequence.length()));
+
+        org.bdgenomics.formats.avro.Alphabet alphabet = alphabetConverter.convert(sequence.getAlphabet(), stringency, logger);
+        if (alphabet != null) {
+            sb.setAlphabet(alphabet);
+        }
 
         String description = descriptionFor(sequence);
         if (description != null) {
