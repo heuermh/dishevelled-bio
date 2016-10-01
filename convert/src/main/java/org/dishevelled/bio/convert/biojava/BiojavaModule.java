@@ -67,4 +67,19 @@ public final class BiojavaModule extends AbstractModule {
     Converter<Read, Fastq> createReadToFastq(final Converter<org.bdgenomics.formats.avro.FastqVariant, org.biojava.bio.program.fastq.FastqVariant> fastqVariantConverter) {
         return new ReadToFastq(fastqVariantConverter);
     }
+
+    @Provides @Singleton
+    Converter<org.biojava.bio.symbol.Alphabet, org.bdgenomics.formats.avro.Alphabet> createBiojavaAlphabetToBdgenomicsAlphabet() {
+        return new BiojavaAlphabetToBdgenomicsAlphabet();
+    }
+
+    @Provides @Singleton
+    Converter<org.bdgenomics.formats.avro.Sequence, org.biojava.bio.seq.Sequence> createBdgenomicsSequenceToBiojavaSequence() {
+        return new BdgenomicsSequenceToBiojavaSequence();
+    }
+
+    @Provides @Singleton
+    Converter<org.biojava.bio.seq.Sequence, org.bdgenomics.formats.avro.Sequence> createBiojavaSequenceToBdgenomicsSequence(final Converter<org.biojava.bio.symbol.Alphabet, org.bdgenomics.formats.avro.Alphabet> alphabetConverter) {
+        return new BiojavaSequenceToBdgenomicsSequence(alphabetConverter);
+    }
 }
