@@ -23,6 +23,8 @@
 */
 package org.dishevelled.bio.convert.dishevelled;
 
+import java.util.List;
+
 import javax.annotation.concurrent.Immutable;
 
 import com.google.inject.AbstractModule;
@@ -34,11 +36,15 @@ import org.bdgenomics.convert.ConversionStringency;
 
 import org.bdgenomics.formats.avro.Dbxref;
 import org.bdgenomics.formats.avro.Feature;
+import org.bdgenomics.formats.avro.Genotype;
 import org.bdgenomics.formats.avro.OntologyTerm;
 import org.bdgenomics.formats.avro.Strand;
+import org.bdgenomics.formats.avro.Variant;
 
 import org.dishevelled.bio.feature.BedRecord;
 import org.dishevelled.bio.feature.Gff3Record;
+
+import org.dishevelled.bio.variant.vcf.VcfRecord;
 
 /**
  * Guice module for the org.dishevelled.bio.convert.dishevelled package.
@@ -74,5 +80,15 @@ public final class DishevelledModule extends AbstractModule {
                                                              final Converter<OntologyTerm, String> ontologyTermConverter,
                                                              final Converter<Strand, String> strandConverter) {
         return new FeatureToGff3Record(dbxrefConverter, ontologyTermConverter, strandConverter);
+    }
+
+    @Provides @Singleton
+    Converter<VcfRecord, List<Variant>> createVcfRecordToVariants() {
+        return new VcfRecordToVariants();
+    }
+
+    @Provides @Singleton
+    Converter<VcfRecord, List<Genotype>> createVcfRecordToGenotypes(final Converter<VcfRecord, List<Variant>> variantConverter) {
+        return new VcfRecordToGenotypes(variantConverter);
     }
 }

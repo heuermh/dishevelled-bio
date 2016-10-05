@@ -25,6 +25,8 @@ package org.dishevelled.bio.convert.dishevelled;
 
 import static org.junit.Assert.assertNotNull;
 
+import java.util.List;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -39,9 +41,13 @@ import org.bdgenomics.convert.ConversionStringency;
 import org.bdgenomics.convert.bdgenomics.BdgenomicsModule;
 
 import org.bdgenomics.formats.avro.Feature;
+import org.bdgenomics.formats.avro.Genotype;
+import org.bdgenomics.formats.avro.Variant;
 
 import org.dishevelled.bio.feature.BedRecord;
 import org.dishevelled.bio.feature.Gff3Record;
+
+import org.dishevelled.bio.variant.vcf.VcfRecord;
 
 /**
  * Unit test for DishevelledModule.
@@ -69,6 +75,8 @@ public final class DishevelledModuleTest {
         assertNotNull(target.getFeatureToBedRecord());
         assertNotNull(target.getGff3RecordToFeature());
         assertNotNull(target.getFeatureToGff3Record());
+        assertNotNull(target.getVcfRecordToVariants());
+        assertNotNull(target.getVcfRecordToGenotypes());
     }
 
     /**
@@ -79,16 +87,22 @@ public final class DishevelledModuleTest {
         Converter<Feature, BedRecord> featureToBedRecord;
         Converter<Gff3Record, Feature> gff3RecordToFeature;
         Converter<Feature, Gff3Record> featureToGff3Record;
+        Converter<VcfRecord, List<Variant>> vcfRecordToVariants;
+        Converter<VcfRecord, List<Genotype>> vcfRecordToGenotypes;
 
         @Inject
         Target(Converter<BedRecord, Feature> bedRecordToFeature,
                Converter<Feature, BedRecord> featureToBedRecord,
                Converter<Gff3Record, Feature> gff3RecordToFeature,
-               Converter<Feature, Gff3Record> featureToGff3Record) {
+               Converter<Feature, Gff3Record> featureToGff3Record,
+               Converter<VcfRecord, List<Variant>> vcfRecordToVariants,
+               Converter<VcfRecord, List<Genotype>> vcfRecordToGenotypes) {
             this.bedRecordToFeature = bedRecordToFeature;
             this.featureToBedRecord = featureToBedRecord;
             this.gff3RecordToFeature = gff3RecordToFeature;
             this.featureToGff3Record = featureToGff3Record;
+            this.vcfRecordToVariants = vcfRecordToVariants;
+            this.vcfRecordToGenotypes = vcfRecordToGenotypes;
         }
 
         Converter<BedRecord, Feature> getBedRecordToFeature() {
@@ -105,6 +119,14 @@ public final class DishevelledModuleTest {
 
         Converter<Feature, Gff3Record> getFeatureToGff3Record() {
             return featureToGff3Record;
+        }
+
+        Converter<VcfRecord, List<Variant>> getVcfRecordToVariants() {
+            return vcfRecordToVariants;
+        }
+
+        Converter<VcfRecord, List<Genotype>> getVcfRecordToGenotypes() {
+            return vcfRecordToGenotypes;
         }
     }
 
