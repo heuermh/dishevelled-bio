@@ -53,7 +53,7 @@ import org.slf4j.Logger;
  * @author  Michael Heuer
  */
 @Immutable
-public final class Gff3RecordToFeature extends AbstractConverter<Gff3Record, Feature> {
+final class Gff3RecordToFeature extends AbstractConverter<Gff3Record, Feature> {
 
     /** Convert String to Dbxref. */
     private final Converter<String, Dbxref> dbxrefConverter;

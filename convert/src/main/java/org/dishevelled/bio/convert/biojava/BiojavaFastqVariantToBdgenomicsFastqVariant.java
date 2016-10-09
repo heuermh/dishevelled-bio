@@ -37,7 +37,7 @@ import org.slf4j.Logger;
  * @author  Michael Heuer
  */
 @Immutable
-public final class BiojavaFastqVariantToBdgenomicsFastqVariant extends AbstractConverter<org.biojava.bio.program.fastq.FastqVariant, org.bdgenomics.formats.avro.FastqVariant> {
+final class BiojavaFastqVariantToBdgenomicsFastqVariant extends AbstractConverter<org.biojava.bio.program.fastq.FastqVariant, org.bdgenomics.formats.avro.FastqVariant> {
 
     /**
      * Package private no-arg constructor.
