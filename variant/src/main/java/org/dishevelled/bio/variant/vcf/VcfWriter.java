@@ -161,7 +161,12 @@ public final class VcfWriter {
         }
 
         sb.append("\t");
-        sb.append(Joiner.on(";").join(record.getFilter()));
+        if (record.getFilter() == null || record.getFilter().length == 0) {
+            sb.append(".");
+        }
+        else {
+            sb.append(Joiner.on(";").join(record.getFilter()));
+        }
 
         sb.append("\t");
         if (record.getInfo().isEmpty()) {
