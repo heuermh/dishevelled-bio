@@ -48,7 +48,7 @@ import org.slf4j.Logger;
  * @author  Michael Heuer
  */
 @Immutable
-public final class VcfRecordToVariants extends AbstractConverter<VcfRecord, List<Variant>> {
+final class VcfRecordToVariants extends AbstractConverter<VcfRecord, List<Variant>> {
 
     /**
      * Convert dishevelled VcfRecord to a list of bdg-formats Variants.

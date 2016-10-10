@@ -41,7 +41,7 @@ import org.slf4j.Logger;
  * @author  Michael Heuer
  */
 @Immutable
-public final class BiojavaAlphabetToBdgenomicsAlphabet extends AbstractConverter<org.biojava.bio.symbol.Alphabet, org.bdgenomics.formats.avro.Alphabet> {
+final class BiojavaAlphabetToBdgenomicsAlphabet extends AbstractConverter<org.biojava.bio.symbol.Alphabet, org.bdgenomics.formats.avro.Alphabet> {
 
     /**
      * Package private no-arg constructor.

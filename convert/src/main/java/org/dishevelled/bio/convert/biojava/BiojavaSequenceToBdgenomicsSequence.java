@@ -40,7 +40,7 @@ import org.slf4j.Logger;
  * @author  Michael Heuer
  */
 @Immutable
-public final class BiojavaSequenceToBdgenomicsSequence extends AbstractConverter<org.biojava.bio.seq.Sequence, org.bdgenomics.formats.avro.Sequence> {
+final class BiojavaSequenceToBdgenomicsSequence extends AbstractConverter<org.biojava.bio.seq.Sequence, org.bdgenomics.formats.avro.Sequence> {
 
     /** Convert Biojava 1.x Alphabet to bdg-formats Alphabet. */
     private final Converter<org.biojava.bio.symbol.Alphabet, org.bdgenomics.formats.avro.Alphabet> alphabetConverter;

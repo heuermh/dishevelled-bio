@@ -46,7 +46,7 @@ import org.slf4j.Logger;
  * @author  Michael Heuer
  */
 @Immutable
-public final class BdgenomicsSequenceToBiojavaSequence extends AbstractConverter<org.bdgenomics.formats.avro.Sequence, org.biojava.bio.seq.Sequence> {
+final class BdgenomicsSequenceToBiojavaSequence extends AbstractConverter<org.bdgenomics.formats.avro.Sequence, org.biojava.bio.seq.Sequence> {
 
     /**
      * Convert bdg-formats Sequence to Biojava 1.x Sequence.

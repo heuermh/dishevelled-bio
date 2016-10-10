@@ -53,7 +53,7 @@ import org.slf4j.Logger;
  * @author  Michael Heuer
  */
 @Immutable
-public final class VcfRecordToGenotypes extends AbstractConverter<VcfRecord, List<Genotype>> {
+final class VcfRecordToGenotypes extends AbstractConverter<VcfRecord, List<Genotype>> {
 
     /** Convert dishevelled VcfRecord to a list of bdg-formats Variants. */
     private final Converter<VcfRecord, List<Variant>> variantConverter;

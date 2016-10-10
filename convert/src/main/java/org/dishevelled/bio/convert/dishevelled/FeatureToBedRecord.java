@@ -47,7 +47,7 @@ import org.slf4j.Logger;
  * @author  Michael Heuer
  */
 @Immutable
-public final class FeatureToBedRecord extends AbstractConverter<Feature, BedRecord> {
+final class FeatureToBedRecord extends AbstractConverter<Feature, BedRecord> {
 
     /** Convert Strand to String. */
     private final Converter<Strand, String> strandConverter;

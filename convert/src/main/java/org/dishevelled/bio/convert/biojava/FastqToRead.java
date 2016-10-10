@@ -43,7 +43,7 @@ import org.slf4j.Logger;
  * @author  Michael Heuer
  */
 @Immutable
-public final class FastqToRead extends AbstractConverter<Fastq, Read> {
+final class FastqToRead extends AbstractConverter<Fastq, Read> {
 
     /** Convert Biojava 1.x FastqVariant to bdg-formats FastqVariant. */
     final Converter<org.biojava.bio.program.fastq.FastqVariant, org.bdgenomics.formats.avro.FastqVariant> fastqVariantConverter;
