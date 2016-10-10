@@ -28,7 +28,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.PrintWriter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.base.Joiner;
 
@@ -166,7 +168,13 @@ public final class VcfWriter {
             sb.append(".");
         }
         else {
-            sb.append(Joiner.on(";").withKeyValueSeparator("=").join(record.getInfo().asMap()));
+            // convert info values to strings
+            Map<String, String> infoStrings = new HashMap<String, String>(record.getInfo().size());
+            for (String key : record.getInfo().keySet()) {
+                infoStrings.put(key, Joiner.on(",").join(record.getInfo().get(key)));
+            }
+            // then join
+            sb.append(Joiner.on(";").withKeyValueSeparator("=").join(infoStrings));
         }
 
         if (!samples.isEmpty()) {
