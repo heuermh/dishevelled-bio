@@ -124,7 +124,7 @@ public final class Gff3Record {
      * @return the feature type for this GFF3 record
      */
     public String featureType() {
-        return seqid;
+        return featureType;
     }
 
     /**
