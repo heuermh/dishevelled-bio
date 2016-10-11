@@ -80,15 +80,15 @@ public final class VcfRecord {
      * Create a new VCF record.
      *
      * @param lineNumber line number
-     * @param chrom chromosome
+     * @param chrom chromosome, must not be null
      * @param pos position
-     * @param id array of ids, must not be null
-     * @param ref reference allele
+     * @param id array of ids
+     * @param ref reference allele, must not be null
      * @param alt array of alternate alleles, must not be null
      * @param qual QUAL score
-     * @param filter filter
+     * @param filter array of filters
      * @param info INFO key-value(s) pairs, must not be null
-     * @param format format
+     * @param format array of format keys
      * @param genotypes genotypes keyed by sample id, must not be null
      */
     VcfRecord(final long lineNumber,
@@ -103,10 +103,11 @@ public final class VcfRecord {
               final String[] format,
               final Map<String, VcfGenotype> genotypes) {
 
-        checkNotNull(id);
-        checkNotNull(alt);
-        checkNotNull(info);
-        checkNotNull(genotypes);
+        checkNotNull(chrom, "chrom must not be null");
+        checkNotNull(ref, "ref must not be null");
+        checkNotNull(alt, "alt must not be null");
+        checkNotNull(info, "info must not be null");
+        checkNotNull(genotypes, "genotypes must not be null");
         this.lineNumber = lineNumber;
         this.chrom = chrom;
         this.pos = pos;

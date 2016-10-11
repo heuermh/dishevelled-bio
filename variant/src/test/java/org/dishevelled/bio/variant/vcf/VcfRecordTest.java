@@ -73,8 +73,13 @@ public final class VcfRecordTest {
     }
 
     @Test(expected=NullPointerException.class)
-    public void testConstructorNullId() {
-        new VcfRecord(lineNumber, chrom, pos, null, ref, alt, qual, filter, info, format, genotypes);
+    public void testConstructorNullChrom() {
+        new VcfRecord(lineNumber, null, pos, id, ref, alt, qual, filter, info, format, genotypes);
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testConstructorNullRef() {
+        new VcfRecord(lineNumber, chrom, pos, id, null, alt, qual, filter, info, format, genotypes);
     }
 
     @Test(expected=NullPointerException.class)
@@ -139,12 +144,28 @@ public final class VcfRecordTest {
     }
 
     @Test(expected=NullPointerException.class)
-    public void testBuilderBuildNullId() {
+    public void testBuilderBuildNullChrom() {
+        builder()
+            .withLineNumber(lineNumber)
+            .withPos(pos)
+            .withId(id)
+            .withRef(ref)
+            .withAlt(alt)
+            .withQual(qual)
+            .withFilter(filter)
+            .withInfo(info)
+            .withFormat(format)
+            .withGenotypes(genotypes)
+            .build();
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testBuilderBuildNullRef() {
         builder()
             .withLineNumber(lineNumber)
             .withChrom(chrom)
             .withPos(pos)
-            .withRef(ref)
+            .withId(id)
             .withAlt(alt)
             .withQual(qual)
             .withFilter(filter)
