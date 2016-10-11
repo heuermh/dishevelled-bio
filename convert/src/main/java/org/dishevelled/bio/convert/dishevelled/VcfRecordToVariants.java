@@ -67,14 +67,6 @@ final class VcfRecordToVariants extends AbstractConverter<VcfRecord, List<Varian
             warnOrThrow(vcfRecord, "must not be null", null, stringency, logger);
             return null;
         }
-        if (vcfRecord.getChrom() == null) {
-            warnOrThrow(vcfRecord, "chrom must not be null", null, stringency, logger);
-            return null;
-        }
-        if (vcfRecord.getRef() == null) {
-            warnOrThrow(vcfRecord, "ref must not be null", null, stringency, logger);
-            return null;
-        }
 
         final Variant.Builder vb = Variant.newBuilder()
             .setContigName(vcfRecord.getChrom())
@@ -83,7 +75,7 @@ final class VcfRecordToVariants extends AbstractConverter<VcfRecord, List<Varian
 
         vb.setEnd(vb.getStart() + vb.getReferenceAllele().length());
 
-        if (vcfRecord.getId().length > 0) {
+        if (vcfRecord.getId() != null && vcfRecord.getId().length > 0) {
             vb.setNames(ImmutableList.copyOf(vcfRecord.getId()));
         }
             

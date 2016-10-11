@@ -65,7 +65,7 @@ final class Gff3RecordToFeature extends AbstractConverter<Gff3Record, Feature> {
     private final Converter<String, Strand> strandConverter;
 
     /** List of GFF3 reserved attribute keys. */
-    private static final List<String> RESERVED_KEYS = ImmutableList.of("Name", "gene_id", "transcript_id", "exon_id", "Target", "Gap", "Derives_from", "Is_circular", "Alias", "Parent", "Note", "Dbxref", "Ontology_term");
+    private static final List<String> RESERVED_KEYS = ImmutableList.of("ID", "Name", "gene_id", "transcript_id", "exon_id", "Target", "Gap", "Derives_from", "Is_circular", "Alias", "Parent", "Note", "Dbxref", "Ontology_term");
 
 
     /**
@@ -110,6 +110,7 @@ final class Gff3RecordToFeature extends AbstractConverter<Gff3Record, Feature> {
             .setPhase(gff3Record.phase());
 
         // 1..1 attributes
+        gff3Record.attributes().get("ID").forEach(featureId -> fb.setFeatureId(featureId));
         gff3Record.attributes().get("Name").forEach(name -> fb.setName(name));
         gff3Record.attributes().get("gene_id").forEach(geneId -> fb.setGeneId(geneId));
         gff3Record.attributes().get("transcript_id").forEach(transcriptId -> fb.setTranscriptId(transcriptId));

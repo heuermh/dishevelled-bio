@@ -104,6 +104,9 @@ final class FeatureToGff3Record extends AbstractConverter<Feature, Gff3Record> {
         ListMultimap<String, String> attributes = ArrayListMultimap.create();
 
         // 1..1 attributes
+        if (feature.getFeatureId() != null) {
+            attributes.put("ID", feature.getName());
+        }
         if (feature.getName() != null) {
             attributes.put("Name", feature.getName());
         }

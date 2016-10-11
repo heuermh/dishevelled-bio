@@ -102,7 +102,7 @@ final class BedRecordToFeature extends AbstractConverter<BedRecord, Feature> {
         if (bedRecord.format().isAtLeastBED12()) {
             Map<String, String> attributes = new HashMap<String, String>();
             attributes.put("thickStart", String.valueOf(bedRecord.thickStart()));
-            attributes.put("thickEnd", String.valueOf(bedRecord.thickStart()));
+            attributes.put("thickEnd", String.valueOf(bedRecord.thickEnd()));
             attributes.put("itemRgb", bedRecord.itemRgb());
             attributes.put("blockCount", String.valueOf(bedRecord.blockCount()));
             attributes.put("blockSizes", Joiner.on(",").join(Longs.asList(bedRecord.blockSizes())));
