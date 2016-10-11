@@ -66,7 +66,7 @@ final class BiojavaAlphabetToBdgenomicsAlphabet extends AbstractConverter<org.bi
         else if (RNATools.getRNA().equals(alphabet)) {
             return org.bdgenomics.formats.avro.Alphabet.RNA;
         }
-        else if (ProteinTools.getAlphabet().equals(alphabet)) {
+        else if (ProteinTools.getAlphabet().equals(alphabet) || ProteinTools.getTAlphabet().equals(alphabet)) {
             return org.bdgenomics.formats.avro.Alphabet.PROTEIN;
         }
         warnOrThrow(alphabet, "alphabet not obviously one of { DNA, RNA, PROTEIN }", null, stringency, logger);
