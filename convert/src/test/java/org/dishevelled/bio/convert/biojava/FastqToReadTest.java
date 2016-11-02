@@ -34,10 +34,12 @@ import org.bdgenomics.convert.Converter;
 import org.bdgenomics.convert.ConversionException;
 import org.bdgenomics.convert.ConversionStringency;
 
+import org.bdgenomics.formats.avro.Read;
+import org.bdgenomics.formats.avro.QualityScoreVariant;
+
 import org.biojava.bio.program.fastq.Fastq;
 import org.biojava.bio.program.fastq.FastqBuilder;
-
-import org.bdgenomics.formats.avro.Read;
+import org.biojava.bio.program.fastq.FastqVariant;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,12 +51,12 @@ import org.slf4j.LoggerFactory;
  */
 public final class FastqToReadTest {
     private final Logger logger = LoggerFactory.getLogger(FastqToReadTest.class);
-    private Converter<org.biojava.bio.program.fastq.FastqVariant, org.bdgenomics.formats.avro.FastqVariant> fastqVariantConverter;
+    private Converter<FastqVariant, QualityScoreVariant> fastqVariantConverter;
     private Converter<Fastq, Read> fastqConverter;
 
     @Before
     public void setUp() throws Exception {
-        fastqVariantConverter = new BiojavaFastqVariantToBdgenomicsFastqVariant();
+        fastqVariantConverter = new FastqVariantToQualityScoreVariant();
         fastqConverter = new FastqToRead(fastqVariantConverter);
     }
 
@@ -89,7 +91,7 @@ public final class FastqToReadTest {
             .withDescription("read/1")
             .withSequence("actg")
             .withQuality("e896")
-            .withVariant(org.biojava.bio.program.fastq.FastqVariant.FASTQ_SANGER)
+            .withVariant(FastqVariant.FASTQ_SANGER)
             .build();
 
         Read read = fastqConverter.convert(fastq, ConversionStringency.STRICT, logger);
@@ -97,6 +99,6 @@ public final class FastqToReadTest {
         assertEquals(fastq.getSequence(), read.getSequence());
         assertEquals(fastq.getQuality(), read.getQualityScores());
         assertEquals(org.bdgenomics.formats.avro.Alphabet.DNA, read.getAlphabet());
-        assertEquals(org.bdgenomics.formats.avro.FastqVariant.SANGER, read.getFastqVariant());
+        assertEquals(QualityScoreVariant.FASTQ_SANGER, read.getQualityScoreVariant());
     }
 }

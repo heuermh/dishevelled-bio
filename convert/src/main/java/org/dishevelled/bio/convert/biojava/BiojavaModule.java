@@ -32,9 +32,11 @@ import com.google.inject.Singleton;
 import org.bdgenomics.convert.Converter;
 import org.bdgenomics.convert.ConversionStringency;
 
+import org.bdgenomics.formats.avro.QualityScoreVariant;
 import org.bdgenomics.formats.avro.Read;
 
 import org.biojava.bio.program.fastq.Fastq;
+import org.biojava.bio.program.fastq.FastqVariant;
 
 /**
  * Guice module for the org.dishevelled.bio.convert.biojava package.
@@ -49,22 +51,22 @@ public final class BiojavaModule extends AbstractModule {
     }
 
     @Provides @Singleton
-    Converter<org.bdgenomics.formats.avro.FastqVariant, org.biojava.bio.program.fastq.FastqVariant> createBdgenomicsFastqVariantToBiojavaFastqVariant() {
-        return new BdgenomicsFastqVariantToBiojavaFastqVariant();
+    Converter<QualityScoreVariant, FastqVariant> createQualityScoreVariantToFastqVariant() {
+        return new QualityScoreVariantToFastqVariant();
     }
 
     @Provides @Singleton
-    Converter<org.biojava.bio.program.fastq.FastqVariant, org.bdgenomics.formats.avro.FastqVariant> createBiojavaFastqVariantToBdgenomicsFastqVariant() {
-        return new BiojavaFastqVariantToBdgenomicsFastqVariant();
+    Converter<FastqVariant, QualityScoreVariant> createFastqVariantToQualityScoreVariant() {
+        return new FastqVariantToQualityScoreVariant();
     }
 
     @Provides @Singleton
-    Converter<Fastq, Read> createFastqToRead(final Converter<org.biojava.bio.program.fastq.FastqVariant, org.bdgenomics.formats.avro.FastqVariant> fastqVariantConverter) {
+    Converter<Fastq, Read> createFastqToRead(final Converter<FastqVariant, QualityScoreVariant> fastqVariantConverter) {
         return new FastqToRead(fastqVariantConverter);
     }
 
     @Provides @Singleton
-    Converter<Read, Fastq> createReadToFastq(final Converter<org.bdgenomics.formats.avro.FastqVariant, org.biojava.bio.program.fastq.FastqVariant> fastqVariantConverter) {
+    Converter<Read, Fastq> createReadToFastq(final Converter<QualityScoreVariant, FastqVariant> fastqVariantConverter) {
         return new ReadToFastq(fastqVariantConverter);
     }
 

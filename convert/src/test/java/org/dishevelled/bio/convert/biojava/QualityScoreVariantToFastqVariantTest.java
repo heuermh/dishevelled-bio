@@ -34,21 +34,25 @@ import org.bdgenomics.convert.Converter;
 import org.bdgenomics.convert.ConversionException;
 import org.bdgenomics.convert.ConversionStringency;
 
+import org.bdgenomics.formats.avro.QualityScoreVariant;
+
+import org.biojava.bio.program.fastq.FastqVariant;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Unit test for BdgenomicsFastqVariantToBiojavaFastqVariant.
+ * Unit test for QualityScoreVariantToFastqVariant.
  *
  * @author  Michael Heuer
  */
-public final class BdgenomicsFastqVariantToBiojavaFastqVariantTest {
-    private final Logger logger = LoggerFactory.getLogger(BdgenomicsFastqVariantToBiojavaFastqVariantTest.class);
-    private Converter<org.bdgenomics.formats.avro.FastqVariant, org.biojava.bio.program.fastq.FastqVariant> fastqVariantConverter;
+public final class QualityScoreVariantToFastqVariantTest {
+    private final Logger logger = LoggerFactory.getLogger(QualityScoreVariantToFastqVariantTest.class);
+    private Converter<QualityScoreVariant, FastqVariant> fastqVariantConverter;
 
     @Before
     public void setUp() {
-        fastqVariantConverter = new BdgenomicsFastqVariantToBiojavaFastqVariant();
+        fastqVariantConverter = new QualityScoreVariantToFastqVariant();
     }
 
     @Test
@@ -73,13 +77,8 @@ public final class BdgenomicsFastqVariantToBiojavaFastqVariantTest {
 
     @Test
     public void testConvert() {
-        assertEquals(org.biojava.bio.program.fastq.FastqVariant.FASTQ_SANGER,
-                     fastqVariantConverter.convert(org.bdgenomics.formats.avro.FastqVariant.SANGER, ConversionStringency.STRICT, logger));
-
-        assertEquals(org.biojava.bio.program.fastq.FastqVariant.FASTQ_SOLEXA,
-                     fastqVariantConverter.convert(org.bdgenomics.formats.avro.FastqVariant.SOLEXA, ConversionStringency.STRICT, logger));
-
-        assertEquals(org.biojava.bio.program.fastq.FastqVariant.FASTQ_ILLUMINA,
-                     fastqVariantConverter.convert(org.bdgenomics.formats.avro.FastqVariant.ILLUMINA, ConversionStringency.STRICT, logger));
+        assertEquals(FastqVariant.FASTQ_SANGER, fastqVariantConverter.convert(QualityScoreVariant.FASTQ_SANGER, ConversionStringency.STRICT, logger));
+        assertEquals(FastqVariant.FASTQ_SOLEXA, fastqVariantConverter.convert(QualityScoreVariant.FASTQ_SOLEXA, ConversionStringency.STRICT, logger));
+        assertEquals(FastqVariant.FASTQ_ILLUMINA, fastqVariantConverter.convert(QualityScoreVariant.FASTQ_ILLUMINA, ConversionStringency.STRICT, logger));
     }
 }

@@ -29,39 +29,43 @@ import org.bdgenomics.convert.AbstractConverter;
 import org.bdgenomics.convert.ConversionException;
 import org.bdgenomics.convert.ConversionStringency;
 
+import org.bdgenomics.formats.avro.QualityScoreVariant;
+
+import org.biojava.bio.program.fastq.FastqVariant;
+
 import org.slf4j.Logger;
 
 /**
- * Convert bdg-formats FastqVariant to Biojava 1.x FastqVariant.
+ * Convert Biojava 1.x FastqVariant to bdg-formats QualityScoreVariant.
  *
  * @author  Michael Heuer
  */
 @Immutable
-final class BdgenomicsFastqVariantToBiojavaFastqVariant extends AbstractConverter<org.bdgenomics.formats.avro.FastqVariant, org.biojava.bio.program.fastq.FastqVariant> {
+final class FastqVariantToQualityScoreVariant extends AbstractConverter<FastqVariant, QualityScoreVariant> {
 
     /**
      * Package private no-arg constructor.
      */
-    BdgenomicsFastqVariantToBiojavaFastqVariant() {
-        super(org.bdgenomics.formats.avro.FastqVariant.class, org.biojava.bio.program.fastq.FastqVariant.class);
+    FastqVariantToQualityScoreVariant() {
+        super(FastqVariant.class, QualityScoreVariant.class);
     }
 
 
     @Override
-    public org.biojava.bio.program.fastq.FastqVariant convert(final org.bdgenomics.formats.avro.FastqVariant fastqVariant,
-                                                              final ConversionStringency stringency,
-                                                              final Logger logger) throws ConversionException {
+    public QualityScoreVariant convert(final FastqVariant fastqVariant,
+                                       final ConversionStringency stringency,
+                                       final Logger logger) throws ConversionException {
 
         if (fastqVariant == null) {
             warnOrThrow(fastqVariant, "must not be null", null, stringency, logger);
             return null;
         }
-        if (fastqVariant == org.bdgenomics.formats.avro.FastqVariant.ILLUMINA) {
-            return org.biojava.bio.program.fastq.FastqVariant.FASTQ_ILLUMINA;
+        if (fastqVariant.isIllumina()) {
+            return QualityScoreVariant.FASTQ_ILLUMINA;
         }
-        else if (fastqVariant == org.bdgenomics.formats.avro.FastqVariant.SOLEXA) {
-            return org.biojava.bio.program.fastq.FastqVariant.FASTQ_SOLEXA;
+        else if (fastqVariant.isSolexa()) {
+            return QualityScoreVariant.FASTQ_SOLEXA;
         }
-        return org.biojava.bio.program.fastq.FastqVariant.FASTQ_SANGER;
+        return QualityScoreVariant.FASTQ_SANGER;
     }
 }

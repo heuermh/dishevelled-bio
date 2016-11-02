@@ -31,9 +31,11 @@ import org.bdgenomics.convert.ConversionException;
 import org.bdgenomics.convert.ConversionStringency;
 
 import org.bdgenomics.formats.avro.Alphabet;
+import org.bdgenomics.formats.avro.QualityScoreVariant;
 import org.bdgenomics.formats.avro.Read;
 
 import org.biojava.bio.program.fastq.Fastq;
+import org.biojava.bio.program.fastq.FastqVariant;
 
 import org.slf4j.Logger;
 
@@ -45,16 +47,16 @@ import org.slf4j.Logger;
 @Immutable
 final class FastqToRead extends AbstractConverter<Fastq, Read> {
 
-    /** Convert Biojava 1.x FastqVariant to bdg-formats FastqVariant. */
-    final Converter<org.biojava.bio.program.fastq.FastqVariant, org.bdgenomics.formats.avro.FastqVariant> fastqVariantConverter;
+    /** Convert Biojava 1.x FastqVariant to bdg-formats QualityScoreVariant. */
+    final Converter<FastqVariant, QualityScoreVariant> fastqVariantConverter;
 
 
     /**
      * Package private no-arg constructor.
      *
-     * @param fastqVariantConverter convert Biojava 1.x FastqVariant to bdg-formats FastqVariant, must not be null
+     * @param fastqVariantConverter convert Biojava 1.x FastqVariant to bdg-formats QualityScoreVariant, must not be null
      */
-    FastqToRead(final Converter<org.biojava.bio.program.fastq.FastqVariant, org.bdgenomics.formats.avro.FastqVariant> fastqVariantConverter) {
+    FastqToRead(final Converter<FastqVariant, QualityScoreVariant> fastqVariantConverter) {
         super(Fastq.class, Read.class);
         checkNotNull(fastqVariantConverter);
         this.fastqVariantConverter = fastqVariantConverter;
@@ -76,8 +78,8 @@ final class FastqToRead extends AbstractConverter<Fastq, Read> {
             .setAlphabet(Alphabet.DNA)
             .setSequence(fastq.getSequence())
             .setLength(Long.valueOf(fastq.getSequence().length()))
-            .setFastqVariant(fastqVariantConverter.convert(fastq.getVariant(), stringency, logger))
             .setQualityScores(fastq.getQuality())
+            .setQualityScoreVariant(fastqVariantConverter.convert(fastq.getVariant(), stringency, logger))
             .build();
     }
 

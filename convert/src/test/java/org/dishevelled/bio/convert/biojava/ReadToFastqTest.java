@@ -34,9 +34,11 @@ import org.bdgenomics.convert.Converter;
 import org.bdgenomics.convert.ConversionException;
 import org.bdgenomics.convert.ConversionStringency;
 
-import org.biojava.bio.program.fastq.Fastq;
-
 import org.bdgenomics.formats.avro.Read;
+import org.bdgenomics.formats.avro.QualityScoreVariant;
+
+import org.biojava.bio.program.fastq.Fastq;
+import org.biojava.bio.program.fastq.FastqVariant;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,12 +50,12 @@ import org.slf4j.LoggerFactory;
  */
 public final class ReadToFastqTest {
     private final Logger logger = LoggerFactory.getLogger(ReadToFastqTest.class);
-    private Converter<org.bdgenomics.formats.avro.FastqVariant, org.biojava.bio.program.fastq.FastqVariant> fastqVariantConverter;
+    private Converter<QualityScoreVariant, FastqVariant> fastqVariantConverter;
     private Converter<Read, Fastq> fastqConverter;
 
     @Before
     public void setUp() throws Exception {
-        fastqVariantConverter = new BdgenomicsFastqVariantToBiojavaFastqVariant();
+        fastqVariantConverter = new QualityScoreVariantToFastqVariant();
         fastqConverter = new ReadToFastq(fastqVariantConverter);
     }
 
@@ -88,13 +90,13 @@ public final class ReadToFastqTest {
             .setName("read/1")
             .setSequence("actg")
             .setQualityScores("e896")
-            .setFastqVariant(org.bdgenomics.formats.avro.FastqVariant.SANGER)
+            .setQualityScoreVariant(QualityScoreVariant.FASTQ_SANGER)
             .build();
 
         Fastq fastq = fastqConverter.convert(read, ConversionStringency.STRICT, logger);
         assertEquals(read.getName(), fastq.getDescription());
         assertEquals(read.getSequence(), fastq.getSequence());
         assertEquals(read.getQualityScores(), fastq.getQuality());
-        assertEquals(org.biojava.bio.program.fastq.FastqVariant.FASTQ_SANGER, fastq.getVariant());
+        assertEquals(FastqVariant.FASTQ_SANGER, fastq.getVariant());
     }
 }
