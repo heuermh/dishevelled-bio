@@ -50,6 +50,9 @@
     <module>tools</module>
   </modules>
 
+  <prerequisites>
+    <maven>3.0</maven>
+  </prerequisites>
   <properties>
     <bdg-convert.version>0.1-SNAPSHOT</bdg-convert.version>
     <biojava.version>1.9.2</biojava.version>
