@@ -23,8 +23,6 @@
 */
 package org.dishevelled.bio.convert.dishevelled;
 
-import static java.util.stream.Collectors.toList;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,7 +76,23 @@ final class VcfRecordToVariants extends AbstractConverter<VcfRecord, List<Varian
         if (vcfRecord.getId() != null && vcfRecord.getId().length > 0) {
             vb.setNames(ImmutableList.copyOf(vcfRecord.getId()));
         }
-            
+
+        if (vcfRecord.getFilter() == null
+            || vcfRecord.getFilter().length == 0
+            || isMissingValue(vcfRecord.getFilter()[0])) {
+
+            vb.setFiltersApplied(false);
+        }
+        else if ("PASS".equals(vcfRecord.getFilter()[0])) {
+            vb.setFiltersApplied(true);
+            vb.setFiltersPassed(true);
+        }
+        else {
+            vb.setFiltersApplied(true);
+            vb.setFiltersPassed(false);
+            vb.setFiltersFailed(ImmutableList.copyOf(vcfRecord.getFilter()));
+        }
+
         vcfRecord.getInfo().get("SOMATIC").forEach(somatic -> vb.setSomatic(Boolean.valueOf(somatic)));
 
         List<Variant> variants = new ArrayList<Variant>(vcfRecord.getAlt().length);
@@ -91,5 +105,9 @@ final class VcfRecordToVariants extends AbstractConverter<VcfRecord, List<Varian
             }
         }
         return variants;
+    }
+
+    static boolean isMissingValue(final String value) {
+        return ".".equals(value);
     }
 }

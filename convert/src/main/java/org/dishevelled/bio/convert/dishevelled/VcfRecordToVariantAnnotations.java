@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Splitter;
+
 import com.google.common.collect.ImmutableList;
 
 import javax.annotation.concurrent.Immutable;
@@ -90,17 +92,38 @@ final class VcfRecordToVariantAnnotations extends AbstractConverter<VcfRecord, L
         List<VariantAnnotation> variantAnnotations = new ArrayList<VariantAnnotation>();
         List<Variant> variants = variantConverter.convert(vcfRecord, stringency, logger);
 
-        for (Variant variant : variants) {
+        for (int i = 0, size = variants.size(); i < size; i++) {
+            Variant variant = variants.get(i);
             VariantAnnotation.Builder vab = VariantAnnotation.newBuilder()
                 .setVariant(variant);
 
+            // Number=0, Number=1 VCF INFO reserved keys shared across all alternate alleles in the same VCF record
+            vcfRecord.getInfo().get("AA").forEach(ancestralAllele -> vab.setAncestralAllele(ancestralAllele));
+            vcfRecord.getInfo().get("DB").forEach(dbSnp -> vab.setDbSnp(Boolean.valueOf(dbSnp)));
+            vcfRecord.getInfo().get("H2").forEach(hapMap2 -> vab.setHapMap2(Boolean.valueOf(hapMap2)));
+            vcfRecord.getInfo().get("H3").forEach(hapMap3 -> vab.setHapMap3(Boolean.valueOf(hapMap3)));
+            vcfRecord.getInfo().get("VALIDATED").forEach(validated -> vab.setValidated(Boolean.valueOf(validated)));
+            vcfRecord.getInfo().get("1000G").forEach(thousandGenomes -> vab.setThousandGenomes(Boolean.valueOf(thousandGenomes)));
+
+            final int index = i;
+            // Number=A VCF INFO reserved keys split for multi-allelic sites by index
+            vcfRecord.getInfo().get("AC").forEach(alleleCount -> vab.setAlleleCount(splitToInteger(vcfRecord, alleleCount, index, stringency, logger)));
+            vcfRecord.getInfo().get("AF").forEach(alleleFrequency -> vab.setAlleleFrequency(splitToFloat(vcfRecord, alleleFrequency, index, stringency, logger)));
+            vcfRecord.getInfo().get("CIGAR").forEach(cigar -> vab.setCigar(splitToString(vcfRecord, cigar, index, stringency, logger)));
+
+            // Number=R VCF INFO reserved keys split for multi-allelic sites by index
+            vcfRecord.getInfo().get("AD").forEach(readDepth -> vab.setReadDepth(splitToInteger(vcfRecord, readDepth, index + 1, stringency, logger)));
+            vcfRecord.getInfo().get("ADF").forEach(forwardReadDepth -> vab.setForwardReadDepth(splitToInteger(vcfRecord, forwardReadDepth, index + 1, stringency, logger)));
+            vcfRecord.getInfo().get("ADR").forEach(reverseReadDepth -> vab.setReverseReadDepth(splitToInteger(vcfRecord, reverseReadDepth, index + 1, stringency, logger)));
+
+            // Number=. VCF INFO key ANN split for multi-allelic sites by alternate allele
             if (vcfRecord.getInfo().containsKey("ANN")) {
                 List<TranscriptEffect> transcriptEffects = new ArrayList<TranscriptEffect>();
                 for (String ann : vcfRecord.getInfo().get("ANN")) {
                     String[] tokens = ann.split(",");
                     for (String token : tokens) {
                         TranscriptEffect transcriptEffect = transcriptEffectConverter.convert(token, stringency, logger);
-                        if (transcriptEffect != null) {
+                        if (transcriptEffect != null && transcriptEffect.getAlternateAllele().equals(variant.getAlternateAllele())) {
                             transcriptEffects.add(transcriptEffect);
                         }
                     }
@@ -110,5 +133,54 @@ final class VcfRecordToVariantAnnotations extends AbstractConverter<VcfRecord, L
             variantAnnotations.add(vab.build());
         }
         return variantAnnotations;
+    }
+
+    // todo: could/should these be conversions?
+    Integer splitToInteger(final VcfRecord vcfRecord,
+                           final String value,
+                           final int index,
+                           final ConversionStringency stringency,
+                           final Logger logger) throws ConversionException {
+
+        List<String> tokens = Splitter.on(",").splitToList(value);
+        try {
+            return Integer.valueOf(tokens.get(index));
+        }
+        catch (IndexOutOfBoundsException | NumberFormatException e) {
+            warnOrThrow(vcfRecord, String.format("could not split %s to integer", value), e, stringency, logger);
+        }
+        return null;
+    }
+
+    Float splitToFloat(final VcfRecord vcfRecord,
+                       final String value,
+                       final int index,
+                       final ConversionStringency stringency,
+                       final Logger logger) throws ConversionException {
+
+        List<String> tokens = Splitter.on(",").splitToList(value);
+        try {
+            return Float.valueOf(tokens.get(index));
+        }
+        catch (IndexOutOfBoundsException | NumberFormatException e) {
+            warnOrThrow(vcfRecord, String.format("could not split %s to float", value), e, stringency, logger);
+        }
+        return null;
+    }
+
+    String splitToString(final VcfRecord vcfRecord,
+                         final String value,
+                         final int index,
+                         final ConversionStringency stringency,
+                         final Logger logger) throws ConversionException {
+
+        List<String> tokens = Splitter.on(",").splitToList(value);
+        try {
+            return tokens.get(index);
+        }
+        catch (IndexOutOfBoundsException e) {
+            warnOrThrow(vcfRecord, String.format("could not split %s to string", value), e, stringency, logger);
+        }
+        return null;
     }
 }

@@ -160,7 +160,7 @@ public final class VcfRecordToVariantAnnotationsTest {
         info.put("MQRankSum", "-1.906");
         info.put("QD", "1.55");
         info.put("ReadPosRankSum", "0.384");
-        info.put("ANN", "T|upstream_gene_variant|MODIFIER|TAS1R3|ENSG00000169962|transcript|ENST00000339381.5|protein_coding||c.-485C>T|||||453|");
+        info.put("ANN", "C|upstream_gene_variant|MODIFIER|TAS1R3|ENSG00000169962|transcript|ENST00000339381.5|protein_coding||c.-485C>T|||||453|");
         
         VcfRecord vcfRecord = VcfRecord.builder()
             .withChrom("1")
@@ -181,11 +181,13 @@ public final class VcfRecordToVariantAnnotationsTest {
         assertEquals(1, variantAnnotations.size());
 
         VariantAnnotation variantAnnotation = variantAnnotations.get(0);
+        assertEquals(Integer.valueOf(2), variantAnnotation.getAlleleCount());
+        assertEquals(Float.valueOf(0.333f), variantAnnotation.getAlleleFrequency());
         assertNotNull(variantAnnotation.getTranscriptEffects());
         assertEquals(1, variantAnnotation.getTranscriptEffects().size());
 
         TranscriptEffect transcriptEffect = variantAnnotation.getTranscriptEffects().get(0);
-        assertEquals("T", transcriptEffect.getAlternateAllele());
+        assertEquals("C", transcriptEffect.getAlternateAllele());
         assertTrue(transcriptEffect.getEffects().contains("upstream_gene_variant"));
         assertEquals("TAS1R3", transcriptEffect.getGeneName());
         assertEquals("ENSG00000169962", transcriptEffect.getGeneId());
