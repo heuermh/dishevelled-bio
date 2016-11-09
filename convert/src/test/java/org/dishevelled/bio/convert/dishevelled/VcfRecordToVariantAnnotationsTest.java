@@ -147,8 +147,8 @@ public final class VcfRecordToVariantAnnotationsTest {
             .build();
 
         ListMultimap<String, String> info = ArrayListMultimap.create();
-        info.put("AC", "2");
-        info.put("AF", "0.333");
+        info.put("AC", "2"); // Number=A Integer
+        info.put("AF", "0.333"); // Number=A Float
         info.put("AN", "6");
         info.put("BaseQRankSum", "1.800");
         info.put("ClippingRankSum", "0.138");
@@ -160,6 +160,8 @@ public final class VcfRecordToVariantAnnotationsTest {
         info.put("MQRankSum", "-1.906");
         info.put("QD", "1.55");
         info.put("ReadPosRankSum", "0.384");
+        info.put("DB", "true"); // Number=0 Flag
+        info.put("AD", "4,42"); // Number=R Integer
         info.put("ANN", "C|upstream_gene_variant|MODIFIER|TAS1R3|ENSG00000169962|transcript|ENST00000339381.5|protein_coding||c.-485C>T|||||453|");
         
         VcfRecord vcfRecord = VcfRecord.builder()
@@ -181,8 +183,10 @@ public final class VcfRecordToVariantAnnotationsTest {
         assertEquals(1, variantAnnotations.size());
 
         VariantAnnotation variantAnnotation = variantAnnotations.get(0);
-        assertEquals(Integer.valueOf(2), variantAnnotation.getAlleleCount());
-        assertEquals(Float.valueOf(0.333f), variantAnnotation.getAlleleFrequency());
+        assertTrue(variantAnnotation.getDbSnp()); // Number=0 Flag
+        assertEquals(Integer.valueOf(2), variantAnnotation.getAlleleCount()); // Number=A Integer
+        assertEquals(Float.valueOf(0.333f), variantAnnotation.getAlleleFrequency()); // Number=A Float
+        assertEquals(Integer.valueOf(42), variantAnnotation.getReadDepth()); // Number=R Integer
         assertNotNull(variantAnnotation.getTranscriptEffects());
         assertEquals(1, variantAnnotation.getTranscriptEffects().size());
 

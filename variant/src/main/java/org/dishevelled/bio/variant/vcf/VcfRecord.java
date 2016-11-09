@@ -377,6 +377,7 @@ public final class VcfRecord {
         public Builder withInfo(final String infoId, final String... values) {
             checkNotNull(infoId);
 
+            // todo: for Number=0 Flag type, shouldn't this info.put(infoId, "true") ?
             if (values == null) {
                 info.removeAll(infoId);
             }
