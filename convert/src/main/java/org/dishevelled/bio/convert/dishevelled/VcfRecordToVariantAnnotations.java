@@ -92,18 +92,19 @@ final class VcfRecordToVariantAnnotations extends AbstractConverter<VcfRecord, L
         List<VariantAnnotation> variantAnnotations = new ArrayList<VariantAnnotation>();
         List<Variant> variants = variantConverter.convert(vcfRecord, stringency, logger);
 
+        VariantAnnotation.Builder vab = VariantAnnotation.newBuilder();
+
+        // Number=0, Number=1 VCF INFO reserved keys shared across all alternate alleles in the same VCF record
+        vcfRecord.getInfo().get("AA").forEach(ancestralAllele -> vab.setAncestralAllele(ancestralAllele));
+        vcfRecord.getInfo().get("DB").forEach(dbSnp -> vab.setDbSnp(Boolean.valueOf(dbSnp)));
+        vcfRecord.getInfo().get("H2").forEach(hapMap2 -> vab.setHapMap2(Boolean.valueOf(hapMap2)));
+        vcfRecord.getInfo().get("H3").forEach(hapMap3 -> vab.setHapMap3(Boolean.valueOf(hapMap3)));
+        vcfRecord.getInfo().get("VALIDATED").forEach(validated -> vab.setValidated(Boolean.valueOf(validated)));
+        vcfRecord.getInfo().get("1000G").forEach(thousandGenomes -> vab.setThousandGenomes(Boolean.valueOf(thousandGenomes)));
+
         for (int i = 0, size = variants.size(); i < size; i++) {
             Variant variant = variants.get(i);
-            VariantAnnotation.Builder vab = VariantAnnotation.newBuilder()
-                .setVariant(variant);
-
-            // Number=0, Number=1 VCF INFO reserved keys shared across all alternate alleles in the same VCF record
-            vcfRecord.getInfo().get("AA").forEach(ancestralAllele -> vab.setAncestralAllele(ancestralAllele));
-            vcfRecord.getInfo().get("DB").forEach(dbSnp -> vab.setDbSnp(Boolean.valueOf(dbSnp)));
-            vcfRecord.getInfo().get("H2").forEach(hapMap2 -> vab.setHapMap2(Boolean.valueOf(hapMap2)));
-            vcfRecord.getInfo().get("H3").forEach(hapMap3 -> vab.setHapMap3(Boolean.valueOf(hapMap3)));
-            vcfRecord.getInfo().get("VALIDATED").forEach(validated -> vab.setValidated(Boolean.valueOf(validated)));
-            vcfRecord.getInfo().get("1000G").forEach(thousandGenomes -> vab.setThousandGenomes(Boolean.valueOf(thousandGenomes)));
+            vab.setVariant(variant);
 
             final int index = i;
             // Number=A VCF INFO reserved keys split for multi-allelic sites by index
