@@ -223,6 +223,10 @@
               <mainClass>org.dishevelled.bio.tools.EnsemblVariantTableToVcf</mainClass>
             </program>
             <program>
+              <id>dsh-vcf-header</id>
+              <mainClass>org.dishevelled.bio.tools.VcfHeader</mainClass>
+            </program>
+            <program>
               <id>dsh-vcf-pedigree</id>
               <mainClass>org.dishevelled.bio.tools.VcfPedigree</mainClass>
             </program>
