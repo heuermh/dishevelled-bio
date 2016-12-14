@@ -156,8 +156,11 @@ public final class VcfWriter {
         if (record.getQual() == null || Double.isNaN(record.getQual())) {
             sb.append(".");
         }
-        else {
+        else if (record.getQual() - record.getQual().intValue() == 0.0d) {
             sb.append(record.getQual().intValue());
+        }
+        else {
+            sb.append(record.getQual());
         }
 
         sb.append("\t");

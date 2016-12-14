@@ -246,6 +246,27 @@ public final class VcfWriterTest {
     }
 
     @Test
+    public void testWriteRecordFloatingPointQual() throws Exception {
+        VcfRecord floatingPointQual = VcfRecord.builder()
+            .withLineNumber(3L)
+            .withChrom("22")
+            .withPos(16140370L)
+            .withId(new String[] { "rs2096606" })
+            .withRef("A")
+            .withAlt(new String[] { "G" })
+            .withQual(100.05d)
+            .withFilter(new String[] { "PASS" })
+            .withInfo(info)
+            .withFormat(new String[] { "GT" })
+            .withGenotypes(genotypes)
+            .build();
+
+        writeRecord(samples, floatingPointQual, writer);
+        writer.close();
+        assertEquals("22\t16140370\trs2096606\tA\tG\t100.05\tPASS\t.\tGT\t1|1" + System.lineSeparator(), outputStream.toString());
+    }
+
+    @Test
     public void testWriteRecordMissingId() throws Exception {
         VcfRecord missingId = VcfRecord.builder()
             .withLineNumber(3L)
