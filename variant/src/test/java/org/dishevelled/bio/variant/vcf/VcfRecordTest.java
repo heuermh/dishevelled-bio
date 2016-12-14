@@ -68,49 +68,8 @@ public final class VcfRecordTest {
         filter = new String[] { "PASS" };
         info = ImmutableListMultimap.<String, String>builder().build();
         format = new String[] { "GT" };
-        VcfGenotype.Builder genotypeBuilder = VcfGenotype.builder().withGt("1|1");
+        VcfGenotype.Builder genotypeBuilder = VcfGenotype.builder().withField("GT", "1|1");
         genotypes = ImmutableMap.<String, VcfGenotype>builder().put("NA19131", genotypeBuilder.build()).put("NA19223", genotypeBuilder.build()).build();
-    }
-
-    @Test(expected=NullPointerException.class)
-    public void testConstructorNullChrom() {
-        new VcfRecord(lineNumber, null, pos, id, ref, alt, qual, filter, info, format, genotypes);
-    }
-
-    @Test(expected=NullPointerException.class)
-    public void testConstructorNullRef() {
-        new VcfRecord(lineNumber, chrom, pos, id, null, alt, qual, filter, info, format, genotypes);
-    }
-
-    @Test(expected=NullPointerException.class)
-    public void testConstructorNullAlt() {
-        new VcfRecord(lineNumber, chrom, pos, id, ref, null, qual, filter, info, format, genotypes);
-    }
-
-    @Test(expected=NullPointerException.class)
-    public void testConstructorNullInfo() {
-        new VcfRecord(lineNumber, chrom, pos, id, ref, alt, qual, filter, null, format, genotypes);
-    }
-
-    @Test(expected=NullPointerException.class)
-    public void testConstructorNullGenotypes() {
-        new VcfRecord(lineNumber, chrom, pos, id, ref, alt, qual, filter, info, format, null);
-    }
-
-    @Test
-    public void testConstructor() {
-        VcfRecord record = new VcfRecord(lineNumber, chrom, pos, id, ref, alt, qual, filter, info, format, genotypes);
-        assertNotNull(record);
-        assertEquals(lineNumber, record.getLineNumber());
-        assertEquals(chrom, record.getChrom());
-        assertEquals(id, record.getId());
-        assertEquals(ref, record.getRef());
-        assertEquals(alt, record.getAlt());
-        assertEquals(qual, record.getQual(), 0.1d);
-        assertEquals(filter, record.getFilter());
-        assertEquals(info, record.getInfo());
-        assertEquals(format, record.getFormat());
-        assertEquals(genotypes, record.getGenotypes());
     }
 
     @Test
@@ -130,7 +89,7 @@ public final class VcfRecordTest {
 
     @Test(expected=NullPointerException.class)
     public void testBuilderWithGenotypeNullSampleId() {
-        builder().withGenotype(null, VcfGenotype.builder().withGt("1|1").build());
+        builder().withGenotype(null, VcfGenotype.builder().withField("GT", "1|1").build());
     }
 
     @Test(expected=NullPointerException.class)
@@ -191,9 +150,9 @@ public final class VcfRecordTest {
             .build();
     }
 
-    @Test
+    @Test(expected=NullPointerException.class)
     public void testBuilderBuildNullInfoValues() {
-        VcfRecord record = builder()
+        builder()
             .withLineNumber(lineNumber)
             .withChrom(chrom)
             .withPos(pos)
@@ -206,8 +165,6 @@ public final class VcfRecordTest {
             .withFormat(format)
             .withGenotypes(genotypes)
             .build();
-
-        assertTrue(record.getInfo().get("NS").isEmpty());
     }
 
     @Test

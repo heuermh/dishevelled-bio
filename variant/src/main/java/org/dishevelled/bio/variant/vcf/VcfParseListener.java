@@ -102,7 +102,7 @@ public interface VcfParseListener {
      * @param qual qual score
      * @throws IOException if an I/O error occurs
      */
-    void qual(double qual) throws IOException;
+    void qual(Double qual) throws IOException;
 
     /**
      * Notify this parse listener of filter strings.

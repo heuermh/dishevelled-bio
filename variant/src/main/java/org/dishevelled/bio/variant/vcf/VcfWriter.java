@@ -153,11 +153,11 @@ public final class VcfWriter {
         sb.append(Joiner.on(",").join(record.getAlt()));
 
         sb.append("\t");
-        if (Double.isNaN(record.getQual())) {
+        if (record.getQual() == null || Double.isNaN(record.getQual())) {
             sb.append(".");
         }
         else {
-            sb.append((int) record.getQual());
+            sb.append(record.getQual().intValue());
         }
 
         sb.append("\t");
@@ -178,8 +178,8 @@ public final class VcfWriter {
             for (String key : record.getInfo().keySet()) {
                 infoStrings.put(key, Joiner.on(",").join(record.getInfo().get(key)));
             }
-            // then join
-            sb.append(Joiner.on(";").withKeyValueSeparator("=").join(infoStrings));
+            // then join, removing value for flags
+            sb.append(Joiner.on(";").withKeyValueSeparator("=").join(infoStrings).replace("=true", ""));
         }
 
         if (!samples.isEmpty()) {

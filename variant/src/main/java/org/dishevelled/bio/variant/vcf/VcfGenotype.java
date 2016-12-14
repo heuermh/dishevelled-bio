@@ -23,9 +23,10 @@
 */
 package org.dishevelled.bio.variant.vcf;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import javax.annotation.concurrent.Immutable;
 
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
 
@@ -43,20 +44,27 @@ public final class VcfGenotype {
     /**
      * Create a new VCF genotype with the specified genotype fields.
      *
-     * @param fields genotype fields, must not be null
+     * @param fields genotype fields, must not be null and must contain strictly one GT genotype field
      */
-    VcfGenotype(final ListMultimap<String, String> fields) {
-        this.fields = ImmutableListMultimap.copyOf(fields);
+    private VcfGenotype(final ListMultimap<String, String> fields) {
+        // check GT cardinality constraint
+        if (!fields.containsKey("GT")) {
+            throw new IllegalArgumentException("GT genotype field is required");
+        }
+        if (fields.get("GT").size() > 1) {
+            throw new IllegalArgumentException("GT genotype field cardinality is strictly one, found " + fields.get("GT").size());
+        }
+        this.fields = fields;
     }
 
 
     /**
-     * Return the value of the GT genotype field for this VCF genotype or <code>null</code> if no such field exists.
+     * Return the value of the GT genotype field for this VCF genotype.
      *
-     * @return the value of the GT genotype field for this VCF genotype or <code>null</code> if no such field exists
+     * @return the value of the GT genotype field for this VCF genotype.
      */
     public String getGt() {
-        return fields.get("GT").isEmpty() ? null : fields.get("GT").get(0);
+        return fields.get("GT").get(0);
     }
 
     /**
@@ -82,7 +90,7 @@ public final class VcfGenotype {
      */
     public static final class Builder {
         /** Genotype fields. */
-        private ListMultimap<String, String> fields = ArrayListMultimap.create();
+        private ImmutableListMultimap.Builder<String, String> fields = ImmutableListMultimap.builder();
 
 
         /**
@@ -94,33 +102,16 @@ public final class VcfGenotype {
 
 
         /**
-         * Return this VCF genotype builder configured with the specified GT genotype field.
-         *
-         * @param gt GT genotype field
-         * @return this VCF record builder configured with the specified GT genotype field
-         */
-        public Builder withGt(final String gt) {
-            if (gt == null) {
-                fields.removeAll("GT");
-            }
-            else {
-                fields.put("GT", gt);
-            }
-            return this;
-        }
-
-        /**
          * Return this VCF genotype builder configured with the specified genotype field.
          *
-         * @param id genotype field id
-         * @param values genotype field values
+         * @param id genotype field id, must not be null
+         * @param values genotype field values, must not be null
          * @return this VCF record builder configured with the specified genotype field
          */
         public Builder withField(final String id, final String... values) {
-            if (values != null) {
-                for (String value : values) {
-                    fields.put(id, value);
-                }
+            checkNotNull(values);
+            for (String value : values) {
+                fields.put(id, value);
             }
             return this;
         }
@@ -142,7 +133,7 @@ public final class VcfGenotype {
          * @return this VCF genotype builder
          */
         public Builder reset() {
-            fields.clear();
+            fields = ImmutableListMultimap.builder();
             return this;
         }
 
@@ -152,15 +143,7 @@ public final class VcfGenotype {
          * @return a new VCF genotype populated from the configuration of this VCF genotype builder
          */
         public VcfGenotype build() {
-            // check GT cardinality constraint
-            if (fields.containsKey("GT")) {
-                String gt = fields.get("GT").get(0);
-                fields.removeAll("GT");
-                if (gt != null) {
-                    fields.put("GT", gt);
-                }
-            }
-            return new VcfGenotype(fields);
+            return new VcfGenotype(fields.build());
         }
     }
 }

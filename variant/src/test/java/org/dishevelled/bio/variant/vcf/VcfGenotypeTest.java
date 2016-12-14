@@ -51,36 +51,29 @@ public final class VcfGenotypeTest {
         fields = ImmutableListMultimap.<String, String>builder().put("GT", "1|1").build();
     }
 
-    @Test(expected=NullPointerException.class)
-    public void testConstructorNullFields() {
-        new VcfGenotype(null);
-    }
-
-    @Test
-    public void testConstructor() {
-        VcfGenotype genotype = new VcfGenotype(fields);
-        assertEquals("1|1", genotype.getGt());
-        assertEquals(ImmutableList.of("1|1"), genotype.getFields().get("GT"));
-    }
-
     @Test
     public void testBuilder() {
         assertNotNull(builder());
     }
 
-    @Test
-    public void testBuilderDefaultGt() {
-        assertNull(builder().build().getGt());
+    @Test(expected=NullPointerException.class)
+    public void testBuilderWithFieldNullId() {
+        builder().withField(null, "1|1");
     }
 
-    @Test
-    public void testBuilderBuildNullGt() {
-        assertNull(builder().withGt(null).build().getGt());
+    @Test(expected=NullPointerException.class)
+    public void testBuilderWithFieldNullValue() {
+        builder().withField("GT", null);
     }
 
-    @Test
+    @Test(expected=NullPointerException.class)
+    public void testBuilderWithFieldsNull() {
+        builder().withFields(null);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
     public void testBuilderBuildDefaultFields() {
-        assertEquals(empty, builder().build().getFields());
+        builder().build();
     }
 
     @Test
@@ -88,21 +81,14 @@ public final class VcfGenotypeTest {
         assertEquals(fields, builder().withFields(fields).build().getFields());
     }
 
-    @Test
+    @Test(expected=IllegalArgumentException.class)
     public void testBuilderBuildEmptyFields() {
-        assertEquals(empty, builder().withFields(empty).build().getFields());
+        builder().withFields(empty).build();
     }
 
     @Test
     public void testBuilderReset() {
-        assertEquals("0|1", builder().withGt("1|1").reset().withGt("0|1").build().getGt());
-    }
-
-    @Test
-    public void testBuilderBuildWithGt() {
-        VcfGenotype genotype = builder().withGt("1|1").build();
-        assertEquals("1|1", genotype.getGt());
-        assertEquals(fields, genotype.getFields());
+        assertEquals("0|1", builder().withField("GT", "1|1").reset().withField("GT", "0|1").build().getGt());
     }
 
     @Test
@@ -112,10 +98,8 @@ public final class VcfGenotypeTest {
         assertEquals(fields, genotype.getFields());
     }
 
-    @Test
-    public void testBuilderBuildWithGtWithFields() {
-        VcfGenotype genotype = builder().withGt("1|1").withFields(fields).build();
-        assertEquals("1|1", genotype.getGt());
-        assertEquals(fields, genotype.getFields());
+    @Test(expected=IllegalArgumentException.class)
+    public void testBuilderBuildMultipleWithGt() {
+        builder().withField("GT", "0|1").withField("GT", "1|1").build();
     }
 }

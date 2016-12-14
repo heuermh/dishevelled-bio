@@ -153,7 +153,7 @@ public final class StreamingVcfParser {
                 }
 
                 @Override
-                public void qual(final double qual) throws IOException {
+                public void qual(final Double qual) throws IOException {
                     builder.withQual(qual);
                 }
 

@@ -140,12 +140,11 @@ public final class VcfParser {
 
                 listener.ref(tokens[3]);
 
-                // todo: check for symbolic alleles
                 String[] altTokens = tokens[4].split(",");
                 listener.alt(isMissingValue(altTokens) ? new String[0] : altTokens);
 
                 try {
-                    listener.qual(isMissingValue(tokens[5]) ? Double.NaN : Double.parseDouble(tokens[5]));
+                    listener.qual(isMissingValue(tokens[5]) ? null : Double.parseDouble(tokens[5]));
                 }
                 catch (NumberFormatException e) {
                     throw new IOException("invalid qual at line number " + lineNumber, e);
@@ -159,7 +158,7 @@ public final class VcfParser {
                     for (String infoToken : infoTokens) {
                         String[] entryTokens = infoToken.split("=");
                         if (entryTokens.length == 1) {
-                            listener.info(entryTokens[0]);
+                            listener.info(entryTokens[0], "true");
                         }
                         else if (entryTokens.length == 2) {
                             String infoId = entryTokens[0];
@@ -189,7 +188,7 @@ public final class VcfParser {
                                 throw new IOException("invalid genotype fields at line number " + lineNumber + ", missing genotype (GT) field");
                             }
                             String gt = genotypeTokens[0];
-                            listener.genotype(samples.get(column), "GT", isMissingGenotypeValue(gt) ? null : gt);
+                            listener.genotype(samples.get(column), "GT", gt);
                         }
                         for (int i = 1, size = Math.min(formatTokens.length, genotypeTokens.length); i < size; i++) {
                             if (!isMissingValue(genotypeTokens[i])) {
@@ -215,18 +214,6 @@ public final class VcfParser {
      */
     static boolean isMissingValue(final String value) {
         return ".".equals(value);
-    }
-
-    /**
-     * Return true if the specified value is the missing value (<code>"."</code>) or a genotype (GT) of only
-     * missing values (e.g. <code>"./."</code> for diploid).
-     *
-     * @param value value
-     * @return true if the specified value is the missing value (<code>"."</code>) or a genotype (GT) of only
-     *   missing values (e.g. <code>"./."</code> for diploid)
-     */
-    static boolean isMissingGenotypeValue(final String value) {
-        return isMissingValue(value) || "./.".equals(value);
     }
 
     /**

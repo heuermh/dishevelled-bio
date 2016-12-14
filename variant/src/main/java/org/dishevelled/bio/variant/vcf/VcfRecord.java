@@ -25,8 +25,10 @@ package org.dishevelled.bio.variant.vcf;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.HashMap;
 import java.util.Map;
+
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.annotation.concurrent.Immutable;
 
@@ -43,37 +45,37 @@ import com.google.common.collect.ListMultimap;
 @Immutable
 public final class VcfRecord {
     /** Line number. */
-    private long lineNumber;
+    private final long lineNumber;
 
     /** Chromosome. */
-    private String chrom;
+    private final String chrom;
 
     /** Position. */
-    private long pos;
+    private final long pos;
 
     /** Array of ids. */
-    private String[] id;
+    private final String[] id;
 
     /** Reference allele. */
-    private String ref;
+    private final String ref;
 
     /** Array of alternate alleles. */
-    private String[] alt;
+    private final String[] alt;
 
     /** QUAL score. */
-    private double qual;
+    private final Double qual;
 
     /** Filter. */
-    private String[] filter;
+    private final String[] filter;
 
     /** INFO key-value(s) pairs. */
-    private ListMultimap<String, String> info;
+    private final ListMultimap<String, String> info;
 
     /** Format. */
-    private String[] format;
+    private final String[] format;
 
     /** Genotypes keyed by sample id. */
-    private Map<String, VcfGenotype> genotypes;
+    private final Map<String, VcfGenotype> genotypes;
 
 
     /**
@@ -91,17 +93,17 @@ public final class VcfRecord {
      * @param format array of format keys
      * @param genotypes genotypes keyed by sample id, must not be null
      */
-    VcfRecord(final long lineNumber,
-              final String chrom,
-              final long pos,
-              final String[] id,
-              final String ref,
-              final String[] alt,
-              final double qual,
-              final String[] filter,
-              final ListMultimap<String, String> info,
-              final String[] format,
-              final Map<String, VcfGenotype> genotypes) {
+    private VcfRecord(final long lineNumber,
+                      final String chrom,
+                      final long pos,
+                      final String[] id,
+                      final String ref,
+                      final String[] alt,
+                      final Double qual,
+                      final String[] filter,
+                      final ListMultimap<String, String> info,
+                      final String[] format,
+                      final Map<String, VcfGenotype> genotypes) {
 
         checkNotNull(chrom, "chrom must not be null");
         checkNotNull(ref, "ref must not be null");
@@ -181,7 +183,7 @@ public final class VcfRecord {
      *
      * @return the QUAL score for this VCF record
      */
-    public double getQual() {
+    public Double getQual() {
         return qual;
     }
 
@@ -253,13 +255,13 @@ public final class VcfRecord {
         private String[] alt;
 
         /** QUAL score. */
-        private double qual;
+        private Double qual;
 
         /** Filter. */
         private String[] filter;
 
         /** Map of INFO key-value(s) pairs. */
-        private ListMultimap<String, String> info = ArrayListMultimap.create();
+        private ImmutableListMultimap.Builder<String, String> info = ImmutableListMultimap.builder();
 
         /** Format. */
         private String[] format;
@@ -268,7 +270,7 @@ public final class VcfRecord {
         private ImmutableMap.Builder<String, VcfGenotype> genotypes = ImmutableMap.builder();
 
         /** Map of genotype fields keyed by sample id. */
-        private Map<String, ListMultimap<String, String>> genotypeFields = new HashMap<String, ListMultimap<String, String>>();
+        private ConcurrentMap<String, ListMultimap<String, String>> genotypeFields = new ConcurrentHashMap<String, ListMultimap<String, String>>();
 
 
         /**
@@ -351,7 +353,7 @@ public final class VcfRecord {
          * @param qual QUAL score
          * @return this VCF record builder configured with the specified QUAL score
          */
-        public Builder withQual(final double qual) {
+        public Builder withQual(final Double qual) {
             this.qual = qual;
             return this;
         }
@@ -370,21 +372,14 @@ public final class VcfRecord {
         /**
          * Return this VCF record builder configured with the specified INFO key-value(s) pair.
          *
-         * @param infoId INFO ID key, must not be null
-         * @param values INFO values
+         * @param id INFO ID key, must not be null
+         * @param values INFO values, must not be null
          * @return this VCF record builder configured with the specified INFO key-value(s) pair
          */
-        public Builder withInfo(final String infoId, final String... values) {
-            checkNotNull(infoId);
-
-            // todo: for Number=0 Flag type, shouldn't this info.put(infoId, "true") ?
-            if (values == null) {
-                info.removeAll(infoId);
-            }
-            else {
-                for (String value : values) {
-                    info.put(infoId, value);
-                }
+        public Builder withInfo(final String id, final String... values) {
+            checkNotNull(values);
+            for (String value : values) {
+                info.put(id, value);
             }
             return this;
         }
@@ -416,21 +411,14 @@ public final class VcfRecord {
          *
          * @param sampleId sample id, must not be null
          * @param formatId genotype field format id, must not be null
-         * @param values values
+         * @param values values, must not be null
          * @return this VCF record builder configured with the specified genotype field keyed by sample id
          */
         public Builder withGenotype(final String sampleId, final String formatId, final String... values) {
-            if (!genotypeFields.containsKey(sampleId)) {
-                genotypeFields.put(sampleId, ArrayListMultimap.<String, String>create());
-            }
-            if (values == null) { // || ".".equals(value)
-                genotypeFields.get(sampleId).removeAll(formatId);
-            }
-            else {
-                for (String value : values) {
-                    // what about missing values here?
-                    genotypeFields.get(sampleId).put(formatId, value);
-                }
+            checkNotNull(values);
+            genotypeFields.putIfAbsent(sampleId, ArrayListMultimap.<String, String>create());
+            for (String value : values) {
+                genotypeFields.get(sampleId).put(formatId, value);
             }
             return this;
         }
@@ -470,9 +458,9 @@ public final class VcfRecord {
             id = null;
             ref = null;
             alt = null;
-            qual = -1.0d;
+            qual = null;
             filter = null;
-            info.clear();
+            info = ImmutableListMultimap.builder();
             genotypes = ImmutableMap.builder();
             genotypeFields.clear();
             return this;
@@ -489,7 +477,7 @@ public final class VcfRecord {
                 String sampleId = entry.getKey();
                 genotypes.put(sampleId, VcfGenotype.builder().withFields(entry.getValue()).build());
             }
-            return new VcfRecord(lineNumber, chrom, pos, id, ref, alt, qual, filter, info, format, genotypes.build());
+            return new VcfRecord(lineNumber, chrom, pos, id, ref, alt, qual, filter, info.build(), format, genotypes.build());
         }
     }
 }

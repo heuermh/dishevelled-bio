@@ -60,7 +60,6 @@ import org.dishevelled.graph.Edge;
 import org.dishevelled.graph.Node;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -357,7 +356,6 @@ public final class VcfReaderTest {
                 assertEquals(0.7d, tumor.getMixture(), 0.01d);
                 assertEquals("Patient tumor genome", tumor.getDescription());
             }
-
             count++;
         }
         assertEquals(2, count);
@@ -395,17 +393,6 @@ public final class VcfReaderTest {
         assertNotNull(record.getInfo().get("AA"));
         assertTrue(record.getInfo().get("AA").isEmpty());
 
-        /*
-          what about flags?
-
-          record.getInfo().get("H2") ??
-
-          what about some but not all missing values?
-
-          AA=.,0.123,.
-
-        */
-
         assertEquals("0.9799", record.getInfo().get("AVGPOST").get(0));
         assertEquals("0.0149", record.getInfo().get("THETA").get(0));
         assertEquals("LOWCOV", record.getInfo().get("SNPSOURCE").get(0));
@@ -430,17 +417,16 @@ public final class VcfReaderTest {
     public void testMissingQual() throws Exception {
         VcfRecord record = records(createInputStream("missing-qual.vcf")).iterator().next();
         assertNotNull(record);
-        assertTrue(Double.isNaN(record.getQual()));
+        assertNull(record.getQual());
     }
 
-    @Ignore
+    @Test
     public void testHapmapInfo() throws Exception {
         VcfRecord record = records(createInputStream("hapmap-info.vcf")).iterator().next();
         assertNotNull(record);
-
-        // todo:  there isn't a way to put an empty mapping in a ListMultimap
         assertTrue(record.getInfo().containsKey("H2"));
-        assertTrue(record.getInfo().get("H2").isEmpty());
+        assertEquals(1, record.getInfo().get("H2").size());
+        assertEquals("true", record.getInfo().get("H2").get(0));
     }
 
     @Test
@@ -522,7 +508,7 @@ public final class VcfReaderTest {
     @Test
     public void testCephGatkHaplotypeJoint() throws Exception {
         VcfRecord record = records(createInputStream("ceph-bwa-j-gatk-haplotype-joint.excerpt.vcf")).iterator().next();
-        assertNull(record.getGenotypes().get("NA12878-3").getGt());
+        assertEquals("./.", record.getGenotypes().get("NA12878-3").getGt());
         assertEquals("0/1", record.getGenotypes().get("NA12891-3").getGt());
         assertEquals("0/0", record.getGenotypes().get("NA12892-3").getGt());
     }

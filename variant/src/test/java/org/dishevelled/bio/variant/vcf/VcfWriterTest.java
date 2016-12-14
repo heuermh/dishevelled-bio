@@ -69,10 +69,23 @@ public final class VcfWriterTest {
         samples = ImmutableList.of(sample);
 
         info = ImmutableListMultimap.<String, String>builder().build();
-        VcfGenotype.Builder genotypeBuilder = VcfGenotype.builder().withGt("1|1");
+        VcfGenotype.Builder genotypeBuilder = VcfGenotype.builder().withField("GT", "1|1");
         genotypes = ImmutableMap.<String, VcfGenotype>builder().put("NA19131", genotypeBuilder.build()).put("NA19223", genotypeBuilder.build()).build();
 
-        record = new VcfRecord(3L, "22", 16140370L, new String[] { "rs2096606" }, "A", new String[] { "G" }, 100.0d, new String[] { "PASS" }, info, new String[] { "GT" }, genotypes);
+        record = VcfRecord.builder()
+            .withLineNumber(3L)
+            .withChrom("22")
+            .withPos(16140370L)
+            .withId(new String[] { "rs2096606" })
+            .withRef("A")
+            .withAlt(new String[] { "G" })
+            .withQual(100.0d)
+            .withFilter(new String[] { "PASS" })
+            .withInfo(info)
+            .withFormat(new String[] { "GT" })
+            .withGenotypes(genotypes)
+            .build();
+
         records = ImmutableList.of(record);
 
         outputStream = new ByteArrayOutputStream();
@@ -192,7 +205,19 @@ public final class VcfWriterTest {
 
     @Test
     public void testWriteRecordMissingQual() throws Exception {
-        VcfRecord missingQual = new VcfRecord(3L, "22", 16140370L, new String[] { "rs2096606" }, "A", new String[] { "G" }, Double.NaN, new String[] { "PASS" }, info, new String[] { "GT" }, genotypes);
+        VcfRecord missingQual = VcfRecord.builder()
+            .withLineNumber(3L)
+            .withChrom("22")
+            .withPos(16140370L)
+            .withId(new String[] { "rs2096606" })
+            .withRef("A")
+            .withAlt(new String[] { "G" })
+            .withQual(null)
+            .withFilter(new String[] { "PASS" })
+            .withInfo(info)
+            .withFormat(new String[] { "GT" })
+            .withGenotypes(genotypes)
+            .build();
 
         writeRecord(samples, missingQual, writer);
         writer.close();
@@ -200,12 +225,72 @@ public final class VcfWriterTest {
     }
 
     @Test
-    public void testWriteRecordMissingId() throws Exception {
-        VcfRecord missingId = new VcfRecord(3L, "22", 16140370L, new String[0], "A", new String[] { "G" }, Double.NaN, new String[] { "PASS" }, info, new String[] { "GT" }, genotypes);
+    public void testWriteRecordNaNQual() throws Exception {
+        VcfRecord nanQual = VcfRecord.builder()
+            .withLineNumber(3L)
+            .withChrom("22")
+            .withPos(16140370L)
+            .withId(new String[] { "rs2096606" })
+            .withRef("A")
+            .withAlt(new String[] { "G" })
+            .withQual(Double.NaN)
+            .withFilter(new String[] { "PASS" })
+            .withInfo(info)
+            .withFormat(new String[] { "GT" })
+            .withGenotypes(genotypes)
+            .build();
 
+        writeRecord(samples, nanQual, writer);
+        writer.close();
+        assertEquals("22\t16140370\trs2096606\tA\tG\t.\tPASS\t.\tGT\t1|1" + System.lineSeparator(), outputStream.toString());
+    }
+
+    @Test
+    public void testWriteRecordMissingId() throws Exception {
+        VcfRecord missingId = VcfRecord.builder()
+            .withLineNumber(3L)
+            .withChrom("22")
+            .withPos(16140370L)
+            .withId(new String[0])
+            .withRef("A")
+            .withAlt(new String[] { "G" })
+            .withQual(100.0d)
+            .withFilter(new String[] { "PASS" })
+            .withInfo(info)
+            .withFormat(new String[] { "GT" })
+            .withGenotypes(genotypes)
+            .build();
+        
         writeRecord(samples, missingId, writer);
         writer.close();
-        assertEquals("22\t16140370\t.\tA\tG\t.\tPASS\t.\tGT\t1|1" + System.lineSeparator(), outputStream.toString());
+        assertEquals("22\t16140370\t.\tA\tG\t100\tPASS\t.\tGT\t1|1" + System.lineSeparator(), outputStream.toString());
+    }
+
+    @Test
+    public void testWriteRecordInfoWithFlag() throws Exception {
+        ListMultimap<String, String> infoWithFlag = ImmutableListMultimap.<String, String>builder()
+            .put("H2", "true")
+            .put("LDAF", "0.0649")
+            .put("VT", "SNP")
+            .build();
+
+        VcfRecord withInfo = VcfRecord.builder()
+            .withLineNumber(3L)
+            .withChrom("22")
+            .withPos(16140370L)
+            .withId(new String[] { "rs2096606" })
+            .withRef("A")
+            .withAlt(new String[] { "G" })
+            .withQual(100.0d)
+            .withFilter(new String[] { "PASS" })
+            .withInfo(infoWithFlag)
+            .withFormat(new String[] { "GT" })
+            .withGenotypes(genotypes)
+            .build();
+        
+        writeRecord(samples, withInfo, writer);
+        writer.close();
+        assertEquals("22\t16140370\trs2096606\tA\tG\t100\tPASS\tH2;LDAF=0.0649;VT=SNP\tGT\t1|1" + System.lineSeparator(), outputStream.toString());
     }
 
     @Test
@@ -213,11 +298,24 @@ public final class VcfWriterTest {
         Map<String, VcfGenotype> genotypes = new HashMap<String, VcfGenotype>();
         VcfGenotype genotype = VcfGenotype.builder().withField("GT", "1|1").withField("DS", "0.000").withField("GL", "-0.02", "-1.38", "-5.00").build();
         genotypes.put("NA19131", genotype);
-        VcfRecord genotypeFields = new VcfRecord(3L, "22", 16140370L, new String[] { "rs2096606" }, "A", new String[] { "G" }, Double.NaN, new String[] { "PASS" }, info, new String[] { "GT", "DS", "GL" }, genotypes);
+
+        VcfRecord genotypeFields = VcfRecord.builder()
+            .withLineNumber(3L)
+            .withChrom("22")
+            .withPos(16140370L)
+            .withId(new String[] { "rs2096606" })
+            .withRef("A")
+            .withAlt(new String[] { "G" })
+            .withQual(100.0d)
+            .withFilter(new String[] { "PASS" })
+            .withInfo(info)
+            .withFormat(new String[] { "GT", "DS", "GL" })
+            .withGenotypes(genotypes)
+            .build();
 
         writeRecord(samples, genotypeFields, writer);
         writer.close();
-        assertEquals("22\t16140370\trs2096606\tA\tG\t.\tPASS\t.\tGT:DS:GL\t1|1:0.000:-0.02,-1.38,-5.00" + System.lineSeparator(), outputStream.toString());
+        assertEquals("22\t16140370\trs2096606\tA\tG\t100\tPASS\t.\tGT:DS:GL\t1|1:0.000:-0.02,-1.38,-5.00" + System.lineSeparator(), outputStream.toString());
     }
 
     @Test
@@ -225,10 +323,23 @@ public final class VcfWriterTest {
         Map<String, VcfGenotype> genotypes = new HashMap<String, VcfGenotype>();
         VcfGenotype genotype = VcfGenotype.builder().withField("GT", "1|1").withField("GL", "-0.02", "-1.38", "-5.00").build();
         genotypes.put("NA19131", genotype);
-        VcfRecord genotypeFields = new VcfRecord(3L, "22", 16140370L, new String[] { "rs2096606" }, "A", new String[] { "G" }, Double.NaN, new String[] { "PASS" }, info, new String[] { "GT", "DS", "GL" }, genotypes);
+
+        VcfRecord genotypeFields = VcfRecord.builder()
+            .withLineNumber(3L)
+            .withChrom("22")
+            .withPos(16140370L)
+            .withId(new String[] { "rs2096606" })
+            .withRef("A")
+            .withAlt(new String[] { "G" })
+            .withQual(100.0d)
+            .withFilter(new String[] { "PASS" })
+            .withInfo(info)
+            .withFormat(new String[] { "GT", "DS", "GL" })
+            .withGenotypes(genotypes)
+            .build();
 
         writeRecord(samples, genotypeFields, writer);
         writer.close();
-        assertEquals("22\t16140370\trs2096606\tA\tG\t.\tPASS\t.\tGT:DS:GL\t1|1:.:-0.02,-1.38,-5.00" + System.lineSeparator(), outputStream.toString());
+        assertEquals("22\t16140370\trs2096606\tA\tG\t100\tPASS\t.\tGT:DS:GL\t1|1:.:-0.02,-1.38,-5.00" + System.lineSeparator(), outputStream.toString());
     }
 }
