@@ -21,15 +21,10 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.variant.vcf;
+package org.dishevelled.bio.variant.vcf.header;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-
-import static org.dishevelled.bio.variant.vcf.VcfHeaderLineParser.optionalLong;
-import static org.dishevelled.bio.variant.vcf.VcfHeaderLineParser.optionalString;
-import static org.dishevelled.bio.variant.vcf.VcfHeaderLineParser.parseEntries;
-import static org.dishevelled.bio.variant.vcf.VcfHeaderLineParser.requiredString;
 
 import java.util.Map;
 
@@ -66,9 +61,9 @@ public final class VcfContigHeaderLine {
      * Create a new VCF contig header line.
      *
      * @param id header line ID, must not be null
-     * @param length contig header line length
-     * @param md5 contig header line md5
-     * @param url contig header line URL
+     * @param length contig header line length, if any
+     * @param md5 contig header line md5, if any
+     * @param url contig header line URL, if any
      * @param attributes header line attributes, must not be null
      */
     VcfContigHeaderLine(final String id,
@@ -171,12 +166,12 @@ public final class VcfContigHeaderLine {
     public static VcfContigHeaderLine valueOf(final String value) {
         checkNotNull(value);
         checkArgument(value.startsWith("##contig="));
-        ListMultimap<String, String> entries = parseEntries(value.replace("##contig=", ""));
+        ListMultimap<String, String> entries = VcfHeaderLineParser.parseEntries(value.replace("##contig=", ""));
 
-        String id = requiredString("ID", entries);
-        Long length = optionalLong("length", entries);
-        String md5 = optionalString("MD5", entries);
-        String url = optionalString("URL", entries);
+        String id = VcfHeaderLineParser.requiredString("ID", entries);
+        Long length = VcfHeaderLineParser.optionalLong("length", entries);
+        String md5 = VcfHeaderLineParser.optionalString("MD5", entries);
+        String url = VcfHeaderLineParser.optionalString("URL", entries);
 
         ListMultimap<String, String> attributes = ArrayListMultimap.create(entries);
         attributes.removeAll("ID");

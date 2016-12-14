@@ -21,15 +21,10 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.variant.vcf;
+package org.dishevelled.bio.variant.vcf.header;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-
-import static org.dishevelled.bio.variant.vcf.VcfHeaderLineParser.optionalNumber;
-import static org.dishevelled.bio.variant.vcf.VcfHeaderLineParser.optionalType;
-import static org.dishevelled.bio.variant.vcf.VcfHeaderLineParser.parseEntries;
-import static org.dishevelled.bio.variant.vcf.VcfHeaderLineParser.requiredString;
 
 import java.util.Map;
 
@@ -40,78 +35,64 @@ import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
 
 /**
- * VCF META header line.
+ * VCF FILTER header line.
  *
  * @author  Michael Heuer
  */
 @Immutable
-public final class VcfMetaHeaderLine {
+public final class VcfFilterHeaderLine {
     /** Header line ID. */
     private final String id;
 
-    /** META header line number. */
-    private final VcfHeaderLineNumber number;
-
-    /** META header line type. */
-    private final VcfHeaderLineType type;
+    /** Header line description. */
+    private final String description;
 
     /** Header line attributes. */
     private final ListMultimap<String, String> attributes;
 
 
     /**
-     * Create a new VCF META header line.
+     * Create a new VCF FILTER header line.
      *
-     * @param id header line ID, must not be null
-     * @param number META header line number, must not be null
-     * @param type META header line type, must not be null
+     * @param id header line id, must not be null
+     * @param description header line description, must not be null
      * @param attributes header line attributes, must not be null
      */
-    VcfMetaHeaderLine(final String id,
-                      final VcfHeaderLineNumber number,
-                      final VcfHeaderLineType type,
-                      final ListMultimap<String, String> attributes) {
+    VcfFilterHeaderLine(final String id,
+                        final String description,
+                        final ListMultimap<String, String> attributes) {
         checkNotNull(id);
+        checkNotNull(description);
         checkNotNull(attributes);
 
         this.id = id;
-        this.number = number;
-        this.type = type;
+        this.description = description;
         this.attributes = ImmutableListMultimap.copyOf(attributes);
     }
 
 
     /**
-     * Return the ID for this VCF META header line.
+     * Return the ID for this VCF FILTER header line.
      *
-     * @return the ID for this VCF META header line
+     * @return the ID for this VCF FILTER header line
      */
     public String getId() {
         return id;
     }
 
     /**
-     * Return the number for this VCF META header line.
+     * Return the description for this VCF FILTER header line.
      *
-     * @return the number for this VCF META header line
+     * @return the description for this VCF FILTER header line
      */
-    public VcfHeaderLineNumber getNumber() {
-        return number;
+    public String getDescription() {
+        return description;
     }
 
     /**
-     * Return the type for this VCF META header line.
+     * Return the attributes for this VCF FILTER header line.
      *
-     * @return the type for this VCF META header line
-     */
-    public VcfHeaderLineType getType() {
-        return type;
-    }
-
-    /**
-     * Return the attributes for this VCF META header line.
-     *
-     * @return the attributes for this VCF META header line
+     * @return the attributes for this VCF FILTER header line
      */
     public ListMultimap<String, String> getAttributes() {
         return attributes;
@@ -120,16 +101,11 @@ public final class VcfMetaHeaderLine {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("##META=<ID=");
+        sb.append("##FILTER=<ID=");
         sb.append(id);
-        if (number != null) {
-            sb.append(",Number=");
-            sb.append(number);
-        }
-        if (type != null) {
-            sb.append(",Type=");
-            sb.append(type);
-        }
+        sb.append(",Description=\"");
+        sb.append(description);
+        sb.append("\"");
         for (Map.Entry<String, String> entry : attributes.entries()) {
             sb.append(",");
             sb.append(entry.getKey());
@@ -142,25 +118,23 @@ public final class VcfMetaHeaderLine {
     }
 
     /**
-     * Parse the specified value into a VCF META header line.
+     * Parse the specified value into a VCF FILTER header line.
      *
      * @param value value, must not be null
-     * @return the specified value parsed into a VCF META header line
+     * @return the specified value parsed into a VCF FILTER header line
      */
-    public static VcfMetaHeaderLine valueOf(final String value) {
+    public static VcfFilterHeaderLine valueOf(final String value) {
         checkNotNull(value);
-        checkArgument(value.startsWith("##META="));
-        ListMultimap<String, String> entries = parseEntries(value.replace("##META=", ""));
+        checkArgument(value.startsWith("##FILTER="));
+        ListMultimap<String, String> entries = VcfHeaderLineParser.parseEntries(value.replace("##FILTER=", ""));
 
-        String id = requiredString("ID", entries);
-        VcfHeaderLineNumber number = optionalNumber("Number", entries);
-        VcfHeaderLineType type = optionalType("Type", entries);
+        String id = VcfHeaderLineParser.requiredString("ID", entries);
+        String description = VcfHeaderLineParser.requiredString("Description", entries);
 
         ListMultimap<String, String> attributes = ArrayListMultimap.create(entries);
         attributes.removeAll("ID");
-        attributes.removeAll("Number");
-        attributes.removeAll("Type");
+        attributes.removeAll("Description");
 
-        return new VcfMetaHeaderLine(id, number, type, attributes);
+        return new VcfFilterHeaderLine(id, description, attributes);
     }
 }

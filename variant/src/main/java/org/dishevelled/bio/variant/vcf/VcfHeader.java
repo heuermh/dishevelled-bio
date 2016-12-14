@@ -175,7 +175,6 @@ public final class VcfHeader {
          * @return a new VCF header populated from the configuration of this VCF header builder
          */
         public VcfHeader build() {
-            // todo: copy fileFormat to first line of meta?
             return new VcfHeader(fileFormat, meta);
         }
     }

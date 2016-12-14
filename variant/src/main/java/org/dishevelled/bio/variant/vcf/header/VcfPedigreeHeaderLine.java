@@ -21,20 +21,18 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.variant.vcf;
+package org.dishevelled.bio.variant.vcf.header;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import static org.dishevelled.bio.variant.vcf.VcfHeaderLineParser.parseEntries;
-import static org.dishevelled.bio.variant.vcf.VcfHeaderLineParser.requiredString;
+import static org.dishevelled.bio.variant.vcf.header.VcfHeaderLineParser.parseEntries;
 
 import java.util.Iterator;
 import java.util.Map;
 
 import javax.annotation.concurrent.Immutable;
 
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
 

@@ -21,18 +21,12 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.variant.vcf;
+package org.dishevelled.bio.variant.vcf.header;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import static org.dishevelled.bio.variant.vcf.VcfHeaderLineParser.isStructured;
-
-import java.util.Map;
-
 import javax.annotation.concurrent.Immutable;
-
-import com.google.common.base.Splitter;
 
 /**
  * VCF key-value header line.
@@ -100,7 +94,7 @@ public final class VcfHeaderLine {
     public static VcfHeaderLine valueOf(final String value) {
         checkNotNull(value);
         checkArgument(value.startsWith("##"));
-        checkArgument(!isStructured(value));
+        checkArgument(!VcfHeaderLineParser.isStructured(value));
 
         String filteredValue = value.replace("##", "").replace("\"", "");
         int split = filteredValue.indexOf("=");

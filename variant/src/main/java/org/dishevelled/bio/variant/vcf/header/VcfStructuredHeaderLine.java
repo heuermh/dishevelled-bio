@@ -21,13 +21,14 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.variant.vcf;
+package org.dishevelled.bio.variant.vcf.header;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import static org.dishevelled.bio.variant.vcf.VcfHeaderLineParser.parseEntries;
-import static org.dishevelled.bio.variant.vcf.VcfHeaderLineParser.requiredString;
+import static org.dishevelled.bio.variant.vcf.header.VcfHeaderLineParser.isStructured;
+import static org.dishevelled.bio.variant.vcf.header.VcfHeaderLineParser.parseEntries;
+import static org.dishevelled.bio.variant.vcf.header.VcfHeaderLineParser.requiredString;
 
 import java.util.Map;
 
@@ -38,12 +39,15 @@ import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
 
 /**
- * VCF SAMPLE header line.
+ * Structured VCF header line, e.g. ##name=&lt;ID=id,...&gt;
  *
  * @author  Michael Heuer
  */
 @Immutable
-public final class VcfSampleHeaderLine {
+public final class VcfStructuredHeaderLine {
+    /** Structured header line name. */
+    private final String name;
+
     /** Header line ID. */
     private final String id;
 
@@ -52,34 +56,47 @@ public final class VcfSampleHeaderLine {
 
 
     /**
-     * Create a new VCF SAMPLE header line.
+     * Create a new structured VCF header line.
      *
+     * @param name structured header line name, must not be null
      * @param id header line ID, must not be null
      * @param attributes header line attributes, must not be null
      */
-    VcfSampleHeaderLine(final String id,
-                        final ListMultimap<String, String> attributes) {
+    VcfStructuredHeaderLine(final String name,
+                            final String id,
+                            final ListMultimap<String, String> attributes) {
+        checkNotNull(name);
         checkNotNull(id);
         checkNotNull(attributes);
 
+        this.name = name;
         this.id = id;
         this.attributes = ImmutableListMultimap.copyOf(attributes);
     }
 
 
     /**
-     * Return the id for this VCF SAMPLE header line.
+     * Return the name for this structured VCF header line.
      *
-     * @return the id for this VCF SAMPLE header line
+     * @return the name for this structured VCF header line
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Return the ID for this structured VCF header line.
+     *
+     * @return the ID for this structured VCF header line
      */
     public String getId() {
         return id;
     }
 
     /**
-     * Return the attributes for this VCF SAMPLE header line.
+     * Return the attributes for this structured VCF header line.
      *
-     * @return the attributes for this VCF SAMPLE header line
+     * @return the attributes for this structured VCF header line
      */
     public ListMultimap<String, String> getAttributes() {
         return attributes;
@@ -88,7 +105,9 @@ public final class VcfSampleHeaderLine {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("##SAMPLE=<ID=");
+        sb.append("##");
+        sb.append(name);
+        sb.append("=<ID=");
         sb.append(id);
         for (Map.Entry<String, String> entry : attributes.entries()) {
             sb.append(",");
@@ -102,21 +121,22 @@ public final class VcfSampleHeaderLine {
     }
 
     /**
-     * Parse the specified value into a VCF SAMPLE header line.
+     * Parse the specified value into a structured VCF header line.
      *
      * @param value value, must not be null
-     * @return the specified value parsed into a VCF SAMPLE header line
+     * @return the specified value parsed into a structured VCF header line
      */
-    public static VcfSampleHeaderLine valueOf(final String value) {
+    public static VcfStructuredHeaderLine valueOf(final String value) {
         checkNotNull(value);
-        checkArgument(value.startsWith("##SAMPLE="));
-        ListMultimap<String, String> entries = parseEntries(value.replace("##SAMPLE=", ""));
+        checkArgument(isStructured(value));
+        String name = value.substring(2, value.indexOf("="));
+        ListMultimap<String, String> entries = parseEntries(value.replace("##" + name + "=", ""));
 
         String id = requiredString("ID", entries);
 
         ListMultimap<String, String> attributes = ArrayListMultimap.create(entries);
         attributes.removeAll("ID");
 
-        return new VcfSampleHeaderLine(id, attributes);
+        return new VcfStructuredHeaderLine(name, id, attributes);
     }
 }

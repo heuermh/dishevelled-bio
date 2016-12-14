@@ -21,11 +21,11 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.variant.vcf;
+package org.dishevelled.bio.variant.vcf.header;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import static org.dishevelled.bio.variant.vcf.VcfHeaderLineParser.isStructured;
+import static org.dishevelled.bio.variant.vcf.header.VcfHeaderLineParser.isStructured;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,6 +36,8 @@ import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+
+import org.dishevelled.bio.variant.vcf.VcfHeader;
 
 /**
  * VCF header lines.

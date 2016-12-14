@@ -21,16 +21,15 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.variant.vcf;
+package org.dishevelled.bio.variant.vcf.header;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import static org.dishevelled.bio.variant.vcf.VcfHeaderLineParser.parseEntries;
-import static org.dishevelled.bio.variant.vcf.VcfHeaderLineParser.requiredString;
+import static org.dishevelled.bio.variant.vcf.header.VcfHeaderLineParser.parseEntries;
+import static org.dishevelled.bio.variant.vcf.header.VcfHeaderLineParser.requiredString;
 
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 import javax.annotation.concurrent.Immutable;
 
@@ -39,64 +38,48 @@ import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
 
 /**
- * VCF FILTER header line.
+ * VCF SAMPLE header line.
  *
  * @author  Michael Heuer
  */
 @Immutable
-public final class VcfFilterHeaderLine {
+public final class VcfSampleHeaderLine {
     /** Header line ID. */
     private final String id;
-
-    /** Header line description. */
-    private final String description;
 
     /** Header line attributes. */
     private final ListMultimap<String, String> attributes;
 
 
     /**
-     * Create a new VCF FILTER header line.
+     * Create a new VCF SAMPLE header line.
      *
-     * @param id header line id, must not be null
-     * @param description header line description, must not be null
+     * @param id header line ID, must not be null
      * @param attributes header line attributes, must not be null
      */
-    VcfFilterHeaderLine(final String id,
-                        final String description,
+    VcfSampleHeaderLine(final String id,
                         final ListMultimap<String, String> attributes) {
         checkNotNull(id);
-        checkNotNull(description);
         checkNotNull(attributes);
 
         this.id = id;
-        this.description = description;
         this.attributes = ImmutableListMultimap.copyOf(attributes);
     }
 
 
     /**
-     * Return the ID for this VCF FILTER header line.
+     * Return the id for this VCF SAMPLE header line.
      *
-     * @return the ID for this VCF FILTER header line
+     * @return the id for this VCF SAMPLE header line
      */
     public String getId() {
         return id;
     }
 
     /**
-     * Return the description for this VCF FILTER header line.
+     * Return the attributes for this VCF SAMPLE header line.
      *
-     * @return the description for this VCF FILTER header line
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * Return the attributes for this VCF FILTER header line.
-     *
-     * @return the attributes for this VCF FILTER header line
+     * @return the attributes for this VCF SAMPLE header line
      */
     public ListMultimap<String, String> getAttributes() {
         return attributes;
@@ -105,11 +88,8 @@ public final class VcfFilterHeaderLine {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("##FILTER=<ID=");
+        sb.append("##SAMPLE=<ID=");
         sb.append(id);
-        sb.append(",Description=\"");
-        sb.append(description);
-        sb.append("\"");
         for (Map.Entry<String, String> entry : attributes.entries()) {
             sb.append(",");
             sb.append(entry.getKey());
@@ -122,23 +102,21 @@ public final class VcfFilterHeaderLine {
     }
 
     /**
-     * Parse the specified value into a VCF FILTER header line.
+     * Parse the specified value into a VCF SAMPLE header line.
      *
      * @param value value, must not be null
-     * @return the specified value parsed into a VCF FILTER header line
+     * @return the specified value parsed into a VCF SAMPLE header line
      */
-    public static VcfFilterHeaderLine valueOf(final String value) {
+    public static VcfSampleHeaderLine valueOf(final String value) {
         checkNotNull(value);
-        checkArgument(value.startsWith("##FILTER="));
-        ListMultimap<String, String> entries = parseEntries(value.replace("##FILTER=", ""));
+        checkArgument(value.startsWith("##SAMPLE="));
+        ListMultimap<String, String> entries = parseEntries(value.replace("##SAMPLE=", ""));
 
         String id = requiredString("ID", entries);
-        String description = requiredString("Description", entries);
 
         ListMultimap<String, String> attributes = ArrayListMultimap.create(entries);
         attributes.removeAll("ID");
-        attributes.removeAll("Description");
 
-        return new VcfFilterHeaderLine(id, description, attributes);
+        return new VcfSampleHeaderLine(id, attributes);
     }
 }

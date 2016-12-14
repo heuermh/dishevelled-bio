@@ -21,12 +21,11 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.variant.vcf;
+package org.dishevelled.bio.variant.vcf.header;
 
 import static org.junit.Assert.assertNotNull;
 
 import static org.dishevelled.bio.variant.vcf.VcfReader.header;
-import static org.dishevelled.bio.variant.vcf.VcfHeaderLines.fromHeader;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,6 +37,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
 
+import org.dishevelled.bio.variant.vcf.VcfHeader;
+
 import org.junit.Test;
 
 /**
@@ -48,20 +49,20 @@ import org.junit.Test;
 public final class VcfHeaderLinesTest {
     private static final List<String> VCF_FILES = ImmutableList.of
     (
-        "ALL.chr22.phase1_release_v3.20101123.snps_indels_svs.genotypes-2-indv-thin-20000bp-trim.vcf",
-        "ceph-bwa-j-gatk-haplotype-joint.excerpt.vcf",
-        "hapmap-info.vcf",
-        "gatk-example.gvcf",
-        "gatk-2.6-example.eff.vcf",
-        "pedigree.vcf",
-        "samples.vcf"
+        "../ALL.chr22.phase1_release_v3.20101123.snps_indels_svs.genotypes-2-indv-thin-20000bp-trim.vcf",
+        "../ceph-bwa-j-gatk-haplotype-joint.excerpt.vcf",
+        "../hapmap-info.vcf",
+        "../gatk-example.gvcf",
+        "../gatk-2.6-example.eff.vcf",
+        "../pedigree.vcf",
+        "../samples.vcf"
      );
 
     @Test
     public void testVcfHeaderLines() throws Exception {
         for (String file : VCF_FILES) {
             VcfHeader header = header(createFile(file));
-            VcfHeaderLines headerLines = fromHeader(header);
+            VcfHeaderLines headerLines = VcfHeaderLines.fromHeader(header);
             assertNotNull(headerLines);
         }
     }

@@ -21,14 +21,10 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.variant.vcf;
+package org.dishevelled.bio.variant.vcf.header;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-
-import static org.dishevelled.bio.variant.vcf.VcfHeaderLineParser.isStructured;
-import static org.dishevelled.bio.variant.vcf.VcfHeaderLineParser.parseEntries;
-import static org.dishevelled.bio.variant.vcf.VcfHeaderLineParser.requiredString;
 
 import java.util.Map;
 
@@ -39,64 +35,64 @@ import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
 
 /**
- * Structured VCF header line, e.g. ##name=&lt;ID=id,...&gt;
+ * VCF ALT header line.
  *
  * @author  Michael Heuer
  */
 @Immutable
-public final class VcfStructuredHeaderLine {
-    /** Structured header line name. */
-    private final String name;
-
+public final class VcfAltHeaderLine {
     /** Header line ID. */
     private final String id;
+
+    /** Header line description. */
+    private final String description;
 
     /** Header line attributes. */
     private final ListMultimap<String, String> attributes;
 
 
     /**
-     * Create a new structured VCF header line.
+     * Create a new VCF ALT header line.
      *
-     * @param name structured header line name, must not be null
      * @param id header line ID, must not be null
+     * @param description header line description, must not be null
      * @param attributes header line attributes, must not be null
      */
-    VcfStructuredHeaderLine(final String name,
-                            final String id,
-                            final ListMultimap<String, String> attributes) {
-        checkNotNull(name);
+    VcfAltHeaderLine(final String id,
+                     final String description,
+                     final ListMultimap<String, String> attributes) {
         checkNotNull(id);
+        checkNotNull(description);
         checkNotNull(attributes);
 
-        this.name = name;
         this.id = id;
+        this.description = description;
         this.attributes = ImmutableListMultimap.copyOf(attributes);
     }
 
 
     /**
-     * Return the name for this structured VCF header line.
+     * Return the ID for this VCF ALT header line.
      *
-     * @return the name for this structured VCF header line
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Return the ID for this structured VCF header line.
-     *
-     * @return the ID for this structured VCF header line
+     * @return the ID for this VCF ALT header line
      */
     public String getId() {
         return id;
     }
 
     /**
-     * Return the attributes for this structured VCF header line.
+     * Return the description for this VCF ALT header line.
      *
-     * @return the attributes for this structured VCF header line
+     * @return the description for this VCF ALT header line
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Return the attributes for this VCF ALT header line.
+     *
+     * @return the attributes for this VCF ALT header line
      */
     public ListMultimap<String, String> getAttributes() {
         return attributes;
@@ -105,10 +101,11 @@ public final class VcfStructuredHeaderLine {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("##");
-        sb.append(name);
-        sb.append("=<ID=");
+        sb.append("##ALT=<ID=");
         sb.append(id);
+        sb.append(",Description=\"");
+        sb.append(description);
+        sb.append("\"");
         for (Map.Entry<String, String> entry : attributes.entries()) {
             sb.append(",");
             sb.append(entry.getKey());
@@ -121,22 +118,23 @@ public final class VcfStructuredHeaderLine {
     }
 
     /**
-     * Parse the specified value into a structured VCF header line.
+     * Parse the specified value into a VCF ALT header line.
      *
      * @param value value, must not be null
-     * @return the specified value parsed into a structured VCF header line
+     * @return the specified value parsed into a VCF ALT header line
      */
-    public static VcfStructuredHeaderLine valueOf(final String value) {
+    public static VcfAltHeaderLine valueOf(final String value) {
         checkNotNull(value);
-        checkArgument(isStructured(value));
-        String name = value.substring(2, value.indexOf("="));
-        ListMultimap<String, String> entries = parseEntries(value.replace("##" + name + "=", ""));
+        checkArgument(value.startsWith("##ALT="));
+        ListMultimap<String, String> entries = VcfHeaderLineParser.parseEntries(value.replace("##ALT=", ""));
 
-        String id = requiredString("ID", entries);
+        String id = VcfHeaderLineParser.requiredString("ID", entries);
+        String description = VcfHeaderLineParser.requiredString("Description", entries);
 
         ListMultimap<String, String> attributes = ArrayListMultimap.create(entries);
         attributes.removeAll("ID");
+        attributes.removeAll("Description");
 
-        return new VcfStructuredHeaderLine(name, id, attributes);
+        return new VcfAltHeaderLine(id, description, attributes);
     }
 }
