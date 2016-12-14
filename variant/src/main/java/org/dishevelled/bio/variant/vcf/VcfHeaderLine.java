@@ -41,20 +41,42 @@ import com.google.common.base.Splitter;
  */
 @Immutable
 public final class VcfHeaderLine {
+    /** Header line key. */
     private final String key;
+
+    /** Header line value. */
     private final String value;
 
+
+    /**
+     * VCF key-value header line.
+     *
+     * @param key header line key, must not be null
+     * @param value header line value, must not be null
+     */
     VcfHeaderLine(final String key, final String value) {
         checkNotNull(key);
         checkNotNull(value);
+
         this.key = key;
         this.value = value;
     }
 
+
+    /**
+     * Return the key for this VCF key-value header line.
+     *
+     * @return the key for this VCF key-value header line
+     */
     public String getKey() {
         return key;
     }
 
+    /**
+     * Return the value for this VCF key-value header line.
+     *
+     * @return the value for this VCF key-value header line
+     */
     public String getValue() {
         return value;
     }
@@ -69,6 +91,12 @@ public final class VcfHeaderLine {
         return sb.toString();
     }
 
+    /**
+     * Parse the specified value into a VCF key-value header line.
+     *
+     * @param value value, must not be null
+     * @return the specified value parsed into a VCF key-value header line
+     */
     public static VcfHeaderLine valueOf(final String value) {
         checkNotNull(value);
         checkArgument(value.startsWith("##"));

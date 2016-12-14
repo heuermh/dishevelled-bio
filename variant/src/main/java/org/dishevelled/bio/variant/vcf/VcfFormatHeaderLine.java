@@ -46,12 +46,31 @@ import com.google.common.collect.ListMultimap;
  */
 @Immutable
 public final class VcfFormatHeaderLine {
+    /** Header line ID. */
     private final String id;
+
+    /** FORMAT header line number. */
     private final VcfHeaderLineNumber number;
+
+    /** FORMAT header line type. */
     private final VcfHeaderLineType type;
+
+    /** Header line description. */
     private final String description;
+
+    /** Header line attributes. */
     private final ListMultimap<String, String> attributes;
 
+
+    /**
+     * Create a new VCF FORMAT header line.
+     *
+     * @param id header line ID, must not be null
+     * @param number FORMAT header line number
+     * @param type FORMAT header line type
+     * @param description header line description, must not be null
+     * @param attributes header line attributes, must not be null
+     */
     VcfFormatHeaderLine(final String id,
                         final VcfHeaderLineNumber number,
                         final VcfHeaderLineType type,
@@ -62,6 +81,7 @@ public final class VcfFormatHeaderLine {
         checkNotNull(type);
         checkNotNull(description);
         checkNotNull(attributes);
+
         this.id = id;
         this.number = number;
         this.type = type;
@@ -69,10 +89,11 @@ public final class VcfFormatHeaderLine {
         this.attributes = ImmutableListMultimap.copyOf(attributes);
     }
 
+
     /**
-     * Return the id for this VCF FORMAT header line.
+     * Return the ID for this VCF FORMAT header line.
      *
-     * @return the id for this VCF FORMAT header line
+     * @return the ID for this VCF FORMAT header line
      */
     public String getId() {
         return id;

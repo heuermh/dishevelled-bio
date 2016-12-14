@@ -200,6 +200,7 @@ final class VcfHeaderLineParser {
     static String optionalString(final String key, final ListMultimap<String, String> entries) {
         checkNotNull(key);
         checkNotNull(entries);
+
         List<String> values = entries.get(key);
         if (values.isEmpty()) {
             return null;

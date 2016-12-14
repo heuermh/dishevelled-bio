@@ -42,6 +42,14 @@ import com.google.common.collect.ListMultimap;
 final class VcfAttributes {
 
     /**
+     * Private no-arg constructor.
+     */
+    private VcfAttributes() {
+        // empty
+    }
+
+
+    /**
      * Return the count for Number=A attributes for the specified VCF record.
      *
      * @param record VCF record, must not be null
@@ -97,17 +105,17 @@ final class VcfAttributes {
      */
     private static char toChar(final String value) {
         checkNotNull(value);
-        checkArgument(value.length() == 1, "Type=Char value " + value + " not one character");
+        checkArgument(value.length() == 1, "Type=Character value " + value + " not one character");
 
         return value.charAt(0);
     }
 
     /**
-     * Parse the Type=Char attribute value for the specified key into a character.
+     * Parse the Type=Character attribute value for the specified key into a character.
      *
      * @param key key, must not be null
      * @param attributes, must not be null
-     * @return the Type=Char attribute value for the specified key parsed into a character
+     * @return the Type=Character attribute value for the specified key parsed into a character
      */
     static char parseChar(final String key, final ListMultimap<String, String> attributes) {
         checkNotNull(key);
@@ -115,10 +123,10 @@ final class VcfAttributes {
 
         List<String> values = attributes.get(key);
         if (values.isEmpty()) {
-            throw new IllegalArgumentException("Type=Char value missing for key " + key);
+            throw new IllegalArgumentException("Type=Character value missing for key " + key);
         }
         if (values.size() > 1) {
-            throw new IllegalArgumentException("more than one Type=Char value for key " + key);
+            throw new IllegalArgumentException("more than one Type=Character value for key " + key);
         }
         return toChar(values.get(0));
     }
@@ -274,11 +282,11 @@ final class VcfAttributes {
 
 
     /**
-     * Parse the Type=Char Number=. attribute value for the specified key into an immutable list of Characters.
+     * Parse the Type=Character Number=. attribute value for the specified key into an immutable list of Characters.
      *
      * @param key key, must not be null
      * @param attributes, must not be null
-     * @return the Type=Char Number=. attribute value for the specified key parsed into an immutable list of Characters
+     * @return the Type=Character Number=. attribute value for the specified key parsed into an immutable list of Characters
      */
     static List<Character> parseChars(final String key, final ListMultimap<String, String> attributes) {
         checkNotNull(key);
@@ -327,13 +335,13 @@ final class VcfAttributes {
 
 
     /**
-     * Parse the Type=Char Number=[n,A,R,G] attribute value for the specified key into an immutable list of Characters
+     * Parse the Type=Character Number=[n,A,R,G] attribute value for the specified key into an immutable list of Characters
      * of size equal to the specified number.
      *
      * @param key key, must not be null
      * @param number number, must be greater than zero
      * @param attributes, must not be null
-     * @return the Type=Char Number=[n,A,R,G] attribute value for the specified key parsed into an immutable list of Characters
+     * @return the Type=Character Number=[n,A,R,G] attribute value for the specified key parsed into an immutable list of Characters
      *    of size equal to the specified number
      */
     static List<Character> parseChars(final String key, final int number, final ListMultimap<String, String> attributes) {
@@ -343,7 +351,7 @@ final class VcfAttributes {
 
         List<String> values = attributes.get(key);
         if (values.size() != number) {
-            throw new IllegalArgumentException("expected " + number + " Type=Char values, found " + values.size());
+            throw new IllegalArgumentException("expected " + number + " Type=Character values, found " + values.size());
         }
         return parseChars(values);
     }

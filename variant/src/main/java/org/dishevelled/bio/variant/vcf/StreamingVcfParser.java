@@ -115,7 +115,7 @@ public final class StreamingVcfParser {
                     for (String sample : samples) {
                         // add if missing in meta lines
                         if (!this.samples.containsKey(sample)) {
-                            this.samples.put(sample, new VcfSample(sample, new VcfGenome[0]));
+                            this.samples.put(sample, new VcfSample(sample));
                         }
                     }
 

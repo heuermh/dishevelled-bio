@@ -23,6 +23,7 @@
 */
 package org.dishevelled.bio.variant.vcf;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import javax.annotation.concurrent.Immutable;
@@ -48,12 +49,9 @@ public final class VcfGenotype {
      */
     private VcfGenotype(final ListMultimap<String, String> fields) {
         // check GT cardinality constraint
-        if (!fields.containsKey("GT")) {
-            throw new IllegalArgumentException("GT genotype field is required");
-        }
-        if (fields.get("GT").size() > 1) {
-            throw new IllegalArgumentException("GT genotype field cardinality is strictly one, found " + fields.get("GT").size());
-        }
+        checkArgument(fields.containsKey("GT"), "GT genotype field is required");
+        checkArgument(fields.get("GT").size() == 1, "GT genotype field cardinality is strictly one, found " + fields.get("GT").size());
+
         this.fields = fields;
     }
 

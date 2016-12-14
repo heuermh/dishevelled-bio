@@ -45,12 +45,20 @@ import com.google.common.collect.ListMultimap;
  */
 @Immutable
 public final class VcfPedigreeHeaderLine {
+    /** Header line attributes. */
     private final ListMultimap<String, String> attributes;
 
+
+    /**
+     * Create a new VCF PEDIGREE header line.
+     *
+     * @param attributes header line attributes, must not be null
+     */
     VcfPedigreeHeaderLine(final ListMultimap<String, String> attributes) {
         checkNotNull(attributes);
         this.attributes = ImmutableListMultimap.copyOf(attributes);
     }
+
 
     /**
      * Return the attributes for this VCF PEDIGREE header line.

@@ -104,12 +104,12 @@ public final class VcfRecord {
                       final ListMultimap<String, String> info,
                       final String[] format,
                       final Map<String, VcfGenotype> genotypes) {
-
         checkNotNull(chrom, "chrom must not be null");
         checkNotNull(ref, "ref must not be null");
         checkNotNull(alt, "alt must not be null");
         checkNotNull(info, "info must not be null");
         checkNotNull(genotypes, "genotypes must not be null");
+
         this.lineNumber = lineNumber;
         this.chrom = chrom;
         this.pos = pos;

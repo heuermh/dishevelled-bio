@@ -46,12 +46,31 @@ import com.google.common.collect.ListMultimap;
  */
 @Immutable
 public final class VcfContigHeaderLine {
+    /** Header line ID. */
     private final String id;
+
+    /** Contig header line length. */
     private final Long length;
+
+    /** Contig header line md5. */
     private final String md5;
+
+    /** Contig header line URL. */
     private final String url;
+
+    /** Header line attributes. */
     private final ListMultimap<String, String> attributes;
 
+
+    /**
+     * Create a new VCF contig header line.
+     *
+     * @param id header line ID, must not be null
+     * @param length contig header line length
+     * @param md5 contig header line md5
+     * @param url contig header line URL
+     * @param attributes header line attributes, must not be null
+     */
     VcfContigHeaderLine(final String id,
                         final Long length,
                         final String md5,
@@ -59,6 +78,7 @@ public final class VcfContigHeaderLine {
                         final ListMultimap<String, String> attributes) {
         checkNotNull(id);
         checkNotNull(attributes);
+
         this.id = id;
         this.length = length;
         this.md5 = md5;
@@ -66,10 +86,11 @@ public final class VcfContigHeaderLine {
         this.attributes = ImmutableListMultimap.copyOf(attributes);
     }
 
+
     /**
-     * Return the id for this VCF contig header line.
+     * Return the ID for this VCF contig header line.
      *
-     * @return the id for this VCF contig header line
+     * @return the ID for this VCF contig header line
      */
     public String getId() {
         return id;

@@ -78,7 +78,7 @@ public final class VcfPedigree {
     }
 
     /**
-     * VCF predigree relationship.
+     * VCF pedigree relationship.
      */
     public static final class Relationship {
         /** Source label. */

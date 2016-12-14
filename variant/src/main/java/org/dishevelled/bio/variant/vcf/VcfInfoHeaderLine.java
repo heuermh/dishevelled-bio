@@ -47,14 +47,38 @@ import com.google.common.collect.ListMultimap;
  */
 @Immutable
 public final class VcfInfoHeaderLine {
+    /** Header line ID. */
     private final String id;
+
+    /** INFO header line number. */
     private final VcfHeaderLineNumber number;
+
+    /** INFO header line type. */
     private final VcfHeaderLineType type;
+
+    /** Header line description. */
     private final String description;
+
+    /** INFO header line source. */
     private final String source;
+
+    /** INFO header line version. */
     private final String version;
+
+    /** Header line attributes. */
     private final ListMultimap<String, String> attributes;
 
+    /**
+     * Create a new VCF INFO header line.
+     *
+     * @param id header line ID, must not be null
+     * @param number INFO header line number, must not be null
+     * @param type INFO header line type, must not be null
+     * @param description header line description, must not be null
+     * @param source INFO header line source, if any
+     * @param version INFO header line version, if any
+     * @param attributes header line attributes, must not be null
+     */
     VcfInfoHeaderLine(final String id,
                       final VcfHeaderLineNumber number,
                       final VcfHeaderLineType type,
@@ -67,6 +91,7 @@ public final class VcfInfoHeaderLine {
         checkNotNull(type);
         checkNotNull(description);
         checkNotNull(attributes);
+
         this.id = id;
         this.number = number;
         this.type = type;
@@ -76,10 +101,11 @@ public final class VcfInfoHeaderLine {
         this.attributes = ImmutableListMultimap.copyOf(attributes);
     }
 
+
     /**
-     * Return the id for this VCF INFO header line.
+     * Return the ID for this VCF INFO header line.
      *
-     * @return the id for this VCF INFO header line
+     * @return the ID for this VCF INFO header line
      */
     public String getId() {
         return id;

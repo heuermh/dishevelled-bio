@@ -44,16 +44,28 @@ import com.google.common.collect.ListMultimap;
  */
 @Immutable
 public final class VcfSampleHeaderLine {
+    /** Header line ID. */
     private final String id;
+
+    /** Header line attributes. */
     private final ListMultimap<String, String> attributes;
 
+
+    /**
+     * Create a new VCF SAMPLE header line.
+     *
+     * @param id header line ID, must not be null
+     * @param attributes header line attributes, must not be null
+     */
     VcfSampleHeaderLine(final String id,
                         final ListMultimap<String, String> attributes) {
         checkNotNull(id);
         checkNotNull(attributes);
+
         this.id = id;
         this.attributes = ImmutableListMultimap.copyOf(attributes);
     }
+
 
     /**
      * Return the id for this VCF SAMPLE header line.

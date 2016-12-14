@@ -61,19 +61,19 @@ public final class VcfAttributesTest {
             .withLineNumber(3L)
             .withChrom("22")
             .withPos(16140370L)
-            .withId(new String[] { "rs2096606" })
+            .withId("rs2096606")
             .withRef("A")
-            .withAlt(new String[] { "G", "T" })
+            .withAlt("G", "T")
             .withQual(100.0d)
-            .withFilter(new String[] { "PASS" })
-            .withFormat(new String[] { "GT" })
+            .withFilter("PASS")
+            .withFormat("GT")
             .withGenotypes(genotypes)
 
             // Number=0 Type=Flag
             .withInfo("FLAG", "true")
             .withInfo("FLAGS", "true", "false")
 
-            // Number=[., 1, 4, A, R] Type=Char
+            // Number=[., 1, 4, A, R] Type=Character
             .withInfo("ANY_CHAR", "a", "b", "c", "d", "e", "f")
             .withInfo("ONE_CHAR", "a")
             .withInfo("FOUR_CHARS", "a", "b", "c", "d")

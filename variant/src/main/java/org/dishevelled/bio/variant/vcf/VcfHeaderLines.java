@@ -44,18 +44,77 @@ import com.google.common.collect.ImmutableSet;
  */
 @Immutable
 public final class VcfHeaderLines {
+    /**
+     * VCF ALT header lines keyed by ID.
+     */
     private final Map<String, VcfAltHeaderLine> altHeaderLines;
+
+    /**
+     * VCF contig header lines keyed by ID.
+     */
     private final Map<String, VcfContigHeaderLine> contigHeaderLines;
+
+    /**
+     * VCF FILTER header lines keyed by ID.
+     */
     private final Map<String, VcfFilterHeaderLine> filterHeaderLines;
+
+    /**
+     * VCF FORMAT header lines keyed by ID.
+     */
     private final Map<String, VcfFormatHeaderLine> formatHeaderLines;
+
+    /**
+     * VCF INFO header lines keyed by ID.
+     */
     private final Map<String, VcfInfoHeaderLine> infoHeaderLines;
+
+    /**
+     * VCF META header lines keyed by ID.
+     */
     private final Map<String, VcfMetaHeaderLine> metaHeaderLines;
+
+    /**
+     * VCF PEDIGREE header lines.
+     */
     private final Set<VcfPedigreeHeaderLine> pedigreeHeaderLines;
+
+    /**
+     * VCF SAMPLE header lines keyed by ID.
+     */
     private final Map<String, VcfSampleHeaderLine> sampleHeaderLines;
+
+    /**
+     * VCF file format header line.
+     */
     private final VcfHeaderLine fileFormat;
+
+    /**
+     * VCF key-value header lines.
+     */
     private final Set<VcfHeaderLine> headerLines;
+
+    /**
+     * Structured VCF header lines.
+     */
     private final Set<VcfStructuredHeaderLine> structuredHeaderLines;
 
+
+    /**
+     * Create a new VCF header lines.
+     *
+     * @param altHeaderLines VCF ALT header lines keyed by ID, must not be null
+     * @param contigHeaderLines VCF contig header lines keyed by ID, must not be null
+     * @param filterHeaderLines VCF FILTER header lines keyed by ID, must not be null
+     * @param formatHeaderLines VCF FORMAT header lines keyed by ID, must not be null
+     * @param infoHeaderLines VCF INFO header lines keyed by ID, must not be null
+     * @param metaHeaderLines VCF META header lines keyed by ID, must not be null
+     * @param pedigreeHeaderLines VCF PEDIGREE header lines, must not be null
+     * @param sampleHeaderLines VCF SAMPLE header lines keyed by ID, must not be null
+     * @param fileFormat VCF file format header line, must not be null
+     * @param headerLines VCF key-value header lines, must not be null
+     * @param structuredHeaderLines structured VCF header lines, must not be null
+     */
     private VcfHeaderLines(final Map<String, VcfAltHeaderLine> altHeaderLines,
                            final Map<String, VcfContigHeaderLine> contigHeaderLines,
                            final Map<String, VcfFilterHeaderLine> filterHeaderLines,
@@ -78,6 +137,7 @@ public final class VcfHeaderLines {
         checkNotNull(fileFormat);
         checkNotNull(headerLines);
         checkNotNull(structuredHeaderLines);
+
         this.altHeaderLines = ImmutableMap.copyOf(altHeaderLines);
         this.contigHeaderLines = ImmutableMap.copyOf(contigHeaderLines);
         this.filterHeaderLines = ImmutableMap.copyOf(filterHeaderLines);
@@ -90,6 +150,7 @@ public final class VcfHeaderLines {
         this.headerLines = ImmutableSet.copyOf(headerLines);
         this.structuredHeaderLines = ImmutableSet.copyOf(structuredHeaderLines);
     }
+
 
     /**
      * Return VCF ALT header lines keyed by ID.
@@ -163,6 +224,14 @@ public final class VcfHeaderLines {
         return sampleHeaderLines;
     }
 
+    /**
+     * Return the VCF file format header line.
+     *
+     * @return the VCF file format header line
+     */
+    public VcfHeaderLine getFileFormat() {
+        return fileFormat;
+    }
     /**
      * Return VCF key=value header lines.
      *

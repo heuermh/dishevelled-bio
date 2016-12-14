@@ -45,20 +45,35 @@ import com.google.common.collect.ListMultimap;
  */
 @Immutable
 public final class VcfStructuredHeaderLine {
+    /** Structured header line name. */
     private final String name;
+
+    /** Header line ID. */
     private final String id;
+
+    /** Header line attributes. */
     private final ListMultimap<String, String> attributes;
 
+
+    /**
+     * Create a new structured VCF header line.
+     *
+     * @param name structured header line name, must not be null
+     * @param id header line ID, must not be null
+     * @param attributes header line attributes, must not be null
+     */
     VcfStructuredHeaderLine(final String name,
                             final String id,
                             final ListMultimap<String, String> attributes) {
         checkNotNull(name);
         checkNotNull(id);
         checkNotNull(attributes);
+
         this.name = name;
         this.id = id;
         this.attributes = ImmutableListMultimap.copyOf(attributes);
     }
+
 
     /**
      * Return the name for this structured VCF header line.
@@ -70,9 +85,9 @@ public final class VcfStructuredHeaderLine {
     }
 
     /**
-     * Return the id for this structured VCF header line.
+     * Return the ID for this structured VCF header line.
      *
-     * @return the id for this structured VCF header line
+     * @return the ID for this structured VCF header line
      */
     public String getId() {
         return id;

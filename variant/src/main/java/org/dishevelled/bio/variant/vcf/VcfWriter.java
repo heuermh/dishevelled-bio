@@ -140,7 +140,7 @@ public final class VcfWriter {
         sb.append(record.getPos());
 
         sb.append("\t");
-        if (record.getId().length == 0) {
+        if (record.getId() == null || record.getId().length == 0) {
             sb.append(".");
         }
         else {

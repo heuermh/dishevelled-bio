@@ -44,25 +44,40 @@ import com.google.common.collect.ListMultimap;
  */
 @Immutable
 public final class VcfAltHeaderLine {
+    /** Header line ID. */
     private final String id;
+
+    /** Header line description. */
     private final String description;
+
+    /** Header line attributes. */
     private final ListMultimap<String, String> attributes;
 
+
+    /**
+     * Create a new VCF ALT header line.
+     *
+     * @param id header line ID, must not be null
+     * @param description header line description, must not be null
+     * @param attributes header line attributes, must not be null
+     */
     VcfAltHeaderLine(final String id,
                      final String description,
                      final ListMultimap<String, String> attributes) {
         checkNotNull(id);
         checkNotNull(description);
         checkNotNull(attributes);
+
         this.id = id;
         this.description = description;
         this.attributes = ImmutableListMultimap.copyOf(attributes);
     }
 
+
     /**
-     * Return the id for this VCF ALT header line.
+     * Return the ID for this VCF ALT header line.
      *
-     * @return the id for this VCF ALT header line
+     * @return the ID for this VCF ALT header line
      */
     public String getId() {
         return id;

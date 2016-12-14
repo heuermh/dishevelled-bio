@@ -116,7 +116,7 @@ public final class VcfPedigreeParser {
             for (String sample : samples) {
                 // add if missing in meta lines
                 if (!samplesById.containsKey(sample)) {
-                    samplesById.put(sample, new VcfSample(sample, new VcfGenome[0]));
+                    samplesById.put(sample, new VcfSample(sample));
                 }
             }
 

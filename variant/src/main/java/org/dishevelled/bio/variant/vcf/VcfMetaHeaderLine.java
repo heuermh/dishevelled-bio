@@ -46,27 +46,45 @@ import com.google.common.collect.ListMultimap;
  */
 @Immutable
 public final class VcfMetaHeaderLine {
+    /** Header line ID. */
     private final String id;
+
+    /** META header line number. */
     private final VcfHeaderLineNumber number;
+
+    /** META header line type. */
     private final VcfHeaderLineType type;
+
+    /** Header line attributes. */
     private final ListMultimap<String, String> attributes;
 
+
+    /**
+     * Create a new VCF META header line.
+     *
+     * @param id header line ID, must not be null
+     * @param number META header line number, must not be null
+     * @param type META header line type, must not be null
+     * @param attributes header line attributes, must not be null
+     */
     VcfMetaHeaderLine(final String id,
                       final VcfHeaderLineNumber number,
                       final VcfHeaderLineType type,
                       final ListMultimap<String, String> attributes) {
         checkNotNull(id);
         checkNotNull(attributes);
+
         this.id = id;
         this.number = number;
         this.type = type;
         this.attributes = ImmutableListMultimap.copyOf(attributes);
     }
 
+
     /**
-     * Return the id for this VCF META header line.
+     * Return the ID for this VCF META header line.
      *
-     * @return the id for this VCF META header line
+     * @return the ID for this VCF META header line
      */
     public String getId() {
         return id;

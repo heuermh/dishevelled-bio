@@ -38,6 +38,7 @@ import com.google.common.collect.ImmutableMap;
  */
 @Immutable
 public final class VcfHeaderLineNumber {
+    /** Cache of commonly used header line numbers. */
     private static final Map<Object, VcfHeaderLineNumber> CACHE = ImmutableMap.<Object, VcfHeaderLineNumber>builder()
         .put("A", new VcfHeaderLineNumber("A"))
         .put("R", new VcfHeaderLineNumber("R"))
@@ -55,21 +56,38 @@ public final class VcfHeaderLineNumber {
         .put(10, new VcfHeaderLineNumber(10))
         .build();
 
+    /** Name of this header line number. */
     private final String name;
+
+    /** Value for this header line number. */
     private final int value;
+
+    /** True if this header line number is numeric. */
     private final boolean isNumeric;
 
+
+    /**
+     * Create a new VCF header line number with the specified name.
+     *
+     * @param name name of this header line number
+     */
     private VcfHeaderLineNumber(final String name) {
         this.name = name;
         this.value = 0;
         isNumeric = false;
     }
 
+    /**
+     * Create a new VCF header line number with the specified value.
+     *
+     * @param value value for this header line number
+     */
     private VcfHeaderLineNumber(final int value) {
         this.name = "N";
         this.value = 0;
         isNumeric = true;
     }
+
 
     /**
      * Return the name for this VCF header line number.
