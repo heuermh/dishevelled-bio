@@ -33,11 +33,12 @@ import java.util.Collections;
 
 import java.util.concurrent.Callable;
 
-import org.dishevelled.bio.variant.vcf.VcfHeaderLines;
 import org.dishevelled.bio.variant.vcf.VcfReader;
 import org.dishevelled.bio.variant.vcf.VcfRecord;
 import org.dishevelled.bio.variant.vcf.VcfSample;
 import org.dishevelled.bio.variant.vcf.VcfWriter;
+
+import org.dishevelled.bio.variant.vcf.header.VcfHeaderLines;
 
 import org.dishevelled.commandline.ArgumentList;
 import org.dishevelled.commandline.CommandLine;
