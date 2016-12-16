@@ -98,7 +98,7 @@ final class VcfAttributes {
 
 
     /**
-     * Convert the specified String to a character.
+     * Convert the specified string to a character.
      *
      * @param value value to convert, must not be null and must have length equal to one
      * @return the specified String converted to a character
@@ -117,7 +117,7 @@ final class VcfAttributes {
      * @param attributes, must not be null
      * @return the Type=Character attribute value for the specified key parsed into a character
      */
-    static char parseChar(final String key, final ListMultimap<String, String> attributes) {
+    static char parseCharacter(final String key, final ListMultimap<String, String> attributes) {
         checkNotNull(key);
         checkNotNull(attributes);
 
@@ -195,11 +195,11 @@ final class VcfAttributes {
     }
 
     /**
-     * Return the Type=String attribute value for the specified key as a String.
+     * Return the Type=String attribute value for the specified key as a string.
      *
      * @param key key, must not be null
      * @param attributes, must not be null
-     * @return the Type=String attribute value for the specified key as a String
+     * @return the Type=String attribute value for the specified key as a string
      */
     static String parseString(final String key, final ListMultimap<String, String> attributes) {
         checkNotNull(key);
@@ -217,12 +217,12 @@ final class VcfAttributes {
 
 
     /**
-     * Convert the specified list of Strings into an immutable list of Characters.
+     * Convert the specified list of strings into an immutable list of characters.
      *
      * @param values list of Strings to convert, must not be null
-     * @return the specified list of Strings converted into an immutable list of Characters
+     * @return the specified list of strings converted into an immutable list of characters
      */
-    private static List<Character> parseChars(final List<String> values) {
+    private static List<Character> parseCharacters(final List<String> values) {
         checkNotNull(values);
 
         ImmutableList.Builder<Character> builder = ImmutableList.builder();
@@ -233,10 +233,10 @@ final class VcfAttributes {
     }
 
     /**
-     * Convert the specified list of Strings into an immutable list of Integers.
+     * Convert the specified list of strings into an immutable list of Integers.
      *
      * @param values list of Strings to convert, must not be null
-     * @return the specified list of Strings converted into an immutable list of Integers
+     * @return the specified list of strings converted into an immutable list of Integers
      */
     private static List<Integer> parseIntegers(final List<String> values) {
         checkNotNull(values);
@@ -249,10 +249,10 @@ final class VcfAttributes {
     }
 
     /**
-     * Convert the specified list of Strings into an immutable list of Floats.
+     * Convert the specified list of strings into an immutable list of floats.
      *
      * @param values list of Strings to convert, must not be null
-     * @return the specified list of Strings converted into an immutable list of Floats
+     * @return the specified list of strings converted into an immutable list of floats
      */
     private static List<Float> parseFloats(final List<String> values) {
         checkNotNull(values);
@@ -265,10 +265,10 @@ final class VcfAttributes {
     }
 
     /**
-     * Return the specified list of Strings as an immutable list of Strings.
+     * Return the specified list of strings as an immutable list of strings.
      *
      * @param values list of Strings to convert, must not be null
-     * @return the specified list of Strings as an immutable list of Strings
+     * @return the specified list of strings as an immutable list of strings
      */
     private static List<String> parseStrings(final List<String> values) {
         checkNotNull(values);
@@ -282,24 +282,24 @@ final class VcfAttributes {
 
 
     /**
-     * Parse the Type=Character Number=. attribute value for the specified key into an immutable list of Characters.
+     * Parse the Type=Character Number=. attribute value for the specified key into an immutable list of characters.
      *
      * @param key key, must not be null
      * @param attributes, must not be null
-     * @return the Type=Character Number=. attribute value for the specified key parsed into an immutable list of Characters
+     * @return the Type=Character Number=. attribute value for the specified key parsed into an immutable list of characters
      */
-    static List<Character> parseChars(final String key, final ListMultimap<String, String> attributes) {
+    static List<Character> parseCharacters(final String key, final ListMultimap<String, String> attributes) {
         checkNotNull(key);
         checkNotNull(attributes);
-        return parseChars(attributes.get(key));
+        return parseCharacters(attributes.get(key));
     }
 
     /**
-     * Parse the Type=Integer Number=. attribute value for the specified key into an immutable list of Integers.
+     * Parse the Type=Integer Number=. attribute value for the specified key into an immutable list of integers.
      *
      * @param key key, must not be null
      * @param attributes, must not be null
-     * @return the Type=Integer Number=. attribute value for the specified key parsed into an immutable list of Integers
+     * @return the Type=Integer Number=. attribute value for the specified key parsed into an immutable list of integers
      */
     static List<Integer> parseIntegers(final String key, final ListMultimap<String, String> attributes) {
         checkNotNull(key);
@@ -308,11 +308,11 @@ final class VcfAttributes {
     }
 
     /**
-     * Parse the Type=Float Number=. attribute value for the specified key into an immutable list of Floats.
+     * Parse the Type=Float Number=. attribute value for the specified key into an immutable list of floats.
      *
      * @param key key, must not be null
      * @param attributes, must not be null
-     * @return the Type=Float Number=. attribute value for the specified key parsed into an immutable list of Floats
+     * @return the Type=Float Number=. attribute value for the specified key parsed into an immutable list of floats
      */
     static List<Float> parseFloats(final String key, final ListMultimap<String, String> attributes) {
         checkNotNull(key);
@@ -321,11 +321,11 @@ final class VcfAttributes {
     }
 
     /**
-     * Return the Type=String Number=. attribute value for the specified key as an immutable list of Strings.
+     * Return the Type=String Number=. attribute value for the specified key as an immutable list of strings.
      *
      * @param key key, must not be null
      * @param attributes, must not be null
-     * @return the Type=String Number=. attribute value for the specified key as an immutable list of Strings
+     * @return the Type=String Number=. attribute value for the specified key as an immutable list of strings
      */
     static List<String> parseStrings(final String key, final ListMultimap<String, String> attributes) {
         checkNotNull(key);
@@ -335,16 +335,16 @@ final class VcfAttributes {
 
 
     /**
-     * Parse the Type=Character Number=[n,A,R,G] attribute value for the specified key into an immutable list of Characters
+     * Parse the Type=Character Number=[n, A, R, G] attribute value for the specified key into an immutable list of characters
      * of size equal to the specified number.
      *
      * @param key key, must not be null
      * @param number number, must be greater than zero
      * @param attributes, must not be null
-     * @return the Type=Character Number=[n,A,R,G] attribute value for the specified key parsed into an immutable list of Characters
+     * @return the Type=Character Number=[n, A, R, G] attribute value for the specified key parsed into an immutable list of characters
      *    of size equal to the specified number
      */
-    static List<Character> parseChars(final String key, final int number, final ListMultimap<String, String> attributes) {
+    static List<Character> parseCharacters(final String key, final int number, final ListMultimap<String, String> attributes) {
         checkNotNull(key);
         checkNotNull(attributes);
         checkArgument(number > 0, "number must be at least one");
@@ -353,17 +353,17 @@ final class VcfAttributes {
         if (values.size() != number) {
             throw new IllegalArgumentException("expected " + number + " Type=Character values, found " + values.size());
         }
-        return parseChars(values);
+        return parseCharacters(values);
     }
 
     /**
-     * Parse the Type=Integer Number=[n,A,R,G] attribute value for the specified key into an immutable list of Integers
+     * Parse the Type=Integer Number=[n, A, R, G] attribute value for the specified key into an immutable list of integers
      * of size equal to the specified number.
      *
      * @param key key, must not be null
      * @param number number, must be greater than zero
      * @param attributes, must not be null
-     * @return the Type=Integer Number=[n,A,R,G] attribute value for the specified key parsed into an immutable list of Integers
+     * @return the Type=Integer Number=[n, A, R, G] attribute value for the specified key parsed into an immutable list of integers
      *    of size equal to the specified number
      */
     static List<Integer> parseIntegers(final String key, final int number, final ListMultimap<String, String> attributes) {
@@ -379,13 +379,13 @@ final class VcfAttributes {
     }
 
     /**
-     * Parse the Type=Float Number=[n,A,R,G] attribute value for the specified key into an immutable list of Floats
+     * Parse the Type=Float Number=[n, A, R, G] attribute value for the specified key into an immutable list of floats
      * of size equal to the specified number.
      *
      * @param key key, must not be null
      * @param number number, must be greater than zero
      * @param attributes, must not be null
-     * @return the Type=Float Number=[n,A,R,G] attribute value for the specified key parsed into an immutable list of Floats
+     * @return the Type=Float Number=[n, A, R, G] attribute value for the specified key parsed into an immutable list of floats
      *    of size equal to the specified number
      */
     static List<Float> parseFloats(final String key, final int number, final ListMultimap<String, String> attributes) {
@@ -401,13 +401,13 @@ final class VcfAttributes {
     }
 
     /**
-     * Return the Type=String Number=[n,A,R,G] attribute value for the specified key as an immutable list of Strings
+     * Return the Type=String Number=[n, A, R, G] attribute value for the specified key as an immutable list of strings
      * of size equal to the specified number.
      *
      * @param key key, must not be null
      * @param number number, must be greater than zero
      * @param attributes, must not be null
-     * @return the Type=String Number=[n,A,R,G] attribute value for the specified key as an immutable list of Strings
+     * @return the Type=String Number=[n, A, R, G] attribute value for the specified key as an immutable list of strings
      *    of size equal to the specified number
      */
     static List<String> parseStrings(final String key, final int number, final ListMultimap<String, String> attributes) {

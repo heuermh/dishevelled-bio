@@ -26,6 +26,11 @@ package org.dishevelled.bio.variant.vcf;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import static org.dishevelled.bio.variant.vcf.VcfAttributes.*;
+
+import java.util.List;
+import java.util.Optional;
+
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableListMultimap;
@@ -73,6 +78,350 @@ public final class VcfGenotype {
     public ListMultimap<String, String> getFields() {
         return fields;
     }
+
+
+    // genotype fields for VCF FORMAT non-reserved keys
+
+    /**
+     * Return true if the genotype fields for this VCF record contains
+     * the specified key.
+     *
+     * @param key key, must not be null
+     * @return true if the genotype fields for this VCF record contains
+     *    the specified key
+     */
+    public boolean containsFieldKey(final String key) {
+        return fields.containsKey(key);
+    }
+
+
+    /**
+     * Return the Number=1 Type=Character value for the specified key
+     * as a character.
+     *
+     * @param key key, must not be null
+     * @return the Number=1 Type=Character value for the specified key
+     *    as a character
+     */
+    public char getFieldCharacter(final String key) {
+        return parseCharacter(key, fields);
+    }
+
+    /**
+     * Return the Number=0 Type=Flag value for the specified key
+     * as a boolean.
+     *
+     * @param key key, must not be null
+     * @return the Number=0 Type=Flag value for the specified key
+     *    as a boolean
+     */
+    public boolean getFieldFlag(final String key) {
+        return parseFlag(key, fields);
+    }
+
+    /**
+     * Return the Number=1 Type=Float value for the specified key
+     * as a float.
+     *
+     * @param key key, must not be null
+     * @return the Number=1 Type=Float value for the specified key
+     *    as a float
+     */
+    public float getFieldFloat(final String key) {
+        return parseFloat(key, fields);
+    }
+
+    /**
+     * Return the Number=1 Type=Integer value for the specified key
+     * as an integer.
+     *
+     * @param key key, must not be null
+     * @return the Number=1 Type=Integer value for the specified key
+     *    as an integer
+     */
+    public int getFieldInteger(final String key) {
+        return parseInteger(key, fields);
+    }
+
+    /**
+     * Return the Number=1 Type=String value for the specified key
+     * as a string.
+     *
+     * @param key key, must not be null
+     * @return the Number=1 Type=Float value for the specified key
+     *    as a string
+     */
+    public String getFieldString(final String key) {
+        return parseString(key, fields);
+    }
+
+
+    /**
+     * Return the Number=&#46; Type=Character value for the specified key
+     * as an immutable list of characters.
+     *
+     * @param key key, must not be null
+     * @return the Number=&#46; Type=Character value for the specified key
+     *    as an immutable list of characters
+     */
+    public List<Character> getFieldCharacters(final String key) {
+        return parseCharacters(key, fields);
+    }
+
+    /**
+     * Return the Number=&#46; Type=Float value for the specified key
+     * as an immutable list of floats.
+     *
+     * @param key key, must not be null
+     * @return the Number=&#46; Type=Float value for the specified key
+     *    as an immutable list of floats
+     */
+    public List<Float> getFieldFloats(final String key) {
+        return parseFloats(key, fields);
+    }
+
+    /**
+     * Return the Number=&#46; Type=Integer value for the specified key
+     * as an immutable list of integers.
+     *
+     * @param key key, must not be null
+     * @return the Number=&#46; Type=Integer value for the specified key
+     *    as an immutable list of integers
+     */
+    public List<Integer> getFieldIntegers(final String key) {
+        return parseIntegers(key, fields);
+    }
+
+    /**
+     * Return the Number=&#46; Type=String value for the specified key
+     * as an immutable list of strings.
+     *
+     * @param key key, must not be null
+     * @return the Number=&#46; Type=String value for the specified key
+     *    as an immutable list of strings
+     */
+    public List<String> getFieldStrings(final String key) {
+        return parseStrings(key, fields);
+    }
+
+
+    // todo: Number=A, Number=R, Number=G genotype fields
+
+    /**
+     * Return the Number=[n, A, R, G] Type=Character value for the specified key
+     * as an immutable list of characters of size equal to the specified number.
+     *
+     * @param key key, must not be null
+     * @param number number, must be greater than zero
+     * @return the Number=[n, A, R, G] Type=Character value for the specified key
+     *    as an immutable list of characters of size equal to the specified number
+     */
+    public List<Character> getFieldCharacters(final String key, final int number) {
+        return parseCharacters(key, number, fields);
+    }
+
+    /**
+     * Return the Number=[n, A, R, G] Type=Float value for the specified key
+     * as an immutable list of floats of size equal to the specified number.
+     *
+     * @param key key, must not be null
+     * @param number number, must be greater than zero
+     * @return the Number=[n, A, R, G] Type=Float value for the specified key
+     *    as an immutable list of floats of size equal to the specified number
+     */
+    public List<Float> getFieldFloats(final String key, final int number) {
+        return parseFloats(key, number, fields);
+    }
+
+    /**
+     * Return the Number=[n, A, R, G] Type=Integer value for the specified key
+     * as an immutable list of integers of size equal to the specified number.
+     *
+     * @param key key, must not be null
+     * @param number number, must be greater than zero
+     * @return the Number=[n, A, R, G] Type=Integer value for the specified key
+     *    as an immutable list of integers of size equal to the specified number
+     */
+    public List<Integer> getFieldIntegers(final String key, final int number) {
+        return parseIntegers(key, number, fields);
+    }
+
+    /**
+     * Return the Number=[n, A, R, G] Type=String value for the specified key
+     * as an immutable list of strings of size equal to the specified number.
+     *
+     * @param key key, must not be null
+     * @param number number, must be greater than zero
+     * @return the Number=[n, A, R, G] Type=String value for the specified key
+     *    as an immutable list of strings of size equal to the specified number
+     */
+    public List<String> getFieldStrings(final String key, final int number) {
+        return parseStrings(key, number, fields);
+    }
+
+
+    /**
+     * Return an optional Number=1 Type=Character value for the specified key
+     * as a character.
+     *
+     * @param key key, must not be null
+     * @return an optional Number=1 Type=Character value for the specified key
+     *    as a character
+     */
+    public Optional<Character> getFieldCharacterOpt(final String key) {
+        return Optional.ofNullable(containsFieldKey(key) ? getFieldCharacter(key) : null);
+    }
+
+    /**
+     * Return an optional Number=0 Type=Flag value for the specified key
+     * as a boolean.
+     *
+     * @param key key, must not be null
+     * @return an optional Number=0 Type=Flag value for the specified key
+     *    as a boolean
+     */
+    public Optional<Boolean> getFieldFlagOpt(final String key) {
+       return Optional.ofNullable(containsFieldKey(key) ? getFieldFlag(key) : null);
+    }
+
+    /**
+     * Return an optional Number=1 Type=Float value for the specified key
+     * as a float.
+     *
+     * @param key key, must not be null
+     * @return an optional Number=1 Type=Float value for the specified key
+     *    as a float
+     */
+    public Optional<Float> getFieldFloatOpt(final String key) {
+       return Optional.ofNullable(containsFieldKey(key) ? getFieldFloat(key) : null);
+    }
+
+    /**
+     * Return an optional Number=1 Type=Integer value for the specified key
+     * as an integer.
+     *
+     * @param key key, must not be null
+     * @return an optional Number=1 Type=Integer value for the specified key
+     *    as an integer
+     */
+    public Optional<Integer> getFieldIntegerOpt(final String key) {
+       return Optional.ofNullable(containsFieldKey(key) ? getFieldInteger(key) : null);
+    }
+
+    /**
+     * Return an optional Number=1 Type=String value for the specified key
+     * as a string.
+     *
+     * @param key key, must not be null
+     * @return an optional Number=1 Type=String value for the specified key
+     *    as a string
+     */
+    public Optional<String> getFieldStringOpt(final String key) {
+       return Optional.ofNullable(containsFieldKey(key) ? getFieldString(key) : null);
+    }
+
+
+    /**
+     * Return an optional Number=&#46; Type=Character value for the specified key
+     * as an immutable list of characters.
+     *
+     * @param key key, must not be null
+     * @return an optional Number=&#46; Type=Character value for the specified key
+     *    as an immutable list of characters
+     */
+    public Optional<List<Character>> getFieldCharactersOpt(final String key) {
+       return Optional.ofNullable(containsFieldKey(key) ? getFieldCharacters(key) : null);
+    }
+
+    /**
+     * Return an optional Number=&#46; Type=Float value for the specified key
+     * as an immutable list of floats.
+     *
+     * @param key key, must not be null
+     * @return an optional Number=&#46; Type=Float value for the specified key
+     *    as an immutable list of floats
+     */
+    public Optional<List<Float>> getFieldFloatsOpt(final String key) {
+       return Optional.ofNullable(containsFieldKey(key) ? getFieldFloats(key) : null);
+    }
+
+    /**
+     * Return an optional Number=&#46; Type=Integer value for the specified key
+     * as an immutable list of integers.
+     *
+     * @param key key, must not be null
+     * @return an optional Number=&#46; Type=Integer value for the specified key
+     *    as an immutable list of integers
+     */
+    public Optional<List<Integer>> getFieldIntegersOpt(final String key) {
+       return Optional.ofNullable(containsFieldKey(key) ? getFieldIntegers(key) : null);
+    }
+
+    /**
+     * Return an optional Number=&#46; Type=String value for the specified key
+     * as an immutable list of strings.
+     *
+     * @param key key, must not be null
+     * @return an optional Number=&#46; Type=String value for the specified key
+     *    as an immutable list of strings
+     */
+    public Optional<List<String>> getFieldStringsOpt(final String key) {
+       return Optional.ofNullable(containsFieldKey(key) ? getFieldStrings(key) : null);
+    }
+
+
+    /**
+     * Return an optional Number=[n, A, R, G] Type=Character value for the specified key
+     * as an immutable list of characters of size equal to the specified number.
+     *
+     * @param key key, must not be null
+     * @param number number, must be greater than zero
+     * @return an optional Number=[n, A, R, G] Type=Character value for the specified key
+     *    as an immutable list of characters of size equal to the specified number
+     */
+    public Optional<List<Character>> getFieldCharactersOpt(final String key, final int number) {
+        return Optional.ofNullable(containsFieldKey(key) ? getFieldCharacters(key, number) : null);
+    }
+
+    /**
+     * Return an optional Number=[n, A, R, G] Type=Float value for the specified key
+     * as an immutable list of floats of size equal to the specified number.
+     *
+     * @param key key, must not be null
+     * @param number number, must be greater than zero
+     * @return an optional Number=[n, A, R, G] Type=Float value for the specified key
+     *    as an immutable list of floats of size equal to the specified number
+     */
+    public Optional<List<Float>> getFieldFloatsOpt(final String key, final int number) {
+        return Optional.ofNullable(containsFieldKey(key) ? getFieldFloats(key, number) : null);
+    }
+
+    /**
+     * Return an optional Number=[n, A, R, G] Type=Integer value for the specified key
+     * as an immutable list of integers of size equal to the specified number.
+     *
+     * @param key key, must not be null
+     * @param number number, must be greater than zero
+     * @return an optional Number=[n, A, R, G] Type=Integer value for the specified key
+     *    as an immutable list of integers of size equal to the specified number
+     */
+    public Optional<List<Integer>> getFieldIntegersOpt(final String key, final int number) {
+        return Optional.ofNullable(containsFieldKey(key) ? getFieldIntegers(key, number) : null);
+    }
+
+    /**
+     * Return an optional Number=[n, A, R, G] Type=String value for the specified key
+     * as an immutable list of strings of size equal to the specified number.
+     *
+     * @param key key, must not be null
+     * @param number number, must be greater than zero
+     * @return an optional Number=[n, A, R, G] Type=String value for the specified key
+     *    as an immutable list of strings of size equal to the specified number
+     */
+    public Optional<List<String>> getFieldStringsOpt(final String key, final int number) {
+        return Optional.ofNullable(containsFieldKey(key) ? getFieldStrings(key, number) : null);
+    }
+
 
     /**
      * Create and return a new VCF genotype builder.
