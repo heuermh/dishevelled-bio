@@ -46,15 +46,49 @@ public final class VcfAttributesTest {
 
     @Before
     public void setUp() throws Exception {
-        VcfGenotype.Builder genotypeBuilder = VcfGenotype.builder().withField("GT", "1|1");
+        VcfGenotype.Builder genotypeBuilder = VcfGenotype.builder()
+            .withRef("A")
+            .withAlt("G", "T")
+            .withField("GT", "1|1")
+
+            // Number=[., 1, 4, A, R, G] Type=Character
+            .withField("ANY_CHAR", "a", "b", "c", "d", "e", "f")
+            .withField("ONE_CHAR", "a")
+            .withField("FOUR_CHARS", "a", "b", "c", "d")
+            .withField("A_CHARS", "a", "b")
+            .withField("R_CHARS", "a", "b", "c")
+            .withField("G_CHARS", "a", "b", "c")
+
+            // Number=[., 1, 4, A, R, G] Type=Float
+            .withField("ANY_FLOAT", "1.0", "2.1", "3.2", "4.3", "5.4", "6.5")
+            .withField("ONE_FLOAT", "1.0")
+            .withField("FOUR_FLOATS", "1.0", "2.1", "3.2", "4.3")
+            .withField("A_FLOATS", "1.0", "2.1")
+            .withField("R_FLOATS", "1.0", "2.1", "3.2")
+            .withField("G_FLOATS", "1.0", "2.1", "3.2")
+
+            // Number=[., 1, 4, A, R, G] Type=Integer
+            .withField("ANY_INT", "1", "2", "3", "4", "5", "6")
+            .withField("ONE_INT", "1")
+            .withField("FOUR_INTS", "1", "2", "3", "4")
+            .withField("A_INTS", "1", "2")
+            .withField("R_INTS", "1", "2", "3")
+            .withField("G_INTS", "1", "2", "3")
+
+            // Number=[., 1, 4, A, R, G] Type=String
+            .withField("ANY_STRING", "foo", "bar", "baz", "qux", "garply", "waldo")
+            .withField("ONE_STRING", "foo")
+            .withField("FOUR_STRINGS", "foo", "bar", "baz", "qux")
+            .withField("A_STRINGS", "foo", "bar")
+            .withField("R_STRINGS", "foo", "bar", "baz")
+            .withField("G_STRINGS", "foo", "bar", "baz");
 
         genotypes = ImmutableMap.<String, VcfGenotype>builder()
-            .put("NA19131", genotypeBuilder.build())
             .put("K=2", genotypeBuilder.build())
-            .put("K=3", genotypeBuilder.reset().withField("GT", "0/0/1").build())
-            .put("K=4", genotypeBuilder.reset().withField("GT", "0/0/0/1").build())
-            .put("K=5", genotypeBuilder.reset().withField("GT", "0/0/0/0/1").build())
-            .put("K=6", genotypeBuilder.reset().withField("GT", "0/0/0/0/0/1").build())
+            .put("K=3", genotypeBuilder.reset().withRef("A").withAlt("G", "T").withField("GT", "0/0/1").build())
+            .put("K=4", genotypeBuilder.reset().withRef("A").withAlt("G", "T").withField("GT", "0/0/0/1").build())
+            .put("K=5", genotypeBuilder.reset().withRef("A").withAlt("G", "T").withField("GT", "0/0/0/0/1").build())
+            .put("K=6", genotypeBuilder.reset().withRef("A").withAlt("G", "T").withField("GT", "0/0/0/0/0/1").build())
             .build();
 
         record = VcfRecord.builder()
@@ -106,41 +140,56 @@ public final class VcfAttributesTest {
 
     @Test(expected=NullPointerException.class)
     public void testNumberANullRecord() {
-        numberA(null);
+        numberA((VcfRecord) null);
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testNumberANullGenotype() {
+        numberA((VcfGenotype) null);
     }
 
     @Test
-    public void testNumberA() {
+    public void testNumberARecord() {
         assertEquals(2, numberA(record));
+    }
+
+    @Test
+    public void testNumberAGenotype() {
+        assertEquals(2, numberA(genotypes.get("K=2")));
     }
 
     @Test(expected=NullPointerException.class)
     public void testNumberRNullRecord() {
-        numberR(null);
-    }
-
-    @Test
-    public void testNumberR() {
-        assertEquals(3, numberR(record));
+        numberR((VcfRecord) null);
     }
 
     @Test(expected=NullPointerException.class)
-    public void testNumberGNullRecord() {
-        numberG(null, genotypes.get("NA19131"));
+    public void testNumberRNullGenotype() {
+        numberR((VcfGenotype) null);
+    }
+
+    @Test
+    public void testNumberRRecord() {
+        assertEquals(3, numberR(record));
+    }
+
+    @Test
+    public void testNumberRGenotype() {
+        assertEquals(3, numberR(genotypes.get("K=2")));
     }
 
     @Test(expected=NullPointerException.class)
     public void testNumberGNullGenotype() {
-        numberG(record, null);
+        numberG(null);
     }
 
     @Ignore
     public void testNumberG() {
-        assertEquals(10, numberG(record, genotypes.get("K=2")));
-        assertEquals(10, numberG(record, genotypes.get("K=3")));
-        assertEquals(10, numberG(record, genotypes.get("K=4")));
-        assertEquals(10, numberG(record, genotypes.get("K=5")));
-        assertEquals(10, numberG(record, genotypes.get("K=6")));
+        assertEquals(10, numberG(genotypes.get("K=2")));
+        assertEquals(10, numberG(genotypes.get("K=3")));
+        assertEquals(10, numberG(genotypes.get("K=4")));
+        assertEquals(10, numberG(genotypes.get("K=5")));
+        assertEquals(10, numberG(genotypes.get("K=6")));
     }
 
     @Test(expected=NullPointerException.class)

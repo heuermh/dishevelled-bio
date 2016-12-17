@@ -58,48 +58,52 @@ public final class VcfGenotypeTest {
 
     @Test(expected=NullPointerException.class)
     public void testBuilderWithFieldNullId() {
-        builder().withField(null, "1|1");
+        builder().withRef("A").withAlt("G").withField(null, "1|1");
     }
 
     @Test(expected=NullPointerException.class)
     public void testBuilderWithFieldNullValue() {
-        builder().withField("GT", null);
+        builder().withRef("A").withAlt("G").withField("GT", null);
     }
 
     @Test(expected=NullPointerException.class)
     public void testBuilderWithFieldsNull() {
-        builder().withFields(null);
+        builder().withRef("A").withAlt("G").withFields(null);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testBuilderBuildDefaultFields() {
-        builder().build();
+        builder().withRef("A").withAlt("G").build();
     }
 
     @Test
     public void testBuilderBuildFields() {
-        assertEquals(fields, builder().withFields(fields).build().getFields());
+        assertEquals(fields, builder().withRef("A").withAlt("G").withFields(fields).build().getFields());
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testBuilderBuildEmptyFields() {
-        builder().withFields(empty).build();
+        builder().withRef("A").withAlt("G").withFields(empty).build();
     }
 
     @Test
     public void testBuilderReset() {
-        assertEquals("0|1", builder().withField("GT", "1|1").reset().withField("GT", "0|1").build().getGt());
+        assertEquals("0|1", builder()
+            .withRef("A").withAlt("G").withField("GT", "1|1")
+            .reset()
+            .withRef("A").withAlt("G").withField("GT", "0|1")
+            .build().getGt());
     }
 
     @Test
     public void testBuilderBuildWithFields() {
-        VcfGenotype genotype = builder().withFields(fields).build();
+        VcfGenotype genotype = builder().withRef("A").withAlt("G").withFields(fields).build();
         assertEquals("1|1", genotype.getGt());
         assertEquals(fields, genotype.getFields());
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testBuilderBuildMultipleWithGt() {
-        builder().withField("GT", "0|1").withField("GT", "1|1").build();
+        builder().withRef("A").withAlt("G").withField("GT", "0|1").withField("GT", "1|1").build();
     }
 }

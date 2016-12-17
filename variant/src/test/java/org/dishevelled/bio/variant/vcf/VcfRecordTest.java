@@ -68,7 +68,7 @@ public final class VcfRecordTest {
         filter = new String[] { "PASS" };
         info = ImmutableListMultimap.<String, String>builder().build();
         format = new String[] { "GT" };
-        VcfGenotype.Builder genotypeBuilder = VcfGenotype.builder().withField("GT", "1|1");
+        VcfGenotype.Builder genotypeBuilder = VcfGenotype.builder().withRef("A").withAlt("G").withField("GT", "1|1");
         genotypes = ImmutableMap.<String, VcfGenotype>builder().put("NA19131", genotypeBuilder.build()).put("NA19223", genotypeBuilder.build()).build();
     }
 
@@ -89,7 +89,7 @@ public final class VcfRecordTest {
 
     @Test(expected=NullPointerException.class)
     public void testBuilderWithGenotypeNullSampleId() {
-        builder().withGenotype(null, VcfGenotype.builder().withField("GT", "1|1").build());
+        builder().withGenotype(null, VcfGenotype.builder().withRef("A").withAlt("G").withField("GT", "1|1").build());
     }
 
     @Test(expected=NullPointerException.class)

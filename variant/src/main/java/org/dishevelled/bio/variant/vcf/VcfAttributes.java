@@ -72,17 +72,37 @@ final class VcfAttributes {
     }
 
     /**
-     * Return the count for Number=G attributes for the specified VCF record and genotype.
+     * Return the count for Number=A attributes for the specified VCF genotype.
      *
-     * @param record VCF record, must not be null
      * @param genotype VCF genotype, must not be null
-     * @return the count for Number=G attributes for the specified VCF record and genotype
+     * @return the count for Number=A attributes for the specified VCF genotype
      */
-    static int numberG(final VcfRecord record, final VcfGenotype genotype) {
-        checkNotNull(record);
+    static int numberA(final VcfGenotype genotype) {
+        checkNotNull(genotype);
+        return genotype.getAlt().length;
+    }
+
+    /**
+     * Return the count for Number=R attributes for the specified VCF genotype.
+     *
+     * @param genotype VCF genotype, must not be null
+     * @return the count for Number=R attributes for the specified VCF genotype
+     */
+    static int numberR(final VcfGenotype genotype) {
+        checkNotNull(genotype);
+        return numberA(genotype) + 1;
+    }
+
+    /**
+     * Return the count for Number=G attributes for the specified VCF genotype.
+     *
+     * @param genotype VCF genotype, must not be null
+     * @return the count for Number=G attributes for the specified VCF genotype
+     */
+    static int numberG(final VcfGenotype genotype) {
         checkNotNull(genotype);
 
-        int n = record.getAlt().length;
+        int n = genotype.getAlt().length;
         int k = genotype.getGt().split("[|/]").length;
 
         // todo: check preconditions

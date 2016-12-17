@@ -69,7 +69,7 @@ public final class VcfWriterTest {
         samples = ImmutableList.of(sample);
 
         info = ImmutableListMultimap.<String, String>builder().build();
-        VcfGenotype.Builder genotypeBuilder = VcfGenotype.builder().withField("GT", "1|1");
+        VcfGenotype.Builder genotypeBuilder = VcfGenotype.builder().withRef("A").withAlt("G").withField("GT", "1|1");
         genotypes = ImmutableMap.<String, VcfGenotype>builder().put("NA19131", genotypeBuilder.build()).put("NA19223", genotypeBuilder.build()).build();
 
         record = VcfRecord.builder()
@@ -316,7 +316,15 @@ public final class VcfWriterTest {
     @Test
     public void testWriteRecordGenotypeFields() throws Exception {
         Map<String, VcfGenotype> genotypes = new HashMap<String, VcfGenotype>();
-        VcfGenotype genotype = VcfGenotype.builder().withField("GT", "1|1").withField("DS", "0.000").withField("GL", "-0.02", "-1.38", "-5.00").build();
+
+        VcfGenotype genotype = VcfGenotype.builder()
+            .withRef("A")
+            .withAlt("G")
+            .withField("GT", "1|1")
+            .withField("DS", "0.000")
+            .withField("GL", "-0.02", "-1.38", "-5.00")
+            .build();
+
         genotypes.put("NA19131", genotype);
 
         VcfRecord genotypeFields = VcfRecord.builder()
@@ -341,7 +349,14 @@ public final class VcfWriterTest {
     @Test
     public void testWriteRecordMissingGenotypeField() throws Exception {
         Map<String, VcfGenotype> genotypes = new HashMap<String, VcfGenotype>();
-        VcfGenotype genotype = VcfGenotype.builder().withField("GT", "1|1").withField("GL", "-0.02", "-1.38", "-5.00").build();
+
+        VcfGenotype genotype = VcfGenotype.builder()
+            .withRef("A")
+            .withAlt("G")
+            .withField("GT", "1|1")
+            .withField("GL", "-0.02", "-1.38", "-5.00")
+            .build();
+
         genotypes.put("NA19131", genotype);
 
         VcfRecord genotypeFields = VcfRecord.builder()

@@ -43,6 +43,12 @@ import com.google.common.collect.ListMultimap;
  */
 @Immutable
 public final class VcfGenotype {
+    /** Reference allele. */
+    private final String ref;
+
+    /** Array of alternate alleles. */
+    private final String[] alt;
+
     /** Genotype fields. */
     private final ListMultimap<String, String> fields;
 
@@ -50,13 +56,24 @@ public final class VcfGenotype {
     /**
      * Create a new VCF genotype with the specified genotype fields.
      *
+     * @param ref reference allele, must not be null
+     * @param alt array of alternate alleles, must not be null
      * @param fields genotype fields, must not be null and must contain strictly one GT genotype field
      */
-    private VcfGenotype(final ListMultimap<String, String> fields) {
+    private VcfGenotype(final String ref,
+                        final String[] alt,
+                        final ListMultimap<String, String> fields) {
+
+        checkNotNull(ref, "ref must not be null");
+        checkNotNull(alt, "alt must not be null");
+        checkNotNull(fields, "fields must not be null");
+
         // check GT cardinality constraint
         checkArgument(fields.containsKey("GT"), "GT genotype field is required");
         checkArgument(fields.get("GT").size() == 1, "GT genotype field cardinality is strictly one, found " + fields.get("GT").size());
 
+        this.ref = ref;
+        this.alt = alt;
         this.fields = fields;
     }
 
@@ -71,6 +88,24 @@ public final class VcfGenotype {
     }
 
     /**
+     * Return the reference allele for this VCF genotype.
+     *
+     * @return the reference allele for this VCF genotype
+     */
+    public String getRef() {
+        return ref;
+    }
+
+    /**
+     * Return the alternate alleles for this VCF genotype.
+     *
+     * @return the alternate alleles for this VCF genotype
+     */
+    public String[] getAlt() {
+        return alt;
+    }
+
+    /**
      * Return the genotype fields for this VCF genotype.
      *
      * @return the genotype fields for this VCF genotype
@@ -80,14 +115,42 @@ public final class VcfGenotype {
     }
 
 
+    // genotype fields for VCF FORMAT reserved keys
+
+    /**
+     * Return the count for Number=A attributes for this VCF genotype.
+     *
+     * @return the count for Number=A attributes for this VCF genotype
+     */
+    public int a() {
+        return alt.length;
+    }
+
+    /**
+     * Return the count for Number=R attributes for this VCF genotype.
+     *
+     * @return the count for Number=R attributes for this VCF genotype
+     */
+    public int r() {
+        return a() + 1;
+    }
+
+    /**
+     * Return the count for Number=G attributes for this VCF genotype.
+     *
+     * @return the count for Number=G attributes for this VCF genotype
+     */
+    public int g() { return -1; }
+
+
     // genotype fields for VCF FORMAT non-reserved keys
 
     /**
-     * Return true if the genotype fields for this VCF record contains
+     * Return true if the genotype fields for this VCF genotype contains
      * the specified key.
      *
      * @param key key, must not be null
-     * @return true if the genotype fields for this VCF record contains
+     * @return true if the genotype fields for this VCF genotype contains
      *    the specified key
      */
     public boolean containsFieldKey(final String key) {
@@ -105,18 +168,6 @@ public final class VcfGenotype {
      */
     public char getFieldCharacter(final String key) {
         return parseCharacter(key, fields);
-    }
-
-    /**
-     * Return the Number=0 Type=Flag value for the specified key
-     * as a boolean.
-     *
-     * @param key key, must not be null
-     * @return the Number=0 Type=Flag value for the specified key
-     *    as a boolean
-     */
-    public boolean getFieldFlag(final String key) {
-        return parseFlag(key, fields);
     }
 
     /**
@@ -205,12 +256,15 @@ public final class VcfGenotype {
     }
 
 
-    // todo: Number=A, Number=R, Number=G genotype fields
-
     /**
      * Return the Number=[n, A, R, G] Type=Character value for the specified key
-     * as an immutable list of characters of size equal to the specified number.
+     * as an immutable list of characters of size equal to the specified number.  For the
+     * count for Number=A, Number=R, and Number=G attributes for this VCF genotype, use the methods
+     * <code>a()</code> and <code>r()</code>, respectively.
      *
+     * @see #a()
+     * @see #r()
+     * @see #g()
      * @param key key, must not be null
      * @param number number, must be greater than zero
      * @return the Number=[n, A, R, G] Type=Character value for the specified key
@@ -222,8 +276,13 @@ public final class VcfGenotype {
 
     /**
      * Return the Number=[n, A, R, G] Type=Float value for the specified key
-     * as an immutable list of floats of size equal to the specified number.
+     * as an immutable list of floats of size equal to the specified number.  For the
+     * count for Number=A, Number=R, and Number=G attributes for this VCF genotype, use the methods
+     * <code>a()</code> and <code>r()</code>, respectively.
      *
+     * @see #a()
+     * @see #r()
+     * @see #g()
      * @param key key, must not be null
      * @param number number, must be greater than zero
      * @return the Number=[n, A, R, G] Type=Float value for the specified key
@@ -235,8 +294,13 @@ public final class VcfGenotype {
 
     /**
      * Return the Number=[n, A, R, G] Type=Integer value for the specified key
-     * as an immutable list of integers of size equal to the specified number.
+     * as an immutable list of integers of size equal to the specified number.  For the
+     * count for Number=A, Number=R, and Number=G attributes for this VCF genotype, use the methods
+     * <code>a()</code> and <code>r()</code>, respectively.
      *
+     * @see #a()
+     * @see #r()
+     * @see #g()
      * @param key key, must not be null
      * @param number number, must be greater than zero
      * @return the Number=[n, A, R, G] Type=Integer value for the specified key
@@ -248,8 +312,13 @@ public final class VcfGenotype {
 
     /**
      * Return the Number=[n, A, R, G] Type=String value for the specified key
-     * as an immutable list of strings of size equal to the specified number.
+     * as an immutable list of strings of size equal to the specified number.  For the
+     * count for Number=A, Number=R, and Number=G attributes for this VCF genotype, use the methods
+     * <code>a()</code> and <code>r()</code>, respectively.
      *
+     * @see #a()
+     * @see #r()
+     * @see #g()
      * @param key key, must not be null
      * @param number number, must be greater than zero
      * @return the Number=[n, A, R, G] Type=String value for the specified key
@@ -270,18 +339,6 @@ public final class VcfGenotype {
      */
     public Optional<Character> getFieldCharacterOpt(final String key) {
         return Optional.ofNullable(containsFieldKey(key) ? getFieldCharacter(key) : null);
-    }
-
-    /**
-     * Return an optional Number=0 Type=Flag value for the specified key
-     * as a boolean.
-     *
-     * @param key key, must not be null
-     * @return an optional Number=0 Type=Flag value for the specified key
-     *    as a boolean
-     */
-    public Optional<Boolean> getFieldFlagOpt(final String key) {
-       return Optional.ofNullable(containsFieldKey(key) ? getFieldFlag(key) : null);
     }
 
     /**
@@ -372,8 +429,13 @@ public final class VcfGenotype {
 
     /**
      * Return an optional Number=[n, A, R, G] Type=Character value for the specified key
-     * as an immutable list of characters of size equal to the specified number.
+     * as an immutable list of characters of size equal to the specified number.  For the
+     * count for Number=A, Number=R, and Number=G attributes for this VCF genotype, use the methods
+     * <code>a()</code> and <code>r()</code>, respectively.
      *
+     * @see #a()
+     * @see #r()
+     * @see #g()
      * @param key key, must not be null
      * @param number number, must be greater than zero
      * @return an optional Number=[n, A, R, G] Type=Character value for the specified key
@@ -385,8 +447,13 @@ public final class VcfGenotype {
 
     /**
      * Return an optional Number=[n, A, R, G] Type=Float value for the specified key
-     * as an immutable list of floats of size equal to the specified number.
+     * as an immutable list of floats of size equal to the specified number.  For the
+     * count for Number=A, Number=R, and Number=G attributes for this VCF genotype, use the methods
+     * <code>a()</code> and <code>r()</code>, respectively.
      *
+     * @see #a()
+     * @see #r()
+     * @see #g()
      * @param key key, must not be null
      * @param number number, must be greater than zero
      * @return an optional Number=[n, A, R, G] Type=Float value for the specified key
@@ -398,8 +465,13 @@ public final class VcfGenotype {
 
     /**
      * Return an optional Number=[n, A, R, G] Type=Integer value for the specified key
-     * as an immutable list of integers of size equal to the specified number.
+     * as an immutable list of integers of size equal to the specified number.  For the
+     * count for Number=A, Number=R, and Number=G attributes for this VCF genotype, use the methods
+     * <code>a()</code> and <code>r()</code>, respectively.
      *
+     * @see #a()
+     * @see #r()
+     * @see #g()
      * @param key key, must not be null
      * @param number number, must be greater than zero
      * @return an optional Number=[n, A, R, G] Type=Integer value for the specified key
@@ -411,8 +483,13 @@ public final class VcfGenotype {
 
     /**
      * Return an optional Number=[n, A, R, G] Type=String value for the specified key
-     * as an immutable list of strings of size equal to the specified number.
+     * as an immutable list of strings of size equal to the specified number.  For the
+     * count for Number=A, Number=R, and Number=G attributes for this VCF genotype, use the methods
+     * <code>a()</code> and <code>r()</code>, respectively.
      *
+     * @see #a()
+     * @see #r()
+     * @see #g()
      * @param key key, must not be null
      * @param number number, must be greater than zero
      * @return an optional Number=[n, A, R, G] Type=String value for the specified key
@@ -436,6 +513,12 @@ public final class VcfGenotype {
      * VCF genotype builder.
      */
     public static final class Builder {
+        /** Reference allele. */
+        private String ref;
+
+        /** Array of alternate alleles. */
+        private String[] alt;
+
         /** Genotype fields. */
         private ImmutableListMultimap.Builder<String, String> fields = ImmutableListMultimap.builder();
 
@@ -449,11 +532,33 @@ public final class VcfGenotype {
 
 
         /**
+         * Return this VCF genotype builder configured with the specified reference allele.
+         *
+         * @param ref reference allele
+         * @return this VCF genotype builder configured with the specified reference allele
+         */
+        public Builder withRef(final String ref) {
+            this.ref = ref;
+            return this;
+        }
+
+        /**
+         * Return this VCF genotype builder configured with the specified alternate alleles.
+         *
+         * @param alt alternate alleles
+         * @return this VCF genotype builder configured with the specified alternate alleles
+         */
+        public Builder withAlt(final String... alt) {
+            this.alt = alt;
+            return this;
+        }
+
+        /**
          * Return this VCF genotype builder configured with the specified genotype field.
          *
          * @param id genotype field id, must not be null
          * @param values genotype field values, must not be null
-         * @return this VCF record builder configured with the specified genotype field
+         * @return this VCF genotype builder configured with the specified genotype field
          */
         public Builder withField(final String id, final String... values) {
             checkNotNull(values);
@@ -467,7 +572,7 @@ public final class VcfGenotype {
          * Return this VCF genotype builder configured with the specified genotype fields.
          *
          * @param fields genotype fields, must not be null
-         * @return this VCF record builder configured with the specified genotype fields
+         * @return this VCF genotype builder configured with the specified genotype fields
          */
         public Builder withFields(final ListMultimap<String, String> fields) {
             this.fields.putAll(fields);
@@ -480,6 +585,8 @@ public final class VcfGenotype {
          * @return this VCF genotype builder
          */
         public Builder reset() {
+            ref = null;
+            alt = null;
             fields = ImmutableListMultimap.builder();
             return this;
         }
@@ -490,7 +597,7 @@ public final class VcfGenotype {
          * @return a new VCF genotype populated from the configuration of this VCF genotype builder
          */
         public VcfGenotype build() {
-            return new VcfGenotype(fields.build());
+            return new VcfGenotype(ref, alt, fields.build());
         }
     }
 }

@@ -23,10 +23,12 @@
 */
 package org.dishevelled.bio.variant.vcf;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import static org.dishevelled.bio.variant.vcf.VcfAttributes.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -114,6 +116,14 @@ public final class VcfRecord {
         checkNotNull(alt, "alt must not be null");
         checkNotNull(info, "info must not be null");
         checkNotNull(genotypes, "genotypes must not be null");
+
+        // verify genotypes have correct ref and alt
+        for (VcfGenotype genotype : genotypes.values()) {
+            checkArgument(ref.equals(genotype.getRef()),
+                "ref " + ref + " and genotype ref " + genotype.getRef() + " must be equal");
+            checkArgument(Arrays.equals(alt, genotype.getAlt()),
+                "alt " + Arrays.toString(alt) + " and genotype alt " + Arrays.toString(genotype.getAlt()) + " must be equal");
+        }
 
         this.lineNumber = lineNumber;
         this.chrom = chrom;
@@ -1568,7 +1578,7 @@ public final class VcfRecord {
             // build genotypes from genotype fields if necessary
             for (Map.Entry<String, ListMultimap<String, String>> entry : genotypeFields.entrySet()) {
                 String sampleId = entry.getKey();
-                genotypes.put(sampleId, VcfGenotype.builder().withFields(entry.getValue()).build());
+                genotypes.put(sampleId, VcfGenotype.builder().withRef(ref).withAlt(alt).withFields(entry.getValue()).build());
             }
             return new VcfRecord(lineNumber, chrom, pos, id, ref, alt, qual, filter, info.build(), format, genotypes.build());
         }
