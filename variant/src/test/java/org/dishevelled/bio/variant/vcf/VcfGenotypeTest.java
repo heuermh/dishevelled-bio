@@ -57,6 +57,16 @@ public final class VcfGenotypeTest {
     }
 
     @Test(expected=NullPointerException.class)
+    public void testBuilderWithNullRef() {
+        builder().withRef(null).withAlt("G").withField("GT", "1|1").build();
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testBuilderWithNullAlt() {
+        builder().withRef("A").withAlt((String[]) null).withField("GT", "1|1").build();
+    }
+
+    @Test(expected=NullPointerException.class)
     public void testBuilderWithFieldNullId() {
         builder().withRef("A").withAlt("G").withField(null, "1|1");
     }

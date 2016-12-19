@@ -146,11 +146,11 @@ public final class VcfGenotype {
     // genotype fields for VCF FORMAT non-reserved keys
 
     /**
-     * Return true if the genotype fields for this VCF genotype contains
+     * Return true if the genotype fields for this VCF genotype contain
      * the specified key.
      *
      * @param key key, must not be null
-     * @return true if the genotype fields for this VCF genotype contains
+     * @return true if the genotype fields for this VCF genotype contain
      *    the specified key
      */
     public boolean containsFieldKey(final String key) {
@@ -259,8 +259,8 @@ public final class VcfGenotype {
     /**
      * Return the Number=[n, A, R, G] Type=Character value for the specified key
      * as an immutable list of characters of size equal to the specified number.  For the
-     * count for Number=A, Number=R, and Number=G attributes for this VCF genotype, use the methods
-     * <code>a()</code> and <code>r()</code>, respectively.
+     * count for Number=A, Number=R, and Number=G attributes for this VCF genotype, use the
+     * methods <code>a()</code> and <code>r()</code>, respectively.
      *
      * @see #a()
      * @see #r()
@@ -277,8 +277,8 @@ public final class VcfGenotype {
     /**
      * Return the Number=[n, A, R, G] Type=Float value for the specified key
      * as an immutable list of floats of size equal to the specified number.  For the
-     * count for Number=A, Number=R, and Number=G attributes for this VCF genotype, use the methods
-     * <code>a()</code> and <code>r()</code>, respectively.
+     * count for Number=A, Number=R, and Number=G attributes for this VCF genotype, use the
+     * methods <code>a()</code> and <code>r()</code>, respectively.
      *
      * @see #a()
      * @see #r()
@@ -295,8 +295,8 @@ public final class VcfGenotype {
     /**
      * Return the Number=[n, A, R, G] Type=Integer value for the specified key
      * as an immutable list of integers of size equal to the specified number.  For the
-     * count for Number=A, Number=R, and Number=G attributes for this VCF genotype, use the methods
-     * <code>a()</code> and <code>r()</code>, respectively.
+     * count for Number=A, Number=R, and Number=G attributes for this VCF genotype, use the
+     * methods <code>a()</code> and <code>r()</code>, respectively.
      *
      * @see #a()
      * @see #r()
@@ -313,8 +313,8 @@ public final class VcfGenotype {
     /**
      * Return the Number=[n, A, R, G] Type=String value for the specified key
      * as an immutable list of strings of size equal to the specified number.  For the
-     * count for Number=A, Number=R, and Number=G attributes for this VCF genotype, use the methods
-     * <code>a()</code> and <code>r()</code>, respectively.
+     * count for Number=A, Number=R, and Number=G attributes for this VCF genotype, use the
+     * methods <code>a()</code> and <code>r()</code>, respectively.
      *
      * @see #a()
      * @see #r()
@@ -430,8 +430,8 @@ public final class VcfGenotype {
     /**
      * Return an optional Number=[n, A, R, G] Type=Character value for the specified key
      * as an immutable list of characters of size equal to the specified number.  For the
-     * count for Number=A, Number=R, and Number=G attributes for this VCF genotype, use the methods
-     * <code>a()</code> and <code>r()</code>, respectively.
+     * count for Number=A, Number=R, and Number=G attributes for this VCF genotype, use the
+     * methods <code>a()</code> and <code>r()</code>, respectively.
      *
      * @see #a()
      * @see #r()
@@ -448,8 +448,8 @@ public final class VcfGenotype {
     /**
      * Return an optional Number=[n, A, R, G] Type=Float value for the specified key
      * as an immutable list of floats of size equal to the specified number.  For the
-     * count for Number=A, Number=R, and Number=G attributes for this VCF genotype, use the methods
-     * <code>a()</code> and <code>r()</code>, respectively.
+     * count for Number=A, Number=R, and Number=G attributes for this VCF genotype, use the
+     * methods <code>a()</code> and <code>r()</code>, respectively.
      *
      * @see #a()
      * @see #r()
@@ -466,8 +466,8 @@ public final class VcfGenotype {
     /**
      * Return an optional Number=[n, A, R, G] Type=Integer value for the specified key
      * as an immutable list of integers of size equal to the specified number.  For the
-     * count for Number=A, Number=R, and Number=G attributes for this VCF genotype, use the methods
-     * <code>a()</code> and <code>r()</code>, respectively.
+     * count for Number=A, Number=R, and Number=G attributes for this VCF genotype, use the
+     * methods <code>a()</code> and <code>r()</code>, respectively.
      *
      * @see #a()
      * @see #r()
@@ -484,8 +484,8 @@ public final class VcfGenotype {
     /**
      * Return an optional Number=[n, A, R, G] Type=String value for the specified key
      * as an immutable list of strings of size equal to the specified number.  For the
-     * count for Number=A, Number=R, and Number=G attributes for this VCF genotype, use the methods
-     * <code>a()</code> and <code>r()</code>, respectively.
+     * count for Number=A, Number=R, and Number=G attributes for this VCF genotype, use the
+     * methods <code>a()</code> and <code>r()</code>, respectively.
      *
      * @see #a()
      * @see #r()

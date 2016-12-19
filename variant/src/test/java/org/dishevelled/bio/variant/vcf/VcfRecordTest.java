@@ -167,6 +167,52 @@ public final class VcfRecordTest {
             .build();
     }
 
+    @Test(expected=IllegalArgumentException.class)
+    public void testBuilderMismatchedGenotypeRef() {
+        VcfGenotype mismatchedRef = VcfGenotype.builder()
+            .withRef("G")
+            .withAlt(alt)
+            .withField("GT", "1|1")
+            .build();
+
+        VcfRecord.builder()
+            .withLineNumber(lineNumber)
+            .withChrom(chrom)
+            .withPos(pos)
+            .withId(id)
+            .withRef(ref)
+            .withAlt(alt)
+            .withQual(qual)
+            .withFilter(filter)
+            .withInfo(info)
+            .withFormat(format)
+            .withGenotype("NA19139", mismatchedRef)
+            .build();
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBuilderMismatchedGenotypeAlt() {
+        VcfGenotype mismatchedAlt = VcfGenotype.builder()
+            .withRef(ref)
+            .withAlt("C")
+            .withField("GT", "1|1")
+            .build();
+
+        VcfRecord.builder()
+            .withLineNumber(lineNumber)
+            .withChrom(chrom)
+            .withPos(pos)
+            .withId(id)
+            .withRef(ref)
+            .withAlt(alt)
+            .withQual(qual)
+            .withFilter(filter)
+            .withInfo(info)
+            .withFormat(format)
+            .withGenotype("NA19139", mismatchedAlt)
+            .build();
+    }
+
     @Test
     public void testBuilderBuild() {
         VcfRecord record = builder()
