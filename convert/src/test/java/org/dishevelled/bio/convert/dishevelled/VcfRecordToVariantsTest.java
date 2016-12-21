@@ -94,7 +94,9 @@ public final class VcfRecordToVariantsTest {
 1       14397   .       CTGT    C       139.12  IndelQD AC=2;AF=0.333;AN=6;BaseQRankSum=1.800;ClippingRankSum=0.138;DP=69;FS=7.786;MLEAC=2;MLEAF=0.333;MQ=26.84;MQ0=0;MQRankSum=-1.906;QD=1.55;ReadPosRankSum=0.384     GT:AD:DP:FT:GQ:PL       0/1:16,4:20:rd:99:120,0,827     0/1:8,2:10:dp;rd:60:60,0,414    0/0:39,0:39:PASS:99:0,116,2114
          */
         VcfGenotype na12878 = VcfGenotype.builder()
-            .withGt("0/1")
+            .withRef("CTGT")
+            .withAlt("C")
+            .withField("GT", "0/1")
             .withField("AD", "16", "4")
             .withField("DP", "20")
             .withField("FT", "rd")
@@ -103,7 +105,9 @@ public final class VcfRecordToVariantsTest {
             .build();
 
         VcfGenotype na12891 = VcfGenotype.builder()
-            .withGt("0/1")
+            .withRef("CTGT")
+            .withAlt("C")
+            .withField("GT", "0/1")
             .withField("AD", "8", "2")
             .withField("DP", "10")
             .withField("FT", "dp", "rd")
@@ -112,7 +116,9 @@ public final class VcfRecordToVariantsTest {
             .build();
 
         VcfGenotype na12892 = VcfGenotype.builder()
-            .withGt("0/0")
+            .withRef("CTGT")
+            .withAlt("C")
+            .withField("GT", "0/0")
             .withField("AD", "39", "0")
             .withField("DP", "39")
             .withField("FT", "PASS")
@@ -160,6 +166,5 @@ public final class VcfRecordToVariantsTest {
         assertEquals("CTGT", variant.getReferenceAllele());
         assertEquals("C", variant.getAlternateAllele());
         assertTrue(variant.getNames().isEmpty());
-        assertFalse(variant.getSomatic());
     }
 }

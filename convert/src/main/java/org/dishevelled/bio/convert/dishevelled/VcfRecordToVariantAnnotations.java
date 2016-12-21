@@ -101,10 +101,10 @@ final class VcfRecordToVariantAnnotations extends AbstractConverter<VcfRecord, L
         vcfRecord.getInfo().get("H3").forEach(hapMap3 -> vab.setHapMap3(Boolean.valueOf(hapMap3)));
         vcfRecord.getInfo().get("VALIDATED").forEach(validated -> vab.setValidated(Boolean.valueOf(validated)));
         vcfRecord.getInfo().get("1000G").forEach(thousandGenomes -> vab.setThousandGenomes(Boolean.valueOf(thousandGenomes)));
+        vcfRecord.getInfo().get("SOMATIC").forEach(somatic -> vab.setSomatic(Boolean.valueOf(somatic)));
 
         for (int i = 0, size = variants.size(); i < size; i++) {
             Variant variant = variants.get(i);
-            vab.setVariant(variant);
 
             final int index = i;
             // Number=A VCF INFO reserved keys split for multi-allelic sites by index

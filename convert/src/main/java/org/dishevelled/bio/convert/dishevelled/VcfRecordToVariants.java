@@ -93,8 +93,6 @@ final class VcfRecordToVariants extends AbstractConverter<VcfRecord, List<Varian
             vb.setFiltersFailed(ImmutableList.copyOf(vcfRecord.getFilter()));
         }
 
-        vcfRecord.getInfo().get("SOMATIC").forEach(somatic -> vb.setSomatic(Boolean.valueOf(somatic)));
-
         List<Variant> variants = new ArrayList<Variant>(vcfRecord.getAlt().length);
         for (String alt : vcfRecord.getAlt()) {
             if (alt == null) {
