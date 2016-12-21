@@ -39,6 +39,7 @@ import org.bdgenomics.formats.avro.Feature;
 import org.bdgenomics.formats.avro.Genotype;
 import org.bdgenomics.formats.avro.OntologyTerm;
 import org.bdgenomics.formats.avro.Strand;
+import org.bdgenomics.formats.avro.TranscriptEffect;
 import org.bdgenomics.formats.avro.Variant;
 
 import org.dishevelled.bio.feature.BedRecord;
@@ -83,8 +84,8 @@ public final class DishevelledModule extends AbstractModule {
     }
 
     @Provides @Singleton
-    Converter<VcfRecord, List<Variant>> createVcfRecordToVariants() {
-        return new VcfRecordToVariants();
+    Converter<VcfRecord, List<Variant>> createVcfRecordToVariants(final Converter<String, TranscriptEffect> transcriptEffectConverter) {
+        return new VcfRecordToVariants(transcriptEffectConverter);
     }
 
     @Provides @Singleton

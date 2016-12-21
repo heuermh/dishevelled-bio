@@ -26,15 +26,20 @@ package org.dishevelled.bio.convert.dishevelled;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.Splitter;
+
 import com.google.common.collect.ImmutableList;
 
 import javax.annotation.concurrent.Immutable;
 
 import org.bdgenomics.convert.AbstractConverter;
+import org.bdgenomics.convert.Converter;
 import org.bdgenomics.convert.ConversionException;
 import org.bdgenomics.convert.ConversionStringency;
 
+import org.bdgenomics.formats.avro.TranscriptEffect;
 import org.bdgenomics.formats.avro.Variant;
+import org.bdgenomics.formats.avro.VariantAnnotation;
 
 import org.dishevelled.bio.variant.vcf.VcfRecord;
 
@@ -48,11 +53,20 @@ import org.slf4j.Logger;
 @Immutable
 final class VcfRecordToVariants extends AbstractConverter<VcfRecord, List<Variant>> {
 
+    /** Convert String to TranscriptEffect. */
+    private final Converter<String, TranscriptEffect> transcriptEffectConverter;
+
+
     /**
      * Convert dishevelled VcfRecord to a list of bdg-formats Variants.
+     *
+     * @param transcriptEffectConverter convert String to TranscriptEffect, must not be null
      */
-    VcfRecordToVariants() {
+    VcfRecordToVariants(final Converter<String, TranscriptEffect> transcriptEffectConverter) {
         super(VcfRecord.class, List.class);
+
+        checkNotNull(transcriptEffectConverter);
+        this.transcriptEffectConverter = transcriptEffectConverter;
     }
 
 
@@ -93,13 +107,90 @@ final class VcfRecordToVariants extends AbstractConverter<VcfRecord, List<Varian
             vb.setFiltersFailed(ImmutableList.copyOf(vcfRecord.getFilter()));
         }
 
+        final VariantAnnotation.Builder vab = VariantAnnotation.newBuilder();
+
+        // Number=0, Number=1 VCF INFO reserved keys shared across all alternate alleles in the same VCF record
+        vcfRecord.getAaOpt().ifPresent(ancestralAllele -> vab.setAncestralAllele(ancestralAllele));
+        vcfRecord.getDbOpt().ifPresent(dbSnp -> vab.setDbSnp(Boolean.valueOf(dbSnp)));
+        vcfRecord.getH2Opt().ifPresent(hapMap2 -> vab.setHapMap2(Boolean.valueOf(hapMap2)));
+        vcfRecord.getH3Opt().ifPresent(hapMap3 -> vab.setHapMap3(Boolean.valueOf(hapMap3)));
+        vcfRecord.getValidatedOpt().ifPresent(validated -> vab.setValidated(Boolean.valueOf(validated)));
+        vcfRecord.get1000gOpt().ifPresent(thousandGenomes -> vab.setThousandGenomes(Boolean.valueOf(thousandGenomes)));
+        vcfRecord.getSomaticOpt().ifPresent(somatic -> vab.setSomatic(Boolean.valueOf(somatic)));
+
         List<Variant> variants = new ArrayList<Variant>(vcfRecord.getAlt().length);
-        for (String alt : vcfRecord.getAlt()) {
+        for (int i = 0, size = vcfRecord.getAlt().length; i < size; i++) {
+            String alt = vcfRecord.getAlt()[i];
+
             if (alt == null) {
                 warnOrThrow(vcfRecord, "alt must not be null", null, stringency, logger);
             }
             else {
-                variants.add(vb.setAlternateAllele(alt).build());
+                Variant variant = vb.setAlternateAllele(alt).build();
+
+                // Number=A VCF INFO reserved keys split for multi-allelic sites by index
+                if (vcfRecord.containsAc()) {
+                    vab.setAlleleCount(vcfRecord.getAc().get(i));
+                }
+                else {
+                    vab.clearAlleleCount();
+                }
+
+                if (vcfRecord.containsAf()) {
+                    vab.setAlleleFrequency(vcfRecord.getAf().get(i));
+                }
+                else {
+                    vab.clearAlleleFrequency();
+                }
+
+                if (vcfRecord.containsCigar()) {
+                    vab.setCigar(vcfRecord.getCigar().get(i));
+                }
+                else {
+                    vab.clearCigar();
+                }
+
+                // Number=R VCF INFO reserved keys split for multi-allelic sites by index
+                if (vcfRecord.containsAd()) {
+                    vab.setReferenceReadDepth(vcfRecord.getAd().get(0));
+                    vab.setReadDepth(vcfRecord.getAd().get(i + 1));
+                }
+                else {
+                    vab.clearReferenceReadDepth();
+                    vab.clearReadDepth();
+                }
+
+                if (vcfRecord.containsAdf()) {
+                    vab.setReferenceForwardReadDepth(vcfRecord.getAdf().get(0));
+                    vab.setForwardReadDepth(vcfRecord.getAdf().get(i + 1));
+                }
+                else {
+                    vab.clearReferenceForwardReadDepth();
+                    vab.clearForwardReadDepth();
+                }
+
+                if (vcfRecord.containsAdr()) {
+                    vab.setReferenceReverseReadDepth(vcfRecord.getAdr().get(0));
+                    vab.setReverseReadDepth(vcfRecord.getAdr().get(i + 1));
+                }
+                else {
+                    vab.clearReferenceReverseReadDepth();
+                    vab.clearReverseReadDepth();
+                }
+
+                // Number=. VCF INFO key ANN split for multi-allelic sites by alternate allele
+                if (vcfRecord.containsInfoKey("ANN")) {
+                    List<TranscriptEffect> transcriptEffects = new ArrayList<TranscriptEffect>();
+                    for (String token : vcfRecord.getInfoStrings("ANN")) {
+                        TranscriptEffect transcriptEffect = transcriptEffectConverter.convert(token, stringency, logger);
+                        if (transcriptEffect != null && transcriptEffect.getAlternateAllele().equals(variant.getAlternateAllele())) {
+                            transcriptEffects.add(transcriptEffect);
+                        }
+                    }
+                    vab.setTranscriptEffects(transcriptEffects);
+                }
+                variant.setAnnotation(vab.build());
+                variants.add(variant);
             }
         }
         return variants;

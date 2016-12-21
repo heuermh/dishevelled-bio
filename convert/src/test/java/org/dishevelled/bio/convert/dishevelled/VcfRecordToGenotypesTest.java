@@ -35,6 +35,11 @@ import java.util.List;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 
+import com.google.inject.Injector;
+import com.google.inject.Guice;
+import com.google.inject.Key;
+import com.google.inject.TypeLiteral;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -46,6 +51,7 @@ import org.bdgenomics.convert.bdgenomics.BdgenomicsModule;
 
 import org.bdgenomics.formats.avro.Genotype;
 import org.bdgenomics.formats.avro.GenotypeAllele;
+import org.bdgenomics.formats.avro.TranscriptEffect;
 import org.bdgenomics.formats.avro.Variant;
 
 import org.dishevelled.bio.variant.vcf.VcfGenotype;
@@ -61,12 +67,15 @@ import org.slf4j.LoggerFactory;
  */
 public final class VcfRecordToGenotypesTest {
     private final Logger logger = LoggerFactory.getLogger(VcfRecordToGenotypesTest.class);
+    private Converter<String, TranscriptEffect> transcriptEffectConverter;
     private Converter<VcfRecord, List<Variant>> variantsConverter;
     private Converter<VcfRecord, List<Genotype>> vcfRecordConverter;
 
     @Before
     public void setUp() {
-        variantsConverter = new VcfRecordToVariants();
+        Injector injector = Guice.createInjector(new BdgenomicsModule());
+        transcriptEffectConverter = injector.getInstance(Key.get(new TypeLiteral<Converter<String, TranscriptEffect>>() {}));
+        variantsConverter = new VcfRecordToVariants(transcriptEffectConverter);
         vcfRecordConverter = new VcfRecordToGenotypes(variantsConverter);
     }
 
