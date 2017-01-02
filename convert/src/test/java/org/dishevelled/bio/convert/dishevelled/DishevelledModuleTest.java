@@ -77,6 +77,8 @@ public final class DishevelledModuleTest {
         assertNotNull(target.getFeatureToGff3Record());
         assertNotNull(target.getVcfRecordToVariants());
         assertNotNull(target.getVcfRecordToGenotypes());
+        assertNotNull(target.getGenotypesToVcfRecord());
+        assertNotNull(target.getVariantToVcfRecord());
     }
 
     /**
@@ -89,6 +91,8 @@ public final class DishevelledModuleTest {
         Converter<Feature, Gff3Record> featureToGff3Record;
         Converter<VcfRecord, List<Variant>> vcfRecordToVariants;
         Converter<VcfRecord, List<Genotype>> vcfRecordToGenotypes;
+        Converter<List<Genotype>, VcfRecord> genotypesToVcfRecord;
+        Converter<Variant, VcfRecord> variantToVcfRecord;
 
         @Inject
         Target(Converter<BedRecord, Feature> bedRecordToFeature,
@@ -96,13 +100,17 @@ public final class DishevelledModuleTest {
                Converter<Gff3Record, Feature> gff3RecordToFeature,
                Converter<Feature, Gff3Record> featureToGff3Record,
                Converter<VcfRecord, List<Variant>> vcfRecordToVariants,
-               Converter<VcfRecord, List<Genotype>> vcfRecordToGenotypes) {
+               Converter<VcfRecord, List<Genotype>> vcfRecordToGenotypes,
+               Converter<List<Genotype>, VcfRecord> genotypesToVcfRecord,
+               Converter<Variant, VcfRecord> variantToVcfRecord) {
             this.bedRecordToFeature = bedRecordToFeature;
             this.featureToBedRecord = featureToBedRecord;
             this.gff3RecordToFeature = gff3RecordToFeature;
             this.featureToGff3Record = featureToGff3Record;
             this.vcfRecordToVariants = vcfRecordToVariants;
             this.vcfRecordToGenotypes = vcfRecordToGenotypes;
+            this.genotypesToVcfRecord = genotypesToVcfRecord;
+            this.variantToVcfRecord = variantToVcfRecord;
         }
 
         Converter<BedRecord, Feature> getBedRecordToFeature() {
@@ -127,6 +135,14 @@ public final class DishevelledModuleTest {
 
         Converter<VcfRecord, List<Genotype>> getVcfRecordToGenotypes() {
             return vcfRecordToGenotypes;
+        }
+
+        Converter<List<Genotype>, VcfRecord> getGenotypesToVcfRecord() {
+            return genotypesToVcfRecord;
+        }
+
+        Converter<Variant, VcfRecord> getVariantToVcfRecord() {
+            return variantToVcfRecord;
         }
     }
 

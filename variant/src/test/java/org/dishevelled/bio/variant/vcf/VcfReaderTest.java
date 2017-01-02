@@ -429,12 +429,9 @@ public final class VcfReaderTest {
         assertEquals("true", record.getInfo().get("H2").get(0));
     }
 
-    @Test
+    @Test(expected=IllegalArgumentException.class)
     public void testMissingAlt() throws Exception {
-        VcfRecord record = records(createInputStream("missing-alt.vcf")).iterator().next();
-        assertNotNull(record);
-        assertNotNull(record.getAlt());
-        assertEquals(0, record.getAlt().length);
+        records(createInputStream("missing-alt.vcf")).iterator().next();
     }
 
     @Test

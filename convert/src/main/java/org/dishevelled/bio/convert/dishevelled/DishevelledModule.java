@@ -92,4 +92,14 @@ public final class DishevelledModule extends AbstractModule {
     Converter<VcfRecord, List<Genotype>> createVcfRecordToGenotypes(final Converter<VcfRecord, List<Variant>> variantConverter) {
         return new VcfRecordToGenotypes(variantConverter);
     }
+
+    @Provides @Singleton
+    Converter<List<Genotype>, VcfRecord> createGenotypesToVcfRecord(final Converter<TranscriptEffect, String> transcriptEffectConverter) {
+        return new GenotypesToVcfRecord(transcriptEffectConverter);
+    }
+
+    @Provides @Singleton
+    Converter<Variant, VcfRecord> createVariantToVcfRecord(final Converter<TranscriptEffect, String> transcriptEffectConverter) {
+        return new VariantToVcfRecord(transcriptEffectConverter);
+    }
 }

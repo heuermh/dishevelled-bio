@@ -134,14 +134,31 @@ public final class VcfRecordTest {
             .build();
     }
 
-    @Test(expected=NullPointerException.class)
-    public void testBuilderBuildNullAlt() {
+    @Test(expected=IllegalArgumentException.class)
+    public void testBuilderBuildEmptyAlt() {
         builder()
             .withLineNumber(lineNumber)
             .withChrom(chrom)
             .withPos(pos)
             .withId(id)
             .withRef(ref)
+            .withQual(qual)
+            .withFilter(filter)
+            .withInfo(info)
+            .withFormat(format)
+            .withGenotypes(genotypes)
+            .build();
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testBuilderBuildAltContainingNull() {
+        builder()
+            .withLineNumber(lineNumber)
+            .withChrom(chrom)
+            .withPos(pos)
+            .withId(id)
+            .withRef(ref)
+            .withAlt(null)
             .withQual(qual)
             .withFilter(filter)
             .withInfo(info)
