@@ -117,7 +117,7 @@ final class GenotypesToVcfRecord extends AbstractConverter<List<Genotype>, VcfRe
             .withPos(variant.getStart() + 1L)
             .withId(toStringArray(variant.getNames()))
             .withRef(variant.getReferenceAllele())
-            .withAlt(variant.getAlternateAllele());
+            .withAlt(toStringArray(variant.getAlternateAllele()));
 
         if (variant.getFiltersApplied()) {
             if (variant.getFiltersPassed()) {
@@ -218,7 +218,7 @@ final class GenotypesToVcfRecord extends AbstractConverter<List<Genotype>, VcfRe
             return vb.build();
         }
         catch (NullPointerException | IllegalArgumentException e) {
-            warnOrThrow(genotypes, "could not convert genotypes, caught " + e.getMessage(), e, stringency, logger);
+            warnOrThrow(genotypes, e.getMessage(), e, stringency, logger);
         }
         return null;
     }
@@ -232,6 +232,10 @@ final class GenotypesToVcfRecord extends AbstractConverter<List<Genotype>, VcfRe
             default:
                 return ".";
         }
+    }
+
+    private static String[] toStringArray(final String value) {
+        return value == null ? null : new String[] { value };
     }
 
     private static String[] toStringArray(final List<String> values) {

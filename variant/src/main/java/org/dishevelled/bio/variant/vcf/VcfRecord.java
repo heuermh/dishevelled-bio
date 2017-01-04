@@ -83,9 +83,6 @@ public final class VcfRecord {
     /** Genotypes keyed by sample id. */
     private final Map<String, VcfGenotype> genotypes;
 
-    /** Empty string array. */
-    private static final String[] EMPTY = new String[0];
-
 
     /**
      * Create a new VCF record.
@@ -95,7 +92,7 @@ public final class VcfRecord {
      * @param pos position
      * @param id array of ids
      * @param ref reference allele, must not be null
-     * @param alt array of alternate alleles, must not be null or empty
+     * @param alt array of alternate alleles, must not be null
      * @param qual QUAL score
      * @param filter array of filters
      * @param info INFO key-value(s) pairs, must not be null
@@ -117,23 +114,8 @@ public final class VcfRecord {
         checkNotNull(chrom, "chrom must not be null");
         checkNotNull(ref, "ref must not be null");
         checkNotNull(alt, "alt must not be null");
-        checkArgument(alt.length > 0, "alt must not be empty");
         checkNotNull(info, "info must not be null");
         checkNotNull(genotypes, "genotypes must not be null");
-
-        // verify arrays do not contain null
-        for (String s : id) {
-            checkNotNull(s, "id array must not contain null");
-        }
-        for (String s : alt) {
-            checkNotNull(s, "alt array must not contain null");
-        }
-        for (String s : filter) {
-            checkNotNull(s, "filter array must not contain null");
-        }
-        for (String s : format) {
-            checkNotNull(s, "format array must not contain null");
-        }
 
         // verify genotypes have correct ref and alt
         for (VcfGenotype genotype : genotypes.values()) {
@@ -1367,25 +1349,25 @@ public final class VcfRecord {
         private long pos;
 
         /** Array of ids. */
-        private String[] id = EMPTY;
+        private String[] id;
 
         /** Reference allele. */
         private String ref;
 
         /** Array of alternate alleles. */
-        private String[] alt = EMPTY;
+        private String[] alt;
 
         /** QUAL score. */
         private Double qual;
 
         /** Filter. */
-        private String[] filter = EMPTY;
+        private String[] filter;
 
         /** Map of INFO key-value(s) pairs. */
         private ImmutableListMultimap.Builder<String, String> info = ImmutableListMultimap.builder();
 
         /** Format. */
-        private String[] format = EMPTY;
+        private String[] format;
 
         /** Map builder for genotypes keyed by sample id. */
         private ImmutableMap.Builder<String, VcfGenotype> genotypes = ImmutableMap.builder();
@@ -1576,13 +1558,13 @@ public final class VcfRecord {
             lineNumber = -1L;
             chrom = null;
             pos = -1L;
-            id = EMPTY;
+            id = null;
             ref = null;
-            alt = EMPTY;
+            alt = null;
             qual = null;
-            filter = EMPTY;
+            filter = null;
             info = ImmutableListMultimap.builder();
-            format = EMPTY;
+            format = null;
             genotypes = ImmutableMap.builder();
             genotypeFields.clear();
             return this;

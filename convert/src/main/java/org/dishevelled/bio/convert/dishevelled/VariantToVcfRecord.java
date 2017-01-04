@@ -83,7 +83,7 @@ final class VariantToVcfRecord extends AbstractConverter<Variant, VcfRecord> {
             .withPos(variant.getStart() + 1L)
             .withId(toStringArray(variant.getNames()))
             .withRef(variant.getReferenceAllele())
-            .withAlt(variant.getAlternateAllele());
+            .withAlt(toStringArray(variant.getAlternateAllele()));
 
         if (variant.getFiltersApplied()) {
             if (variant.getFiltersPassed()) {
@@ -164,7 +164,18 @@ final class VariantToVcfRecord extends AbstractConverter<Variant, VcfRecord> {
             }
             vb.withFormat(toStringArray(format));
         }
-        return vb.build();
+
+        try {
+            return vb.build();
+        }
+        catch (NullPointerException | IllegalArgumentException e) {
+            warnOrThrow(variant, e.getMessage(), e, stringency, logger);
+        }
+        return null;
+    }
+
+    private static String[] toStringArray(final String value) {
+        return value == null ? null : new String[] { value };
     }
 
     private static String[] toStringArray(final List<String> values) {

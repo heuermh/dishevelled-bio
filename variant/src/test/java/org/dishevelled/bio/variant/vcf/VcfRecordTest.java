@@ -134,8 +134,8 @@ public final class VcfRecordTest {
             .build();
     }
 
-    @Test(expected=IllegalArgumentException.class)
-    public void testBuilderBuildEmptyAlt() {
+    @Test(expected=NullPointerException.class)
+    public void testBuilderBuildNullAlt() {
         builder()
             .withLineNumber(lineNumber)
             .withChrom(chrom)
@@ -151,7 +151,7 @@ public final class VcfRecordTest {
     }
 
     @Test(expected=NullPointerException.class)
-    public void testBuilderBuildAltContainingNull() {
+    public void testBuilderBuildWithNullAlt() {
         builder()
             .withLineNumber(lineNumber)
             .withChrom(chrom)

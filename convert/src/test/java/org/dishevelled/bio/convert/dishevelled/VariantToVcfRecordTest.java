@@ -96,6 +96,51 @@ public final class VariantToVcfRecordTest {
         assertNull(variantConverter.convert(null, ConversionStringency.SILENT, logger));
     }
 
+    @Test(expected=ConversionException.class)
+    public void testConvertNullAltStrict() {
+        Variant v = Variant.newBuilder()
+            .setContigName("1")
+            .setReferenceAllele("A")
+            .setStart(1000L)
+            .setEnd(1001L)
+            .setNames(ImmutableList.of("id"))
+            .setFiltersApplied(true)
+            .setFiltersPassed(true)
+            .build();
+
+        variantConverter.convert(v, ConversionStringency.STRICT, logger);
+    }
+
+    @Test
+    public void testConvertNullAltLenient() {
+        Variant v = Variant.newBuilder()
+            .setContigName("1")
+            .setReferenceAllele("A")
+            .setStart(1000L)
+            .setEnd(1001L)
+            .setNames(ImmutableList.of("id"))
+            .setFiltersApplied(true)
+            .setFiltersPassed(true)
+            .build();
+
+        assertNull(variantConverter.convert(v, ConversionStringency.LENIENT, logger));
+    }
+
+    @Test
+    public void testConvertNullAltSilent() {
+        Variant v = Variant.newBuilder()
+            .setContigName("1")
+            .setReferenceAllele("A")
+            .setStart(1000L)
+            .setEnd(1001L)
+            .setNames(ImmutableList.of("id"))
+            .setFiltersApplied(true)
+            .setFiltersPassed(true)
+            .build();
+
+        assertNull(variantConverter.convert(v, ConversionStringency.SILENT, logger));
+    }
+
     @Test
     public void testConvert() {
         VariantAnnotation ann = VariantAnnotation.newBuilder()
