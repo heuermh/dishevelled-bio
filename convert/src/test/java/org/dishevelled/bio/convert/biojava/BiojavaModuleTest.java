@@ -1,7 +1,7 @@
 /*
 
     dsh-convert  Convert between various data models.
-    Copyright (c) 2013-2016 held jointly by the individual authors.
+    Copyright (c) 2013-2017 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Lesser General Public License as published
@@ -25,6 +25,8 @@ package org.dishevelled.bio.convert.biojava;
 
 import static org.junit.Assert.assertNotNull;
 
+import java.util.List;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -36,11 +38,16 @@ import org.junit.Test;
 import org.bdgenomics.convert.Converter;
 import org.bdgenomics.convert.ConversionStringency;
 
+import org.bdgenomics.convert.bdgenomics.BdgenomicsModule;
+
+import org.bdgenomics.formats.avro.Feature;
 import org.bdgenomics.formats.avro.QualityScoreVariant;
 import org.bdgenomics.formats.avro.Read;
 
 import org.biojava.bio.program.fastq.Fastq;
 import org.biojava.bio.program.fastq.FastqVariant;
+
+import org.biojavax.bio.seq.RichSequence;
 
 /**
  * Unit test for BiojavaModule.
@@ -62,7 +69,7 @@ public final class BiojavaModuleTest {
 
     @Test
     public void testBiojavaModule() {
-        Injector injector = Guice.createInjector(module, new TestModule());
+        Injector injector = Guice.createInjector(module, new BdgenomicsModule(), new TestModule());
         Target target = injector.getInstance(Target.class);
         assertNotNull(target.getQualityScoreVariantToFastqVariant());
         assertNotNull(target.getFastqVariantToQualityScoreVariant());
@@ -71,6 +78,8 @@ public final class BiojavaModuleTest {
         assertNotNull(target.getBiojavaAlphabetToBdgenomicsAlphabet());
         assertNotNull(target.getBiojavaSequenceToBdgenomicsSequence());
         assertNotNull(target.getBdgenomicsSequenceToBiojavaSequence());
+        assertNotNull(target.getRichSequenceToSequence());
+        assertNotNull(target.getRichSequenceToFeatures());
     }
 
     /**
@@ -84,6 +93,8 @@ public final class BiojavaModuleTest {
         Converter<org.biojava.bio.symbol.Alphabet, org.bdgenomics.formats.avro.Alphabet> biojavaAlphabetToBdgenomicsAlphabet;
         Converter<org.bdgenomics.formats.avro.Sequence, org.biojava.bio.seq.Sequence> bdgenomicsSequenceToBiojavaSequence;
         Converter<org.biojava.bio.seq.Sequence, org.bdgenomics.formats.avro.Sequence> biojavaSequenceToBdgenomicsSequence;
+        Converter<RichSequence, org.bdgenomics.formats.avro.Sequence> richSequenceToSequence;
+        Converter<RichSequence, List<Feature>> richSequenceToFeatures;
 
         @Inject
         Target(final Converter<QualityScoreVariant, FastqVariant> qualityScoreVariantToFastqVariant,
@@ -92,7 +103,9 @@ public final class BiojavaModuleTest {
                final Converter<Read, Fastq> bdgenomicsReadToBiojavaFastq,
                final Converter<org.biojava.bio.symbol.Alphabet, org.bdgenomics.formats.avro.Alphabet> biojavaAlphabetToBdgenomicsAlphabet,
                final Converter<org.bdgenomics.formats.avro.Sequence, org.biojava.bio.seq.Sequence> bdgenomicsSequenceToBiojavaSequence,
-               final Converter<org.biojava.bio.seq.Sequence, org.bdgenomics.formats.avro.Sequence> biojavaSequenceToBdgenomicsSequence) {
+               final Converter<org.biojava.bio.seq.Sequence, org.bdgenomics.formats.avro.Sequence> biojavaSequenceToBdgenomicsSequence,
+               final Converter<RichSequence, org.bdgenomics.formats.avro.Sequence> richSequenceToSequence,
+               final Converter<RichSequence, List<Feature>> richSequenceToFeatures) {
 
             this.qualityScoreVariantToFastqVariant = qualityScoreVariantToFastqVariant;
             this.fastqVariantToQualityScoreVariant = fastqVariantToQualityScoreVariant;
@@ -101,6 +114,8 @@ public final class BiojavaModuleTest {
             this.biojavaAlphabetToBdgenomicsAlphabet = biojavaAlphabetToBdgenomicsAlphabet;
             this.biojavaSequenceToBdgenomicsSequence = biojavaSequenceToBdgenomicsSequence;
             this.bdgenomicsSequenceToBiojavaSequence = bdgenomicsSequenceToBiojavaSequence;
+            this.richSequenceToSequence = richSequenceToSequence;
+            this.richSequenceToFeatures = richSequenceToFeatures;
         }
 
         Converter<QualityScoreVariant, FastqVariant> getQualityScoreVariantToFastqVariant() {
@@ -129,6 +144,14 @@ public final class BiojavaModuleTest {
 
         Converter<org.biojava.bio.seq.Sequence, org.bdgenomics.formats.avro.Sequence> getBiojavaSequenceToBdgenomicsSequence() {
             return biojavaSequenceToBdgenomicsSequence;
+        }
+
+        Converter<RichSequence, org.bdgenomics.formats.avro.Sequence> getRichSequenceToSequence() {
+            return richSequenceToSequence;
+        }
+
+        Converter<RichSequence, List<Feature>> getRichSequenceToFeatures() {
+            return richSequenceToFeatures;
         }
     }
 

@@ -1,7 +1,7 @@
 /*
 
     dsh-convert  Convert between various data models.
-    Copyright (c) 2013-2016 held jointly by the individual authors.
+    Copyright (c) 2013-2017 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Lesser General Public License as published
@@ -23,6 +23,8 @@
 */
 package org.dishevelled.bio.convert.biojava;
 
+import java.util.List;
+
 import javax.annotation.concurrent.Immutable;
 
 import com.google.inject.AbstractModule;
@@ -33,10 +35,16 @@ import org.bdgenomics.convert.Converter;
 import org.bdgenomics.convert.ConversionStringency;
 
 import org.bdgenomics.formats.avro.QualityScoreVariant;
+import org.bdgenomics.formats.avro.Dbxref;
+import org.bdgenomics.formats.avro.Feature;
+import org.bdgenomics.formats.avro.OntologyTerm;
 import org.bdgenomics.formats.avro.Read;
+import org.bdgenomics.formats.avro.Strand;
 
 import org.biojava.bio.program.fastq.Fastq;
 import org.biojava.bio.program.fastq.FastqVariant;
+
+import org.biojavax.bio.seq.RichSequence;
 
 /**
  * Guice module for the org.dishevelled.bio.convert.biojava package.
@@ -83,5 +91,17 @@ public final class BiojavaModule extends AbstractModule {
     @Provides @Singleton
     Converter<org.biojava.bio.seq.Sequence, org.bdgenomics.formats.avro.Sequence> createBiojavaSequenceToBdgenomicsSequence(final Converter<org.biojava.bio.symbol.Alphabet, org.bdgenomics.formats.avro.Alphabet> alphabetConverter) {
         return new BiojavaSequenceToBdgenomicsSequence(alphabetConverter);
+    }
+
+    @Provides @Singleton
+    Converter<RichSequence, org.bdgenomics.formats.avro.Sequence> createRichSequenceToSequence(final Converter<org.biojava.bio.symbol.Alphabet, org.bdgenomics.formats.avro.Alphabet> alphabetConverter) {
+        return new RichSequenceToSequence(alphabetConverter);
+    }
+
+    @Provides @Singleton
+    Converter<RichSequence, List<Feature>> createRichSequenceToFeatures(final Converter<String, Dbxref> dbxrefConverter,
+                                                                        final Converter<String, OntologyTerm> ontologyTermConverter,
+                                                                        final Converter<String, Strand> strandConverter) {
+        return new RichSequenceToFeatures(dbxrefConverter, ontologyTermConverter, strandConverter);
     }
 }

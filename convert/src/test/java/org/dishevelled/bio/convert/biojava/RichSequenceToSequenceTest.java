@@ -34,56 +34,51 @@ import org.bdgenomics.convert.Converter;
 import org.bdgenomics.convert.ConversionException;
 import org.bdgenomics.convert.ConversionStringency;
 
-import org.biojava.bio.seq.DNATools;
-import org.biojava.bio.seq.ProteinTools;
-import org.biojava.bio.seq.RNATools;
+import org.bdgenomics.formats.avro.Sequence;
+
+import org.biojavax.bio.seq.RichSequence;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Unit test for BdgenomicsAlphabetToBiojavaAlphabet.
+ * Unit test for RichSequenceToSequence.
  *
  * @author  Michael Heuer
  */
-public final class BdgenomicsAlphabetToBiojavaAlphabetTest {
-    private final Logger logger = LoggerFactory.getLogger(BdgenomicsAlphabetToBiojavaAlphabetTest.class);
-    private Converter<org.bdgenomics.formats.avro.Alphabet, org.biojava.bio.symbol.Alphabet> alphabetConverter;
+public final class RichSequenceToSequenceTest {
+    private final Logger logger = LoggerFactory.getLogger(RichSequenceToSequenceTest.class);
+    private Converter<org.biojava.bio.symbol.Alphabet, org.bdgenomics.formats.avro.Alphabet> alphabetConverter;
+    private Converter<RichSequence, Sequence> sequenceConverter;
 
     @Before
-    public void setUp() {
-        alphabetConverter = new BdgenomicsAlphabetToBiojavaAlphabet();
+    public void setUp() throws Exception {
+        alphabetConverter = new BiojavaAlphabetToBdgenomicsAlphabet();
+        sequenceConverter = new RichSequenceToSequence(alphabetConverter);
     }
 
     @Test
     public void testConstructor() {
-        assertNotNull(alphabetConverter);
+        assertNotNull(sequenceConverter);
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testConstructorNullAlphabetConverter() {
+        new RichSequenceToSequence(null);
     }
 
     @Test(expected=ConversionException.class)
     public void testConvertNullStrict() {
-        alphabetConverter.convert(null, ConversionStringency.STRICT, logger);
+        sequenceConverter.convert(null, ConversionStringency.STRICT, logger);
     }
 
     @Test
     public void testConvertNullLenient() {
-        assertNull(alphabetConverter.convert(null, ConversionStringency.LENIENT, logger));
+        assertNull(sequenceConverter.convert(null, ConversionStringency.LENIENT, logger));
     }
 
     @Test
     public void testConvertNullSilent() {
-        assertNull(alphabetConverter.convert(null, ConversionStringency.SILENT, logger));
-    }
-
-    @Test
-    public void testConvert() {
-        assertEquals(DNATools.getDNA(),
-                     alphabetConverter.convert(org.bdgenomics.formats.avro.Alphabet.DNA, ConversionStringency.STRICT, logger));
-
-        assertEquals(RNATools.getRNA(),
-                     alphabetConverter.convert(org.bdgenomics.formats.avro.Alphabet.RNA, ConversionStringency.STRICT, logger));
-
-        assertEquals(ProteinTools.getAlphabet(),
-                     alphabetConverter.convert(org.bdgenomics.formats.avro.Alphabet.PROTEIN, ConversionStringency.STRICT, logger));
+        assertNull(sequenceConverter.convert(null, ConversionStringency.SILENT, logger));
     }
 }

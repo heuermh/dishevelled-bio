@@ -30,55 +30,57 @@ import org.bdgenomics.convert.Converter;
 import org.bdgenomics.convert.ConversionException;
 import org.bdgenomics.convert.ConversionStringency;
 
-import org.biojava.bio.seq.io.FastaFormat;
+import org.biojavax.bio.seq.RichSequence;
+
+import org.bdgenomics.formats.avro.Sequence;
 
 import org.slf4j.Logger;
 
 /**
- * Convert Biojava 1.x Sequence to bdg-formats Sequence.
+ * Convert Biojava 1.x RichSequence to bdg-formats Sequence.
  *
  * @author  Michael Heuer
  */
 @Immutable
-final class BiojavaSequenceToBdgenomicsSequence extends AbstractConverter<org.biojava.bio.seq.Sequence, org.bdgenomics.formats.avro.Sequence> {
+final class RichSequenceToSequence extends AbstractConverter<RichSequence, Sequence> {
 
     /** Convert Biojava 1.x Alphabet to bdg-formats Alphabet. */
     private final Converter<org.biojava.bio.symbol.Alphabet, org.bdgenomics.formats.avro.Alphabet> alphabetConverter;
 
 
     /**
-     * Convert Biojava 1.x Sequence to bdg-formats Sequence.
+     * Convert Biojava 1.x RichSequence to bdg-formats Sequence.
      *
      * @param alphabetConverter convert Biojava 1.x Alphabet to bdg-formats Alphabet, must not be null
      */
-    BiojavaSequenceToBdgenomicsSequence(final Converter<org.biojava.bio.symbol.Alphabet, org.bdgenomics.formats.avro.Alphabet> alphabetConverter) {
-        super(org.biojava.bio.seq.Sequence.class, org.bdgenomics.formats.avro.Sequence.class);
+    RichSequenceToSequence(final Converter<org.biojava.bio.symbol.Alphabet, org.bdgenomics.formats.avro.Alphabet> alphabetConverter) {
+        super(RichSequence.class, Sequence.class);
         checkNotNull(alphabetConverter);
         this.alphabetConverter = alphabetConverter;
     }
 
 
     @Override
-    public org.bdgenomics.formats.avro.Sequence convert(final org.biojava.bio.seq.Sequence sequence,
-                                                        final ConversionStringency stringency,
-                                                        final Logger logger) throws ConversionException {
+    public Sequence convert(final RichSequence richSequence,
+                            final ConversionStringency stringency,
+                            final Logger logger) throws ConversionException {
 
-        if (sequence == null) {
-            warnOrThrow(sequence, "must not be null", null, stringency, logger);
+        if (richSequence == null) {
+            warnOrThrow(richSequence, "must not be null", null, stringency, logger);
             return null;
         }
 
-        org.bdgenomics.formats.avro.Sequence.Builder sb = org.bdgenomics.formats.avro.Sequence.newBuilder()
-            .setName(sequence.getName())
-            .setSequence(sequence.seqString())
-            .setLength(Long.valueOf(sequence.length()));
+        Sequence.Builder sb = Sequence.newBuilder()
+            .setName(richSequence.getName())
+            .setSequence(richSequence.seqString())
+            .setLength(Long.valueOf(richSequence.length()));
 
-        org.bdgenomics.formats.avro.Alphabet alphabet = alphabetConverter.convert(sequence.getAlphabet(), stringency, logger);
+        org.bdgenomics.formats.avro.Alphabet alphabet = alphabetConverter.convert(richSequence.getAlphabet(), stringency, logger);
         if (alphabet != null) {
             sb.setAlphabet(alphabet);
         }
 
-        String description = descriptionFor(sequence);
+        String description = descriptionFor(richSequence);
         if (description != null) {
             sb.setDescription(description);
         }
@@ -86,11 +88,7 @@ final class BiojavaSequenceToBdgenomicsSequence extends AbstractConverter<org.bi
         return sb.build();
     }
 
-    static String descriptionFor(final org.biojava.bio.seq.Sequence sequence) {
-        if (sequence.getAnnotation().containsProperty(FastaFormat.PROPERTY_DESCRIPTIONLINE)) {
-            return (String) sequence.getAnnotation().getProperty(FastaFormat.PROPERTY_DESCRIPTIONLINE);
-        }
-        // todo: where is description stored in EMBL/Genbank formats?
-        return null;
+    static String descriptionFor(final RichSequence richSequence) {
+        return richSequence.getDescription();
     }
 }

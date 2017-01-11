@@ -21,11 +21,13 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.convert.dishevelled;
+package org.dishevelled.bio.convert.biojava;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
+
+import java.util.List;
 
 import com.google.inject.Injector;
 import com.google.inject.Guice;
@@ -46,80 +48,64 @@ import org.bdgenomics.formats.avro.Feature;
 import org.bdgenomics.formats.avro.OntologyTerm;
 import org.bdgenomics.formats.avro.Strand;
 
-import org.dishevelled.bio.feature.Gff3Record;
+import org.biojavax.bio.seq.RichSequence;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Unit test for Gff3RecordToFeature.
+ * Unit test for RichSequenceToFeatures.
  *
  * @author  Michael Heuer
  */
-public final class Gff3RecordToFeatureTest {
-    private final Logger logger = LoggerFactory.getLogger(Gff3RecordToFeatureTest.class);
+public final class RichSequenceToFeaturesTest {
+    private final Logger logger = LoggerFactory.getLogger(RichSequenceToFeaturesTest.class);
     private Converter<String, Dbxref> dbxrefConverter;
     private Converter<String, OntologyTerm> ontologyTermConverter;
     private Converter<String, Strand> strandConverter;
-    private Converter<Gff3Record, Feature> gff3RecordConverter;
+    private Converter<RichSequence, List<Feature>> sequenceConverter;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         Injector injector = Guice.createInjector(new BdgenomicsModule());
         dbxrefConverter = injector.getInstance(Key.get(new TypeLiteral<Converter<String, Dbxref>>() {}));
         ontologyTermConverter = injector.getInstance(Key.get(new TypeLiteral<Converter<String, OntologyTerm>>() {}));
         strandConverter = injector.getInstance(Key.get(new TypeLiteral<Converter<String, Strand>>() {}));
-        gff3RecordConverter = new Gff3RecordToFeature(dbxrefConverter, ontologyTermConverter, strandConverter);
+        sequenceConverter = new RichSequenceToFeatures(dbxrefConverter, ontologyTermConverter, strandConverter);
     }
 
     @Test
     public void testConstructor() {
-        assertNotNull(gff3RecordConverter);
+        assertNotNull(sequenceConverter);
     }
 
     @Test(expected=NullPointerException.class)
     public void testConstructorNullDbxrefConverter() {
-        new Gff3RecordToFeature(null, ontologyTermConverter, strandConverter);
+        new RichSequenceToFeatures(null, ontologyTermConverter, strandConverter);
     }
 
     @Test(expected=NullPointerException.class)
     public void testConstructorNullOntologyTermConverter() {
-        new Gff3RecordToFeature(dbxrefConverter, null, strandConverter);
+        new RichSequenceToFeatures(dbxrefConverter, null, strandConverter);
     }
 
     @Test(expected=NullPointerException.class)
     public void testConstructorNullStrandConverter() {
-        new Gff3RecordToFeature(dbxrefConverter, ontologyTermConverter, null);
+        new RichSequenceToFeatures(dbxrefConverter, ontologyTermConverter, null);
     }
 
     @Test(expected=ConversionException.class)
     public void testConvertNullStrict() {
-        gff3RecordConverter.convert(null, ConversionStringency.STRICT, logger);
+        sequenceConverter.convert(null, ConversionStringency.STRICT, logger);
     }
 
     @Test
     public void testConvertNullLenient() {
-        assertNull(gff3RecordConverter.convert(null, ConversionStringency.LENIENT, logger));
+        assertNull(sequenceConverter.convert(null, ConversionStringency.LENIENT, logger));
     }
 
     @Test
     public void testConvertNullSilent() {
-        assertNull(gff3RecordConverter.convert(null, ConversionStringency.SILENT, logger));
-    }
-
-    @Test
-    public void testConvert() {
-        Gff3Record gff3Record = Gff3Record.valueOf("1\tEnsembl\tgene\t1335276\t1349350\t.\t-\t.\tID=ENSG00000107404;Name=ENSG00000107404;biotype=protein_coding");
-        Feature feature = gff3RecordConverter.convert(gff3Record, ConversionStringency.STRICT, logger);
-        assertEquals("1", feature.getContigName());
-        assertEquals(Long.valueOf(1335275L), feature.getStart());
-        assertEquals(Long.valueOf(1349350L), feature.getEnd());
-        assertEquals("ENSG00000107404", feature.getName());
-        assertEquals("ENSG00000107404", feature.getFeatureId());
-        assertEquals("gene", feature.getFeatureType());
-        assertEquals("Ensembl", feature.getSource());
-        assertNull(feature.getScore());
-        assertEquals(Strand.REVERSE, feature.getStrand());
-        assertEquals("protein_coding", feature.getAttributes().get("biotype"));
+        assertNull(sequenceConverter.convert(null, ConversionStringency.SILENT, logger));
     }
 }
