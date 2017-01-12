@@ -36,6 +36,8 @@ import org.bdgenomics.convert.ConversionStringency;
 
 import org.bdgenomics.formats.avro.Sequence;
 
+import org.biojava.bio.symbol.AlphabetManager;
+
 import org.biojavax.bio.seq.RichSequence;
 
 import org.slf4j.Logger;
@@ -48,6 +50,9 @@ import org.slf4j.LoggerFactory;
  */
 public final class RichSequenceToSequenceTest {
     private final Logger logger = LoggerFactory.getLogger(RichSequenceToSequenceTest.class);
+    private RichSequence dnaSequence;
+    private RichSequence rnaSequence;
+    private RichSequence proteinSequence;
     private Converter<org.biojava.bio.symbol.Alphabet, org.bdgenomics.formats.avro.Alphabet> alphabetConverter;
     private Converter<RichSequence, Sequence> sequenceConverter;
 
@@ -55,6 +60,12 @@ public final class RichSequenceToSequenceTest {
     public void setUp() throws Exception {
         alphabetConverter = new BiojavaAlphabetToBdgenomicsAlphabet();
         sequenceConverter = new RichSequenceToSequence(alphabetConverter);
+
+        dnaSequence = RichSequence.Tools.createRichSequence("dna", "actg", AlphabetManager.alphabetForName("DNA"));
+        dnaSequence.setDescription("dna description");
+
+        rnaSequence = RichSequence.Tools.createRichSequence("rna", "acug", AlphabetManager.alphabetForName("RNA"));
+        proteinSequence = RichSequence.Tools.createRichSequence("protein", "mgws", AlphabetManager.alphabetForName("PROTEIN"));
     }
 
     @Test
@@ -80,5 +91,28 @@ public final class RichSequenceToSequenceTest {
     @Test
     public void testConvertNullSilent() {
         assertNull(sequenceConverter.convert(null, ConversionStringency.SILENT, logger));
+    }
+
+    @Test
+    public void testConvertDnaSequence() {
+        Sequence sequence = sequenceConverter.convert(dnaSequence, ConversionStringency.STRICT, logger);
+
+        assertEquals("dna", sequence.getName());
+        assertEquals("actg", sequence.getSequence());
+        assertEquals(Long.valueOf(4L), sequence.getLength());
+        assertEquals(org.bdgenomics.formats.avro.Alphabet.DNA, sequence.getAlphabet());
+        assertEquals("dna description", sequence.getDescription());
+    }
+
+    @Test
+    public void testConvertRnaSequence() {
+        Sequence sequence = sequenceConverter.convert(rnaSequence, ConversionStringency.STRICT, logger);
+        assertEquals(org.bdgenomics.formats.avro.Alphabet.RNA, sequence.getAlphabet());
+    }
+
+    @Test
+    public void testConvertProteinSequence() {
+        Sequence sequence = sequenceConverter.convert(proteinSequence, ConversionStringency.STRICT, logger);
+        assertEquals(org.bdgenomics.formats.avro.Alphabet.PROTEIN, sequence.getAlphabet());
     }
 }
