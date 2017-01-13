@@ -32,11 +32,11 @@ import com.esotericsoftware.kryo.serializers.JavaSerializer;
 import org.bdgenomics.adam.serialization.ADAMKryoRegistrator;
 
 /**
- * Dishevelled kryo registrator.
+ * Biojava kryo registrator.
  *
  * @author  Michael Heuer
  */
-public class DishevelledKryoRegistrator extends ADAMKryoRegistrator {
+public class BiojavaKryoRegistrator extends ADAMKryoRegistrator {
 
     @Override
     public void registerClasses(final Kryo kryo) {
