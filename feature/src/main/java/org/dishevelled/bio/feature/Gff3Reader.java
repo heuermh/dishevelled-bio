@@ -123,7 +123,7 @@ public final class Gff3Reader {
          * @return true if the specified line is a header or comment line in GFF3 format
          */
         private boolean isHeader(final String line) {
-            return line.startsWith("#");
+            return line.startsWith("#") || "".equals(line);
         }
     }
 

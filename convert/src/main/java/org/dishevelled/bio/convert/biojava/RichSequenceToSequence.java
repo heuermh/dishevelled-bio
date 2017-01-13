@@ -80,15 +80,10 @@ final class RichSequenceToSequence extends AbstractConverter<RichSequence, Seque
             sb.setAlphabet(alphabet);
         }
 
-        String description = descriptionFor(richSequence);
-        if (description != null) {
-            sb.setDescription(description);
+        if (richSequence.getDescription() != null) {
+            sb.setDescription(richSequence.getDescription());
         }
 
         return sb.build();
-    }
-
-    static String descriptionFor(final RichSequence richSequence) {
-        return richSequence.getDescription();
     }
 }

@@ -123,7 +123,7 @@ public final class BedReader {
          * @return true if the specified line is a header or comment line in BED format
          */
         private boolean isHeader(final String line) {
-            return line.startsWith("#") || line.startsWith("browser") || line.startsWith("track"); // || is blank line?
+            return line.startsWith("#") || line.startsWith("browser") || line.startsWith("track") || "".equals(line);
         }
     }
 

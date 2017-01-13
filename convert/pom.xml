@@ -30,8 +30,8 @@
     <artifactId>dsh-bio</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <artifactId>dsh-convert</artifactId>
-  <name>dsh-convert</name>
+  <artifactId>dsh-bio-convert</artifactId>
+  <name>dsh-bio-convert</name>
   <description>Convert between various data models.</description>
   <dependencyManagement>
     <dependencies>
