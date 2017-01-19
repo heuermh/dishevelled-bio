@@ -122,7 +122,7 @@ public class DishevelledAdamContext extends ADAMContext {
         try (BufferedReader reader = new BufferedReader(new FileReader(new File(path)))) {
             JavaRDD<BedRecord> bedRecords = javaSparkContext.parallelize((List<BedRecord>) BedReader.read(reader));
             JavaRDD<Feature> features = bedRecords.map(record -> bedFeatureConverter.convert(record, ConversionStringency.STRICT, logger));
-            return new FeatureRDD(features.rdd(), null);
+            return FeatureRDD.apply(features.rdd());
         }
     }
 
@@ -136,11 +136,9 @@ public class DishevelledAdamContext extends ADAMContext {
         logger.info("Loading " + path + " as GFF3 format...");
         // will this work via HDFS?
         try (BufferedReader reader = new BufferedReader(new FileReader(new File(path)))) {
-            // Gff3Reader.read uses LinkedList... is there a better way to parallelize via stream?
             JavaRDD<Gff3Record> gff3Records = javaSparkContext.parallelize((List<Gff3Record>) Gff3Reader.read(reader));
             JavaRDD<Feature> features = gff3Records.map(record -> gff3FeatureConverter.convert(record, ConversionStringency.STRICT, logger));
-            // how do I create a SequenceDictionary?
-            return new FeatureRDD(features.rdd(), null);
+            return FeatureRDD.apply(features.rdd());
         }
     }
 
