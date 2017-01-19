@@ -1336,6 +1336,28 @@ public final class VcfRecord {
     }
 
     /**
+     * Create and return a new VCF record builder populated from the fields in the specified VCF record.
+     *
+     * @param record VCF record, must not be null
+     * @return a new VCF record builder populated from the fields in the specified VCF record
+     */
+    public static Builder builder(final VcfRecord record) {
+        checkNotNull(record, "record must not be null");
+        return new Builder()
+            .withLineNumber(record.getLineNumber())
+            .withChrom(record.getChrom())
+            .withPos(record.getPos())
+            .withId(record.getId())
+            .withRef(record.getRef())
+            .withAlt(record.getAlt())
+            .withQual(record.getQual())
+            .withFilter(record.getFilter())
+            .withInfo(record.getInfo())
+            .withFormat(record.getFormat())
+            .withGenotypes(record.getGenotypes());
+    }
+
+    /**
      * VCF record builder.
      */
     public static final class Builder {

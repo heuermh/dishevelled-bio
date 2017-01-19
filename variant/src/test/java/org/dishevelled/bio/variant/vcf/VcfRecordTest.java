@@ -281,4 +281,54 @@ public final class VcfRecordTest {
         assertNotNull(record);
         assertEquals(lineNumber, record.getLineNumber());
     }
+
+    @Test(expected=NullPointerException.class)
+    public void testBuilderNullVcfRecord() {
+        builder(null);
+    }
+
+    @Test
+    public void testBuilderVcfRecord() {
+        VcfRecord record = builder()
+            .withLineNumber(lineNumber)
+            .withChrom(chrom)
+            .withPos(pos)
+            .withId(id)
+            .withRef(ref)
+            .withAlt(alt)
+            .withQual(qual)
+            .withFilter(filter)
+            .withInfo(info)
+            .withFormat(format)
+            .withGenotypes(genotypes)
+            .build();
+
+        VcfRecord.Builder builder = builder(record);
+
+        VcfRecord copy = builder.build();
+        assertEquals(lineNumber, copy.getLineNumber());
+        assertEquals(chrom, copy.getChrom());
+        assertEquals(pos, copy.getPos());
+        assertEquals(id, copy.getId());
+        assertEquals(ref, copy.getRef());
+        assertEquals(alt, copy.getAlt());
+        assertEquals(qual, copy.getQual(), 0.1d);
+        assertEquals(filter, copy.getFilter());
+        assertEquals(info, copy.getInfo());
+        assertEquals(format, copy.getFormat());
+        assertEquals(genotypes, copy.getGenotypes());
+
+        VcfRecord next = builder.withLineNumber(43L).build();
+        assertEquals(43L, next.getLineNumber());
+        assertEquals(chrom, next.getChrom());
+        assertEquals(pos, next.getPos());
+        assertEquals(id, next.getId());
+        assertEquals(ref, next.getRef());
+        assertEquals(alt, next.getAlt());
+        assertEquals(qual, next.getQual(), 0.1d);
+        assertEquals(filter, next.getFilter());
+        assertEquals(info, next.getInfo());
+        assertEquals(format, next.getFormat());
+        assertEquals(genotypes, next.getGenotypes());
+    }
 }
