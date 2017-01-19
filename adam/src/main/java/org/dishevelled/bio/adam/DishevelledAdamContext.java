@@ -23,9 +23,12 @@
 */
 package org.dishevelled.bio.adam;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.io.IOException;
 
 import java.util.List;
@@ -34,6 +37,9 @@ import com.google.inject.Injector;
 import com.google.inject.Guice;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
+
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 
 import org.apache.spark.SparkContext;
 
@@ -109,6 +115,20 @@ public class DishevelledAdamContext extends ADAMContext {
 
 
     /**
+     * Create and return a BufferedReader for the HDFS path represented by the specified file name.
+     *
+     * @param fileName file name, must not be null
+     * @return a BufferedReader for the HDFS path represented by the specified file name
+     * @throws IOException if an I/O error occurs
+     */
+    BufferedReader reader(final String fileName) throws IOException {
+        checkNotNull(fileName);
+        Path path = new Path(fileName);
+        FileSystem fileSystem = path.getFileSystem(javaSparkContext.hadoopConfiguration());
+        return new BufferedReader(new InputStreamReader(fileSystem.open(path)));
+    }
+
+    /**
      * Load the specified path in BED format as features.
      *
      * @param path path in BED format
@@ -116,9 +136,9 @@ public class DishevelledAdamContext extends ADAMContext {
      */
     public FeatureRDD dshLoadBed(final String path) throws IOException {
         log().info("Loading " + path + " as BED format...");
-        try (BufferedReader reader = new BufferedReader(new FileReader(new File(path)))) {
+        try (BufferedReader reader = reader(path)) {
             JavaRDD<BedRecord> bedRecords = javaSparkContext.parallelize((List<BedRecord>) BedReader.read(reader));
-            JavaRDD<Feature> features = bedRecords.map(record -> bedFeatureConverter.convert(record, ConversionStringency.STRICT, logger));
+            JavaRDD<Feature> features = bedRecords.map(record -> bedFeatureConverter.convert(record, ConversionStringency.STRICT, log()));
             return FeatureRDD.apply(features.rdd());
         }
     }
@@ -132,9 +152,9 @@ public class DishevelledAdamContext extends ADAMContext {
     public FeatureRDD dshLoadGff3(final String path) throws IOException {
         log().info("Loading " + path + " as GFF3 format...");
         // will this work via HDFS?
-        try (BufferedReader reader = new BufferedReader(new FileReader(new File(path)))) {
+        try (BufferedReader reader = reader(path)) {
             JavaRDD<Gff3Record> gff3Records = javaSparkContext.parallelize((List<Gff3Record>) Gff3Reader.read(reader));
-            JavaRDD<Feature> features = gff3Records.map(record -> gff3FeatureConverter.convert(record, ConversionStringency.STRICT, logger));
+            JavaRDD<Feature> features = gff3Records.map(record -> gff3FeatureConverter.convert(record, ConversionStringency.STRICT, log()));
             return FeatureRDD.apply(features.rdd());
         }
     }
@@ -147,9 +167,9 @@ public class DishevelledAdamContext extends ADAMContext {
      */
     public VariantRDD dshLoadVariants(final String path) throws IOException {
         log().info("Loading " + path + " in VCF/BCF format as variants...");
-        try (BufferedReader reader = new BufferedReader(new FileReader(new File(path)))) {
+        try (BufferedReader reader = reader(path)) {
             JavaRDD<VcfRecord> vcfRecords = javaSparkContext.parallelize((List<VcfRecord>) VcfReader.records(reader));
-            JavaRDD<Variant> variants = vcfRecords.flatMap(record -> variantConverter.convert(record, ConversionStringency.STRICT, logger).iterator());
+            JavaRDD<Variant> variants = vcfRecords.flatMap(record -> variantConverter.convert(record, ConversionStringency.STRICT, log()).iterator());
             return new VariantRDD(variants.rdd(), null, null);
         }
     }
@@ -162,9 +182,9 @@ public class DishevelledAdamContext extends ADAMContext {
      */
     public GenotypeRDD dshLoadGenotypes(final String path) throws IOException {
         log().info("Loading " + path + " in VCF/BCF format as genotypes...");
-        try (BufferedReader reader = new BufferedReader(new FileReader(new File(path)))) {
+        try (BufferedReader reader = reader(path)) {
             JavaRDD<VcfRecord> vcfRecords = javaSparkContext.parallelize((List<VcfRecord>) VcfReader.records(reader));
-            JavaRDD<Genotype> genotypes = vcfRecords.flatMap(record -> genotypeConverter.convert(record, ConversionStringency.STRICT, logger).iterator());
+            JavaRDD<Genotype> genotypes = vcfRecords.flatMap(record -> genotypeConverter.convert(record, ConversionStringency.STRICT, log()).iterator());
             return new GenotypeRDD(genotypes.rdd(), null, null, null);
         }
     }

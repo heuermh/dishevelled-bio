@@ -130,8 +130,7 @@ public class BiojavaAdamContext extends ADAMContext {
     InputStream inputStream(final String fileName) throws IOException {
         checkNotNull(fileName);
         Path path = new Path(fileName);
-        //FileSystem fileSystem = path.getFileSystem(sc.hadoopConfiguration);
-        FileSystem fileSystem = path.getFileSystem(null);
+        FileSystem fileSystem = path.getFileSystem(javaSparkContext.hadoopConfiguration());
         return fileSystem.open(path);
     }
 
@@ -157,7 +156,7 @@ public class BiojavaAdamContext extends ADAMContext {
         FastqReader fastqReader = new SangerFastqReader();
         try (InputStream inputStream = inputStream(path)) {
             JavaRDD<Fastq> fastqs = javaSparkContext.parallelize((List<Fastq>) fastqReader.read(inputStream));
-            JavaRDD<Read> reads = fastqs.map(fastq -> readConverter.convert(fastq, ConversionStringency.STRICT, logger));
+            JavaRDD<Read> reads = fastqs.map(fastq -> readConverter.convert(fastq, ConversionStringency.STRICT, log()));
             return reads.rdd();
         }
     }
@@ -172,7 +171,7 @@ public class BiojavaAdamContext extends ADAMContext {
         log().info("Loading " + path + " as FASTA format and DNA alphabet...");
         try (BufferedReader reader = reader(path)) {
             JavaRDD<org.biojava.bio.seq.Sequence> biojavaSequences = javaSparkContext.parallelize(collect(SeqIOTools.readFastaDNA(reader)));
-            JavaRDD<Sequence> sequences = biojavaSequences.map(biojavaSequence -> sequenceConverter.convert(biojavaSequence, ConversionStringency.STRICT, logger));
+            JavaRDD<Sequence> sequences = biojavaSequences.map(biojavaSequence -> sequenceConverter.convert(biojavaSequence, ConversionStringency.STRICT, log()));
             return sequences.rdd();
         }
     }
@@ -187,7 +186,7 @@ public class BiojavaAdamContext extends ADAMContext {
         log().info("Loading " + path + " as FASTA format and RNA alphabet...");
         try (BufferedReader reader = reader(path)) {
             JavaRDD<org.biojava.bio.seq.Sequence> biojavaSequences = javaSparkContext.parallelize(collect(SeqIOTools.readFastaRNA(reader)));
-            JavaRDD<Sequence> sequences = biojavaSequences.map(biojavaSequence -> sequenceConverter.convert(biojavaSequence, ConversionStringency.STRICT, logger));
+            JavaRDD<Sequence> sequences = biojavaSequences.map(biojavaSequence -> sequenceConverter.convert(biojavaSequence, ConversionStringency.STRICT, log()));
             return sequences.rdd();
         }
     }
@@ -202,7 +201,7 @@ public class BiojavaAdamContext extends ADAMContext {
         log().info("Loading " + path + " as FASTA format and PROTEIN alphabet...");
         try (BufferedReader reader = reader(path)) {
             JavaRDD<org.biojava.bio.seq.Sequence> biojavaSequences = javaSparkContext.parallelize(collect(SeqIOTools.readFastaProtein(reader)));
-            JavaRDD<Sequence> sequences = biojavaSequences.map(biojavaSequence -> sequenceConverter.convert(biojavaSequence, ConversionStringency.STRICT, logger));
+            JavaRDD<Sequence> sequences = biojavaSequences.map(biojavaSequence -> sequenceConverter.convert(biojavaSequence, ConversionStringency.STRICT, log()));
             return sequences.rdd();
         }
     }
@@ -218,7 +217,7 @@ public class BiojavaAdamContext extends ADAMContext {
         log().info("Loading " + path + " as FASTA format and DNA alphabet...");
         try (BufferedReader reader = reader(path)) {
             JavaRDD<RichSequence> richSequences = javaSparkContext.parallelize(collect(RichSequence.IOTools.readFastaDNA(reader, null)));
-            JavaRDD<Sequence> sequences = richSequences.map(richSequence -> richSequenceConverter.convert(richSequence, ConversionStringency.STRICT, logger));
+            JavaRDD<Sequence> sequences = richSequences.map(richSequence -> richSequenceConverter.convert(richSequence, ConversionStringency.STRICT, log()));
             return sequences.rdd();
         }
     }
@@ -233,7 +232,7 @@ public class BiojavaAdamContext extends ADAMContext {
         log().info("Loading " + path + " as FASTA format and RNA alphabet...");
         try (BufferedReader reader = reader(path)) {
             JavaRDD<RichSequence> richSequences = javaSparkContext.parallelize(collect(RichSequence.IOTools.readFastaRNA(reader, null)));
-            JavaRDD<Sequence> sequences = richSequences.map(richSequence -> richSequenceConverter.convert(richSequence, ConversionStringency.STRICT, logger));
+            JavaRDD<Sequence> sequences = richSequences.map(richSequence -> richSequenceConverter.convert(richSequence, ConversionStringency.STRICT, log()));
             return sequences.rdd();
         }
     }
@@ -248,7 +247,7 @@ public class BiojavaAdamContext extends ADAMContext {
         log().info("Loading " + path + " as FASTA format and PROTEIN alphabet...");
         try (BufferedReader reader = reader(path)) {
             JavaRDD<RichSequence> richSequences = javaSparkContext.parallelize(collect(RichSequence.IOTools.readFastaProtein(reader, null)));
-            JavaRDD<Sequence> sequences = richSequences.map(richSequence -> richSequenceConverter.convert(richSequence, ConversionStringency.STRICT, logger));
+            JavaRDD<Sequence> sequences = richSequences.map(richSequence -> richSequenceConverter.convert(richSequence, ConversionStringency.STRICT, log()));
             return sequences.rdd();
         }
     }
@@ -264,7 +263,7 @@ public class BiojavaAdamContext extends ADAMContext {
         log().info("Loading " + path + " as Genbank format and DNA alphabet...");
         try (BufferedReader reader = reader(path)) {
             JavaRDD<RichSequence> richSequences = javaSparkContext.parallelize(collect(RichSequence.IOTools.readGenbankDNA(reader, null)));
-            JavaRDD<Sequence> sequences = richSequences.map(richSequence -> richSequenceConverter.convert(richSequence, ConversionStringency.STRICT, logger));
+            JavaRDD<Sequence> sequences = richSequences.map(richSequence -> richSequenceConverter.convert(richSequence, ConversionStringency.STRICT, log()));
             return sequences.rdd();
         }
     }
@@ -279,7 +278,7 @@ public class BiojavaAdamContext extends ADAMContext {
         log().info("Loading " + path + " as Genbank format and RNA alphabet...");
         try (BufferedReader reader = reader(path)) {
             JavaRDD<RichSequence> richSequences = javaSparkContext.parallelize(collect(RichSequence.IOTools.readGenbankRNA(reader, null)));
-            JavaRDD<Sequence> sequences = richSequences.map(richSequence -> richSequenceConverter.convert(richSequence, ConversionStringency.STRICT, logger));
+            JavaRDD<Sequence> sequences = richSequences.map(richSequence -> richSequenceConverter.convert(richSequence, ConversionStringency.STRICT, log()));
             return sequences.rdd();
         }
     }
@@ -294,7 +293,7 @@ public class BiojavaAdamContext extends ADAMContext {
         log().info("Loading " + path + " as Genbank format and PROTEIN alphabet...");
         try (BufferedReader reader = reader(path)) {
             JavaRDD<RichSequence> richSequences = javaSparkContext.parallelize(collect(RichSequence.IOTools.readGenbankProtein(reader, null)));
-            JavaRDD<Sequence> sequences = richSequences.map(richSequence -> richSequenceConverter.convert(richSequence, ConversionStringency.STRICT, logger));
+            JavaRDD<Sequence> sequences = richSequences.map(richSequence -> richSequenceConverter.convert(richSequence, ConversionStringency.STRICT, log()));
             return sequences.rdd();
         }
     }
@@ -310,7 +309,7 @@ public class BiojavaAdamContext extends ADAMContext {
         log().info("Loading " + path + " as EMBL format and DNA alphabet...");
         try (BufferedReader reader = reader(path)) {
             JavaRDD<RichSequence> richSequences = javaSparkContext.parallelize(collect(RichSequence.IOTools.readEMBLDNA(reader, null)));
-            JavaRDD<Sequence> sequences = richSequences.map(richSequence -> richSequenceConverter.convert(richSequence, ConversionStringency.STRICT, logger));
+            JavaRDD<Sequence> sequences = richSequences.map(richSequence -> richSequenceConverter.convert(richSequence, ConversionStringency.STRICT, log()));
             return sequences.rdd();
         }
     }
@@ -325,7 +324,7 @@ public class BiojavaAdamContext extends ADAMContext {
         log().info("Loading " + path + " as EMBL format and RNA alphabet...");
         try (BufferedReader reader = reader(path)) {
             JavaRDD<RichSequence> richSequences = javaSparkContext.parallelize(collect(RichSequence.IOTools.readEMBLRNA(reader, null)));
-            JavaRDD<Sequence> sequences = richSequences.map(richSequence -> richSequenceConverter.convert(richSequence, ConversionStringency.STRICT, logger));
+            JavaRDD<Sequence> sequences = richSequences.map(richSequence -> richSequenceConverter.convert(richSequence, ConversionStringency.STRICT, log()));
             return sequences.rdd();
         }
     }
@@ -340,7 +339,7 @@ public class BiojavaAdamContext extends ADAMContext {
         log().info("Loading " + path + " as EMBL format and PROTEIN alphabet...");
         try (BufferedReader reader = reader(path)) {
             JavaRDD<RichSequence> richSequences = javaSparkContext.parallelize(collect(RichSequence.IOTools.readEMBLProtein(reader, null)));
-            JavaRDD<Sequence> sequences = richSequences.map(richSequence -> richSequenceConverter.convert(richSequence, ConversionStringency.STRICT, logger));
+            JavaRDD<Sequence> sequences = richSequences.map(richSequence -> richSequenceConverter.convert(richSequence, ConversionStringency.STRICT, log()));
             return sequences.rdd();
         }
     }
@@ -356,7 +355,7 @@ public class BiojavaAdamContext extends ADAMContext {
         log().info("Loading " + path + " as Genbank format and DNA alphabet features...");
         try (BufferedReader reader = reader(path)) {
             JavaRDD<RichSequence> richSequences = javaSparkContext.parallelize(collect(RichSequence.IOTools.readGenbankDNA(reader, null)));
-            JavaRDD<Feature> features = richSequences.flatMap(richSequence -> featureConverter.convert(richSequence, ConversionStringency.STRICT, logger).iterator());
+            JavaRDD<Feature> features = richSequences.flatMap(richSequence -> featureConverter.convert(richSequence, ConversionStringency.STRICT, log()).iterator());
             return FeatureRDD.apply(features.rdd());
         }
     }
@@ -371,7 +370,7 @@ public class BiojavaAdamContext extends ADAMContext {
         log().info("Loading " + path + " as Genbank format and RNA alphabet features...");
         try (BufferedReader reader = reader(path)) {
             JavaRDD<RichSequence> richSequences = javaSparkContext.parallelize(collect(RichSequence.IOTools.readGenbankRNA(reader, null)));
-            JavaRDD<Feature> features = richSequences.flatMap(richSequence -> featureConverter.convert(richSequence, ConversionStringency.STRICT, logger).iterator());
+            JavaRDD<Feature> features = richSequences.flatMap(richSequence -> featureConverter.convert(richSequence, ConversionStringency.STRICT, log()).iterator());
             return FeatureRDD.apply(features.rdd());
         }
     }
@@ -386,7 +385,7 @@ public class BiojavaAdamContext extends ADAMContext {
         log().info("Loading " + path + " as Genbank format and PROTEIN alphabet features...");
         try (BufferedReader reader = reader(path)) {
             JavaRDD<RichSequence> richSequences = javaSparkContext.parallelize(collect(RichSequence.IOTools.readGenbankProtein(reader, null)));
-            JavaRDD<Feature> features = richSequences.flatMap(richSequence -> featureConverter.convert(richSequence, ConversionStringency.STRICT, logger).iterator());
+            JavaRDD<Feature> features = richSequences.flatMap(richSequence -> featureConverter.convert(richSequence, ConversionStringency.STRICT, log()).iterator());
             return FeatureRDD.apply(features.rdd());
         }
     }
@@ -402,7 +401,7 @@ public class BiojavaAdamContext extends ADAMContext {
         log().info("Loading " + path + " as EMBL format and DNA alphabet features...");
         try (BufferedReader reader = reader(path)) {
             JavaRDD<RichSequence> richSequences = javaSparkContext.parallelize(collect(RichSequence.IOTools.readEMBLDNA(reader, null)));
-            JavaRDD<Feature> features = richSequences.flatMap(richSequence -> featureConverter.convert(richSequence, ConversionStringency.STRICT, logger).iterator());
+            JavaRDD<Feature> features = richSequences.flatMap(richSequence -> featureConverter.convert(richSequence, ConversionStringency.STRICT, log()).iterator());
             return FeatureRDD.apply(features.rdd());
         }
     }
@@ -417,7 +416,7 @@ public class BiojavaAdamContext extends ADAMContext {
         log().info("Loading " + path + " as EMBL format and RNA alphabet features...");
         try (BufferedReader reader = reader(path)) {
             JavaRDD<RichSequence> richSequences = javaSparkContext.parallelize(collect(RichSequence.IOTools.readEMBLRNA(reader, null)));
-            JavaRDD<Feature> features = richSequences.flatMap(richSequence -> featureConverter.convert(richSequence, ConversionStringency.STRICT, logger).iterator());
+            JavaRDD<Feature> features = richSequences.flatMap(richSequence -> featureConverter.convert(richSequence, ConversionStringency.STRICT, log()).iterator());
             return FeatureRDD.apply(features.rdd());
         }
     }
@@ -432,7 +431,7 @@ public class BiojavaAdamContext extends ADAMContext {
         log().info("Loading " + path + " as EMBL format and PROTEIN alphabet features...");
         try (BufferedReader reader = reader(path)) {
             JavaRDD<RichSequence> richSequences = javaSparkContext.parallelize(collect(RichSequence.IOTools.readEMBLProtein(reader, null)));
-            JavaRDD<Feature> features = richSequences.flatMap(richSequence -> featureConverter.convert(richSequence, ConversionStringency.STRICT, logger).iterator());
+            JavaRDD<Feature> features = richSequences.flatMap(richSequence -> featureConverter.convert(richSequence, ConversionStringency.STRICT, log()).iterator());
             return FeatureRDD.apply(features.rdd());
         }
     }
