@@ -2,7 +2,7 @@
 <!--
 
     dsh-bio  dishevelled.org bio multimodule build.
-    Copyright (c) 2013-2016 held jointly by the individual authors.
+    Copyright (c) 2013-2017 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Lesser General Public License as published
@@ -51,7 +51,7 @@
   </modules>
 
   <prerequisites>
-    <maven>3.0</maven>
+    <maven>3.1.1</maven>
   </prerequisites>
   <properties>
     <bdg-convert.version>0.1-SNAPSHOT</bdg-convert.version>
@@ -66,7 +66,7 @@
     <jsr305.version>3.0.1</jsr305.version>
     <maven.enforcer.jdk-version>[1.8,)</maven.enforcer.jdk-version>
     <rtree.version>0.4.1</rtree.version>
-    <slf4j.version>1.7.21</slf4j.version>
+    <slf4j.version>1.7.22</slf4j.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -184,7 +184,7 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
           <!-- todo:  must manually update the copyright dates here -->
-          <bottom>Copyright (c) 2013-2016 held jointly by the individual authors. Licensed under the &lt;a
+          <bottom>Copyright (c) 2013-2017 held jointly by the individual authors. Licensed under the &lt;a
             href="http://www.fsf.org/licensing/licenses/lgpl.html"&gt;GNU Lesser General Public License&lt;a&gt; (LGPL).
           </bottom>
         </configuration>

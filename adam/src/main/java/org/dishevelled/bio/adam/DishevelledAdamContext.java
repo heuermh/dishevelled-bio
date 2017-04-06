@@ -46,6 +46,8 @@ import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 
+import org.apache.spark.storage.StorageLevel;
+
 import org.bdgenomics.adam.rdd.ADAMContext;
 
 import org.bdgenomics.adam.rdd.feature.FeatureRDD;
@@ -75,6 +77,8 @@ import org.dishevelled.bio.variant.vcf.VcfRecord;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import scala.Some;
 
 /**
  * Extends ADAMContext with load methods for dsh-bio models.
@@ -139,7 +143,7 @@ public class DishevelledAdamContext extends ADAMContext {
         try (BufferedReader reader = reader(path)) {
             JavaRDD<BedRecord> bedRecords = javaSparkContext.parallelize((List<BedRecord>) BedReader.read(reader));
             JavaRDD<Feature> features = bedRecords.map(record -> bedFeatureConverter.convert(record, ConversionStringency.STRICT, log()));
-            return FeatureRDD.apply(features.rdd());
+            return FeatureRDD.inferSequenceDictionary(features.rdd(), new Some(StorageLevel.MEMORY_ONLY()));
         }
     }
 
@@ -155,7 +159,7 @@ public class DishevelledAdamContext extends ADAMContext {
         try (BufferedReader reader = reader(path)) {
             JavaRDD<Gff3Record> gff3Records = javaSparkContext.parallelize((List<Gff3Record>) Gff3Reader.read(reader));
             JavaRDD<Feature> features = gff3Records.map(record -> gff3FeatureConverter.convert(record, ConversionStringency.STRICT, log()));
-            return FeatureRDD.apply(features.rdd());
+            return FeatureRDD.inferSequenceDictionary(features.rdd(), new Some(StorageLevel.MEMORY_ONLY()));
         }
     }
 
