@@ -155,7 +155,6 @@ public class DishevelledAdamContext extends ADAMContext {
      */
     public FeatureRDD dshLoadGff3(final String path) throws IOException {
         log().info("Loading " + path + " as GFF3 format...");
-        // will this work via HDFS?
         try (BufferedReader reader = reader(path)) {
             JavaRDD<Gff3Record> gff3Records = javaSparkContext.parallelize((List<Gff3Record>) Gff3Reader.read(reader));
             JavaRDD<Feature> features = gff3Records.map(record -> gff3FeatureConverter.convert(record, ConversionStringency.STRICT, log()));

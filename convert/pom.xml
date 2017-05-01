@@ -69,16 +69,6 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.biojava</groupId>
-      <artifactId>core</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.biojava</groupId>
-      <artifactId>sequencing</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>org.dishevelled</groupId>
       <artifactId>dsh-bio-feature</artifactId>
       <scope>compile</scope>
