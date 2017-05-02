@@ -27,7 +27,9 @@ import com.google.common.collect.ImmutableListMultimap;
 
 import com.esotericsoftware.kryo.Kryo;
 
-import com.esotericsoftware.kryo.serializers.JavaSerializer;
+import de.javakaffee.kryoserializers.guava.ArrayListMultimapSerializer;
+import de.javakaffee.kryoserializers.guava.ImmutableMapSerializer;
+import de.javakaffee.kryoserializers.guava.ImmutableMultimapSerializer;
 
 import org.bdgenomics.adam.serialization.ADAMKryoRegistrator;
 
@@ -41,7 +43,9 @@ public class DishevelledKryoRegistrator extends ADAMKryoRegistrator {
     @Override
     public void registerClasses(final Kryo kryo) {
         super.registerClasses(kryo);
-        kryo.setClassLoader(Thread.currentThread().getContextClassLoader());
-        kryo.register(ImmutableListMultimap.class, new JavaSerializer());
+
+        ImmutableMapSerializer.registerSerializers(kryo);
+        ImmutableMultimapSerializer.registerSerializers(kryo);
+        ArrayListMultimapSerializer.registerSerializers(kryo);
     }
 }
