@@ -42,7 +42,9 @@
     <url>git@github.com:heuermh/dishevelled-bio.git</url>
   </scm>
   <modules>
+    <module>adam</module>
     <module>align</module>
+    <module>convert</module>
     <module>feature</module>
     <module>range</module>
     <module>read</module>
@@ -50,11 +52,8 @@
     <module>tools</module>
   </modules>
 
-  <prerequisites>
-    <maven>3.1.1</maven>
-  </prerequisites>
   <properties>
-    <bdg-convert.version>0.1-SNAPSHOT</bdg-convert.version>
+    <bdg-convert.version>0.1</bdg-convert.version>
     <biojava.version>1.9.2</biojava.version>
     <commons-csv.version>1.4</commons-csv.version>
     <commons-math3.version>3.6</commons-math3.version>
