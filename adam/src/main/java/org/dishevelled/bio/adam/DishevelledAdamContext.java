@@ -46,7 +46,9 @@ import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 
-import org.apache.spark.storage.StorageLevel;
+import org.bdgenomics.adam.converters.DefaultHeaderLines;
+
+import org.bdgenomics.adam.models.SequenceDictionary;
 
 import org.bdgenomics.adam.rdd.ADAMContext;
 
@@ -63,6 +65,7 @@ import org.bdgenomics.convert.bdgenomics.BdgenomicsModule;
 
 import org.bdgenomics.formats.avro.Feature;
 import org.bdgenomics.formats.avro.Genotype;
+import org.bdgenomics.formats.avro.Sample;
 import org.bdgenomics.formats.avro.Variant;
 
 import org.dishevelled.bio.convert.dishevelled.DishevelledModule;
@@ -74,11 +77,12 @@ import org.dishevelled.bio.feature.Gff3Record;
 
 import org.dishevelled.bio.variant.vcf.VcfReader;
 import org.dishevelled.bio.variant.vcf.VcfRecord;
+import org.dishevelled.bio.variant.vcf.VcfSample;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import scala.Some;
+import scala.collection.JavaConversions;
 
 /**
  * Extends ADAMContext with load methods for dsh-bio models.
@@ -143,7 +147,7 @@ public class DishevelledAdamContext extends ADAMContext {
         try (BufferedReader reader = reader(path)) {
             JavaRDD<BedRecord> bedRecords = javaSparkContext.parallelize((List<BedRecord>) BedReader.read(reader));
             JavaRDD<Feature> features = bedRecords.map(record -> bedFeatureConverter.convert(record, ConversionStringency.STRICT, log()));
-            return FeatureRDD.inferSequenceDictionary(features.rdd(), new Some(StorageLevel.MEMORY_ONLY()));
+            return FeatureRDD.apply(features.rdd());
         }
     }
 
@@ -158,7 +162,7 @@ public class DishevelledAdamContext extends ADAMContext {
         try (BufferedReader reader = reader(path)) {
             JavaRDD<Gff3Record> gff3Records = javaSparkContext.parallelize((List<Gff3Record>) Gff3Reader.read(reader));
             JavaRDD<Feature> features = gff3Records.map(record -> gff3FeatureConverter.convert(record, ConversionStringency.STRICT, log()));
-            return FeatureRDD.inferSequenceDictionary(features.rdd(), new Some(StorageLevel.MEMORY_ONLY()));
+            return FeatureRDD.apply(features.rdd());
         }
     }
 
@@ -173,7 +177,7 @@ public class DishevelledAdamContext extends ADAMContext {
         try (BufferedReader reader = reader(path)) {
             JavaRDD<VcfRecord> vcfRecords = javaSparkContext.parallelize((List<VcfRecord>) VcfReader.records(reader));
             JavaRDD<Variant> variants = vcfRecords.flatMap(record -> variantConverter.convert(record, ConversionStringency.STRICT, log()).iterator());
-            return new VariantRDD(variants.rdd(), null, null);
+            return VariantRDD.apply(variants.rdd(), SequenceDictionary.empty(), DefaultHeaderLines.allHeaderLines());
         }
     }
 
@@ -185,10 +189,20 @@ public class DishevelledAdamContext extends ADAMContext {
      */
     public GenotypeRDD dshLoadGenotypes(final String path) throws IOException {
         log().info("Loading " + path + " in VCF/BCF format as genotypes...");
+
+        // todo: read header and convert to SequenceDictionary?
+        List<Sample> samples = new java.util.ArrayList<Sample>();
+        // read samples
+        try (BufferedReader reader = reader(path)) {
+            for (VcfSample sample : VcfReader.samples(reader)) {
+                samples.add(Sample.newBuilder().setSampleId(sample.getId()).build());
+            }
+        }
+        // read records
         try (BufferedReader reader = reader(path)) {
             JavaRDD<VcfRecord> vcfRecords = javaSparkContext.parallelize((List<VcfRecord>) VcfReader.records(reader));
             JavaRDD<Genotype> genotypes = vcfRecords.flatMap(record -> genotypeConverter.convert(record, ConversionStringency.STRICT, log()).iterator());
-            return new GenotypeRDD(genotypes.rdd(), null, null, null);
+            return GenotypeRDD.apply(genotypes.rdd(), SequenceDictionary.empty(), scala.collection.JavaConversions.asScalaBuffer(samples), DefaultHeaderLines.allHeaderLines());
         }
     }
 }
