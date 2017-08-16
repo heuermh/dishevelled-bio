@@ -31,12 +31,22 @@ import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.inject.Injector;
 import com.google.inject.Guice;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
+
+import htsjdk.variant.vcf.VCFFormatHeaderLine;
+import htsjdk.variant.vcf.VCFInfoHeaderLine;
+import htsjdk.variant.vcf.VCFHeaderLine;
+import htsjdk.variant.vcf.VCFHeaderLineCount;
+import htsjdk.variant.vcf.VCFHeaderLineType;
 
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -49,6 +59,7 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.bdgenomics.adam.converters.DefaultHeaderLines;
 
 import org.bdgenomics.adam.models.SequenceDictionary;
+import org.bdgenomics.adam.models.SequenceRecord;
 
 import org.bdgenomics.adam.rdd.ADAMContext;
 
@@ -75,14 +86,26 @@ import org.dishevelled.bio.feature.BedRecord;
 import org.dishevelled.bio.feature.Gff3Reader;
 import org.dishevelled.bio.feature.Gff3Record;
 
+import org.dishevelled.bio.variant.vcf.VcfHeader;
 import org.dishevelled.bio.variant.vcf.VcfReader;
 import org.dishevelled.bio.variant.vcf.VcfRecord;
 import org.dishevelled.bio.variant.vcf.VcfSample;
 
+import org.dishevelled.bio.variant.vcf.header.VcfContigHeaderLine;
+import org.dishevelled.bio.variant.vcf.header.VcfFormatHeaderLine;
+import org.dishevelled.bio.variant.vcf.header.VcfInfoHeaderLine;
+import org.dishevelled.bio.variant.vcf.header.VcfHeaderLineNumber;
+import org.dishevelled.bio.variant.vcf.header.VcfHeaderLineType;
+import org.dishevelled.bio.variant.vcf.header.VcfHeaderLines;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import scala.Option;
+import scala.Some;
+
 import scala.collection.JavaConversions;
+import scala.collection.Seq;
 
 /**
  * Extends ADAMContext with load methods for dsh-bio models.
@@ -174,10 +197,18 @@ public class DishevelledAdamContext extends ADAMContext {
      */
     public VariantRDD dshLoadVariants(final String path) throws IOException {
         log().info("Loading " + path + " in VCF/BCF format as variants...");
+
+        // read header
+        VcfHeaderLines vcfHeaderLines = null;
+        try (BufferedReader reader = reader(path)) {
+            VcfHeader vcfHeader = VcfReader.header(reader);
+            vcfHeaderLines = VcfHeaderLines.fromHeader(vcfHeader);
+        }
+        // read records
         try (BufferedReader reader = reader(path)) {
             JavaRDD<VcfRecord> vcfRecords = javaSparkContext.parallelize((List<VcfRecord>) VcfReader.records(reader));
             JavaRDD<Variant> variants = vcfRecords.flatMap(record -> variantConverter.convert(record, ConversionStringency.STRICT, log()).iterator());
-            return VariantRDD.apply(variants.rdd(), SequenceDictionary.empty(), DefaultHeaderLines.allHeaderLines());
+            return VariantRDD.apply(variants.rdd(), createSequenceDictionary(vcfHeaderLines), createHeaderLines(vcfHeaderLines));
         }
     }
 
@@ -190,9 +221,14 @@ public class DishevelledAdamContext extends ADAMContext {
     public GenotypeRDD dshLoadGenotypes(final String path) throws IOException {
         log().info("Loading " + path + " in VCF/BCF format as genotypes...");
 
-        // todo: read header and convert to SequenceDictionary?
-        List<Sample> samples = new java.util.ArrayList<Sample>();
+        // read header
+        VcfHeaderLines vcfHeaderLines = null;
+        try (BufferedReader reader = reader(path)) {
+            VcfHeader vcfHeader = VcfReader.header(reader);
+            vcfHeaderLines = VcfHeaderLines.fromHeader(vcfHeader);
+        }
         // read samples
+        List<Sample> samples = new ArrayList<Sample>();
         try (BufferedReader reader = reader(path)) {
             for (VcfSample sample : VcfReader.samples(reader)) {
                 samples.add(Sample.newBuilder().setSampleId(sample.getId()).build());
@@ -202,7 +238,124 @@ public class DishevelledAdamContext extends ADAMContext {
         try (BufferedReader reader = reader(path)) {
             JavaRDD<VcfRecord> vcfRecords = javaSparkContext.parallelize((List<VcfRecord>) VcfReader.records(reader));
             JavaRDD<Genotype> genotypes = vcfRecords.flatMap(record -> genotypeConverter.convert(record, ConversionStringency.STRICT, log()).iterator());
-            return GenotypeRDD.apply(genotypes.rdd(), SequenceDictionary.empty(), scala.collection.JavaConversions.asScalaBuffer(samples), DefaultHeaderLines.allHeaderLines());
+            return GenotypeRDD.apply(genotypes.rdd(), createSequenceDictionary(vcfHeaderLines), JavaConversions.asScalaBuffer(samples), createHeaderLines(vcfHeaderLines));
         }
+    }
+
+    static Seq<VCFHeaderLine> createHeaderLines(final VcfHeaderLines vcfHeaderLines) {
+        Map<String, VCFInfoHeaderLine> infoHeaderLines = new HashMap<String, VCFInfoHeaderLine>();
+        for (VCFInfoHeaderLine infoHeaderLine : JavaConversions.asJavaIterable(DefaultHeaderLines.infoHeaderLines())) {
+            infoHeaderLines.put(infoHeaderLine.getID(), infoHeaderLine);
+        }
+        for (Map.Entry<String, VcfInfoHeaderLine> entry : vcfHeaderLines.getInfoHeaderLines().entrySet()) {
+            String id = entry.getKey();
+            VcfInfoHeaderLine infoHeaderLine = entry.getValue();
+            if (!infoHeaderLines.containsKey(id)) {
+                infoHeaderLines.put(id, convertInfoHeaderLine(infoHeaderLine));
+            }
+        }
+
+        Map<String, VCFFormatHeaderLine> formatHeaderLines = new HashMap<String, VCFFormatHeaderLine>();
+        for (VCFFormatHeaderLine formatHeaderLine : JavaConversions.asJavaIterable(DefaultHeaderLines.formatHeaderLines())) {
+            formatHeaderLines.put(formatHeaderLine.getID(), formatHeaderLine);
+        }
+        for (Map.Entry<String, VcfFormatHeaderLine> entry : vcfHeaderLines.getFormatHeaderLines().entrySet()) {
+            String id = entry.getKey();
+            VcfFormatHeaderLine formatHeaderLine = entry.getValue();
+            if (!formatHeaderLines.containsKey(id)) {
+                formatHeaderLines.put(id, convertFormatHeaderLine(formatHeaderLine));
+            }
+        }
+
+        List<VCFHeaderLine> headerLines = new ArrayList<VCFHeaderLine>(infoHeaderLines.size() + formatHeaderLines.size());
+        headerLines.addAll(infoHeaderLines.values());
+        headerLines.addAll(formatHeaderLines.values());
+        return JavaConversions.asScalaBuffer(headerLines);
+    }
+
+    static VCFHeaderLineCount convertHeaderLineNumber(final VcfHeaderLineNumber number) {
+        if ("A".equals(number.getName())) {
+            return VCFHeaderLineCount.A;
+        }
+        else if ("R".equals(number.getName())) {
+            return VCFHeaderLineCount.R;
+        }
+        else if ("G".equals(number.getName())) {
+            return VCFHeaderLineCount.G;
+        }
+        return VCFHeaderLineCount.UNBOUNDED;
+    }
+
+    static VCFHeaderLineType convertHeaderLineType(final VcfHeaderLineType type) {
+        if (type.equals(VcfHeaderLineType.Integer)) {
+            return VCFHeaderLineType.Integer;
+        }
+        else if (type.equals(VcfHeaderLineType.Float)) {
+            return VCFHeaderLineType.Float;
+        }
+        else if (type.equals(VcfHeaderLineType.Flag)) {
+            return VCFHeaderLineType.Flag;
+        }
+        else if (type.equals(VcfHeaderLineType.Character)) {
+            return VCFHeaderLineType.Character;
+        }
+        else if (type.equals(VcfHeaderLineType.String)) {
+            return VCFHeaderLineType.String;
+        }
+        throw new IllegalArgumentException("unable to convert VCF header line type " + type);
+    }
+    
+    static VCFInfoHeaderLine convertInfoHeaderLine(final VcfInfoHeaderLine infoHeaderLine) {
+        if (infoHeaderLine.getNumber().isNumeric()) {
+            return new VCFInfoHeaderLine(infoHeaderLine.getId(),
+                                         infoHeaderLine.getNumber().getValue(),
+                                         convertHeaderLineType(infoHeaderLine.getType()),
+                                         infoHeaderLine.getDescription());
+        }
+        return new VCFInfoHeaderLine(infoHeaderLine.getId(),
+                                     convertHeaderLineNumber(infoHeaderLine.getNumber()),
+                                     convertHeaderLineType(infoHeaderLine.getType()),
+                                     infoHeaderLine.getDescription());
+    }
+
+    static VCFFormatHeaderLine convertFormatHeaderLine(final VcfFormatHeaderLine formatHeaderLine) {
+        if (formatHeaderLine.getNumber().isNumeric()) {
+            return new VCFFormatHeaderLine(formatHeaderLine.getId(),
+                                           formatHeaderLine.getNumber().getValue(),
+                                           convertHeaderLineType(formatHeaderLine.getType()),
+                                           formatHeaderLine.getDescription());
+        }
+        return new VCFFormatHeaderLine(formatHeaderLine.getId(),
+                                       convertHeaderLineNumber(formatHeaderLine.getNumber()),
+                                       convertHeaderLineType(formatHeaderLine.getType()),
+                                       formatHeaderLine.getDescription());
+    }
+
+    static SequenceDictionary createSequenceDictionary(final VcfHeaderLines vcfHeaderLines) {
+        Collection<VcfContigHeaderLine> vcfContigHeaderLines = vcfHeaderLines.getContigHeaderLines().values();
+            
+        if (vcfContigHeaderLines.isEmpty()) {
+            return SequenceDictionary.empty();
+        }
+        List<SequenceRecord> sequenceRecords = new ArrayList<SequenceRecord>(vcfContigHeaderLines.size());
+        for (VcfContigHeaderLine contigHeaderLine : vcfContigHeaderLines) {
+            sequenceRecords.add(new SequenceRecord
+                                (
+                                 contigHeaderLine.getId(),
+                                 contigHeaderLine.getLength(),
+                                 Option.apply(contigHeaderLine.getUrl()),
+                                 Option.apply(contigHeaderLine.getMd5()),
+                                 firstOrNone(contigHeaderLine.getAttributes().get("REFSEQ")),
+                                 firstOrNone(contigHeaderLine.getAttributes().get("GENBANK")),
+                                 firstOrNone(contigHeaderLine.getAttributes().get("assembly")),
+                                 firstOrNone(contigHeaderLine.getAttributes().get("species")),
+                                 Option.apply(null)
+                                 ));
+        }
+        return new SequenceDictionary(JavaConversions.asScalaBuffer(sequenceRecords).toVector());
+    }
+
+    static Option<String> firstOrNone(final List<String> values) {
+        return values.isEmpty() ? Option.apply((String) null) : Option.apply(values.get(0));
     }
 }
