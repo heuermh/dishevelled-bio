@@ -45,8 +45,6 @@ import com.google.inject.TypeLiteral;
 import htsjdk.variant.vcf.VCFFormatHeaderLine;
 import htsjdk.variant.vcf.VCFInfoHeaderLine;
 import htsjdk.variant.vcf.VCFHeaderLine;
-import htsjdk.variant.vcf.VCFHeaderLineCount;
-import htsjdk.variant.vcf.VCFHeaderLineType;
 
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -81,6 +79,8 @@ import org.bdgenomics.formats.avro.Variant;
 
 import org.dishevelled.bio.convert.DishevelledModule;
 
+import org.dishevelled.bio.convert.htsjdk.HtsjdkModule;
+
 import org.dishevelled.bio.feature.BedReader;
 import org.dishevelled.bio.feature.BedRecord;
 import org.dishevelled.bio.feature.Gff3Reader;
@@ -94,8 +94,6 @@ import org.dishevelled.bio.variant.vcf.VcfSample;
 import org.dishevelled.bio.variant.vcf.header.VcfContigHeaderLine;
 import org.dishevelled.bio.variant.vcf.header.VcfFormatHeaderLine;
 import org.dishevelled.bio.variant.vcf.header.VcfInfoHeaderLine;
-import org.dishevelled.bio.variant.vcf.header.VcfHeaderLineNumber;
-import org.dishevelled.bio.variant.vcf.header.VcfHeaderLineType;
 import org.dishevelled.bio.variant.vcf.header.VcfHeaderLines;
 
 import org.slf4j.Logger;
@@ -126,6 +124,12 @@ public class DishevelledAdamContext extends ADAMContext {
     /** Convert dishevelled VcfRecord to a list of bdg-formats Genotypes. */
     private final Converter<VcfRecord, List<Genotype>> genotypeConverter;
 
+    /** Convert dishevelled VcfFormatHeaderLine to htsjdk VCFFormatHeaderLine. */
+    private final Converter<VcfFormatHeaderLine, VCFFormatHeaderLine> formatHeaderLineConverter;
+
+    /** Convert dishevelled VcfInfoHeaderLine to htsjdk VCFInfoHeaderLine. */
+    private final Converter<VcfInfoHeaderLine, VCFInfoHeaderLine> infoHeaderLineConverter;
+
 
     /**
      * Create a new DishevelledAdamContext with the specified Spark context.
@@ -137,11 +141,13 @@ public class DishevelledAdamContext extends ADAMContext {
 
         javaSparkContext = new JavaSparkContext(sc);
 
-        Injector injector = Guice.createInjector(new DishevelledModule(), new BdgenomicsModule());
+        Injector injector = Guice.createInjector(new DishevelledModule(), new HtsjdkModule(), new BdgenomicsModule());
         bedFeatureConverter = injector.getInstance(Key.get(new TypeLiteral<Converter<BedRecord, Feature>>() {}));
         gff3FeatureConverter = injector.getInstance(Key.get(new TypeLiteral<Converter<Gff3Record, Feature>>() {}));
         variantConverter = injector.getInstance(Key.get(new TypeLiteral<Converter<VcfRecord, List<Variant>>>() {}));
         genotypeConverter = injector.getInstance(Key.get(new TypeLiteral<Converter<VcfRecord, List<Genotype>>>() {}));
+        formatHeaderLineConverter = injector.getInstance(Key.get(new TypeLiteral<Converter<VcfFormatHeaderLine, VCFFormatHeaderLine>>() {}));
+        infoHeaderLineConverter = injector.getInstance(Key.get(new TypeLiteral<Converter<VcfInfoHeaderLine, VCFInfoHeaderLine>>() {}));
     }
 
 
@@ -242,7 +248,14 @@ public class DishevelledAdamContext extends ADAMContext {
         }
     }
 
-    static Seq<VCFHeaderLine> createHeaderLines(final VcfHeaderLines vcfHeaderLines) {
+    /**
+     * Convert the specified VcfHeaderLines to a sequence of htsjdk VCF header lines, merged with the
+     * default header lines specified by ADAM.
+     *
+     * @param vcfHeaderLines VCF header lines to convert
+     * @return a sequence of htsjdk header lines
+     */
+    Seq<VCFHeaderLine> createHeaderLines(final VcfHeaderLines vcfHeaderLines) {
         Map<String, VCFInfoHeaderLine> infoHeaderLines = new HashMap<String, VCFInfoHeaderLine>();
         for (VCFInfoHeaderLine infoHeaderLine : JavaConversions.asJavaIterable(DefaultHeaderLines.infoHeaderLines())) {
             infoHeaderLines.put(infoHeaderLine.getID(), infoHeaderLine);
@@ -251,7 +264,7 @@ public class DishevelledAdamContext extends ADAMContext {
             String id = entry.getKey();
             VcfInfoHeaderLine infoHeaderLine = entry.getValue();
             if (!infoHeaderLines.containsKey(id)) {
-                infoHeaderLines.put(id, convertInfoHeaderLine(infoHeaderLine));
+                infoHeaderLines.put(id, infoHeaderLineConverter.convert(infoHeaderLine, ConversionStringency.STRICT, log()));
             }
         }
 
@@ -263,7 +276,7 @@ public class DishevelledAdamContext extends ADAMContext {
             String id = entry.getKey();
             VcfFormatHeaderLine formatHeaderLine = entry.getValue();
             if (!formatHeaderLines.containsKey(id)) {
-                formatHeaderLines.put(id, convertFormatHeaderLine(formatHeaderLine));
+                formatHeaderLines.put(id, formatHeaderLineConverter.convert(formatHeaderLine, ConversionStringency.STRICT, log()));
             }
         }
 
@@ -271,64 +284,6 @@ public class DishevelledAdamContext extends ADAMContext {
         headerLines.addAll(infoHeaderLines.values());
         headerLines.addAll(formatHeaderLines.values());
         return JavaConversions.asScalaBuffer(headerLines);
-    }
-
-    static VCFHeaderLineCount convertHeaderLineNumber(final VcfHeaderLineNumber number) {
-        if ("A".equals(number.getName())) {
-            return VCFHeaderLineCount.A;
-        }
-        else if ("R".equals(number.getName())) {
-            return VCFHeaderLineCount.R;
-        }
-        else if ("G".equals(number.getName())) {
-            return VCFHeaderLineCount.G;
-        }
-        return VCFHeaderLineCount.UNBOUNDED;
-    }
-
-    static VCFHeaderLineType convertHeaderLineType(final VcfHeaderLineType type) {
-        if (type.equals(VcfHeaderLineType.Integer)) {
-            return VCFHeaderLineType.Integer;
-        }
-        else if (type.equals(VcfHeaderLineType.Float)) {
-            return VCFHeaderLineType.Float;
-        }
-        else if (type.equals(VcfHeaderLineType.Flag)) {
-            return VCFHeaderLineType.Flag;
-        }
-        else if (type.equals(VcfHeaderLineType.Character)) {
-            return VCFHeaderLineType.Character;
-        }
-        else if (type.equals(VcfHeaderLineType.String)) {
-            return VCFHeaderLineType.String;
-        }
-        throw new IllegalArgumentException("unable to convert VCF header line type " + type);
-    }
-    
-    static VCFInfoHeaderLine convertInfoHeaderLine(final VcfInfoHeaderLine infoHeaderLine) {
-        if (infoHeaderLine.getNumber().isNumeric()) {
-            return new VCFInfoHeaderLine(infoHeaderLine.getId(),
-                                         infoHeaderLine.getNumber().getValue(),
-                                         convertHeaderLineType(infoHeaderLine.getType()),
-                                         infoHeaderLine.getDescription());
-        }
-        return new VCFInfoHeaderLine(infoHeaderLine.getId(),
-                                     convertHeaderLineNumber(infoHeaderLine.getNumber()),
-                                     convertHeaderLineType(infoHeaderLine.getType()),
-                                     infoHeaderLine.getDescription());
-    }
-
-    static VCFFormatHeaderLine convertFormatHeaderLine(final VcfFormatHeaderLine formatHeaderLine) {
-        if (formatHeaderLine.getNumber().isNumeric()) {
-            return new VCFFormatHeaderLine(formatHeaderLine.getId(),
-                                           formatHeaderLine.getNumber().getValue(),
-                                           convertHeaderLineType(formatHeaderLine.getType()),
-                                           formatHeaderLine.getDescription());
-        }
-        return new VCFFormatHeaderLine(formatHeaderLine.getId(),
-                                       convertHeaderLineNumber(formatHeaderLine.getNumber()),
-                                       convertHeaderLineType(formatHeaderLine.getType()),
-                                       formatHeaderLine.getDescription());
     }
 
     static SequenceDictionary createSequenceDictionary(final VcfHeaderLines vcfHeaderLines) {

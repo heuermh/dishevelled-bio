@@ -1,6 +1,6 @@
 /*
 
-    dsh-bio-convert  Convert between dishevelled and bdg-formats data models.
+    dsh-bio-convert-htsjdk  Convert between dishevelled and htsjdk data models.
     Copyright (c) 2013-2017 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
@@ -23,6 +23,6 @@
 */
 
 /**
- * Convert between dishevelled and bdg-formats data models.
+ * Convert between dishevelled and htsjdk data models.
  */
-package org.dishevelled.bio.convert;
+package org.dishevelled.bio.convert.htsjdk;

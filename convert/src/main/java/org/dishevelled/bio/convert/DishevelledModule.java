@@ -1,6 +1,6 @@
 /*
 
-    dsh-convert  Convert between dishevelled and bdg-formats data models.
+    dsh-bio-convert  Convert between dishevelled and bdg-formats data models.
     Copyright (c) 2013-2017 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
@@ -48,7 +48,7 @@ import org.dishevelled.bio.feature.Gff3Record;
 import org.dishevelled.bio.variant.vcf.VcfRecord;
 
 /**
- * Guice module for the org.dishevelled.bio.convert.dishevelled package.
+ * Guice module for the org.dishevelled.bio.convert package.
  *
  * @author  Michael Heuer
  */

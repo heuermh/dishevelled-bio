@@ -129,6 +129,11 @@
       </dependency>
       <dependency>
         <groupId>org.dishevelled</groupId>
+        <artifactId>dsh-bio-convert-htsjdk</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.dishevelled</groupId>
         <artifactId>dsh-bio-feature</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -158,6 +163,11 @@
     <dependency>
       <groupId>org.dishevelled</groupId>
       <artifactId>dsh-bio-convert</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.dishevelled</groupId>
+      <artifactId>dsh-bio-convert-htsjdk</artifactId>
       <scope>compile</scope>
     </dependency>
     <dependency>

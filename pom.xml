@@ -45,6 +45,7 @@
     <module>adam</module>
     <module>align</module>
     <module>convert</module>
+    <module>convert-htsjdk</module>
     <module>feature</module>
     <module>range</module>
     <module>read</module>
