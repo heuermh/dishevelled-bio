@@ -1,6 +1,6 @@
 /*
 
-    dsh-convert  Convert between various data models.
+    dsh-convert  Convert between dishevelled and bdg-formats data models.
     Copyright (c) 2013-2017 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
@@ -21,12 +21,11 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.convert.dishevelled;
+package org.dishevelled.bio.convert;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,35 +44,30 @@ import org.bdgenomics.convert.ConversionStringency;
 
 import org.bdgenomics.convert.bdgenomics.BdgenomicsModule;
 
-import org.bdgenomics.formats.avro.Dbxref;
 import org.bdgenomics.formats.avro.Feature;
-import org.bdgenomics.formats.avro.OntologyTerm;
 import org.bdgenomics.formats.avro.Strand;
 
-import org.dishevelled.bio.feature.Gff3Record;
+import org.dishevelled.bio.feature.BedFormat;
+import org.dishevelled.bio.feature.BedRecord;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Unit test for FeatureToGff3Record.
+ * Unit test for FeatureToBedRecord.
  *
  * @author  Michael Heuer
  */
-public final class FeatureToGff3RecordTest {
-    private final Logger logger = LoggerFactory.getLogger(FeatureToGff3RecordTest.class);
-    private Converter<Dbxref, String> dbxrefConverter;
-    private Converter<OntologyTerm, String> ontologyTermConverter;
+public final class FeatureToBedRecordTest {
+    private final Logger logger = LoggerFactory.getLogger(FeatureToBedRecordTest.class);
     private Converter<Strand, String> strandConverter;
-    private Converter<Feature, Gff3Record> featureConverter;
+    private Converter<Feature, BedRecord> featureConverter;
 
     @Before
     public void setUp() {
         Injector injector = Guice.createInjector(new BdgenomicsModule());
-        dbxrefConverter = injector.getInstance(Key.get(new TypeLiteral<Converter<Dbxref, String>>() {}));
-        ontologyTermConverter = injector.getInstance(Key.get(new TypeLiteral<Converter<OntologyTerm, String>>() {}));
         strandConverter = injector.getInstance(Key.get(new TypeLiteral<Converter<Strand, String>>() {}));
-        featureConverter = new FeatureToGff3Record(dbxrefConverter, ontologyTermConverter, strandConverter);
+        featureConverter = new FeatureToBedRecord(strandConverter);
     }
 
     @Test
@@ -82,18 +76,8 @@ public final class FeatureToGff3RecordTest {
     }
 
     @Test(expected=NullPointerException.class)
-    public void testConstructorNullDbxrefConverter() {
-        new FeatureToGff3Record(null, ontologyTermConverter, strandConverter);
-    }
-
-    @Test(expected=NullPointerException.class)
-    public void testConstructorNullOntologyTermConverter() {
-        new FeatureToGff3Record(dbxrefConverter, null, strandConverter);
-    }
-
-    @Test(expected=NullPointerException.class)
     public void testConstructorNullStrandConverter() {
-        new FeatureToGff3Record(dbxrefConverter, ontologyTermConverter, null);
+        new FeatureToBedRecord(null);
     }
 
     @Test(expected=ConversionException.class)
@@ -114,29 +98,41 @@ public final class FeatureToGff3RecordTest {
     @Test
     public void testConvert() {
         Map<String, String> attributes = new HashMap<String, String>();
-        attributes.put("biotype", "protein_coding");
+        attributes.put("thickStart", "11873");
+        attributes.put("thickEnd", "11873");
+        attributes.put("itemRgb", "0");
+        attributes.put("blockCount", "3");
+        attributes.put("blockSizes", "354,109,1189");
+        attributes.put("blockStarts", "0,739,1347");
 
         Feature feature = Feature.newBuilder()
-            .setContigName("1")
-            .setStart(1335275L)
-            .setEnd(1349350L)
-            .setName("ENSG00000107404")
-            .setFeatureId("ENSG00000107404")
-            .setFeatureType("gene")
-            .setSource("Ensembl")
-            .setStrand(Strand.REVERSE)
+            .setContigName("chr1")
+            .setStart(11873L)
+            .setEnd(14409L)
+            .setName("uc001aaa.3")
+            .setStrand(Strand.FORWARD)
             .setAttributes(attributes)
             .build();
 
-        Gff3Record gff3Record = featureConverter.convert(feature, ConversionStringency.STRICT, logger);
-        assertEquals("1", gff3Record.seqid());
-        assertEquals(1335275L, gff3Record.start());
-        assertEquals(1349350L, gff3Record.end());
-        assertEquals("gene", gff3Record.featureType());
-        assertEquals("Ensembl", gff3Record.source());
-        assertEquals("-", gff3Record.strand());
-        assertTrue(gff3Record.attributes().get("ID").contains("ENSG00000107404"));
-        assertTrue(gff3Record.attributes().get("Name").contains("ENSG00000107404"));
-        assertTrue(gff3Record.attributes().get("biotype").contains("protein_coding"));
+        BedRecord bedRecord = featureConverter.convert(feature, ConversionStringency.STRICT, logger);
+        assertEquals("chr1", bedRecord.chrom());
+        assertEquals(11873L, bedRecord.start());
+        assertEquals(14409L, bedRecord.end());
+        assertEquals("uc001aaa.3", bedRecord.name());
+        assertNull(bedRecord.score());
+        assertEquals("+", bedRecord.strand());
+        assertEquals(11873L, bedRecord.thickStart());
+        assertEquals(11873L, bedRecord.thickEnd());
+        assertEquals("0", bedRecord.itemRgb());
+        assertEquals(3, bedRecord.blockCount());
+        assertEquals(3, bedRecord.blockSizes().length);
+        assertEquals(354L, bedRecord.blockSizes()[0]);
+        assertEquals(109L, bedRecord.blockSizes()[1]);
+        assertEquals(1189L, bedRecord.blockSizes()[2]);
+        assertEquals(3, bedRecord.blockStarts().length);
+        assertEquals(0L, bedRecord.blockStarts()[0]);
+        assertEquals(739L, bedRecord.blockStarts()[1]);
+        assertEquals(1347L, bedRecord.blockStarts()[2]);
+        assertEquals(BedFormat.BED12, bedRecord.format());
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    dsh-convert  Convert between various data models.
+    dsh-convert  Convert between dishevelled and bdg-formats data models.
     Copyright (c) 2013-2017 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
@@ -32,7 +32,7 @@
   </parent>
   <artifactId>dsh-bio-convert</artifactId>
   <name>dsh-bio-convert</name>
-  <description>Convert between various data models.</description>
+  <description>Convert between dishevelled and bdg-formats data models.</description>
   <dependencyManagement>
     <dependencies>
       <dependency>

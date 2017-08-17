@@ -79,7 +79,7 @@ import org.bdgenomics.formats.avro.Genotype;
 import org.bdgenomics.formats.avro.Sample;
 import org.bdgenomics.formats.avro.Variant;
 
-import org.dishevelled.bio.convert.dishevelled.DishevelledModule;
+import org.dishevelled.bio.convert.DishevelledModule;
 
 import org.dishevelled.bio.feature.BedReader;
 import org.dishevelled.bio.feature.BedRecord;

@@ -1,6 +1,6 @@
 /*
 
-    dsh-convert  Convert between various data models.
+    dsh-convert  Convert between dishevelled and bdg-formats data models.
     Copyright (c) 2013-2017 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
@@ -21,7 +21,7 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.convert.dishevelled;
+package org.dishevelled.bio.convert;
 
 import java.util.Map;
 
