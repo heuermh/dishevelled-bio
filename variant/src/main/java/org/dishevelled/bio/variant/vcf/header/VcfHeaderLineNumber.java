@@ -39,21 +39,21 @@ import com.google.common.collect.ImmutableMap;
 @Immutable
 public final class VcfHeaderLineNumber {
     /** Cache of commonly used header line numbers. */
-    private static final Map<Object, VcfHeaderLineNumber> CACHE = ImmutableMap.<Object, VcfHeaderLineNumber>builder()
+    private static final Map<String, VcfHeaderLineNumber> CACHE = ImmutableMap.<String, VcfHeaderLineNumber>builder()
         .put("A", new VcfHeaderLineNumber("A"))
         .put("R", new VcfHeaderLineNumber("R"))
         .put("G", new VcfHeaderLineNumber("G"))
         .put(".", new VcfHeaderLineNumber("."))
-        .put(1, new VcfHeaderLineNumber(1))
-        .put(2, new VcfHeaderLineNumber(2))
-        .put(3, new VcfHeaderLineNumber(3))
-        .put(4, new VcfHeaderLineNumber(4))
-        .put(5, new VcfHeaderLineNumber(5))
-        .put(6, new VcfHeaderLineNumber(6))
-        .put(7, new VcfHeaderLineNumber(7))
-        .put(8, new VcfHeaderLineNumber(8))
-        .put(9, new VcfHeaderLineNumber(9))
-        .put(10, new VcfHeaderLineNumber(10))
+        .put("1", new VcfHeaderLineNumber(1))
+        .put("2", new VcfHeaderLineNumber(2))
+        .put("3", new VcfHeaderLineNumber(3))
+        .put("4", new VcfHeaderLineNumber(4))
+        .put("5", new VcfHeaderLineNumber(5))
+        .put("6", new VcfHeaderLineNumber(6))
+        .put("7", new VcfHeaderLineNumber(7))
+        .put("8", new VcfHeaderLineNumber(8))
+        .put("9", new VcfHeaderLineNumber(9))
+        .put("10", new VcfHeaderLineNumber(10))
         .build();
 
     /** Name of this header line number. */
@@ -84,7 +84,7 @@ public final class VcfHeaderLineNumber {
      */
     private VcfHeaderLineNumber(final int value) {
         this.name = "N";
-        this.value = 0;
+        this.value = value;
         isNumeric = true;
     }
 
