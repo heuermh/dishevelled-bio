@@ -64,6 +64,7 @@
     <dsh-graph.version>1.0</dsh-graph.version>
     <jdk.version>1.8</jdk.version>
     <jsr305.version>3.0.1</jsr305.version>
+    <maven.enforcer.maven-version>[3.1.1,)</maven.enforcer.maven-version>
     <maven.enforcer.jdk-version>[1.8,)</maven.enforcer.jdk-version>
     <rtree.version>0.4.1</rtree.version>
     <slf4j.version>1.7.22</slf4j.version>
@@ -165,6 +166,9 @@
             </goals>
             <configuration>
               <rules>
+                <requireMavenVersion>
+                  <version>${maven.enforcer.maven-version}</version>
+                </requireMavenVersion>
                 <requireJavaVersion>
                   <version>${maven.enforcer.jdk-version}</version>
                 </requireJavaVersion>
