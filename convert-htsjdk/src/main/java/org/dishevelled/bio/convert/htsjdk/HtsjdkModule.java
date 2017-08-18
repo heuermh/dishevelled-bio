@@ -25,6 +25,7 @@ package org.dishevelled.bio.convert.htsjdk;
 
 import javax.annotation.concurrent.Immutable;
 
+import htsjdk.variant.vcf.VCFFilterHeaderLine;
 import htsjdk.variant.vcf.VCFFormatHeaderLine;
 import htsjdk.variant.vcf.VCFHeaderLineCount;
 import htsjdk.variant.vcf.VCFHeaderLineType;
@@ -36,6 +37,7 @@ import com.google.inject.Singleton;
 
 import org.bdgenomics.convert.Converter;
 
+import org.dishevelled.bio.variant.vcf.header.VcfFilterHeaderLine;
 import org.dishevelled.bio.variant.vcf.header.VcfFormatHeaderLine;
 import org.dishevelled.bio.variant.vcf.header.VcfHeaderLineNumber;
 import org.dishevelled.bio.variant.vcf.header.VcfHeaderLineType;
@@ -61,6 +63,11 @@ public final class HtsjdkModule extends AbstractModule {
     @Provides @Singleton
     Converter<VcfHeaderLineType, VCFHeaderLineType> createVcfHeaderLineTypeToVCFHeaderLineType() {
         return new VcfHeaderLineTypeToVCFHeaderLineType();
+    }
+
+    @Provides @Singleton
+    Converter<VcfFilterHeaderLine, VCFFilterHeaderLine> createVcfFilterHeaderLineToVCFFilterHeaderLine() {
+        return new VcfFilterHeaderLineToVCFFilterHeaderLine();
     }
 
     @Provides @Singleton

@@ -25,6 +25,7 @@ package org.dishevelled.bio.convert.htsjdk;
 
 import static org.junit.Assert.assertNotNull;
 
+import htsjdk.variant.vcf.VCFFilterHeaderLine;
 import htsjdk.variant.vcf.VCFFormatHeaderLine;
 import htsjdk.variant.vcf.VCFHeaderLineCount;
 import htsjdk.variant.vcf.VCFHeaderLineType;
@@ -43,6 +44,7 @@ import org.bdgenomics.convert.ConversionStringency;
 
 import org.bdgenomics.convert.bdgenomics.BdgenomicsModule;
 
+import org.dishevelled.bio.variant.vcf.header.VcfFilterHeaderLine;
 import org.dishevelled.bio.variant.vcf.header.VcfFormatHeaderLine;
 import org.dishevelled.bio.variant.vcf.header.VcfHeaderLineNumber;
 import org.dishevelled.bio.variant.vcf.header.VcfHeaderLineType;
@@ -72,6 +74,7 @@ public final class HtsjdkModuleTest {
         Target target = injector.getInstance(Target.class);
         assertNotNull(target.getVcfHeaderLineNumberToVCFHeaderLineCount());
         assertNotNull(target.getVcfHeaderLineTypeToVCFHeaderLineType());
+        assertNotNull(target.getVcfFilterHeaderLineToVCFFilterHeaderLine());
         assertNotNull(target.getVcfFormatHeaderLineToVCFFormatHeaderLine());
         assertNotNull(target.getVcfInfoHeaderLineToVCFInfoHeaderLine());
     }
@@ -82,16 +85,19 @@ public final class HtsjdkModuleTest {
     static class Target {
         final Converter<VcfHeaderLineNumber, VCFHeaderLineCount> numberConverter;
         final Converter<VcfHeaderLineType, VCFHeaderLineType> typeConverter;
+        final Converter<VcfFilterHeaderLine, VCFFilterHeaderLine> filterConverter;
         final Converter<VcfFormatHeaderLine, VCFFormatHeaderLine> formatConverter;
         final Converter<VcfInfoHeaderLine, VCFInfoHeaderLine> infoConverter;
 
         @Inject
         Target(final Converter<VcfHeaderLineNumber, VCFHeaderLineCount> numberConverter,
                final Converter<VcfHeaderLineType, VCFHeaderLineType> typeConverter,
+               final Converter<VcfFilterHeaderLine, VCFFilterHeaderLine> filterConverter,
                final Converter<VcfFormatHeaderLine, VCFFormatHeaderLine> formatConverter,
                final Converter<VcfInfoHeaderLine, VCFInfoHeaderLine> infoConverter) {
             this.numberConverter = numberConverter;
             this.typeConverter = typeConverter;
+            this.filterConverter = filterConverter;
             this.formatConverter = formatConverter;
             this.infoConverter = infoConverter;
         }
@@ -102,6 +108,10 @@ public final class HtsjdkModuleTest {
 
         Converter<VcfHeaderLineType, VCFHeaderLineType> getVcfHeaderLineTypeToVCFHeaderLineType() {
             return typeConverter;
+        }
+
+        Converter<VcfFilterHeaderLine, VCFFilterHeaderLine> getVcfFilterHeaderLineToVCFFilterHeaderLine() {
+            return filterConverter;
         }
 
         Converter<VcfFormatHeaderLine, VCFFormatHeaderLine> getVcfFormatHeaderLineToVCFFormatHeaderLine() {

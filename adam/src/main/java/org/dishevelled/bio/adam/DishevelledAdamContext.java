@@ -42,6 +42,7 @@ import com.google.inject.Guice;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 
+import htsjdk.variant.vcf.VCFFilterHeaderLine;
 import htsjdk.variant.vcf.VCFFormatHeaderLine;
 import htsjdk.variant.vcf.VCFInfoHeaderLine;
 import htsjdk.variant.vcf.VCFHeaderLine;
@@ -92,6 +93,7 @@ import org.dishevelled.bio.variant.vcf.VcfRecord;
 import org.dishevelled.bio.variant.vcf.VcfSample;
 
 import org.dishevelled.bio.variant.vcf.header.VcfContigHeaderLine;
+import org.dishevelled.bio.variant.vcf.header.VcfFilterHeaderLine;
 import org.dishevelled.bio.variant.vcf.header.VcfFormatHeaderLine;
 import org.dishevelled.bio.variant.vcf.header.VcfInfoHeaderLine;
 import org.dishevelled.bio.variant.vcf.header.VcfHeaderLines;
@@ -124,6 +126,9 @@ public class DishevelledAdamContext extends ADAMContext {
     /** Convert dishevelled VcfRecord to a list of bdg-formats Genotypes. */
     private final Converter<VcfRecord, List<Genotype>> genotypeConverter;
 
+    /** Convert dishevelled VcfFilterHeaderLine to htsjdk VCFFilterHeaderLine. */
+    private final Converter<VcfFilterHeaderLine, VCFFilterHeaderLine> filterHeaderLineConverter;
+
     /** Convert dishevelled VcfFormatHeaderLine to htsjdk VCFFormatHeaderLine. */
     private final Converter<VcfFormatHeaderLine, VCFFormatHeaderLine> formatHeaderLineConverter;
 
@@ -146,6 +151,7 @@ public class DishevelledAdamContext extends ADAMContext {
         gff3FeatureConverter = injector.getInstance(Key.get(new TypeLiteral<Converter<Gff3Record, Feature>>() {}));
         variantConverter = injector.getInstance(Key.get(new TypeLiteral<Converter<VcfRecord, List<Variant>>>() {}));
         genotypeConverter = injector.getInstance(Key.get(new TypeLiteral<Converter<VcfRecord, List<Genotype>>>() {}));
+        filterHeaderLineConverter = injector.getInstance(Key.get(new TypeLiteral<Converter<VcfFilterHeaderLine, VCFFilterHeaderLine>>() {}));
         formatHeaderLineConverter = injector.getInstance(Key.get(new TypeLiteral<Converter<VcfFormatHeaderLine, VCFFormatHeaderLine>>() {}));
         infoHeaderLineConverter = injector.getInstance(Key.get(new TypeLiteral<Converter<VcfInfoHeaderLine, VCFInfoHeaderLine>>() {}));
     }
@@ -280,9 +286,15 @@ public class DishevelledAdamContext extends ADAMContext {
             }
         }
 
-        List<VCFHeaderLine> headerLines = new ArrayList<VCFHeaderLine>(infoHeaderLines.size() + formatHeaderLines.size());
+        List<VCFFilterHeaderLine> filterHeaderLines = new ArrayList<VCFFilterHeaderLine>(vcfHeaderLines.getFilterHeaderLines().size());
+        for (VcfFilterHeaderLine filterHeaderLine : vcfHeaderLines.getFilterHeaderLines().values()) {
+            filterHeaderLines.add(filterHeaderLineConverter.convert(filterHeaderLine, ConversionStringency.STRICT, log()));
+        }
+
+        List<VCFHeaderLine> headerLines = new ArrayList<VCFHeaderLine>(infoHeaderLines.size() + formatHeaderLines.size() + filterHeaderLines.size());
         headerLines.addAll(infoHeaderLines.values());
         headerLines.addAll(formatHeaderLines.values());
+        headerLines.addAll(filterHeaderLines);
         return JavaConversions.asScalaBuffer(headerLines);
     }
 
