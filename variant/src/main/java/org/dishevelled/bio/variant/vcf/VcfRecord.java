@@ -1523,7 +1523,7 @@ public final class VcfRecord {
         /**
          * Return this VCF record builder configured with the specified INFO key-value(s) pair
          * replacing the previously configured value(s).  Use sparingly, more expensive than
-         * <code>withFields</code>.
+         * <code>withInfo</code>.
          *
          * @param id INFO ID key, must not be null
          * @param values INFO values, must not be null
@@ -1550,7 +1550,7 @@ public final class VcfRecord {
 
         /**
          * Return this VCF record builder configured with the specified INFO key-value pairs.
-         * Use sparingly, more expensive than <code>withFields</code>.
+         * Use sparingly, more expensive than <code>withInfo</code>.
          *
          * @param info INFO key-value pairs, must not be null
          * @return this VCF record builder configured with the specified INFO key-value pairs
