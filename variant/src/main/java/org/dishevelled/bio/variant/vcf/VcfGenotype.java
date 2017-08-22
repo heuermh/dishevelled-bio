@@ -1,7 +1,7 @@
 /*
 
     dsh-bio-variant  Variants.
-    Copyright (c) 2013-2016 held jointly by the individual authors.
+    Copyright (c) 2013-2017 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Lesser General Public License as published
@@ -510,6 +510,20 @@ public final class VcfGenotype {
     }
 
     /**
+     * Create and return a new VCF genotype builder populated from the fields in the specified VCF genotype.
+     *
+     * @param genotype VCF genotype, must not be null
+     * @return a new VCF genotype builder populated from the fields in the specified VCF genotype
+     */
+    public static Builder builder(final VcfGenotype genotype) {
+        checkNotNull(genotype, "genotype must not be null");
+        return new Builder()
+            .withRef(genotype.getRef())
+            .withAlt(genotype.getAlt())
+            .withFields(genotype.getFields());
+    }
+
+    /**
      * VCF genotype builder.
      */
     public static final class Builder {
@@ -575,6 +589,47 @@ public final class VcfGenotype {
          * @return this VCF genotype builder configured with the specified genotype fields
          */
         public Builder withFields(final ListMultimap<String, String> fields) {
+            this.fields.putAll(fields);
+            return this;
+        }
+
+        /**
+         * Return this VCF genotype builder configured with the specified genotype field
+         * replacing the previously configured value(s).  Use sparingly, more expensive than
+         * <code>withFields</code>.
+         *
+         * @param id genotype field id, must not be null
+         * @param values genotype field values, must not be null
+         * @return this VCF genotype builder configured with the specified genotype field
+         *    replacing the previously configured value(s)
+         */
+        public Builder replaceField(final String id, final String... values) {
+            checkNotNull(values);
+
+            // copy old field values except id
+            ListMultimap<String, String> oldFields = this.fields.build();
+            this.fields = ImmutableListMultimap.builder();
+            for (String key : oldFields.keys()) {
+                if (!key.equals(id)) {
+                    this.fields.putAll(key, oldFields.get(key));
+                }
+            }
+            // add new value(s)
+            for (String value : values) {
+                fields.put(id, value);
+            }
+            return this;
+        }
+
+        /**
+         * Return this VCF genotype builder configured with the specified genotype fields.
+         * Use sparingly, more expensive than <code>withFields</code>.
+         *
+         * @param fields genotype fields, must not be null
+         * @return this VCF genotype builder configured with the specified genotype fields
+         */
+        public Builder replaceFields(final ListMultimap<String, String> fields) {
+            this.fields = ImmutableListMultimap.builder();
             this.fields.putAll(fields);
             return this;
         }

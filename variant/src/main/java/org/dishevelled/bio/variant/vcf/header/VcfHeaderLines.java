@@ -1,7 +1,7 @@
 /*
 
     dsh-bio-variant  Variants.
-    Copyright (c) 2013-2016 held jointly by the individual authors.
+    Copyright (c) 2013-2017 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Lesser General Public License as published
@@ -252,52 +252,50 @@ public final class VcfHeaderLines {
         return structuredHeaderLines;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(fileFormat.toString());
-        sb.append("\n");
+    /**
+     * Create a new VcfHeader from this VcfHeaderLines.
+     *
+     * @return a new VcfHeader from this VcfHeaderLines
+     */
+    public VcfHeader toHeader() {
+        VcfHeader.Builder builder = VcfHeader.builder();
+        builder.withFileFormat(fileFormat.toString());
         for (VcfHeaderLine line : headerLines) {
-            sb.append(line.toString());
-            sb.append("\n");
+            builder.withMeta(line.toString());
         }
         for (VcfAltHeaderLine altHeaderLine : altHeaderLines.values()) {
-            sb.append(altHeaderLine.toString());
-            sb.append("\n");
+            builder.withMeta(altHeaderLine.toString());
         }
         for (VcfContigHeaderLine contigHeaderLine : contigHeaderLines.values()) {
-            sb.append(contigHeaderLine.toString());
-            sb.append("\n");
+            builder.withMeta(contigHeaderLine.toString());
         }
         for (VcfFilterHeaderLine filterHeaderLine : filterHeaderLines.values()) {
-            sb.append(filterHeaderLine.toString());
-            sb.append("\n");
+            builder.withMeta(filterHeaderLine.toString());
         }
         for (VcfFormatHeaderLine formatHeaderLine : formatHeaderLines.values()) {
-            sb.append(formatHeaderLine.toString());
-            sb.append("\n");
+            builder.withMeta(formatHeaderLine.toString());
         }
         for (VcfInfoHeaderLine infoHeaderLine : infoHeaderLines.values()) {
-            sb.append(infoHeaderLine.toString());
-            sb.append("\n");
+            builder.withMeta(infoHeaderLine.toString());
         }
         for (VcfMetaHeaderLine metaHeaderLine : metaHeaderLines.values()) {
-            sb.append(metaHeaderLine.toString());
-            sb.append("\n");
+            builder.withMeta(metaHeaderLine.toString());
         }
-        for (VcfPedigreeHeaderLine pedigreeHeaderLine : pedigreeHeaderLines) {
-            sb.append(pedigreeHeaderLine.toString());
-            sb.append("\n");
+        for (VcfPedigreeHeaderLine pedigreeHeaderLine : pedigreeHeaderLines) { 
+            builder.withMeta(pedigreeHeaderLine.toString());
         }
         for (VcfSampleHeaderLine sampleHeaderLine : sampleHeaderLines.values()) {
-            sb.append(sampleHeaderLine.toString());
-            sb.append("\n");
+            builder.withMeta(sampleHeaderLine.toString());
         }
         for (VcfStructuredHeaderLine structuredHeaderLine : structuredHeaderLines) {
-            sb.append(structuredHeaderLine);
-            sb.append("\n");
+            builder.withMeta(structuredHeaderLine.toString());
         }
-        return sb.toString();
+        return builder.build();
+    }
+
+    @Override
+    public String toString() {
+        return toHeader().toString();
     }
 
     /**

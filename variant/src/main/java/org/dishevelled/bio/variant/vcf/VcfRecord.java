@@ -1,7 +1,7 @@
 /*
 
     dsh-bio-variant  Variants.
-    Copyright (c) 2013-2016 held jointly by the individual authors.
+    Copyright (c) 2013-2017 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Lesser General Public License as published
@@ -1521,6 +1521,47 @@ public final class VcfRecord {
         }
 
         /**
+         * Return this VCF record builder configured with the specified INFO key-value(s) pair
+         * replacing the previously configured value(s).  Use sparingly, more expensive than
+         * <code>withFields</code>.
+         *
+         * @param id INFO ID key, must not be null
+         * @param values INFO values, must not be null
+         * @return this VCF record builder configured with the specified INFO key-value(s) pair
+         *    replacing the previously configured value(s)
+         */
+        public Builder replaceInfo(final String id, final String... values) {
+            checkNotNull(values);
+
+            // copy old info values except id
+            ListMultimap<String, String> oldInfo = this.info.build();
+            this.info = ImmutableListMultimap.builder();
+            for (String key : oldInfo.keys()) {
+                if (!key.equals(id)) {
+                    this.info.putAll(key, oldInfo.get(key));
+                }
+            }
+            // add new value(s)
+            for (String value : values) {
+                info.put(id, value);
+            }
+            return this;
+        }
+
+        /**
+         * Return this VCF record builder configured with the specified INFO key-value pairs.
+         * Use sparingly, more expensive than <code>withFields</code>.
+         *
+         * @param info INFO key-value pairs, must not be null
+         * @return this VCF record builder configured with the specified INFO key-value pairs
+         */
+        public Builder replaceInfo(final ListMultimap<String, String> info) {
+            this.info = ImmutableListMultimap.builder();
+            this.info.putAll(info);
+            return this;
+        }
+
+        /**
          * Return this VCF record builder configured with the specified format.
          *
          * @param format format
@@ -1567,6 +1608,19 @@ public final class VcfRecord {
          * @return this VCF record builder configured with the specified genotypes keyed by sample id
          */
         public Builder withGenotypes(final Map<String, VcfGenotype> genotypes) {
+            this.genotypes.putAll(genotypes);
+            return this;
+        }
+
+        /**
+         * Return this VCF record builder configured with the specified genotypes keyed by sample id.
+         * Use sparingly, more expensive than <code>withGenotypes</code>.
+         *
+         * @param genotypes genotypes keyed by sample id, must not be null
+         * @return this VCF record builder configured with the specified genotypes keyed by sample id
+         */
+        public Builder replaceGenotypes(final Map<String, VcfGenotype> genotypes) {
+            this.genotypes = ImmutableMap.builder();
             this.genotypes.putAll(genotypes);
             return this;
         }
