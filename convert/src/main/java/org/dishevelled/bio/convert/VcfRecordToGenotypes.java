@@ -23,13 +23,9 @@
 */
 package org.dishevelled.bio.convert;
 
-import static java.util.stream.Collectors.toList;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import com.google.common.collect.ImmutableList;
 
 import javax.annotation.concurrent.Immutable;
 

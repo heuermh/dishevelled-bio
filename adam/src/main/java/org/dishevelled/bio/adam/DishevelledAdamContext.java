@@ -26,8 +26,6 @@ package org.dishevelled.bio.adam;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 
@@ -68,7 +66,6 @@ import org.bdgenomics.adam.rdd.variant.GenotypeRDD;
 import org.bdgenomics.adam.rdd.variant.VariantRDD;
 
 import org.bdgenomics.convert.Converter;
-import org.bdgenomics.convert.ConversionException;
 import org.bdgenomics.convert.ConversionStringency;
 
 import org.bdgenomics.convert.bdgenomics.BdgenomicsModule;
@@ -98,11 +95,7 @@ import org.dishevelled.bio.variant.vcf.header.VcfFormatHeaderLine;
 import org.dishevelled.bio.variant.vcf.header.VcfInfoHeaderLine;
 import org.dishevelled.bio.variant.vcf.header.VcfHeaderLines;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import scala.Option;
-import scala.Some;
 
 import scala.collection.JavaConversions;
 import scala.collection.Seq;

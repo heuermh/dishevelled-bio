@@ -23,8 +23,6 @@
 */
 package org.dishevelled.bio.adam;
 
-import com.google.common.collect.ImmutableListMultimap;
-
 import com.esotericsoftware.kryo.Kryo;
 
 import de.javakaffee.kryoserializers.guava.ArrayListMultimapSerializer;

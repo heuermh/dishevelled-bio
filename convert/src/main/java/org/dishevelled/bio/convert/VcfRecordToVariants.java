@@ -26,8 +26,6 @@ package org.dishevelled.bio.convert;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.base.Splitter;
-
 import com.google.common.collect.ImmutableList;
 
 import javax.annotation.concurrent.Immutable;

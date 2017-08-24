@@ -32,7 +32,6 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
 import org.bdgenomics.convert.Converter;
-import org.bdgenomics.convert.ConversionStringency;
 
 import org.bdgenomics.formats.avro.Dbxref;
 import org.bdgenomics.formats.avro.Feature;

@@ -23,7 +23,6 @@
 */
 package org.dishevelled.bio.convert;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -36,7 +36,6 @@ import com.google.common.base.Joiner;
 import org.dishevelled.bio.variant.vcf.VcfGenome;
 import org.dishevelled.bio.variant.vcf.VcfReader;
 import org.dishevelled.bio.variant.vcf.VcfSample;
-import org.dishevelled.bio.variant.vcf.VcfWriter;
 import org.dishevelled.bio.variant.vcf.VcfStreamAdapter;
 
 import org.dishevelled.commandline.ArgumentList;

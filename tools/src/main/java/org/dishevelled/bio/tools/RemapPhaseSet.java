@@ -23,8 +23,6 @@
 */
 package org.dishevelled.bio.tools;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import static org.dishevelled.compress.Readers.reader;
 import static org.dishevelled.compress.Writers.writer;
 
@@ -37,10 +35,6 @@ import java.util.List;
 import java.util.Map;
 
 import java.util.concurrent.Callable;
-
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ListMultimap;
 
 import org.dishevelled.bio.variant.vcf.VcfGenotype;
 import org.dishevelled.bio.variant.vcf.VcfHeader;

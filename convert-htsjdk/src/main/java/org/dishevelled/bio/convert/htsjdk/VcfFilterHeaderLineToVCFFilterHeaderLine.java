@@ -28,7 +28,6 @@ import htsjdk.variant.vcf.VCFFilterHeaderLine;
 import org.bdgenomics.convert.AbstractConverter;
 import org.bdgenomics.convert.ConversionException;
 import org.bdgenomics.convert.ConversionStringency;
-import org.bdgenomics.convert.Converter;
 
 import org.dishevelled.bio.variant.vcf.header.VcfFilterHeaderLine;
 

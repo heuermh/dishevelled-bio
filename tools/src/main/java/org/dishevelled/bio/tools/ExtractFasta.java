@@ -31,17 +31,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import java.util.Iterator;
-
 import java.util.concurrent.Callable;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import com.google.common.base.Splitter;
-
-import org.biojava.bio.seq.DNATools;
 import org.biojava.bio.seq.Sequence;
 import org.biojava.bio.seq.SequenceIterator;
 
