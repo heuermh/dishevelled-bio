@@ -1,7 +1,7 @@
 /*
 
     dsh-bio-variant  Variants.
-    Copyright (c) 2013-2016 held jointly by the individual authors.
+    Copyright (c) 2013-2017 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Lesser General Public License as published
@@ -136,46 +136,6 @@ public final class VcfAttributesTest {
             .withInfo("R_STRINGS", "foo", "bar", "baz")
 
             .build();
-    }
-
-    @Test(expected=NullPointerException.class)
-    public void testNumberANullRecord() {
-        numberA((VcfRecord) null);
-    }
-
-    @Test(expected=NullPointerException.class)
-    public void testNumberANullGenotype() {
-        numberA((VcfGenotype) null);
-    }
-
-    @Test
-    public void testNumberARecord() {
-        assertEquals(2, numberA(record));
-    }
-
-    @Test
-    public void testNumberAGenotype() {
-        assertEquals(2, numberA(genotypes.get("K=2")));
-    }
-
-    @Test(expected=NullPointerException.class)
-    public void testNumberRNullRecord() {
-        numberR((VcfRecord) null);
-    }
-
-    @Test(expected=NullPointerException.class)
-    public void testNumberRNullGenotype() {
-        numberR((VcfGenotype) null);
-    }
-
-    @Test
-    public void testNumberRRecord() {
-        assertEquals(3, numberR(record));
-    }
-
-    @Test
-    public void testNumberRGenotype() {
-        assertEquals(3, numberR(genotypes.get("K=2")));
     }
 
     @Test(expected=NullPointerException.class)

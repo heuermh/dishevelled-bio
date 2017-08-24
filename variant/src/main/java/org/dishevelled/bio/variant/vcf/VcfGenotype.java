@@ -52,6 +52,15 @@ public final class VcfGenotype {
     /** Genotype fields. */
     private final ListMultimap<String, String> fields;
 
+    /** The count for Number=A attributes for this VCF record. */
+    private final int a;
+
+    /** The count for Number=R attributes for this VCF record. */
+    private final int r;
+
+    /** The count for Number=G attributes for this VCF record. */
+    private final int g;
+
 
     /**
      * Create a new VCF genotype with the specified genotype fields.
@@ -75,6 +84,10 @@ public final class VcfGenotype {
         this.ref = ref;
         this.alt = alt;
         this.fields = fields;
+
+        this.a = alt.length;
+        this.r = this.a + 1;
+        this.g = numberG(this);
     }
 
 
@@ -123,7 +136,7 @@ public final class VcfGenotype {
      * @return the count for Number=A attributes for this VCF genotype
      */
     public int a() {
-        return alt.length;
+        return a;
     }
 
     /**
@@ -132,7 +145,7 @@ public final class VcfGenotype {
      * @return the count for Number=R attributes for this VCF genotype
      */
     public int r() {
-        return a() + 1;
+        return r;
     }
 
     /**
@@ -140,10 +153,484 @@ public final class VcfGenotype {
      *
      * @return the count for Number=G attributes for this VCF genotype
      */
-    public int g() { return -1; }
+    public int g() {
+        return g;
+    }
 
 
     // genotype fields for VCF FORMAT non-reserved keys
+
+    /**
+     * Return true if the genotype fields for this VCF genotype contains
+     * the VCF genotype field reserved key <code>AD</code>.
+     *
+     * @return true if the genotype fields for this VCF genotype contains
+     *    the VCF genotype field reserved key <code>AD</code>
+     */
+    public boolean containsAd() {
+        return containsFieldKey("AD");
+    }
+
+    /**
+     * Return the Number=R Type=Integer value for the VCF genotype field
+     * reserved key <code>AD</code> as an immutable list of integers.
+     *
+     * @return the Number=R Type=Integer value for the VCF genotype field
+     *    reserved key <code>AD</code> as an immutable list of integers.
+     */
+    public List<Integer> getAd() {
+        return getFieldIntegers("AD", r);
+    }
+
+    /**
+     * Return an optional Number=R Type=Integer value for the VCF genotype field
+     * reserved key <code>AD</code> as an immutable list of integers.
+     *
+     * @return an optional Number=R Type=Integer value for the VCF genotype field
+     *    reserved key <code>AD</code> as an immutable list of integers
+     */
+    public Optional<List<Integer>> getAdOpt() {
+        return getFieldIntegersOpt("AD", r);
+    }
+
+    /**
+     * Return true if the genotype fields for this VCF genotype contains
+     * the VCF genotype field reserved key <code>ADF</code>.
+     *
+     * @return true if the genotype fields for this VCF genotype contains
+     *    the VCF genotype field reserved key <code>ADF</code>
+     */
+    public boolean containsAdf() {
+        return containsFieldKey("ADF");
+    }
+
+    /**
+     * Return the Number=R Type=Integer value for the VCF genotype field
+     * reserved key <code>ADF</code> as an immutable list of integers.
+     *
+     * @return the Number=R Type=Integer value for the VCF genotype field
+     *    reserved key <code>ADF</code> as an immutable list of integers.
+     */
+    public List<Integer> getAdf() {
+        return getFieldIntegers("ADF", r);
+    }
+
+    /**
+     * Return an optional Number=R Type=Integer value for the VCF genotype field
+     * reserved key <code>ADF</code> as an immutable list of integers.
+     *
+     * @return an optional Number=R Type=Integer value for the VCF genotype field
+     *    reserved key <code>ADF</code> as an immutable list of integers
+     */
+    public Optional<List<Integer>> getAdfOpt() {
+        return getFieldIntegersOpt("ADF", r);
+    }
+
+    /**
+     * Return true if the genotype fields for this VCF genotype contains
+     * the VCF genotype field reserved key <code>ADR</code>.
+     *
+     * @return true if the genotype fields for this VCF genotype contains
+     *    the VCF genotype field reserved key <code>ADR</code>
+     */
+    public boolean containsAdr() {
+        return containsFieldKey("ADR");
+    }
+
+    /**
+     * Return the Number=R Type=Integer value for the VCF genotype field
+     * reserved key <code>ADR</code> as an immutable list of integers.
+     *
+     * @return the Number=R Type=Integer value for the VCF genotype field
+     *    reserved key <code>ADR</code> as an immutable list of integers.
+     */
+    public List<Integer> getAdr() {
+        return getFieldIntegers("ADR", r);
+    }
+
+    /**
+     * Return an optional Number=R Type=Integer value for the VCF genotype field
+     * reserved key <code>ADR</code> as an immutable list of integers.
+     *
+     * @return an optional Number=R Type=Integer value for the VCF genotype field
+     *    reserved key <code>ADR</code> as an immutable list of integers
+     */
+    public Optional<List<Integer>> getAdrOpt() {
+        return getFieldIntegersOpt("ADR", r);
+    }
+
+    /**
+     * Return true if the genotype fields for this VCF genotype contains
+     * the VCF genotype field reserved key <code>DP</code>.
+     *
+     * @return true if the genotype fields for this VCF genotype contains
+     *    the VCF genotype field reserved key <code>DP</code>
+     */
+    public boolean containsDp() {
+        return containsFieldKey("DP");
+    }
+
+    /**
+     * Return the Number=1 Type=Integer value for the VCF genotype field
+     * reserved key <code>DP</code> as an integer.
+     *
+     * @return the Number=1 Type=Integer value for the VCF genotype field
+     *    reserved key <code>DP</code> as an integer
+     */
+    public int getDp() {
+        return getFieldInteger("DP");
+    }
+
+    /**
+     * Return an optional Number=1 Type=Integer value for the VCF genotype field
+     * reserved key <code>DP</code> as an integer.
+     *
+     * @return an optional Number=1 Type=Integer value for the VCF genotype field
+     *    reserved key <code>DP</code> as an integer
+     */
+    public Optional<Integer> getDpOpt() {
+        return getFieldIntegerOpt("DP");
+    }
+
+    /**
+     * Return true if the genotype fields for this VCF genotype contains
+     * the VCF genotype field reserved key <code>EC</code>.
+     *
+     * @return true if the genotype fields for this VCF genotype contains
+     *    the VCF genotype field reserved key <code>EC</code>
+     */
+    public boolean containsEc() {
+        return containsFieldKey("EC");
+    }
+
+    /**
+     * Return the Number=A Type=Integer value for the VCF genotype field
+     * reserved key <code>EC</code> as an immutable list of integers.
+     *
+     * @return the Number=A Type=Integer value for the VCF genotype field
+     *    reserved key <code>EC</code> as an immutable list of integers.
+     */
+    public List<Integer> getEc() {
+        return getFieldIntegers("EC", a);
+    }
+
+    /**
+     * Return an optional Number=A Type=Integer value for the VCF genotype field
+     * reserved key <code>EC</code> as an immutable list of integers.
+     *
+     * @return an optional Number=A Type=Integer value for the VCF genotype field
+     *    reserved key <code>EC</code> as an immutable list of integers
+     */
+    public Optional<List<Integer>> getEcOpt() {
+        return getFieldIntegersOpt("ADR", a);
+    }
+
+    /**
+     * Return true if the genotype fields for this VCF genotype contains
+     * the VCF genotype field reserved key <code>FT</code>.
+     *
+     * @return true if the genotype fields for this VCF genotype contains
+     *    the VCF genotype field reserved key <code>FT</code>
+     */
+    public boolean containsFt() {
+        return containsFieldKey("FT");
+    }
+
+    /**
+     * Return the Number=1 Type=String value for the VCF genotype field
+     * reserved key <code>FT</code> as a string.
+     *
+     * @return the Number=1 Type=String value for the VCF genotype field
+     *    reserved key <code>FT</code> as a string
+     */
+    public String getFt() {
+        return getFieldString("FT");
+    }
+
+    /**
+     * Return an optional Number=1 Type=String value for the VCF genotype field
+     * reserved key <code>FT</code> as a string.
+     *
+     * @return an optional Number=1 Type=String value for the VCF genotype field
+     *    reserved key <code>FT</code> as a string
+     */
+    public Optional<String> getFtOpt() {
+        return getFieldStringOpt("FT");
+    }
+
+    /**
+     * Return true if the genotype fields for this VCF genotype contains
+     * the VCF genotype field reserved key <code>GL</code>.
+     *
+     * @return true if the genotype fields for this VCF genotype contains
+     *    the VCF genotype field reserved key <code>GL</code>
+     */
+    public boolean containsGl() {
+        return containsFieldKey("GL");
+    }
+
+    /**
+     * Return the Number=G Type=Float value for the VCF genotype field
+     * reserved key <code>GL</code> as an immutable list of floats.
+     *
+     * @return the Number=G Type=Float value for the VCF genotype field
+     *    reserved key <code>GL</code> as an immutable list of floats.
+     */
+    public List<Float> getGl() {
+        return getFieldFloats("GL", g);
+    }
+
+    /**
+     * Return an optional Number=G Type=Float value for the VCF genotype field
+     * reserved key <code>GL</code> as an immutable list of floats.
+     *
+     * @return an optional Number=G Type=Float value for the VCF genotype field
+     *    reserved key <code>GL</code> as an immutable list of floats
+     */
+    public Optional<List<Float>> getGlOpt() {
+        return getFieldFloatsOpt("GL", g);
+    }
+
+    /**
+     * Return true if the genotype fields for this VCF genotype contains
+     * the VCF genotype field reserved key <code>GP</code>.
+     *
+     * @return true if the genotype fields for this VCF genotype contains
+     *    the VCF genotype field reserved key <code>GP</code>
+     */
+    public boolean containsGp() {
+        return containsFieldKey("GP");
+    }
+
+    /**
+     * Return the Number=G Type=Float value for the VCF genotype field
+     * reserved key <code>GP</code> as an immutable list of floats.
+     *
+     * @return the Number=G Type=Float value for the VCF genotype field
+     *    reserved key <code>GP</code> as an immutable list of floats.
+     */
+    public List<Float> getGp() {
+        return getFieldFloats("GP", g);
+    }
+
+    /**
+     * Return an optional Number=G Type=Float value for the VCF genotype field
+     * reserved key <code>GP</code> as an immutable list of floats.
+     *
+     * @return an optional Number=G Type=Float value for the VCF genotype field
+     *    reserved key <code>GP</code> as an immutable list of floats
+     */
+    public Optional<List<Float>> getGpOpt() {
+        return getFieldFloatsOpt("GP", g);
+    }
+
+    /**
+     * Return true if the genotype fields for this VCF genotype contains
+     * the VCF genotype field reserved key <code>GQ</code>.
+     *
+     * @return true if the genotype fields for this VCF genotype contains
+     *    the VCF genotype field reserved key <code>GQ</code>
+     */
+    public boolean containsGq() {
+        return containsFieldKey("GQ");
+    }
+
+    /**
+     * Return the Number=1 Type=Integer value for the VCF genotype field
+     * reserved key <code>GQ</code> as an integer.
+     *
+     * @return the Number=1 Type=Integer value for the VCF genotype field
+     *    reserved key <code>GQ</code> as an integer
+     */
+    public int getGq() {
+        return getFieldInteger("GQ");
+    }
+
+    /**
+     * Return an optional Number=1 Type=Integer value for the VCF genotype field
+     * reserved key <code>GQ</code> as an integer.
+     *
+     * @return an optional Number=1 Type=Integer value for the VCF genotype field
+     *    reserved key <code>GQ</code> as an integer
+     */
+    public Optional<Integer> getGqOpt() {
+        return getFieldIntegerOpt("GQ");
+    }
+
+    /**
+     * Return true if the genotype fields for this VCF genotype contains
+     * the VCF genotype field reserved key <code>GT</code>. Always returns true.
+     *
+     * @return true
+     */
+    public boolean containsGt() {
+        return true;
+    }
+
+    /**
+     * Return true if the genotype fields for this VCF genotype contains
+     * the VCF genotype field reserved key <code>HQ</code>.
+     *
+     * @return true if the genotype fields for this VCF genotype contains
+     *    the VCF genotype field reserved key <code>HQ</code>
+     */
+    public boolean containsHq() {
+        return containsFieldKey("HQ");
+    }
+
+    /**
+     * Return the Number=2 Type=Integer value for the VCF genotype field
+     * reserved key <code>HQ</code> as an immutable list of integers.
+     *
+     * @return the Number=2 Type=Integer value for the VCF genotype field
+     *    reserved key <code>HQ</code> as an immutable list of integers.
+     */
+    public List<Integer> getHq() {
+        return getFieldIntegers("HQ", 2);
+    }
+
+    /**
+     * Return an optional Number=2 Type=Integer value for the VCF genotype field
+     * reserved key <code>HQ</code> as an immutable list of integers.
+     *
+     * @return an optional Number=2 Type=Integer value for the VCF genotype field
+     *    reserved key <code>HQ</code> as an immutable list of integers
+     */
+    public Optional<List<Integer>> getHqOpt() {
+        return getFieldIntegersOpt("HQ", 2);
+    }
+
+    /**
+     * Return true if the genotype fields for this VCF genotype contains
+     * the VCF genotype field reserved key <code>MQ</code>.
+     *
+     * @return true if the genotype fields for this VCF genotype contains
+     *    the VCF genotype field reserved key <code>MQ</code>
+     */
+    public boolean containsMq() {
+        return containsFieldKey("MQ");
+    }
+
+    /**
+     * Return the Number=1 Type=Integer value for the VCF genotype field
+     * reserved key <code>MQ</code> as an integer.
+     *
+     * @return the Number=1 Type=Integer value for the VCF genotype field
+     *    reserved key <code>MQ</code> as an integer
+     */
+    public int getMq() {
+        return getFieldInteger("MQ");
+    }
+
+    /**
+     * Return an optional Number=1 Type=Integer value for the VCF genotype field
+     * reserved key <code>MQ</code> as an integer.
+     *
+     * @return an optional Number=1 Type=Integer value for the VCF genotype field
+     *    reserved key <code>MQ</code> as an integer
+     */
+    public Optional<Integer> getMqOpt() {
+        return getFieldIntegerOpt("MQ");
+    }
+
+    /**
+     * Return true if the genotype fields for this VCF genotype contains
+     * the VCF genotype field reserved key <code>PL</code>.
+     *
+     * @return true if the genotype fields for this VCF genotype contains
+     *    the VCF genotype field reserved key <code>PL</code>
+     */
+    public boolean containsPl() {
+        return containsFieldKey("PL");
+    }
+
+    /**
+     * Return the Number=G Type=Integer value for the VCF genotype field
+     * reserved key <code>PL</code> as an immutable list of integers.
+     *
+     * @return the Number=G Type=Integer value for the VCF genotype field
+     *    reserved key <code>PL</code> as an immutable list of integers.
+     */
+    public List<Integer> getPl() {
+        return getFieldIntegers("PL", g);
+    }
+
+    /**
+     * Return an optional Number=G Type=Integer value for the VCF genotype field
+     * reserved key <code>PL</code> as an immutable list of integers.
+     *
+     * @return an optional Number=G Type=Integer value for the VCF genotype field
+     *    reserved key <code>PL</code> as an immutable list of integers
+     */
+    public Optional<List<Integer>> getPlOpt() {
+        return getFieldIntegersOpt("PL", g);
+    }
+
+    /**
+     * Return true if the genotype fields for this VCF genotype contains
+     * the VCF genotype field reserved key <code>PQ</code>.
+     *
+     * @return true if the genotype fields for this VCF genotype contains
+     *    the VCF genotype field reserved key <code>PQ</code>
+     */
+    public boolean containsPq() {
+        return containsFieldKey("PQ");
+    }
+
+    /**
+     * Return the Number=1 Type=Integer value for the VCF genotype field
+     * reserved key <code>PQ</code> as an integer.
+     *
+     * @return the Number=1 Type=Integer value for the VCF genotype field
+     *    reserved key <code>PQ</code> as an integer
+     */
+    public int getPq() {
+        return getFieldInteger("PQ");
+    }
+
+    /**
+     * Return an optional Number=1 Type=Integer value for the VCF genotype field
+     * reserved key <code>PQ</code> as an integer.
+     *
+     * @return an optional Number=1 Type=Integer value for the VCF genotype field
+     *    reserved key <code>PQ</code> as an integer
+     */
+    public Optional<Integer> getPqOpt() {
+        return getFieldIntegerOpt("PQ");
+    }
+
+    /**
+     * Return true if the genotype fields for this VCF genotype contains
+     * the VCF genotype field reserved key <code>PS</code>.
+     *
+     * @return true if the genotype fields for this VCF genotype contains
+     *    the VCF genotype field reserved key <code>PS</code>
+     */
+    public boolean containsPs() {
+        return containsFieldKey("PS");
+    }
+
+    /**
+     * Return the Number=1 Type=Integer value for the VCF genotype field
+     * reserved key <code>PS</code> as an integer.
+     *
+     * @return the Number=1 Type=Integer value for the VCF genotype field
+     *    reserved key <code>PS</code> as an integer
+     */
+    public int getPs() {
+        return getFieldInteger("PS");
+    }
+
+    /**
+     * Return an optional Number=1 Type=Integer value for the VCF genotype field
+     * reserved key <code>PS</code> as an integer.
+     *
+     * @return an optional Number=1 Type=Integer value for the VCF genotype field
+     *    reserved key <code>PS</code> as an integer
+     */
+    public Optional<Integer> getPsOpt() {
+        return getFieldIntegerOpt("PS");
+    }
 
     /**
      * Return true if the genotype fields for this VCF genotype contain

@@ -83,6 +83,12 @@ public final class VcfRecord {
     /** Genotypes keyed by sample id. */
     private final Map<String, VcfGenotype> genotypes;
 
+    /** The count for Number=A attributes for this VCF record. */
+    private final int a;
+
+    /** The count for Number=R attributes for this VCF record. */
+    private final int r;
+
 
     /**
      * Create a new VCF record.
@@ -136,6 +142,9 @@ public final class VcfRecord {
         this.info = info;
         this.format = format;
         this.genotypes = genotypes;
+
+        this.a = this.alt.length;
+        this.r = this.a + 1;
     }
 
 
@@ -229,7 +238,7 @@ public final class VcfRecord {
      * @return the count for Number=A attributes for this VCF record
      */
     public int a() {
-        return alt.length;
+        return a;
     }
 
     /**
@@ -238,15 +247,15 @@ public final class VcfRecord {
      * @return the count for Number=R attributes for this VCF record
      */
     public int r() {
-        return a() + 1;
+        return r;
     }
 
     /**
      * Return true if the INFO key-value(s) pairs for this VCF record contains
-     * the VCF INFO reserved key <code>"AA"</code>.
+     * the VCF INFO reserved key <code>AA</code>.
      *
      * @return true if the INFO key-value(s) pairs for this VCF record contains
-     *    the VCF INFO reserved key <code>"AA"</code>
+     *    the VCF INFO reserved key <code>AA</code>
      */
     public boolean containsAa() {
         return containsInfoKey("AA");
@@ -276,10 +285,10 @@ public final class VcfRecord {
 
     /**
      * Return true if the INFO key-value(s) pairs for this VCF record contains
-     * the VCF INFO reserved key <code>"AC"</code>.
+     * the VCF INFO reserved key <code>AC</code>.
      *
      * @return true if the INFO key-value(s) pairs for this VCF record contains
-     *    the VCF INFO reserved key <code>"AC"</code>
+     *    the VCF INFO reserved key <code>AC</code>
      */
     public boolean containsAc() {
         return containsInfoKey("AC");
@@ -309,10 +318,10 @@ public final class VcfRecord {
 
     /**
      * Return true if the INFO key-value(s) pairs for this VCF record contains
-     * the VCF INFO reserved key <code>"AD"</code>.
+     * the VCF INFO reserved key <code>AD</code>.
      *
      * @return true if the INFO key-value(s) pairs for this VCF record contains
-     *    the VCF INFO reserved key <code>"AD"</code>
+     *    the VCF INFO reserved key <code>AD</code>
      */
     public boolean containsAd() {
         return containsInfoKey("AD");
@@ -342,10 +351,10 @@ public final class VcfRecord {
 
     /**
      * Return true if the INFO key-value(s) pairs for this VCF record contains
-     * the VCF INFO reserved key <code>"ADF"</code>.
+     * the VCF INFO reserved key <code>ADF</code>.
      *
      * @return true if the INFO key-value(s) pairs for this VCF record contains
-     *    the VCF INFO reserved key <code>"ADF"</code>
+     *    the VCF INFO reserved key <code>ADF</code>
      */
     public boolean containsAdf() {
         return containsInfoKey("ADF");
@@ -375,10 +384,10 @@ public final class VcfRecord {
 
     /**
      * Return true if the INFO key-value(s) pairs for this VCF record contains
-     * the VCF INFO reserved key <code>"ADR"</code>.
+     * the VCF INFO reserved key <code>ADR</code>.
      *
      * @return true if the INFO key-value(s) pairs for this VCF record contains
-     *    the VCF INFO reserved key <code>"ADR"</code>
+     *    the VCF INFO reserved key <code>ADR</code>
      */
     public boolean containsAdr() {
         return containsInfoKey("ADR");
@@ -408,10 +417,10 @@ public final class VcfRecord {
 
     /**
      * Return true if the INFO key-value(s) pairs for this VCF record contains
-     * the VCF INFO reserved key <code>"AF"</code>.
+     * the VCF INFO reserved key <code>AF</code>.
      *
      * @return true if the INFO key-value(s) pairs for this VCF record contains
-     *    the VCF INFO reserved key <code>"AF"</code>
+     *    the VCF INFO reserved key <code>AF</code>
      */
     public boolean containsAf() {
         return containsInfoKey("AF");
@@ -441,10 +450,10 @@ public final class VcfRecord {
 
     /**
      * Return true if the INFO key-value(s) pairs for this VCF record contains
-     * the VCF INFO reserved key <code>"AN"</code>.
+     * the VCF INFO reserved key <code>AN</code>.
      *
      * @return true if the INFO key-value(s) pairs for this VCF record contains
-     *    the VCF INFO reserved key <code>"AN"</code>
+     *    the VCF INFO reserved key <code>AN</code>
      */
     public boolean containsAn() {
         return containsInfoKey("AN");
@@ -474,10 +483,10 @@ public final class VcfRecord {
 
     /**
      * Return true if the INFO key-value(s) pairs for this VCF record contains
-     * the VCF INFO reserved key <code>"BQ"</code>.
+     * the VCF INFO reserved key <code>BQ</code>.
      *
      * @return true if the INFO key-value(s) pairs for this VCF record contains
-     *    the VCF INFO reserved key <code>"BQ"</code>
+     *    the VCF INFO reserved key <code>BQ</code>
      */
     public boolean containsBq() {
         return containsInfoKey("BQ");
@@ -507,10 +516,10 @@ public final class VcfRecord {
 
     /**
      * Return true if the INFO key-value(s) pairs for this VCF record contains
-     * the VCF INFO reserved key <code>"CIGAR"</code>.
+     * the VCF INFO reserved key <code>CIGAR</code>.
      *
      * @return true if the INFO key-value(s) pairs for this VCF record contains
-     *    the VCF INFO reserved key <code>"CIGAR"</code>
+     *    the VCF INFO reserved key <code>CIGAR</code>
      */
     public boolean containsCigar() {
         return containsInfoKey("CIGAR");
@@ -540,10 +549,10 @@ public final class VcfRecord {
 
     /**
      * Return true if the INFO key-value(s) pairs for this VCF record contains
-     * the VCF INFO reserved key <code>"DB"</code>.
+     * the VCF INFO reserved key <code>DB</code>.
      *
      * @return true if the INFO key-value(s) pairs for this VCF record contains
-     *    the VCF INFO reserved key <code>"DB"</code>
+     *    the VCF INFO reserved key <code>DB</code>
      */
     public boolean containsDb() {
         return containsInfoKey("DB");
@@ -573,10 +582,10 @@ public final class VcfRecord {
 
     /**
      * Return true if the INFO key-value(s) pairs for this VCF record contains
-     * the VCF INFO reserved key <code>"DP"</code>.
+     * the VCF INFO reserved key <code>DP</code>.
      *
      * @return true if the INFO key-value(s) pairs for this VCF record contains
-     *    the VCF INFO reserved key <code>"DP"</code>
+     *    the VCF INFO reserved key <code>DP</code>
      */
     public boolean containsDp() {
         return containsInfoKey("DP");
@@ -606,10 +615,10 @@ public final class VcfRecord {
 
     /**
      * Return true if the INFO key-value(s) pairs for this VCF record contains
-     * the VCF INFO reserved key <code>"END"</code>.
+     * the VCF INFO reserved key <code>END</code>.
      *
      * @return true if the INFO key-value(s) pairs for this VCF record contains
-     *    the VCF INFO reserved key <code>"END"</code>
+     *    the VCF INFO reserved key <code>END</code>
      */
     public boolean containsEnd() {
         return containsInfoKey("END");
@@ -639,10 +648,10 @@ public final class VcfRecord {
 
     /**
      * Return true if the INFO key-value(s) pairs for this VCF record contains
-     * the VCF INFO reserved key <code>"H2"</code>.
+     * the VCF INFO reserved key <code>H2</code>.
      *
      * @return true if the INFO key-value(s) pairs for this VCF record contains
-     *    the VCF INFO reserved key <code>"H2"</code>
+     *    the VCF INFO reserved key <code>H2</code>
      */
     public boolean containsH2() {
         return containsInfoKey("H2");
@@ -672,10 +681,10 @@ public final class VcfRecord {
 
     /**
      * Return true if the INFO key-value(s) pairs for this VCF record contains
-     * the VCF INFO reserved key <code>"H3"</code>.
+     * the VCF INFO reserved key <code>H3</code>.
      *
      * @return true if the INFO key-value(s) pairs for this VCF record contains
-     *    the VCF INFO reserved key <code>"H3"</code>
+     *    the VCF INFO reserved key <code>H3</code>
      */
     public boolean containsH3() {
         return containsInfoKey("H3");
@@ -705,10 +714,10 @@ public final class VcfRecord {
 
     /**
      * Return true if the INFO key-value(s) pairs for this VCF record contains
-     * the VCF INFO reserved key <code>"MQ"</code>.
+     * the VCF INFO reserved key <code>MQ</code>.
      *
      * @return true if the INFO key-value(s) pairs for this VCF record contains
-     *    the VCF INFO reserved key <code>"MQ"</code>
+     *    the VCF INFO reserved key <code>MQ</code>
      */
     public boolean containsMq() {
         return containsInfoKey("MQ");
@@ -738,10 +747,10 @@ public final class VcfRecord {
 
     /**
      * Return true if the INFO key-value(s) pairs for this VCF record contains
-     * the VCF INFO reserved key <code>"MQ0"</code>.
+     * the VCF INFO reserved key <code>MQ0</code>.
      *
      * @return true if the INFO key-value(s) pairs for this VCF record contains
-     *    the VCF INFO reserved key <code>"MQ0"</code>
+     *    the VCF INFO reserved key <code>MQ0</code>
      */
     public boolean containsMq0() {
         return containsInfoKey("MQ0");
@@ -771,10 +780,10 @@ public final class VcfRecord {
 
     /**
      * Return true if the INFO key-value(s) pairs for this VCF record contains
-     * the VCF INFO reserved key <code>"NS"</code>.
+     * the VCF INFO reserved key <code>NS</code>.
      *
      * @return true if the INFO key-value(s) pairs for this VCF record contains
-     *    the VCF INFO reserved key <code>"NS"</code>
+     *    the VCF INFO reserved key <code>NS</code>
      */
     public boolean containsNs() {
         return containsInfoKey("NS");
@@ -804,10 +813,10 @@ public final class VcfRecord {
 
     /**
      * Return true if the INFO key-value(s) pairs for this VCF record contains
-     * the VCF INFO reserved key <code>"SB"</code>.
+     * the VCF INFO reserved key <code>SB</code>.
      *
      * @return true if the INFO key-value(s) pairs for this VCF record contains
-     *    the VCF INFO reserved key <code>"SB"</code>
+     *    the VCF INFO reserved key <code>SB</code>
      */
     public boolean containsSb() {
         return containsInfoKey("SB");
@@ -837,10 +846,10 @@ public final class VcfRecord {
 
     /**
      * Return true if the INFO key-value(s) pairs for this VCF record contains
-     * the VCF INFO reserved key <code>"SOMATIC"</code>.
+     * the VCF INFO reserved key <code>SOMATIC</code>.
      *
      * @return true if the INFO key-value(s) pairs for this VCF record contains
-     *    the VCF INFO reserved key <code>"SOMATIC"</code>
+     *    the VCF INFO reserved key <code>SOMATIC</code>
      */
     public boolean containsSomatic() {
         return containsInfoKey("SOMATIC");
@@ -870,10 +879,10 @@ public final class VcfRecord {
 
     /**
      * Return true if the INFO key-value(s) pairs for this VCF record contains
-     * the VCF INFO reserved key <code>"VALIDATED"</code>.
+     * the VCF INFO reserved key <code>VALIDATED</code>.
      *
      * @return true if the INFO key-value(s) pairs for this VCF record contains
-     *    the VCF INFO reserved key <code>"VALIDATED"</code>
+     *    the VCF INFO reserved key <code>VALIDATED</code>
      */
     public boolean containsValidated() {
         return containsInfoKey("VALIDATED");
@@ -903,10 +912,10 @@ public final class VcfRecord {
 
     /**
      * Return true if the INFO key-value(s) pairs for this VCF record contains
-     * the VCF INFO reserved key <code>"1000G"</code>.
+     * the VCF INFO reserved key <code>1000G</code>.
      *
      * @return true if the INFO key-value(s) pairs for this VCF record contains
-     *    the VCF INFO reserved key <code>"1000G"</code>
+     *    the VCF INFO reserved key <code>1000G</code>
      */
     public boolean contains1000g() {
         return containsInfoKey("1000G");

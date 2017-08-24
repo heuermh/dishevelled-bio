@@ -151,6 +151,7 @@ public final class VcfPedigree {
          * @param sourceLabel source label
          * @param target target sample, must not be null
          * @param targetLabel target label
+         * @return this VCF pedigree builder
          */
         public Builder withRelationship(final VcfSample source,
                                         final String sourceLabel,

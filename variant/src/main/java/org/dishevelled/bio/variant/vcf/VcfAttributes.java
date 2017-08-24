@@ -1,7 +1,7 @@
 /*
 
     dsh-bio-variant  Variants.
-    Copyright (c) 2013-2016 held jointly by the individual authors.
+    Copyright (c) 2013-2017 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Lesser General Public License as published
@@ -48,50 +48,6 @@ final class VcfAttributes {
         // empty
     }
 
-
-    /**
-     * Return the count for Number=A attributes for the specified VCF record.
-     *
-     * @param record VCF record, must not be null
-     * @return the count for Number=A attributes for the specified VCF record
-     */
-    static int numberA(final VcfRecord record) {
-        checkNotNull(record);
-        return record.getAlt().length;
-    }
-
-    /**
-     * Return the count for Number=R attributes for the specified VCF record.
-     *
-     * @param record VCF record, must not be null
-     * @return the count for Number=R attributes for the specified VCF record
-     */
-    static int numberR(final VcfRecord record) {
-        checkNotNull(record);
-        return numberA(record) + 1;
-    }
-
-    /**
-     * Return the count for Number=A attributes for the specified VCF genotype.
-     *
-     * @param genotype VCF genotype, must not be null
-     * @return the count for Number=A attributes for the specified VCF genotype
-     */
-    static int numberA(final VcfGenotype genotype) {
-        checkNotNull(genotype);
-        return genotype.getAlt().length;
-    }
-
-    /**
-     * Return the count for Number=R attributes for the specified VCF genotype.
-     *
-     * @param genotype VCF genotype, must not be null
-     * @return the count for Number=R attributes for the specified VCF genotype
-     */
-    static int numberR(final VcfGenotype genotype) {
-        checkNotNull(genotype);
-        return numberA(genotype) + 1;
-    }
 
     /**
      * Return the count for Number=G attributes for the specified VCF genotype.
