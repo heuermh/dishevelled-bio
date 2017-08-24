@@ -37,7 +37,6 @@ import org.dishevelled.bio.variant.vcf.header.VcfHeaderLineType;
 import org.dishevelled.bio.variant.vcf.header.VcfInfoHeaderLine;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Convert VcfInfoHeaderLine to VCFInfoHeaderLine.
@@ -45,7 +44,6 @@ import org.slf4j.LoggerFactory;
  * @author  Michael Heuer
  */
 final class VcfInfoHeaderLineToVCFInfoHeaderLine extends AbstractConverter<VcfInfoHeaderLine, VCFInfoHeaderLine> {
-    private static final Logger logger = LoggerFactory.getLogger(VcfInfoHeaderLineToVCFInfoHeaderLine.class);
     /** Convert VcfHeaderLineNumber to VCFHeaderLineCount. */
     private final Converter<VcfHeaderLineNumber, VCFHeaderLineCount> numberConverter;
 
@@ -65,10 +63,6 @@ final class VcfInfoHeaderLineToVCFInfoHeaderLine extends AbstractConverter<VcfIn
         checkNotNull(typeConverter);
         this.numberConverter = numberConverter;
         this.typeConverter = typeConverter;
-        logger.error("error!");
-        logger.warn("warning!");
-        logger.info("info");
-        logger.debug("debug");
     }
 
     @Override
