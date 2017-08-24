@@ -29,12 +29,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static org.dishevelled.bio.variant.vcf.VcfAttributes.*;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import javax.annotation.concurrent.Immutable;
 
@@ -83,10 +81,10 @@ public final class VcfRecord {
     /** Genotypes keyed by sample id. */
     private final Map<String, VcfGenotype> genotypes;
 
-    /** The count for Number=A attributes for this VCF record. */
+    /** Count for Number=A attributes. */
     private final int a;
 
-    /** The count for Number=R attributes for this VCF record. */
+    /** Count for Number=R attributes. */
     private final int r;
 
 
@@ -302,7 +300,7 @@ public final class VcfRecord {
      *    as an immutable list of integers
      */
     public List<Integer> getAc() {
-        return getInfoIntegers("AC", a());
+        return getInfoIntegers("AC", a);
     }
 
     /**
@@ -313,7 +311,7 @@ public final class VcfRecord {
      *    as an immutable list of integers
      */
     public Optional<List<Integer>> getAcOpt() {
-        return getInfoIntegersOpt("AC", a());
+        return getInfoIntegersOpt("AC", a);
     }
 
     /**
@@ -335,7 +333,7 @@ public final class VcfRecord {
      *    as an immutable list of integers
      */
     public List<Integer> getAd() {
-        return getInfoIntegers("AD", r());
+        return getInfoIntegers("AD", r);
     }
 
     /**
@@ -346,7 +344,7 @@ public final class VcfRecord {
      *    as an immutable list of integers
      */
     public Optional<List<Integer>> getAdOpt() {
-        return getInfoIntegersOpt("AD", r());
+        return getInfoIntegersOpt("AD", r);
     }
 
     /**
@@ -368,7 +366,7 @@ public final class VcfRecord {
      *    as an immutable list of integers
      */
     public List<Integer> getAdf() {
-        return getInfoIntegers("ADF", r());
+        return getInfoIntegers("ADF", r);
     }
 
     /**
@@ -379,7 +377,7 @@ public final class VcfRecord {
      *    as an immutable list of integers
      */
     public Optional<List<Integer>> getAdfOpt() {
-        return getInfoIntegersOpt("ADF", r());
+        return getInfoIntegersOpt("ADF", r);
     }
 
     /**
@@ -401,7 +399,7 @@ public final class VcfRecord {
      *    as an immutable list of integers
      */
     public List<Integer> getAdr() {
-        return getInfoIntegers("ADR", r());
+        return getInfoIntegers("ADR", r);
     }
 
     /**
@@ -412,7 +410,7 @@ public final class VcfRecord {
      *    as an immutable list of integers
      */
     public Optional<List<Integer>> getAdrOpt() {
-        return getInfoIntegersOpt("ADR", r());
+        return getInfoIntegersOpt("ADR", r);
     }
 
     /**
@@ -434,7 +432,7 @@ public final class VcfRecord {
      *    as an immutable list of floats
      */
     public List<Float> getAf() {
-        return getInfoFloats("AF", a());
+        return getInfoFloats("AF", a);
     }
 
     /**
@@ -445,7 +443,7 @@ public final class VcfRecord {
      *    as an immutable list of floats
      */
     public Optional<List<Float>> getAfOpt() {
-        return getInfoFloatsOpt("AF", a());
+        return getInfoFloatsOpt("AF", a);
     }
 
     /**
@@ -533,7 +531,7 @@ public final class VcfRecord {
      *    as an immutable list of strings
      */
     public List<String> getCigar() {
-        return getInfoStrings("CIGAR", a());
+        return getInfoStrings("CIGAR", a);
     }
 
     /**
@@ -544,7 +542,7 @@ public final class VcfRecord {
      *    as an immutable list of strings
      */
     public Optional<List<String>> getCigarOpt() {
-        return getInfoStringsOpt("CIGAR", a());
+        return getInfoStringsOpt("CIGAR", a);
     }
 
     /**
@@ -1404,7 +1402,7 @@ public final class VcfRecord {
         private ImmutableMap.Builder<String, VcfGenotype> genotypes = ImmutableMap.builder();
 
         /** Map of genotype fields keyed by sample id. */
-        private ConcurrentMap<String, ListMultimap<String, String>> genotypeFields = new ConcurrentHashMap<String, ListMultimap<String, String>>();
+        private Map<String, ListMultimap<String, String>> genotypeFields = new HashMap<String, ListMultimap<String, String>>();
 
 
         /**

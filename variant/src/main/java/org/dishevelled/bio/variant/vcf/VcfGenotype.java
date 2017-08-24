@@ -52,13 +52,13 @@ public final class VcfGenotype {
     /** Genotype fields. */
     private final ListMultimap<String, String> fields;
 
-    /** The count for Number=A attributes for this VCF record. */
+    /** Count for Number=A attributes. */
     private final int a;
 
-    /** The count for Number=R attributes for this VCF record. */
+    /** Count for Number=R attributes. */
     private final int r;
 
-    /** The count for Number=G attributes for this VCF record. */
+    /** Count for Number=G attributes. */
     private final int g;
 
 
@@ -156,9 +156,6 @@ public final class VcfGenotype {
     public int g() {
         return g;
     }
-
-
-    // genotype fields for VCF FORMAT non-reserved keys
 
     /**
      * Return true if the genotype fields for this VCF genotype contains
@@ -631,6 +628,9 @@ public final class VcfGenotype {
     public Optional<Integer> getPsOpt() {
         return getFieldIntegerOpt("PS");
     }
+
+
+    // genotype fields for VCF FORMAT non-reserved keys
 
     /**
      * Return true if the genotype fields for this VCF genotype contain
