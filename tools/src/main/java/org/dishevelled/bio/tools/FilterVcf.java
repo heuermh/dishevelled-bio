@@ -204,7 +204,7 @@ public final class FilterVcf implements Callable<Integer> {
     static final class FilterFilter implements Filter {
         @Override
         public boolean accept(final VcfRecord record) {
-            return "PASS".equals(record.getFilter());
+            return (record.getFilter().length == 1 && "PASS".equals(record.getFilter()[0]));
         }
     }
 
