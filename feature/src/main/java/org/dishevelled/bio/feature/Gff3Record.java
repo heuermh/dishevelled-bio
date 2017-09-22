@@ -76,15 +76,15 @@ public final class Gff3Record {
         checkNotNull(source);
         checkNotNull(featureType);
         checkNotNull(attributes);
-        checkArgument(start >= 0L, "start must be at least zero");
-        checkArgument(end >= 0L, "end must be at least zero");
-        checkArgument(end >= start, "end must be greater than or equal to start");
+        checkArgument(start >= 0L, "start must be at least zero, was " + start);
+        checkArgument(end >= 0L, "end must be at least zero, was " + end);
+        checkArgument(end >= start, "end must be greater than or equal to start, was " + end);
 
         if (strand != null) {
-            checkArgument("-".equals(strand) || "+".equals(strand) || "?".equals(strand), "if present, strand must be either -, +, or ?");
+            checkArgument("-".equals(strand) || "+".equals(strand) || "?".equals(strand), "if present, strand must be either -, +, or ?, was " + strand);
         }
         if (phase != null) {
-            checkArgument(phase > 0 && phase < 4, "if present, phase must be either 0, 1, or 2");
+            checkArgument(phase >= 0 && phase < 3, "if present, phase must be either 0, 1, or 2, was " + phase);
         }
 
         this.seqid = seqid;
@@ -286,7 +286,7 @@ public final class Gff3Record {
         checkNotNull(value);
         List<String> tokens = Splitter.on("\t").splitToList(value);
         if (tokens.size() < 9) {
-            throw new IllegalArgumentException("value must have nine fields (seqid, source, featureType, start, end, score, strand, phase, attributes)");
+            throw new IllegalArgumentException("value must have nine fields (seqid, source, featureType, start, end, score, strand, phase, attributes), was " + tokens.size());
         }
         String seqid = tokens.get(0);
         String source = tokens.get(1);
