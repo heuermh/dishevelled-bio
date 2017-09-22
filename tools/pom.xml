@@ -219,6 +219,10 @@
               <mainClass>org.dishevelled.bio.tools.RemapPhaseSet</mainClass>
             </program>
             <program>
+              <id>dsh-rename-references</id>
+              <mainClass>org.dishevelled.bio.tools.RenameReferences</mainClass>
+            </program>
+            <program>
               <id>dsh-split-fastq</id>
               <mainClass>org.dishevelled.bio.tools.SplitFastq</mainClass>
             </program>
