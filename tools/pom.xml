@@ -179,6 +179,10 @@
           <repositoryName>lib</repositoryName>
           <programs>
             <program>
+              <id>dsh-disinterleave-fastq</id>
+              <mainClass>org.dishevelled.bio.tools.DisinterleaveFastq</mainClass>
+            </program>
+            <program>
               <id>dsh-downsample-fastq</id>
               <mainClass>org.dishevelled.bio.tools.DownsampleFastq</mainClass>
             </program>
@@ -221,10 +225,6 @@
             <program>
               <id>dsh-rename-references</id>
               <mainClass>org.dishevelled.bio.tools.RenameReferences</mainClass>
-            </program>
-            <program>
-              <id>dsh-split-fastq</id>
-              <mainClass>org.dishevelled.bio.tools.SplitFastq</mainClass>
             </program>
             <program>
               <id>dsh-variant-table-to-vcf</id>

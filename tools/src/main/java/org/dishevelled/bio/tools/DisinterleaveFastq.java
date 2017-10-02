@@ -61,12 +61,12 @@ import org.dishevelled.commandline.argument.FileArgument;
  *
  * @author  Michael Heuer
  */
-public final class SplitFastq implements Callable<Integer> {
+public final class DisinterleaveFastq implements Callable<Integer> {
     private final File pairedFile;
     private final File unpairedFile;
     private final File firstFastqFile;
     private final File secondFastqFile;
-    private static final String USAGE = "dsh-split-fastq -p foo.paired.fq.gz [-u foo.unpaired.fq.gz] -1 foo_1.fq.gz -2 foo_2.fq.gz";
+    private static final String USAGE = "dsh-disinterleave-fastq -p foo.paired.fq.gz [-u foo.unpaired.fq.gz] -1 foo_1.fq.gz -2 foo_2.fq.gz";
 
 
     /**
@@ -77,7 +77,7 @@ public final class SplitFastq implements Callable<Integer> {
      * @param firstFastqFile first FASTQ input file, must not be null
      * @param secondFastqFile second FASTQ input file, must not be null
      */
-    public SplitFastq(final File pairedFile, final File unpairedFile, final File firstFastqFile, final File secondFastqFile) {
+    public DisinterleaveFastq(final File pairedFile, final File unpairedFile, final File firstFastqFile, final File secondFastqFile) {
         checkNotNull(pairedFile);
         checkNotNull(firstFastqFile);
         checkNotNull(secondFastqFile);
@@ -191,7 +191,7 @@ public final class SplitFastq implements Callable<Integer> {
         ArgumentList arguments = new ArgumentList(about, help, pairedFile, unpairedFile, firstFastqFile, secondFastqFile);
         CommandLine commandLine = new CommandLine(args);
 
-        SplitFastq splitFastq = null;
+        DisinterleaveFastq disinterleaveFastq = null;
         try {
             CommandLineParser.parse(commandLine, arguments);
             if (about.wasFound()) {
@@ -202,7 +202,7 @@ public final class SplitFastq implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            splitFastq = new SplitFastq(pairedFile.getValue(), unpairedFile.getValue(), firstFastqFile.getValue(), secondFastqFile.getValue());
+            disinterleaveFastq = new DisinterleaveFastq(pairedFile.getValue(), unpairedFile.getValue(), firstFastqFile.getValue(), secondFastqFile.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {
@@ -217,7 +217,7 @@ public final class SplitFastq implements Callable<Integer> {
             System.exit(-1);
         }
         try {
-            System.exit(splitFastq.call());
+            System.exit(disinterleaveFastq.call());
         }
         catch (Exception e) {
             e.printStackTrace();

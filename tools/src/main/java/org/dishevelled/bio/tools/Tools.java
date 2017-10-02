@@ -103,6 +103,7 @@ public final class Tools implements Callable<Integer> {
     }
 
     static SortedMap<String, Command> COMMANDS = new ImmutableSortedMap.Builder<String, Command>(Ordering.natural())
+        .put("disinterleave-fastq", new Command("disinterleave-fastq", "convert interleaved FASTQ format into first and second sequence files in FASTQ format", DisinterleaveFastq.class))
         .put("downsample-fastq", new Command("downsample-fastq", "downsample sequences from files in FASTQ format", DownsampleFastq.class))
         .put("downsample-interleaved-fastq", new Command("downsample-interleaved-fastq", "downsample sequences from a file in interleaved FASTQ format", DownsampleInterleavedFastq.class))
         .put("extract-fasta", new Command("extract-fasta", "extract matching sequences in FASTA format", ExtractFasta.class))
@@ -114,7 +115,6 @@ public final class Tools implements Callable<Integer> {
         .put("interleave-fastq", new Command("interleave-fastq", "convert first and second sequence files in FASTQ format to interleaved FASTQ format", InterleaveFastq.class))
         //.put("intersect-bed", new Command("intersect-bed", "similar to bedtools2 intersect -v", IntersectBed.class))
         .put("remap-phase-set", new Command("remap-phase-set", "remap Type=String PS phase set ids in VCF format to Type=Integer", RemapPhaseSet.class))
-        .put("split-fastq", new Command("split-fastq", "convert interleaved FASTQ format into first and second sequence files in FASTQ format", SplitFastq.class))
         .put("vcf-pedigree", new Command("vcf-pedigree", "extract a pedigree from VCF format", VcfPedigree.class))
         .put("vcf-samples", new Command("vcf-samples", "extract samples from VCF format", VcfSamples.class))
         .build();

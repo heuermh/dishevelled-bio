@@ -43,11 +43,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Unit test for SplitFastq.
+ * Unit test for DisinterleaveFastq.
  *
  * @author  Michael Heuer
  */
-public final class SplitFastqTest {
+public final class DisinterleaveFastqTest {
     private File pairedFile;
     private File unpairedFile;
     private File firstFastqFile;
@@ -55,10 +55,10 @@ public final class SplitFastqTest {
 
     @Before
     public void setUp() throws IOException {
-        pairedFile = File.createTempFile("splitFastqTest", ".fq.gz");
-        unpairedFile = File.createTempFile("splitFastqTest", ".fq.gz");
-        firstFastqFile = File.createTempFile("splitFastqTest", ".fq");
-        secondFastqFile = File.createTempFile("splitFastqTest", ".fq");
+        pairedFile = File.createTempFile("disinterleaveFastqTest", ".fq.gz");
+        unpairedFile = File.createTempFile("disinterleaveFastqTest", ".fq.gz");
+        firstFastqFile = File.createTempFile("disinterleaveFastqTest", ".fq");
+        secondFastqFile = File.createTempFile("disinterleaveFastqTest", ".fq");
     }
 
     @After
@@ -71,63 +71,63 @@ public final class SplitFastqTest {
 
     @Test(expected=NullPointerException.class)
     public void testConstructorNullPairedFile() {
-        new SplitFastq(null, unpairedFile, firstFastqFile, secondFastqFile);
+        new DisinterleaveFastq(null, unpairedFile, firstFastqFile, secondFastqFile);
     }
 
     public void testConstructorNullUnpairedFile() {
-        assertNotNull(new SplitFastq(pairedFile, null, firstFastqFile, secondFastqFile));
+        assertNotNull(new DisinterleaveFastq(pairedFile, null, firstFastqFile, secondFastqFile));
     }
 
     @Test(expected=NullPointerException.class)
     public void testConstructorNullFirstFastqFile() {
-        new SplitFastq(pairedFile, unpairedFile, null, secondFastqFile);
+        new DisinterleaveFastq(pairedFile, unpairedFile, null, secondFastqFile);
     }
 
     @Test(expected=NullPointerException.class)
     public void testConstructorNullSecondFastqFile() {
-        new SplitFastq(pairedFile, unpairedFile, firstFastqFile, null);
+        new DisinterleaveFastq(pairedFile, unpairedFile, firstFastqFile, null);
     }
 
     @Test
     public void testConstructor() {
-        assertNotNull(new SplitFastq(pairedFile, unpairedFile, firstFastqFile, secondFastqFile));
+        assertNotNull(new DisinterleaveFastq(pairedFile, unpairedFile, firstFastqFile, secondFastqFile));
     }
 
     @Test
-    public void testSplitFastq() throws Exception {
+    public void testDisinterleaveFastq() throws Exception {
         copyResource("interleaved.fq.gz", pairedFile);
         copyResource("empty-unpaired.fq.gz", unpairedFile);
-        new SplitFastq(pairedFile, unpairedFile, firstFastqFile, secondFastqFile).call();
+        new DisinterleaveFastq(pairedFile, unpairedFile, firstFastqFile, secondFastqFile).call();
 
         assertEquals(4, countFastq(firstFastqFile));
         assertEquals(4, countFastq(secondFastqFile));
     }
 
     @Test
-    public void testSplitFastqUnpairedLeft() throws Exception {
+    public void testDisinterleaveFastqUnpairedLeft() throws Exception {
         copyResource("interleaved.fq.gz", pairedFile);
         copyResource("unpaired-left.fq.gz", unpairedFile);
-        new SplitFastq(pairedFile, unpairedFile, firstFastqFile, secondFastqFile).call();
+        new DisinterleaveFastq(pairedFile, unpairedFile, firstFastqFile, secondFastqFile).call();
 
         assertEquals(5, countFastq(firstFastqFile));
         assertEquals(4, countFastq(secondFastqFile));
     }
 
     @Test
-    public void testSplitFastqUnpairedRight() throws Exception {
+    public void testDisinterleaveFastqUnpairedRight() throws Exception {
         copyResource("interleaved.fq.gz", pairedFile);
         copyResource("unpaired-right.fq.gz", unpairedFile);
-        new SplitFastq(pairedFile, unpairedFile, firstFastqFile, secondFastqFile).call();
+        new DisinterleaveFastq(pairedFile, unpairedFile, firstFastqFile, secondFastqFile).call();
 
         assertEquals(4, countFastq(firstFastqFile));
         assertEquals(5, countFastq(secondFastqFile));
     }
 
     @Test(expected=IOException.class)
-    public void testSplitFastqInvalidInterleaved() throws Exception {
+    public void testDisinterleaveFastqInvalidInterleaved() throws Exception {
         copyResource("invalid-interleaved.fq.gz", pairedFile);
         copyResource("empty-unpaired.fq.gz", unpairedFile);
-        new SplitFastq(pairedFile, unpairedFile, firstFastqFile, secondFastqFile).call();
+        new DisinterleaveFastq(pairedFile, unpairedFile, firstFastqFile, secondFastqFile).call();
     }
 
     private static int countFastq(final File file) throws Exception {
@@ -140,6 +140,6 @@ public final class SplitFastqTest {
     }
 
     private static void copyResource(final String name, final File file) throws Exception {
-        Files.write(Resources.toByteArray(SplitFastqTest.class.getResource(name)), file);
+        Files.write(Resources.toByteArray(DisinterleaveFastqTest.class.getResource(name)), file);
     }
 }
