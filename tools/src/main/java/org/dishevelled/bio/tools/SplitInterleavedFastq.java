@@ -23,15 +23,11 @@
 */
 package org.dishevelled.bio.tools;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import static org.dishevelled.compress.Readers.reader;
-import static org.dishevelled.compress.Writers.writer;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import com.google.common.io.Files;
 
