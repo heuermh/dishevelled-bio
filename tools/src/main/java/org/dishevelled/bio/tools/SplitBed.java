@@ -179,9 +179,9 @@ public final class SplitBed extends AbstractSplit {
                 }
                 else {
                     // if (Compress.isBgzfInputStream(...)) {
-                    //   s = ".bed.bgzf";
+                    //   s = ".bed.bgz";
                     // else if (Compress.isGzipInputStream(...)) { // method does not yet exist
-                    //   s = ".bed.gzip";
+                    //   s = ".bed.gz";
                     // else if (Compress.isBzip2InputStream(...)) { // method does not yet exist
                     //   s = ".bed.bz2"
                     // }

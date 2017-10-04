@@ -182,9 +182,9 @@ public final class SplitFastq extends AbstractSplit {
                 }
                 else {
                     // if (Compress.isBgzfInputStream(...)) {
-                    //   s = ".fq.bgzf";
+                    //   s = ".fq.bgz";
                     // else if (Compress.isGzipInputStream(...)) { // method does not yet exist
-                    //   s = ".fq.gzip";
+                    //   s = ".fq.gz";
                     // else if (Compress.isBzip2InputStream(...)) { // method does not yet exist
                     //   s = ".fq.bz2"
                     // }

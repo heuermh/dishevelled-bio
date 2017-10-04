@@ -236,6 +236,10 @@
               <mainClass>org.dishevelled.bio.tools.SplitBed</mainClass>
             </program>
             <program>
+              <id>dsh-split-fasta</id>
+              <mainClass>org.dishevelled.bio.tools.SplitFasta</mainClass>
+            </program>
+            <program>
               <id>dsh-split-fastq</id>
               <mainClass>org.dishevelled.bio.tools.SplitFastq</mainClass>
             </program>

@@ -179,9 +179,9 @@ public final class SplitGff3 extends AbstractSplit {
                 }
                 else {
                     // if (Compress.isBgzfInputStream(...)) {
-                    //   s = ".gff3.bgzf";
+                    //   s = ".gff3.bgz";
                     // else if (Compress.isGzipInputStream(...)) { // method does not yet exist
-                    //   s = ".gff3.gzip";
+                    //   s = ".gff3.gz";
                     // else if (Compress.isBzip2InputStream(...)) { // method does not yet exist
                     //   s = ".gff3.bz2"
                     // }
