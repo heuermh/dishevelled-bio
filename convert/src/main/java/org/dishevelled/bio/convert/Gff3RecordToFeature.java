@@ -100,57 +100,57 @@ final class Gff3RecordToFeature extends AbstractConverter<Gff3Record, Feature> {
             return null;
         }
         final Feature.Builder fb = Feature.newBuilder()
-            .setContigName(gff3Record.seqid())
-            .setSource(gff3Record.source())
-            .setFeatureType(gff3Record.featureType())
-            .setStart(gff3Record.start())
-            .setEnd(gff3Record.end())
-            .setScore(gff3Record.score())
-            .setStrand(strandConverter.convert(gff3Record.strand(), stringency, logger))
-            .setPhase(gff3Record.phase());
+            .setContigName(gff3Record.getSeqid())
+            .setSource(gff3Record.getSource())
+            .setFeatureType(gff3Record.getFeatureType())
+            .setStart(gff3Record.getStart())
+            .setEnd(gff3Record.getEnd())
+            .setScore(gff3Record.getScore())
+            .setStrand(strandConverter.convert(gff3Record.getStrand(), stringency, logger))
+            .setPhase(gff3Record.getPhase());
 
         // 1..1 attributes
-        gff3Record.attributes().get("ID").forEach(featureId -> fb.setFeatureId(featureId));
-        gff3Record.attributes().get("Name").forEach(name -> fb.setName(name));
-        gff3Record.attributes().get("gene_id").forEach(geneId -> fb.setGeneId(geneId));
-        gff3Record.attributes().get("transcript_id").forEach(transcriptId -> fb.setTranscriptId(transcriptId));
-        gff3Record.attributes().get("exon_id").forEach(exonId -> fb.setExonId(exonId));
-        gff3Record.attributes().get("Target").forEach(target -> fb.setTarget(target));
-        gff3Record.attributes().get("Gap").forEach(gap -> fb.setGap(gap));
-        gff3Record.attributes().get("Derives_from").forEach(derivesFrom -> fb.setDerivesFrom(derivesFrom));
-        gff3Record.attributes().get("Is_circular").forEach(circular -> fb.setCircular(Boolean.valueOf(circular)));
+        gff3Record.getAttributes().get("ID").forEach(featureId -> fb.setFeatureId(featureId));
+        gff3Record.getAttributes().get("Name").forEach(name -> fb.setName(name));
+        gff3Record.getAttributes().get("gene_id").forEach(geneId -> fb.setGeneId(geneId));
+        gff3Record.getAttributes().get("transcript_id").forEach(transcriptId -> fb.setTranscriptId(transcriptId));
+        gff3Record.getAttributes().get("exon_id").forEach(exonId -> fb.setExonId(exonId));
+        gff3Record.getAttributes().get("Target").forEach(target -> fb.setTarget(target));
+        gff3Record.getAttributes().get("Gap").forEach(gap -> fb.setGap(gap));
+        gff3Record.getAttributes().get("Derives_from").forEach(derivesFrom -> fb.setDerivesFrom(derivesFrom));
+        gff3Record.getAttributes().get("Is_circular").forEach(circular -> fb.setCircular(Boolean.valueOf(circular)));
 
         // 1..* attributes
-        List<String> aliases = gff3Record.attributes().get("Alias");
+        List<String> aliases = gff3Record.getAttributes().get("Alias");
         if (!aliases.isEmpty()) {
             fb.setAliases(aliases);
         }
 
-        List<String> parentIds = gff3Record.attributes().get("Parent");
+        List<String> parentIds = gff3Record.getAttributes().get("Parent");
         if (!parentIds.isEmpty()) {
             fb.setParentIds(parentIds);
         }
 
-        List<String> notes = gff3Record.attributes().get("Note");
+        List<String> notes = gff3Record.getAttributes().get("Note");
         if (!notes.isEmpty()) {
             fb.setNotes(notes);
         }
 
-        List<String> dbxrefs = gff3Record.attributes().get("Dbxref");
+        List<String> dbxrefs = gff3Record.getAttributes().get("Dbxref");
         if (!dbxrefs.isEmpty()) {
             fb.setDbxrefs(dbxrefs.stream().map(dbxref -> dbxrefConverter.convert(dbxref, stringency, logger)).collect(toList()));
         }
 
-        List<String> ontologyTerms = gff3Record.attributes().get("Ontology_term");
+        List<String> ontologyTerms = gff3Record.getAttributes().get("Ontology_term");
         if (!ontologyTerms.isEmpty()) {
             fb.setOntologyTerms(ontologyTerms.stream().map(ontologyTerm -> ontologyTermConverter.convert(ontologyTerm, stringency, logger)).collect(toList()));
         }
 
         // remaining attributes
         Map<String, String> remaining = new HashMap<String, String>();
-        for (String key : gff3Record.attributes().keySet()) {
+        for (String key : gff3Record.getAttributes().keySet()) {
             if (!isReservedKey(key)) {
-                List<String> values = gff3Record.attributes().get(key);
+                List<String> values = gff3Record.getAttributes().get(key);
                 if (values.size() > 1 && !stringency.isSilent()) {
                     logger.warn("duplicate key {} found in attributes for GFF3 record, will lose all but last value", key);
                 }

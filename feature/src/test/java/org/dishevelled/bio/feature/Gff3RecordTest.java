@@ -69,9 +69,9 @@ public final class Gff3RecordTest {
     @Test
     public void testValueOfGFF3() {
         Gff3Record record = valueOf("1\tEnsembl\tgene\t1335276\t1349350\t.\t-\t.\tID=ENSG00000107404;Name=ENSG00000107404;biotype=protein_coding");
-        assertEquals("1", record.seqid());
-        assertEquals(1335275L, record.start());
-        assertEquals(1349350L, record.end());
+        assertEquals("1", record.getSeqid());
+        assertEquals(1335275L, record.getStart());
+        assertEquals(1349350L, record.getEnd());
         assertEquals(Range.closedOpen(1335275L, 1349350L), record.toRange());
         assertEquals("1\tEnsembl\tgene\t1335276\t1349350\t.\t-\t.\tID=ENSG00000107404;Name=ENSG00000107404;biotype=protein_coding", record.toString());
     }

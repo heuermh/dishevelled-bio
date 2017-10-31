@@ -129,14 +129,14 @@ public final class FeatureToGff3RecordTest {
             .build();
 
         Gff3Record gff3Record = featureConverter.convert(feature, ConversionStringency.STRICT, logger);
-        assertEquals("1", gff3Record.seqid());
-        assertEquals(1335275L, gff3Record.start());
-        assertEquals(1349350L, gff3Record.end());
-        assertEquals("gene", gff3Record.featureType());
-        assertEquals("Ensembl", gff3Record.source());
-        assertEquals("-", gff3Record.strand());
-        assertTrue(gff3Record.attributes().get("ID").contains("ENSG00000107404"));
-        assertTrue(gff3Record.attributes().get("Name").contains("ENSG00000107404"));
-        assertTrue(gff3Record.attributes().get("biotype").contains("protein_coding"));
+        assertEquals("1", gff3Record.getSeqid());
+        assertEquals(1335275L, gff3Record.getStart());
+        assertEquals(1349350L, gff3Record.getEnd());
+        assertEquals("gene", gff3Record.getFeatureType());
+        assertEquals("Ensembl", gff3Record.getSource());
+        assertEquals("-", gff3Record.getStrand());
+        assertTrue(gff3Record.getAttributes().get("ID").contains("ENSG00000107404"));
+        assertTrue(gff3Record.getAttributes().get("Name").contains("ENSG00000107404"));
+        assertTrue(gff3Record.getAttributes().get("biotype").contains("protein_coding"));
     }
 }

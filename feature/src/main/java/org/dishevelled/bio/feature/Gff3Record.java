@@ -105,7 +105,7 @@ public final class Gff3Record {
      *
      * @return the seqid for this GFF3 record
      */
-    public String seqid() {
+    public String getSeqid() {
         return seqid;
     }
 
@@ -114,7 +114,7 @@ public final class Gff3Record {
      *
      * @return the source for this GFF3 record
      */
-    public String source() {
+    public String getSource() {
         return source;
     }
 
@@ -123,7 +123,7 @@ public final class Gff3Record {
      *
      * @return the feature type for this GFF3 record
      */
-    public String featureType() {
+    public String getFeatureType() {
         return featureType;
     }
 
@@ -132,7 +132,7 @@ public final class Gff3Record {
      *
      * @return the start for this GFF3 record in 0-based coordinate system, closed open range
      */
-    public long start() {
+    public long getStart() {
         return start;
     }
 
@@ -141,7 +141,7 @@ public final class Gff3Record {
      *
      * @return the end for this GFF3 record in 0-based coordinate system, closed open range
      */
-    public long end() {
+    public long getEnd() {
         return end;
     }
 
@@ -150,7 +150,7 @@ public final class Gff3Record {
      *
      * @return the score for this GFF3 record, if any
      */
-    public Double score() {
+    public Double getScore() {
         return score;
     }
 
@@ -159,7 +159,7 @@ public final class Gff3Record {
      *
      * @return the strand for this GFF3 record
      */
-    public String strand() {
+    public String getStrand() {
         return strand;
     }
 
@@ -168,7 +168,7 @@ public final class Gff3Record {
      *
      * @return the phase for this GFF3 record, if any
      */
-    public Integer phase() {
+    public Integer getPhase() {
         return phase;
     }
 
@@ -177,7 +177,7 @@ public final class Gff3Record {
      *
      * @return the attributes for this GFF3 record
      */
-    public ListMultimap<String, String> attributes() {
+    public ListMultimap<String, String> getAttributes() {
         return attributes;
     }
 

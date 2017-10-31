@@ -115,24 +115,24 @@ public final class FeatureToBedRecordTest {
             .build();
 
         BedRecord bedRecord = featureConverter.convert(feature, ConversionStringency.STRICT, logger);
-        assertEquals("chr1", bedRecord.chrom());
-        assertEquals(11873L, bedRecord.start());
-        assertEquals(14409L, bedRecord.end());
-        assertEquals("uc001aaa.3", bedRecord.name());
-        assertNull(bedRecord.score());
-        assertEquals("+", bedRecord.strand());
-        assertEquals(11873L, bedRecord.thickStart());
-        assertEquals(11873L, bedRecord.thickEnd());
-        assertEquals("0", bedRecord.itemRgb());
-        assertEquals(3, bedRecord.blockCount());
-        assertEquals(3, bedRecord.blockSizes().length);
-        assertEquals(354L, bedRecord.blockSizes()[0]);
-        assertEquals(109L, bedRecord.blockSizes()[1]);
-        assertEquals(1189L, bedRecord.blockSizes()[2]);
-        assertEquals(3, bedRecord.blockStarts().length);
-        assertEquals(0L, bedRecord.blockStarts()[0]);
-        assertEquals(739L, bedRecord.blockStarts()[1]);
-        assertEquals(1347L, bedRecord.blockStarts()[2]);
-        assertEquals(BedFormat.BED12, bedRecord.format());
+        assertEquals("chr1", bedRecord.getChrom());
+        assertEquals(11873L, bedRecord.getStart());
+        assertEquals(14409L, bedRecord.getEnd());
+        assertEquals("uc001aaa.3", bedRecord.getName());
+        assertNull(bedRecord.getScore());
+        assertEquals("+", bedRecord.getStrand());
+        assertEquals(11873L, bedRecord.getThickStart());
+        assertEquals(11873L, bedRecord.getThickEnd());
+        assertEquals("0", bedRecord.getItemRgb());
+        assertEquals(3, bedRecord.getBlockCount());
+        assertEquals(3, bedRecord.getBlockSizes().length);
+        assertEquals(354L, bedRecord.getBlockSizes()[0]);
+        assertEquals(109L, bedRecord.getBlockSizes()[1]);
+        assertEquals(1189L, bedRecord.getBlockSizes()[2]);
+        assertEquals(3, bedRecord.getBlockStarts().length);
+        assertEquals(0L, bedRecord.getBlockStarts()[0]);
+        assertEquals(739L, bedRecord.getBlockStarts()[1]);
+        assertEquals(1347L, bedRecord.getBlockStarts()[2]);
+        assertEquals(BedFormat.BED12, bedRecord.getFormat());
     }
 }

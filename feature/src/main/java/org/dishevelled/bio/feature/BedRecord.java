@@ -230,7 +230,7 @@ public final class BedRecord {
      *
      * @return the chrom for this BED record
      */
-    public String chrom() {
+    public String getChrom() {
         return chrom;
     }
 
@@ -239,7 +239,7 @@ public final class BedRecord {
      *
      * @return the start for this BED record in 0-based coordinate system, closed open range
      */
-    public long start() {
+    public long getStart() {
         return start;
     }
 
@@ -248,7 +248,7 @@ public final class BedRecord {
      *
      * @return the end for this BED record in 0-based coordinate system, closed open range
      */
-    public long end() {
+    public long getEnd() {
         return end;
     }
 
@@ -257,7 +257,7 @@ public final class BedRecord {
      *
      * @return the name for this BED record, if any
      */
-    public String name() {
+    public String getName() {
         return name;
     }
 
@@ -266,7 +266,7 @@ public final class BedRecord {
      *
      * @return the score for this BED record, if any
      */
-    public String score() {
+    public String getScore() {
         return score;
     }
 
@@ -275,7 +275,7 @@ public final class BedRecord {
      *
      * @return the strand for this BED record, if any
      */
-    public String strand() {
+    public String getStrand() {
         return strand;
     }
 
@@ -284,7 +284,7 @@ public final class BedRecord {
      *
      * @return the thick start for this BED record in 0-based coordinate system, closed open range
      */
-    public long thickStart() {
+    public long getThickStart() {
         return thickStart;
     }
 
@@ -293,7 +293,7 @@ public final class BedRecord {
      *
      * @return the thick end for this BED record in 0-based coordinate system, closed open range
      */
-    public long thickEnd() {
+    public long getThickEnd() {
         return thickEnd;
     }
 
@@ -302,7 +302,7 @@ public final class BedRecord {
      *
      * @return the item RGB for this BED record, if any
      */
-    public String itemRgb() {
+    public String getItemRgb() {
         return itemRgb;
     }
 
@@ -311,7 +311,7 @@ public final class BedRecord {
      *
      * @return the block count for this BED record
      */
-    public int blockCount() {
+    public int getBlockCount() {
         return blockCount;
     }
 
@@ -320,7 +320,7 @@ public final class BedRecord {
      *
      * @return the block sizes for this BED record
      */
-    public long[] blockSizes() {
+    public long[] getBlockSizes() {
         return (long[]) blockSizes.clone();
     }
 
@@ -329,7 +329,7 @@ public final class BedRecord {
      *
      * @return the block starts for this BED record
      */
-    public long[] blockStarts() {
+    public long[] getBlockStarts() {
         return (long[]) blockStarts.clone();
     }
 
@@ -338,7 +338,7 @@ public final class BedRecord {
      *
      * @return the format of this BED record
      */
-    public BedFormat format() {
+    public BedFormat getFormat() {
         return format;
     }
 

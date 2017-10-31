@@ -166,7 +166,7 @@ public final class IntersectBed implements Callable<Integer> {
             BedReader.stream(b, new BedListener() {
                 @Override
                 public boolean record(final BedRecord rec) {
-                    ref.put(rec.chrom(), rec);
+                    ref.put(rec.getChrom(), rec);
                     return true;
                 }
             });
@@ -191,7 +191,7 @@ public final class IntersectBed implements Callable<Integer> {
             BedReader.stream(a, new BedListener() {
                 @Override
                 public boolean record(final BedRecord rec) {
-                    String chr = rec.chrom();
+                    String chr = rec.getChrom();
                     if (coverage.containsKey(chr) && !coverage.get(chr).intersects(rec.toRange())) {
                         BedWriter.write(rec, w);
                     }
@@ -210,7 +210,7 @@ public final class IntersectBed implements Callable<Integer> {
             BedReader.stream(b, new BedListener() {
                 @Override
                 public boolean record(final BedRecord rec) {
-                    String chr = rec.chrom();
+                    String chr = rec.getChrom();
                     if (!coverage.containsKey(chr)) {
                         RangeSet<Long> rangeSet = TreeRangeSet.create();
                         coverage.put(chr, rangeSet);
@@ -225,7 +225,7 @@ public final class IntersectBed implements Callable<Integer> {
             BedReader.stream(a, new BedListener() {
                 @Override
                 public boolean record(final BedRecord rec) {
-                    String chr = rec.chrom();
+                    String chr = rec.getChrom();
                     if (coverage.containsKey(chr) && coverage.get(chr).subRangeSet(rec.toRange()).isEmpty()) {
                         BedWriter.write(rec, w);
                     }
@@ -244,7 +244,7 @@ public final class IntersectBed implements Callable<Integer> {
             BedReader.stream(b, new BedListener() {
                 @Override
                 public boolean record(final BedRecord rec) {
-                    ref.put(rec.chrom(), rec);
+                    ref.put(rec.getChrom(), rec);
                     return true;
                 }
             });
@@ -269,7 +269,7 @@ public final class IntersectBed implements Callable<Integer> {
             BedReader.stream(a, new BedListener() {
                 @Override
                 public boolean record(final BedRecord rec) {
-                    String chr = rec.chrom();
+                    String chr = rec.getChrom();
                     if (coverage.containsKey(chr) && !coverage.get(chr).intersects(rec.toRange())) {
                         BedWriter.write(rec, w);
                     }
@@ -289,7 +289,7 @@ public final class IntersectBed implements Callable<Integer> {
             BedReader.stream(b, new BedListener() {
                 @Override
                 public boolean record(final BedRecord rec) {
-                    String chr = rec.chrom();
+                    String chr = rec.getChrom();
                     if (!coverage.containsKey(chr)) {
                         RTree rtree = RTree.maxChildren(12).create();
                         coverage.put(chr, rtree);
@@ -304,7 +304,7 @@ public final class IntersectBed implements Callable<Integer> {
             BedReader.stream(a, new BedListener() {
                 @Override
                 public boolean record(final BedRecord rec) {
-                    String chr = rec.chrom();
+                    String chr = rec.getChrom();
                     if (coverage.containsKey(chr) && isEmpty(coverage.get(chr).search(RangeGeometries.range(rec.toRange())))) {
                         BedWriter.write(rec, w);
                     }
@@ -324,7 +324,7 @@ public final class IntersectBed implements Callable<Integer> {
             BedReader.stream(b, new BedListener() {
                 @Override
                 public boolean record(final BedRecord rec) {
-                    String chr = rec.chrom();
+                    String chr = rec.getChrom();
                     if (!coverage.containsKey(chr)) {
                         RTree rtree = RTree.star().maxChildren(12).create();
                         coverage.put(chr, rtree);
@@ -339,7 +339,7 @@ public final class IntersectBed implements Callable<Integer> {
             BedReader.stream(a, new BedListener() {
                 @Override
                 public boolean record(final BedRecord rec) {
-                    String chr = rec.chrom();
+                    String chr = rec.getChrom();
                     if (coverage.containsKey(chr) && isEmpty(coverage.get(chr).search(RangeGeometries.range(rec.toRange())))) {
                         BedWriter.write(rec, w);
                     }
