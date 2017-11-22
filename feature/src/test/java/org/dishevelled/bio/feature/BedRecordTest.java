@@ -1,7 +1,7 @@
 /*
 
     dsh-bio-feature  Sequence features.
-    Copyright (c) 2013-2016 held jointly by the individual authors.
+    Copyright (c) 2013-2017 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Lesser General Public License as published
@@ -134,10 +134,10 @@ public final class BedRecordTest {
     @Test
     public void testValueOfBED3() {
         BedRecord record = valueOf("chr1\t11873\t14409");
-        assertEquals("chr1", record.chrom());
-        assertEquals(11873L, record.start());
-        assertEquals(14409L, record.end());
-        assertEquals(BedFormat.BED3, record.format());
+        assertEquals("chr1", record.getChrom());
+        assertEquals(11873L, record.getStart());
+        assertEquals(14409L, record.getEnd());
+        assertEquals(BedFormat.BED3, record.getFormat());
         assertEquals(Range.closedOpen(11873L, 14409L), record.toRange());
         assertEquals("chr1\t11873\t14409", record.toString());
     }
@@ -145,11 +145,11 @@ public final class BedRecordTest {
     @Test
     public void testValueOfBED4() {
         BedRecord record = valueOf("chr1\t11873\t14409\tuc001aaa.3");
-        assertEquals("chr1", record.chrom());
-        assertEquals(11873L, record.start());
-        assertEquals(14409L, record.end());
-        assertEquals("uc001aaa.3", record.name());
-        assertEquals(BedFormat.BED4, record.format());
+        assertEquals("chr1", record.getChrom());
+        assertEquals(11873L, record.getStart());
+        assertEquals(14409L, record.getEnd());
+        assertEquals("uc001aaa.3", record.getName());
+        assertEquals(BedFormat.BED4, record.getFormat());
         assertEquals(Range.closedOpen(11873L, 14409L), record.toRange());
         assertEquals("chr1\t11873\t14409\tuc001aaa.3", record.toString());
     }
@@ -157,12 +157,12 @@ public final class BedRecordTest {
     @Test
     public void testValueOfBED5() {
         BedRecord record = valueOf("chr1\t11873\t14409\tuc001aaa.3\t0");
-        assertEquals("chr1", record.chrom());
-        assertEquals(11873L, record.start());
-        assertEquals(14409L, record.end());
-        assertEquals("uc001aaa.3", record.name());
-        assertEquals("0", record.score());
-        assertEquals(BedFormat.BED5, record.format());
+        assertEquals("chr1", record.getChrom());
+        assertEquals(11873L, record.getStart());
+        assertEquals(14409L, record.getEnd());
+        assertEquals("uc001aaa.3", record.getName());
+        assertEquals("0", record.getScore());
+        assertEquals(BedFormat.BED5, record.getFormat());
         assertEquals(Range.closedOpen(11873L, 14409L), record.toRange());
         assertEquals("chr1\t11873\t14409\tuc001aaa.3\t0", record.toString());
     }
@@ -170,13 +170,13 @@ public final class BedRecordTest {
     @Test
     public void testValueOfBED6() {
         BedRecord record = valueOf("chr1\t11873\t14409\tuc001aaa.3\t0\t+");
-        assertEquals("chr1", record.chrom());
-        assertEquals(11873L, record.start());
-        assertEquals(14409L, record.end());
-        assertEquals("uc001aaa.3", record.name());
-        assertEquals("0", record.score());
-        assertEquals("+", record.strand());
-        assertEquals(BedFormat.BED6, record.format());
+        assertEquals("chr1", record.getChrom());
+        assertEquals(11873L, record.getStart());
+        assertEquals(14409L, record.getEnd());
+        assertEquals("uc001aaa.3", record.getName());
+        assertEquals("0", record.getScore());
+        assertEquals("+", record.getStrand());
+        assertEquals(BedFormat.BED6, record.getFormat());
         assertEquals(Range.closedOpen(11873L, 14409L), record.toRange());
         assertEquals("chr1\t11873\t14409\tuc001aaa.3\t0\t+", record.toString());
     }
@@ -184,25 +184,25 @@ public final class BedRecordTest {
     @Test
     public void testValueOfBED12() {
         BedRecord record = valueOf("chr1\t11873\t14409\tuc001aaa.3\t0\t+\t11873\t11873\t0\t3\t354,109,1189,\t0,739,1347,");
-        assertEquals("chr1", record.chrom());
-        assertEquals(11873L, record.start());
-        assertEquals(14409L, record.end());
-        assertEquals("uc001aaa.3", record.name());
-        assertEquals("0", record.score());
-        assertEquals("+", record.strand());
-        assertEquals(11873L, record.thickStart());
-        assertEquals(11873L, record.thickEnd());
-        assertEquals("0", record.itemRgb());
-        assertEquals(3, record.blockCount());
-        assertEquals(3, record.blockSizes().length);
-        assertEquals(354L, record.blockSizes()[0]);
-        assertEquals(109L, record.blockSizes()[1]);
-        assertEquals(1189L, record.blockSizes()[2]);
-        assertEquals(3, record.blockStarts().length);
-        assertEquals(0L, record.blockStarts()[0]);
-        assertEquals(739L, record.blockStarts()[1]);
-        assertEquals(1347L, record.blockStarts()[2]);
-        assertEquals(BedFormat.BED12, record.format());
+        assertEquals("chr1", record.getChrom());
+        assertEquals(11873L, record.getStart());
+        assertEquals(14409L, record.getEnd());
+        assertEquals("uc001aaa.3", record.getName());
+        assertEquals("0", record.getScore());
+        assertEquals("+", record.getStrand());
+        assertEquals(11873L, record.getThickStart());
+        assertEquals(11873L, record.getThickEnd());
+        assertEquals("0", record.getItemRgb());
+        assertEquals(3, record.getBlockCount());
+        assertEquals(3, record.getBlockSizes().length);
+        assertEquals(354L, record.getBlockSizes()[0]);
+        assertEquals(109L, record.getBlockSizes()[1]);
+        assertEquals(1189L, record.getBlockSizes()[2]);
+        assertEquals(3, record.getBlockStarts().length);
+        assertEquals(0L, record.getBlockStarts()[0]);
+        assertEquals(739L, record.getBlockStarts()[1]);
+        assertEquals(1347L, record.getBlockStarts()[2]);
+        assertEquals(BedFormat.BED12, record.getFormat());
         assertEquals(Range.closedOpen(11873L, 14409L), record.toRange());
         assertEquals("chr1\t11873\t14409\tuc001aaa.3\t0\t+\t11873\t11873\t0\t3\t354,109,1189\t0,739,1347", record.toString());
     }

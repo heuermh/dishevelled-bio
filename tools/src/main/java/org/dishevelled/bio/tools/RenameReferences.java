@@ -91,15 +91,15 @@ public final class RenameReferences implements Callable<Integer> {
             Gff3Reader.stream(reader, new Gff3Listener() {
                     @Override
                     public boolean record(final Gff3Record record) {
-                        Gff3Record renamed = new Gff3Record(rename(record.seqid()),
-                                                            record.source(),
-                                                            record.featureType(),
-                                                            record.start(),
-                                                            record.end(),
-                                                            record.score(),
-                                                            record.strand(),
-                                                            record.phase(),
-                                                            record.attributes());
+                        Gff3Record renamed = new Gff3Record(rename(record.getSeqid()),
+                                                            record.getSource(),
+                                                            record.getFeatureType(),
+                                                            record.getStart(),
+                                                            record.getEnd(),
+                                                            record.getScore(),
+                                                            record.getStrand(),
+                                                            record.getPhase(),
+                                                            record.getAttributes());
                         Gff3Writer.write(renamed, w);
                         return true;
                     }

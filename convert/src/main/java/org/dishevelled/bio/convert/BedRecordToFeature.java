@@ -79,33 +79,33 @@ final class BedRecordToFeature extends AbstractConverter<BedRecord, Feature> {
             return null;
         }
         final Feature.Builder fb = Feature.newBuilder()
-            .setContigName(bedRecord.chrom())
-            .setStart(bedRecord.start())
-            .setEnd(bedRecord.end());
+            .setContigName(bedRecord.getChrom())
+            .setStart(bedRecord.getStart())
+            .setEnd(bedRecord.getEnd());
 
-        if (bedRecord.format().isAtLeastBED4() && !isMissingValue(bedRecord.name())) {
-            fb.setName(bedRecord.name());
+        if (bedRecord.getFormat().isAtLeastBED4() && !isMissingValue(bedRecord.getName())) {
+            fb.setName(bedRecord.getName());
         }
-        if (bedRecord.format().isAtLeastBED5() && !isMissingValue(bedRecord.score())) {
+        if (bedRecord.getFormat().isAtLeastBED5() && !isMissingValue(bedRecord.getScore())) {
             try {
-                fb.setScore(Double.valueOf(bedRecord.score()));
+                fb.setScore(Double.valueOf(bedRecord.getScore()));
             }
             catch (NumberFormatException e) {
                 warnOrThrow(bedRecord, "caught NumberFormatException", e, stringency, logger);
             }
         }
-        if (bedRecord.format().isAtLeastBED6()) {
-            fb.setStrand(strandConverter.convert(bedRecord.strand(), stringency, logger));
+        if (bedRecord.getFormat().isAtLeastBED6()) {
+            fb.setStrand(strandConverter.convert(bedRecord.getStrand(), stringency, logger));
         }
 
-        if (bedRecord.format().isAtLeastBED12()) {
+        if (bedRecord.getFormat().isAtLeastBED12()) {
             Map<String, String> attributes = new HashMap<String, String>();
-            attributes.put("thickStart", String.valueOf(bedRecord.thickStart()));
-            attributes.put("thickEnd", String.valueOf(bedRecord.thickEnd()));
-            attributes.put("itemRgb", bedRecord.itemRgb());
-            attributes.put("blockCount", String.valueOf(bedRecord.blockCount()));
-            attributes.put("blockSizes", Joiner.on(",").join(Longs.asList(bedRecord.blockSizes())));
-            attributes.put("blockStarts", Joiner.on(",").join(Longs.asList(bedRecord.blockStarts())));
+            attributes.put("thickStart", String.valueOf(bedRecord.getThickStart()));
+            attributes.put("thickEnd", String.valueOf(bedRecord.getThickEnd()));
+            attributes.put("itemRgb", bedRecord.getItemRgb());
+            attributes.put("blockCount", String.valueOf(bedRecord.getBlockCount()));
+            attributes.put("blockSizes", Joiner.on(",").join(Longs.asList(bedRecord.getBlockSizes())));
+            attributes.put("blockStarts", Joiner.on(",").join(Longs.asList(bedRecord.getBlockStarts())));
             fb.setAttributes(attributes);
         }
         return fb.build();
