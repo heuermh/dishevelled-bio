@@ -44,6 +44,7 @@
   <modules>
     <module>adam</module>
     <module>align</module>
+    <module>assembly</module>
     <module>convert</module>
     <module>convert-htsjdk</module>
     <module>feature</module>
