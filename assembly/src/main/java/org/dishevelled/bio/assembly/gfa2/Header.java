@@ -58,7 +58,7 @@ public final class Header extends Gfa2Record {
     public String toString() {
         Joiner joiner = Joiner.on("\t");
         StringBuilder sb = new StringBuilder();
-        joiner.appendTo(sb, new Object[] { "H" });
+        sb.append("H");
         if (!getTags().isEmpty()) {
             sb.append("\t");
             joiner.appendTo(sb, getTags().values());
