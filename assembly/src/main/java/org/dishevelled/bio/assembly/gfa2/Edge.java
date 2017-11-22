@@ -39,21 +39,50 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 
 /**
- * Edge.
+ * Edge GFA 2.0 record.
  *
  * @author  Michael Heuer
  */
 @Immutable
 public final class Edge extends Gfa2Record {
+    /** Optional identifier for this edge. */
     private final String id;
+
+    /** Source reference for this edge. */
     private final Reference source;
+
+    /** Target reference for this edge. */
     private final Reference target;
+
+    /** Source start position for this edge. */
     private final Position sourceStart;
+
+    /** Source end position for this edge. */
     private final Position sourceEnd;
+
+    /** Target start position for this edge. */
     private final Position targetStart;
+
+    /** Target end position for this edge. */
     private final Position targetEnd;
+
+    /** Optional alignment for this edge. */
     private final Alignment alignment;
 
+
+    /**
+     * Create a new edge GFA 2.0 record.
+     *
+     * @param id identifier, if any
+     * @param source source reference, must not be null
+     * @param target target reference, must not be null
+     * @param sourceStart source start position, must not be null
+     * @param sourceEnd source end position, must not be null
+     * @param targetStart target start position, must not be null
+     * @param targetEnd target end position, must not be null
+     * @param alignment alignment, if any
+     * @param tags tags, must not be null
+     */
     public Edge(@Nullable final String id,
                 final Reference source,
                 final Reference target,
@@ -82,34 +111,75 @@ public final class Edge extends Gfa2Record {
         this.alignment = alignment;
     }
 
+
+    /**
+     * Return the identifier for this edge, if any.
+     *
+     * @return the identifier for this edge, if any
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Return the source reference for this edge.
+     *
+     * @return the source reference for this edge
+     */
     public Reference getSource() {
         return source;
     }
 
+    /**
+     * Return the target reference for this edge.
+     *
+     * @return the target reference for this edge
+     */
     public Reference getTarget() {
         return target;
     }
 
+    /**
+     * Return the source start position for this edge.
+     *
+     * @return the source start position for this edge
+     */
     public Position getSourceStart() {
         return sourceStart;
     }
 
+    /**
+     * Return the source end position for this edge.
+     *
+     * @return the source end position for this edge
+     */
     public Position getSourceEnd() {
         return sourceEnd;
     }
 
+    /**
+     * Return the target start position for this edge.
+     *
+     * @return the target start position for this edge
+     */
     public Position getTargetStart() {
         return targetStart;
     }
 
+    /**
+     * Return the target end position for this edge.
+     *
+     * @return the target end position for this edge
+     */
     public Position getTargetEnd() {
         return targetEnd;
     }
 
+    /**
+     * Return the alignment for this edge, if any.
+     *
+     * @return the alignment for this edge, if any
+     */
     public Alignment getAlignment() {
         return alignment;
     }
@@ -126,6 +196,13 @@ public final class Edge extends Gfa2Record {
         return sb.toString();
     }
 
+
+    /**
+     * Parse an edge GFA 2.0 record from the specified value.
+     *
+     * @param value value, must not be null
+     * @return an edge GFA 2.0 record parsed from the specified value
+     */
     public static Edge valueOf(final String value) {
         checkNotNull(value);
         checkArgument(value.startsWith("E"), "value must start with E");
@@ -145,7 +222,7 @@ public final class Edge extends Gfa2Record {
         ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
         for (int i = 9; i < tokens.size(); i++) {
             Tag tag = Tag.valueOf(tokens.get(i));
-            tags.put(tag.getTag(), tag);
+            tags.put(tag.getName(), tag);
         }
 
         return new Edge(id, source, target, sourceStart, sourceEnd, targetStart, targetEnd, alignment, tags.build());

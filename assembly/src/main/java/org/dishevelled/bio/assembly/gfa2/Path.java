@@ -42,15 +42,26 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 /**
- * Path.
+ * Path GFA 2.0 record.
  *
  * @author  Michael Heuer
  */
 @Immutable
 public final class Path extends Gfa2Record {
+    /** Optional identifier for this path. */
     private final String id;
+
+    /** List of references for this path. */
     private final List<Reference> references;
 
+
+    /**
+     * Create a new path GFA 2.0 record.
+     *
+     * @param id identifier, if any
+     * @param references list of reference, must not be null
+     * @param tags targs, must not be null
+     */
     public Path(@Nullable final String id,
                 final List<Reference> references,
                 final Map<String, Tag> tags) {
@@ -63,10 +74,21 @@ public final class Path extends Gfa2Record {
         this.references = ImmutableList.copyOf(references);
     }
 
+
+    /**
+     * Return the identifier for this path, if any.
+     *
+     * @return the identifier for this path, if any
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Return an immutable list of references for this path.
+     *
+     * @return an immutable list of references for this path
+     */
     public List<Reference> getReferences() {
         return references;
     }
@@ -83,6 +105,13 @@ public final class Path extends Gfa2Record {
         return sb.toString();
     }
 
+
+    /**
+     * Parse a path GFA 2.0 record from the specified value.
+     *
+     * @param value value, must not be null
+     * @return a path GFA 2.0 record parsed from the specified value
+     */
     public static Path valueOf(final String value) {
         checkNotNull(value);
         checkArgument(value.startsWith("O"), "value must start with O");
@@ -101,7 +130,7 @@ public final class Path extends Gfa2Record {
         ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
         for (int i = 8; i < tokens.size(); i++) {
             Tag tag = Tag.valueOf(tokens.get(i));
-            tags.put(tag.getTag(), tag);
+            tags.put(tag.getName(), tag);
         }
 
         return new Path(id, references, tags.build());

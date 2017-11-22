@@ -39,37 +39,73 @@ import com.google.common.base.Splitter;
  */
 @Immutable
 public final class Tag {
-    private final String tag;
+    /** Name of this tag. */
+    private final String name;
+
+    /** Type for this tag. */
     private final String type;
+
+    /** Value for this tag. */
     private final String value;
 
-    public Tag(final String tag, final String type, final String value) {
-        checkNotNull(tag);
+
+    /**
+     * Create a new tag.
+     *
+     * @param name name, must not be null
+     * @param type type, must not be null
+     * @param value value, must not be null
+     */
+    public Tag(final String name, final String type, final String value) {
+        checkNotNull(name);
         checkNotNull(type);
         checkNotNull(value);
 
-        this.tag = tag;
+        this.name = name;
         this.type = type;
         this.value = value;
     }
 
-    public String getTag() {
-        return tag;
+
+    /**
+     * Return the name of this tag.
+     *
+     * @return the name of this tag
+     */
+    public String getName() {
+        return name;
     }
 
+    /**
+     * Return the type for this tag.
+     *
+     * @return the type for this tag
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * Return the value for this tag.
+     *
+     * @return the value for this tag
+     */
     public String getValue() {
         return value;
     }
 
     @Override
     public String toString() {
-        return Joiner.on(":").join(tag, type, value);
+        return Joiner.on(":").join(name, type, value);
     }
 
+
+    /**
+     * Parse a tag from the specified value.
+     *
+     * @param value value, must not be null
+     * @return a tag parsed from the specified value
+     */
     public static Tag valueOf(final String value) {
         checkNotNull(value);
         List<String> tokens = Splitter.on(":").splitToList(value);

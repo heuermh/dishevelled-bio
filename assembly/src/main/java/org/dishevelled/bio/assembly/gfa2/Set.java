@@ -40,15 +40,26 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 /**
- * Set.
+ * Set GFA 2.0 record.
  *
  * @author  Michael Heuer
  */
 @Immutable
 public final class Set extends Gfa2Record {
+    /** Optional identifier for this set. */
     private final String id;
+
+    /** Unordered set of identifiers for this set. */
     private final java.util.Set<String> ids;
 
+
+    /**
+     * Create a new set GFA 2.0 record.
+     *
+     * @param id identifier, if any
+     * @param ids unordered set of identifiers, must not be null
+     * @param tags tags, must not be null
+     */
     public Set(@Nullable final String id,
                final java.util.Set<String> ids,
                final Map<String, Tag> tags) {
@@ -60,11 +71,22 @@ public final class Set extends Gfa2Record {
         this.ids = ImmutableSet.copyOf(ids);
     }
 
+
+    /**
+     * Return the identifier for this set, if any.
+     *
+     * @return the identifier for this set, if any
+     */
     public String getId() {
         return id;
     }
 
-    public java.util.Set getIds() {
+    /**
+     * Return an immutable unordered set of identifiers for this set.
+     *
+     * @return an immutable unordered set of identifiers for this set
+     */
+    public java.util.Set<String> getIds() {
         return ids;
     }
 
@@ -80,6 +102,13 @@ public final class Set extends Gfa2Record {
         return sb.toString();
     }
 
+
+    /**
+     * Parse a set GFA 2.0 record from the specified value.
+     *
+     * @param value value, must not be null
+     * @return a set GFA 2.0 record parsed from the specified value
+     */
     public static Set valueOf(final String value) {
         checkNotNull(value);
         checkArgument(value.startsWith("U"), "value must start with U");
@@ -93,7 +122,7 @@ public final class Set extends Gfa2Record {
         ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
         for (int i = 8; i < tokens.size(); i++) {
             Tag tag = Tag.valueOf(tokens.get(i));
-            tags.put(tag.getTag(), tag);
+            tags.put(tag.getName(), tag);
         }
 
         return new Set(id, ids, tags.build());

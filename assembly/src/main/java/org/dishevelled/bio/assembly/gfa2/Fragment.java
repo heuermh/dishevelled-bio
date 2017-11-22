@@ -39,20 +39,46 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 
 /**
- * Fragment.
+ * Fragment GFA 2.0 record.
  *
  * @author  Michael Heuer
  */
 @Immutable
 public final class Fragment extends Gfa2Record {
+    /** Segment identifier for this fragment. */
     private final String segmentId;
+
+    /** External reference for this fragment. */
     private final Reference external;
+
+    /** Segment start position for this fragment. */
     private final Position segmentStart;
+
+    /** Segment end position for this fragment. */
     private final Position segmentEnd;
+
+    /** Fragment start position for this fragment. */
     private final Position fragmentStart;
+
+    /** Fragment end position for this fragment. */
     private final Position fragmentEnd;
+
+    /** Optional alignment for this fragment. */
     private final Alignment alignment;
 
+
+    /**
+     * Create a new fragment GFA 2.0 record.
+     *
+     * @param segmentId segment identifier, must not be null
+     * @param external external reference, must not be null
+     * @param segmentStart segment start position, must not be null
+     * @param segmentEnd segment end position, must not be null
+     * @param fragmentStart fragment start position, must not be null
+     * @param fragmentEnd fragment end position, must not be null
+     * @param alignment alignment, if any
+     * @param tags tags, must not be null
+     */
     public Fragment(final String segmentId,
                     final Reference external,
                     final Position segmentStart,
@@ -79,30 +105,66 @@ public final class Fragment extends Gfa2Record {
         this.alignment = alignment;
     }
 
+
+    /**
+     * Return the segment identifier for this fragment.
+     *
+     * @return the segment identifier for this fragment
+     */
     public String getSegmentId() {
         return segmentId;
     }
 
+    /**
+     * Return the external reference for this fragment.
+     *
+     * @return the external reference for this fragment
+     */
     public Reference getExternal() {
         return external;
     }
 
+    /**
+     * Return the segment start position for this fragment.
+     *
+     * @return the segment start position for this fragment
+     */
     public Position getSegmentStart() {
         return segmentStart;
     }
 
+    /**
+     * Return the segment end position for this fragment.
+     *
+     * @return the segment end position for this fragment
+     */
     public Position getSegmentEnd() {
         return segmentEnd;
     }
 
+    /**
+     * Return the fragment start position for this fragment.
+     *
+     * @return the fragment start position for this fragment
+     */
     public Position getFragmentStart() {
         return fragmentStart;
     }
 
+    /**
+     * Return the fragment end position for this fragment.
+     *
+     * @return the fragment end position for this fragment
+     */
     public Position getFragmentEnd() {
         return fragmentEnd;
     }
 
+    /**
+     * Return the alignment for this fragment, if any.
+     *
+     * @return the alignment for this fragment, if any
+     */
     public Alignment getAlignment() {
         return alignment;
     }
@@ -119,6 +181,13 @@ public final class Fragment extends Gfa2Record {
         return sb.toString();
     }
 
+
+    /**
+     * Parse a fragment GFA 2.0 record from the specified value.
+     *
+     * @param value value, must not be null
+     * @return a fragment GFA 2.0 record parsed from the specified value
+     */
     public static Fragment valueOf(final String value) {
         checkNotNull(value);
         checkArgument(value.startsWith("F"), "value must start with F");
@@ -137,7 +206,7 @@ public final class Fragment extends Gfa2Record {
         ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
         for (int i = 8; i < tokens.size(); i++) {
             Tag tag = Tag.valueOf(tokens.get(i));
-            tags.put(tag.getTag(), tag);
+            tags.put(tag.getName(), tag);
         }
 
         return new Fragment(segmentId, external, segmentStart, segmentEnd, fragmentStart, fragmentEnd, alignment, tags.build());

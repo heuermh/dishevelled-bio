@@ -39,16 +39,30 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 
 /**
- * Segment.
+ * Segment GFA 2.0 record.
  *
  * @author  Michael Heuer
  */
 @Immutable
 public final class Segment extends Gfa2Record {
+    /** Identifier for this segment. */
     private final String id;
+
+    /** Length for this segment. */
     private final int length;
+
+    /** Optional sequence for this segment. */
     private final String sequence;
 
+
+    /**
+     * Create a new segment GFA 2.0 record.
+     *
+     * @param id identifier, must not be null
+     * @param length length, must be at least zero
+     * @param sequence sequence, if any
+     * @param tags tags, must not be null
+     */
     public Segment(final String id,
                    final int length,
                    @Nullable final String sequence,
@@ -63,14 +77,30 @@ public final class Segment extends Gfa2Record {
         this.sequence = sequence;
     }
 
+
+    /**
+     * Return the identifier for this segment.
+     *
+     * @return the identifier for this segment
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Return the length for this segment.
+     *
+     * @return the length for this segment
+     */
     public int getLength() {
         return length;
     }
 
+    /**
+     * Return the sequence for this segment, if any.
+     *
+     * @return the sequence for this segment, if any
+     */
     public String getSequence() {
         return sequence;
     }
@@ -87,6 +117,13 @@ public final class Segment extends Gfa2Record {
         return sb.toString();
     }
 
+
+    /**
+     * Parse a segment GFA 2.0 record from the specified value.
+     *
+     * @param value value, must not be null
+     * @return a segment GFA 2.0 record parsed from the specified value
+     */
     public static Segment valueOf(final String value) {
         checkNotNull(value);
         checkArgument(value.startsWith("S"), "value must start with S");
@@ -98,7 +135,7 @@ public final class Segment extends Gfa2Record {
         ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
         for (int i = 4; i < tokens.size(); i++) {
             Tag tag = Tag.valueOf(tokens.get(i));
-            tags.put(tag.getTag(), tag);
+            tags.put(tag.getName(), tag);
         }
 
         return new Segment(tokens.get(1), Integer.parseInt(tokens.get(2)), tokens.get(3), tags.build());

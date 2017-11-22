@@ -37,16 +37,22 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 
 /**
- * Header.
+ * Header GFA 2.0 record.
  *
  * @author  Michael Heuer
  */
 @Immutable
 public final class Header extends Gfa2Record {
 
+    /**
+     * Create a new header GFA 2.0 record.
+     *
+     * @param tags tags, must not be null
+     */
     public Header(final Map<String, Tag> tags) {
         super(tags);
     }
+
 
     @Override
     public String toString() {
@@ -60,6 +66,13 @@ public final class Header extends Gfa2Record {
         return sb.toString();
     }
 
+
+    /**
+     * Parse a header GFA 2.0 record from the specified value.
+     *
+     * @param value value, must not be null
+     * @return a header GFA 2.0 record parsed from the specified value
+     */
     public static Header valueOf(final String value) {
         checkNotNull(value);
         checkArgument(value.startsWith("H"), "header value must start with H");
@@ -71,7 +84,7 @@ public final class Header extends Gfa2Record {
         ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
         for (int i = 1; i < tokens.size(); i++) {
             Tag tag = Tag.valueOf(tokens.get(i));
-            tags.put(tag.getTag(), tag);
+            tags.put(tag.getName(), tag);
         }
 
         return new Header(tags.build());

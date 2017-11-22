@@ -29,6 +29,9 @@ package org.dishevelled.bio.assembly.gfa2;
  * @author  Michael Heuer
  */
 public enum Orientation {
+    /** Forward orientation. */
     FORWARD,
+
+    /** Reverse orientation. */
     REVERSE
 }

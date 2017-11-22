@@ -35,19 +35,40 @@ import javax.annotation.concurrent.Immutable;
  */
 @Immutable
 public final class Position {
+    /** Position. */
     private final int position;
+
+    /** True if this position is a terminal position. */
     private final boolean terminal;
 
+
+    /**
+     * Create a new position.
+     *
+     * @param position position, must be at least zero
+     * @param terminal true if this position is a terminal position
+     */
     public Position(final int position, final boolean terminal) {
         checkArgument(position >= 0, "position must be at least zero");
         this.position = position;
         this.terminal = terminal;
     }
 
+
+    /**
+     * Return the position for this position.
+     *
+     * @return the position for this position
+     */
     public int getPosition() {
         return position;
     }
 
+    /**
+     * Return true if this position is a terminal position.
+     *
+     * @return true if this position is a terminal position
+     */
     public boolean isTerminal() {
         return terminal;
     }
@@ -57,6 +78,13 @@ public final class Position {
         return terminal ? position + "$" : String.valueOf(position);
     }
 
+
+    /**
+     * Parse a position from the specified value.
+     *
+     * @param value value, must not be null
+     * @return a position parsed from the specified value
+     */
     public static Position valueOf(final String value) {
         checkNotNull(value);
         if (value.endsWith("$")) {

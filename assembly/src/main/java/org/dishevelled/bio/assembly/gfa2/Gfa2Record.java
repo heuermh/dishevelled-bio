@@ -27,19 +27,34 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Map;
 
+import com.google.common.collect.ImmutableMap;
+
 /**
  * Graphical Fragment Assembly (GFA) 2.0 record.
  *
  * @author  Michael Heuer
  */
 public abstract class Gfa2Record {
+    /** Map of tags keyed by tag name. */
     private final Map<String, Tag> tags;
 
+    /**
+     * Create a new GFA 2.0 record with the specifed tags.
+     *
+     * @param tags tags, must not be null
+     */
     protected Gfa2Record(final Map<String, Tag> tags) {
         checkNotNull(tags);
-        this.tags = tags;
+        this.tags = ImmutableMap.copyOf(tags);
     }
 
+    /**
+     * Return an immutable map of tags keyed by tag name
+     * for this GFA 2.0 record.
+     *
+     * @return an immutable map of tags keyed by tag name
+     *    for this GFA 2.0 record
+     */
     public final Map<String, Tag> getTags() {
         return tags;
     }

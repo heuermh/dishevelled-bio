@@ -35,9 +35,19 @@ import javax.annotation.concurrent.Immutable;
  */
 @Immutable
 public final class Reference {
+    /** Identifier for this reference. */
     private final String id;
+
+    /** Orientation for this reference. */
     private final Orientation orientation;
 
+
+    /**
+     * Create a new reference.
+     *
+     * @param id identifier, must not be null
+     * @param orientation orientation, must not be null
+     */
     public Reference(final String id,
                      final Orientation orientation) {
 
@@ -48,10 +58,21 @@ public final class Reference {
         this.orientation = orientation;
     }
 
+
+    /**
+     * Return the identifier for this reference.
+     *
+     * @return the identifier for this reference
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Return the orientation for this reference.
+     *
+     * @return the orientation for this reference
+     */
     public Orientation getOrientation() {
         return orientation;
     }
@@ -61,6 +82,13 @@ public final class Reference {
         return id + (Orientation.REVERSE.equals(orientation) ? "-" : "+");
     }
 
+
+    /**
+     * Parse a reference from the specified value.
+     *
+     * @param value value, must not be null
+     * @return a reference parsed from the specified value
+     */
     public static Reference valueOf(final String value) {
         checkNotNull(value);
         checkArgument(!value.isEmpty(), "value must not be empty");

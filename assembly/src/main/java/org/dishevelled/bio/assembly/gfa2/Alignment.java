@@ -39,6 +39,8 @@ import javax.annotation.concurrent.Immutable;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 
+import com.google.common.collect.ImmutableList;
+
 /**
  * Alignment.
  *
@@ -46,36 +48,81 @@ import com.google.common.base.Splitter;
  */
 @Immutable
 public final class Alignment {
+    /** Optional cigar for this alignment. */
     private final String cigar;
+
+    /** Optional trace for this alignment. */
     private final List<Integer> trace;
+
+    /** Regex for cigars. */
     private static final Pattern CIGAR = Pattern.compile("^([0-9]+[MDIP])+$");
 
+
+    /**
+     * Create a new alignment with the specified cigar.
+     *
+     * @param cigar cigar, if any
+     */
     public Alignment(final String cigar) {
         this(cigar, null);
     }
 
+
+    /**
+     * Create a new aligment with the specified trace.
+     *
+     * @param trace trace, if any
+     */
     public Alignment(final List<Integer> trace) {
         this(null, trace);
     }
 
+    /**
+     * Create a new alignment with the specified cigar and trace.
+     *
+     * @param cigar cigar, if any
+     * @param trace trace, if any
+     */
     private Alignment(@Nullable final String cigar,
                       @Nullable final List<Integer> trace) {
         this.cigar = cigar;
-        this.trace = trace;
+        this.trace = trace == null ? null : ImmutableList.copyOf(trace);
     }
 
+    /**
+     * Return true if this alignment has a cigar.
+     *
+     * @return true if this alignment has a cigar
+     */
     public boolean hasCigar() {
         return cigar != null;
     }
 
+    /**
+     * Return the cigar for this alignment, if any.
+     *
+     * @return the cigar for this alignment, if any
+     */
     public String getCigar() {
         return cigar;
     }
 
+    /**
+     * Return true if this alignment has a trace.
+     *
+     * @return true if this alignment has a trace
+     */
     public boolean hasTrace() {
         return trace != null;
     }
 
+    /**
+     * Return the trace as an immutable list of Integers, or null if
+     * this alignment does not have a trace.
+     *
+     * @return the trace as an immutable list of Integers, or null if
+     *    this alignment does not have a trace
+     */
     public List<Integer> getTrace() {
         return trace;
     }
@@ -85,10 +132,23 @@ public final class Alignment {
         return hasCigar() ? cigar : Joiner.on(",").join(trace);
     }
 
+
+    /**
+     * Return true if the specified value is a cigar.
+     *
+     * @param value value
+     * @return true if the specified value is a cigar
+     */
     static boolean isCigar(final String value) {
         return CIGAR.matcher(value).matches();
     }
 
+    /**
+     * Parse an alignment from the specified value.
+     *
+     * @param value value, must not be null
+     * @return an alignment parsed from the specified value
+     */
     public static Alignment valueOf(final String value) {
         checkNotNull(value);
         if ("*".equals(value)) {
