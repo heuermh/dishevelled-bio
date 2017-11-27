@@ -49,11 +49,27 @@ import com.google.common.collect.ImmutableMap;
  */
 @Immutable
 public final class Path extends Gfa1Record {
+    /** Name for this path. */
     private final String name;
+
+    /** List of segment references for this path. */
     private final List<Reference> segments;
+
+    /** List of overlaps for this path. */
     private final List<String> overlaps;
+
+    /** Cached hash code. */
     private final int hashCode;
 
+
+    /**
+     * Create a new path GFA 1.0 record.
+     *
+     * @param name name, must not be null
+     * @param segments list of segment references, must not be null
+     * @param overlaps list of overlaps, if any
+     * @param tags tags, must not be null
+     */
     public Path(final String name,
                 final List<Reference> segments,
                 @Nullable final List<String> overlaps,
@@ -70,15 +86,41 @@ public final class Path extends Gfa1Record {
         hashCode = Objects.hash(this.name, this.segments, this.overlaps, getTags());
     }
 
+
+    /**
+     * Return the name for this path.
+     *
+     * @return the name for this path
+     */
     public String getName() {
         return name;
     }
+
+    /**
+     * Return an immutable list of segment references for this path.
+     *
+     * @return an immutable list of segment references for this path
+     */
     public List<Reference> getSegments() {
         return segments;
     }
+
+    /**
+     * Return true if this path has any overlaps.
+     *
+     * @return true if this path has any overlaps
+     */
     public boolean hasOverlaps() {
         return overlaps != null;
     }
+
+    /**
+     * Return an immutable list of overlaps in cigar format for this path,
+     * or null if none exist.
+     *
+     * @return an immutable list of overlaps in cigar format for this path,
+     *    or null if none exist
+     */
     public List<String> getOverlaps() {
         return overlaps;
     }
@@ -93,7 +135,7 @@ public final class Path extends Gfa1Record {
          if (o == this) {
             return true;
         }
-        if (!(o instanceof Containment)) {
+        if (!(o instanceof Path)) {
             return false;
         }
         Path p = (Path) o;
@@ -116,6 +158,13 @@ public final class Path extends Gfa1Record {
         return sb.toString();
     }
 
+
+    /**
+     * Parse a path GFA 1.0 record from the specified value.
+     *
+     * @param value value, must not be null
+     * @return a path GFA 1.0 record parsed from the specified value
+     */
     public static Path valueOf(final String value) {
         checkNotNull(value);
         checkArgument(value.startsWith("P"), "value must start with P");

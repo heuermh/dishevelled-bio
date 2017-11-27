@@ -103,6 +103,11 @@ public final class Reference {
         return id + (Orientation.REVERSE.equals(orientation) ? "-" : "+");
     }
 
+    /**
+     * Return this reference as a string split by the tab character.
+     *
+     * @return this reference as a string split by the tab character
+     */
     public String splitToString() {
         return id + "\t" + (Orientation.REVERSE.equals(orientation) ? "-" : "+");
     }
@@ -127,6 +132,13 @@ public final class Reference {
         throw new IllegalArgumentException("value must have an orientation");
     }
 
+    /**
+     * Parse a reference from the specified values.
+     *
+     * @param id id, must not be null
+     * @param orientation orientation, must be one of {<code>+</code>,<code>-</code>}
+     * @return a reference parsed from the specified values
+     */
     public static Reference splitValueOf(final String id, final String orientation) {
         checkNotNull(id);
         checkNotNull(orientation);

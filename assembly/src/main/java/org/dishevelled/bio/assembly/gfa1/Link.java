@@ -40,17 +40,33 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 
 /**
- * Segment GFA 1.0 record.
+ * Link GFA 1.0 record.
  *
  * @author  Michael Heuer
  */
 @Immutable
 public final class Link extends Gfa1Record {
+    /** Source reference for this link. */
     private final Reference source;
+
+    /** Target reference for this link. */
     private final Reference target;
+
+    /** Overlap for this link. */
     private final String overlap;
+
+    /** Cached hash code. */
     private final int hashCode;
 
+
+    /**
+     * Create a new link GFA 1.0 record.
+     *
+     * @param source source reference, must not be null
+     * @param target target reference, must not be null
+     * @param overlap overlap, if any
+     * @param tags tags, must not be null
+     */
     public Link(final Reference source,
                 final Reference target,
                 @Nullable final String overlap,
@@ -67,14 +83,30 @@ public final class Link extends Gfa1Record {
         hashCode = Objects.hash(this.source, this.target, this.overlap, getTags());
     }
 
+
+    /**
+     * Return the source reference for this link.
+     *
+     * @return the source reference for this link
+     */
     public Reference getSource() {
         return source;
     }
 
+    /**
+     * Return the target reference for this link.
+     *
+     * @return the target reference for this link
+     */
     public Reference getTarget() {
         return target;
     }
 
+    /**
+     * Return the overlap in cigar format for this link, if any.
+     *
+     * @return the overlap in cigar format for this link, if any
+     */
     public String getOverlap() {
         return overlap;
     }
@@ -89,7 +121,7 @@ public final class Link extends Gfa1Record {
          if (o == this) {
             return true;
         }
-        if (!(o instanceof Containment)) {
+        if (!(o instanceof Link)) {
             return false;
         }
         Link l = (Link) o;
@@ -112,12 +144,19 @@ public final class Link extends Gfa1Record {
         return sb.toString();
     }
 
+
+    /**
+     * Parse a link GFA 1.0 record from the specified value.
+     *
+     * @param value value, must not be null
+     * @return a link GFA 1.0 record parsed from the specified value
+     */
     public static Link valueOf(final String value) {
         checkNotNull(value);
         checkArgument(value.startsWith("L"), "value must start with L");
         List<String> tokens = Splitter.on("\t").splitToList(value);
         if (tokens.size() < 6) {
-            throw new IllegalArgumentException("value must have at least seven tokens, was " + tokens.size());
+            throw new IllegalArgumentException("value must have at least six tokens, was " + tokens.size());
         }
         Reference source = Reference.splitValueOf(tokens.get(1), tokens.get(2));
         Reference target = Reference.splitValueOf(tokens.get(3), tokens.get(4));

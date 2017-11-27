@@ -46,12 +46,31 @@ import com.google.common.collect.ImmutableMap;
  */
 @Immutable
 public final class Containment extends Gfa1Record {
+    /** Container reference for this containment. */
     private final Reference container;
+
+    /** Contained reference for this containment. */
     private final Reference contained;
+
+    /** Position for this containment. */
     private final int position;
+
+    /** Overlap for this containment. */
     private final String overlap;
+
+    /** Cached hash code. */
     private final int hashCode;
 
+
+    /**
+     * Create a new containment GFA 1.0 record.
+     *
+     * @param container container reference, must not be null
+     * @param contained contained reference, must not be null
+     * @param position position, must be at least zero
+     * @param overlap overlap, if any
+     * @param tags tags, must not be null
+     */
     public Containment(final Reference container,
                        final Reference contained,
                        final int position,
@@ -71,18 +90,39 @@ public final class Containment extends Gfa1Record {
         hashCode = Objects.hash(this.container, this.contained, this.position, this.overlap, getTags());
     }
 
+
+    /**
+     * Return the container reference for this containment.
+     *
+     * @return the container reference for this containment
+     */
     public Reference getContainer() {
         return container;
     }
 
+    /**
+     * Return the contained reference for this containment.
+     *
+     * @return the contained reference for this containment
+     */
     public Reference getContained() {
         return contained;
     }
 
+    /**
+     * Return the position for this containment.
+     *
+     * @return the position for this containment.
+     */
     public int getPosition() {
         return position;
     }
 
+    /**
+     * Return the overlap in cigar format for this containment, if any.
+     *
+     * @return the overlap in cigar format for this containment, if any
+     */
     public String getOverlap() {
         return overlap;
     }
@@ -121,6 +161,13 @@ public final class Containment extends Gfa1Record {
         return sb.toString();
     }
 
+
+    /**
+     * Parse a containment GFA 1.0 record from the specified value.
+     *
+     * @param value value, must not be null
+     * @return a containment GFA 1.0 record parsed from the specified value
+     */
     public static Containment valueOf(final String value) {
         checkNotNull(value);
         checkArgument(value.startsWith("C"), "value must start with C");
