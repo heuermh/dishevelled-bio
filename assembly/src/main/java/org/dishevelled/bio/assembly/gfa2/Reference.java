@@ -26,6 +26,8 @@ package org.dishevelled.bio.assembly.gfa2;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Objects;
+
 import javax.annotation.concurrent.Immutable;
 
 /**
@@ -75,6 +77,25 @@ public final class Reference {
      */
     public Orientation getOrientation() {
         return orientation;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, orientation);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+         if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Reference)) {
+            return false;
+        }
+        Reference r = (Reference) o;
+
+        return Objects.equals(id, r.getId())
+            && Objects.equals(orientation, r.getOrientation());
     }
 
     @Override

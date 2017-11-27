@@ -55,6 +55,24 @@ public final class Header extends Gfa2Record {
 
 
     @Override
+    public int hashCode() {
+        return getTags().hashCode();
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+         if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Header)) {
+            return false;
+        }
+        Header h = (Header) o;
+
+        return getTags().equals(h.getTags());
+    }
+
+    @Override
     public String toString() {
         Joiner joiner = Joiner.on("\t");
         StringBuilder sb = new StringBuilder();
@@ -77,10 +95,6 @@ public final class Header extends Gfa2Record {
         checkNotNull(value);
         checkArgument(value.startsWith("H"), "header value must start with H");
         List<String> tokens = Splitter.on("\t").splitToList(value);
-        if (tokens.size() < 1) {
-            throw new IllegalArgumentException("header value must have at least one token, was " + tokens.size());
-        }
-
         ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
         for (int i = 1; i < tokens.size(); i++) {
             Tag tag = Tag.valueOf(tokens.get(i));

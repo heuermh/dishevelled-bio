@@ -28,6 +28,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import java.util.stream.Collectors;
 
@@ -54,6 +55,9 @@ public final class Path extends Gfa2Record {
     /** List of references for this path. */
     private final List<Reference> references;
 
+    /** Cached hash code. */
+    private final int hashCode;
+
 
     /**
      * Create a new path GFA 2.0 record.
@@ -72,6 +76,8 @@ public final class Path extends Gfa2Record {
 
         this.id = id;
         this.references = ImmutableList.copyOf(references);
+
+        hashCode = Objects.hash(this.id, this.references, getTags());
     }
 
 
@@ -91,6 +97,25 @@ public final class Path extends Gfa2Record {
      */
     public List<Reference> getReferences() {
         return references;
+    }
+    @Override
+    public int hashCode() {
+        return hashCode;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+         if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Path)) {
+            return false;
+        }
+        Path p = (Path) o;
+
+        return Objects.equals(id, p.getId())
+            && Objects.equals(references, p.getReferences())
+            && Objects.equals(getTags(), p.getTags());
     }
 
     @Override
@@ -116,8 +141,8 @@ public final class Path extends Gfa2Record {
         checkNotNull(value);
         checkArgument(value.startsWith("O"), "value must start with O");
         List<String> tokens = Splitter.on("\t").splitToList(value);
-        if (tokens.size() < 9) {
-            throw new IllegalArgumentException("value must have at least nine tokens, was " + tokens.size());
+        if (tokens.size() < 3) {
+            throw new IllegalArgumentException("value must have at least three tokens, was " + tokens.size());
         }
         String id = "*".equals(tokens.get(1)) ? null : tokens.get(1);
         List<Reference> references = Splitter
@@ -128,7 +153,7 @@ public final class Path extends Gfa2Record {
             .collect(Collectors.toList());
 
         ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
-        for (int i = 8; i < tokens.size(); i++) {
+        for (int i = 3; i < tokens.size(); i++) {
             Tag tag = Tag.valueOf(tokens.get(i));
             tags.put(tag.getName(), tag);
         }

@@ -26,6 +26,7 @@ package org.dishevelled.bio.assembly.gfa2;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.concurrent.Immutable;
 
@@ -92,6 +93,26 @@ public final class Tag {
      */
     public String getValue() {
         return value;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, type, value);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+         if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Tag)) {
+            return false;
+        }
+        Tag t = (Tag) o;
+
+        return Objects.equals(name, t.getName())
+            && Objects.equals(type, t.getType())
+            && Objects.equals(value, t.getValue());
     }
 
     @Override

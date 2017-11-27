@@ -28,6 +28,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.annotation.Nullable;
 
@@ -69,6 +70,9 @@ public final class Edge extends Gfa2Record {
     /** Optional alignment for this edge. */
     private final Alignment alignment;
 
+    /** Cached hash code. */
+    private final int hashCode;
+
 
     /**
      * Create a new edge GFA 2.0 record.
@@ -109,6 +113,10 @@ public final class Edge extends Gfa2Record {
         this.targetStart = targetStart;
         this.targetEnd = targetEnd;
         this.alignment = alignment;
+
+        hashCode = Objects.hash(this.id, this.source, this.target, this.sourceStart,
+                                this.sourceEnd, this.targetStart, this.targetEnd, this.alignment,
+                                getTags());
     }
 
 
@@ -182,6 +190,32 @@ public final class Edge extends Gfa2Record {
      */
     public Alignment getAlignment() {
         return alignment;
+    }
+
+    @Override
+    public int hashCode() {
+        return hashCode;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+         if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Edge)) {
+            return false;
+        }
+        Edge e = (Edge) o;
+
+        return Objects.equals(id, e.getId())
+            && Objects.equals(source, e.getSource())
+            && Objects.equals(target, e.getTarget())
+            && Objects.equals(sourceStart, e.getSourceStart())
+            && Objects.equals(sourceEnd, e.getSourceEnd())
+            && Objects.equals(targetStart, e.getTargetStart())
+            && Objects.equals(targetEnd, e.getTargetEnd())
+            && Objects.equals(alignment, e.getAlignment())
+            && Objects.equals(getTags(), e.getTags());
     }
 
     @Override

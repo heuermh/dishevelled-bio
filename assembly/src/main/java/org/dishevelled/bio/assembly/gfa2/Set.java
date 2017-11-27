@@ -28,6 +28,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.annotation.Nullable;
 
@@ -52,6 +53,9 @@ public final class Set extends Gfa2Record {
     /** Unordered set of identifiers for this set. */
     private final java.util.Set<String> ids;
 
+    /** Cached hash code. */
+    private final int hashCode;
+
 
     /**
      * Create a new set GFA 2.0 record.
@@ -69,6 +73,8 @@ public final class Set extends Gfa2Record {
 
         this.id = id;
         this.ids = ImmutableSet.copyOf(ids);
+
+        hashCode = Objects.hash(this.id, this.ids, getTags());
     }
 
 
@@ -88,6 +94,26 @@ public final class Set extends Gfa2Record {
      */
     public java.util.Set<String> getIds() {
         return ids;
+    }
+
+    @Override
+    public int hashCode() {
+        return hashCode;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+         if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Set)) {
+            return false;
+        }
+        Set s = (Set) o;
+
+        return Objects.equals(id, s.getId())
+            && Objects.equals(ids, s.getIds())
+            && Objects.equals(getTags(), s.getTags());
     }
 
     @Override
@@ -120,7 +146,7 @@ public final class Set extends Gfa2Record {
         java.util.Set<String> ids = ImmutableSet.copyOf(Splitter.on(" ").split(tokens.get(2)));
 
         ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
-        for (int i = 8; i < tokens.size(); i++) {
+        for (int i = 3; i < tokens.size(); i++) {
             Tag tag = Tag.valueOf(tokens.get(i));
             tags.put(tag.getName(), tag);
         }

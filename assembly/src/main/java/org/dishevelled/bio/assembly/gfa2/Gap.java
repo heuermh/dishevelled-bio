@@ -28,6 +28,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.annotation.Nullable;
 
@@ -60,6 +61,9 @@ public final class Gap extends Gfa2Record {
     /** Optional variance for this gap. */
     private final Integer variance;
 
+    /** Cached hash code. */
+    private final int hashCode;
+
 
     /**
      * Create a new gap GFA 2.0 record.
@@ -88,6 +92,9 @@ public final class Gap extends Gfa2Record {
         this.target = target;
         this.distance = distance;
         this.variance = variance;
+
+        hashCode = Objects.hash(this.id, this.source, this.target, this.distance,
+                                this.variance, getTags());
     }
 
 
@@ -134,6 +141,29 @@ public final class Gap extends Gfa2Record {
      */
     public Integer getVariance() {
         return variance;
+    }
+
+    @Override
+    public int hashCode() {
+        return hashCode;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+         if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Gap)) {
+            return false;
+        }
+        Gap g = (Gap) o;
+
+        return Objects.equals(id, g.getId())
+            && Objects.equals(source, g.getSource())
+            && Objects.equals(target, g.getTarget())
+            && Objects.equals(distance, g.getDistance())
+            && Objects.equals(variance, g.getVariance())
+            && Objects.equals(getTags(), g.getTags());
     }
 
     @Override

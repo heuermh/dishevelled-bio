@@ -27,6 +27,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 import java.util.regex.Pattern;
 
@@ -128,6 +129,25 @@ public final class Alignment {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(cigar, trace);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+         if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Alignment)) {
+            return false;
+        }
+        Alignment a = (Alignment) o;
+
+        return Objects.equals(cigar, a.getCigar())
+            && Objects.equals(trace, a.getTrace());
+    }
+
+    @Override
     public String toString() {
         return hasCigar() ? cigar : Joiner.on(",").join(trace);
     }
@@ -151,7 +171,7 @@ public final class Alignment {
      */
     public static Alignment valueOf(final String value) {
         checkNotNull(value);
-        if ("*".equals(value)) {
+        if ("*".equals(value) || value.isEmpty()) {
             return null;
         }
         if (isCigar(value)) {

@@ -28,6 +28,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.annotation.Nullable;
 
@@ -66,6 +67,9 @@ public final class Fragment extends Gfa2Record {
     /** Optional alignment for this fragment. */
     private final Alignment alignment;
 
+    /** Cached hash code. */
+    private final int hashCode;
+
 
     /**
      * Create a new fragment GFA 2.0 record.
@@ -103,6 +107,10 @@ public final class Fragment extends Gfa2Record {
         this.fragmentStart = fragmentStart;
         this.fragmentEnd = fragmentEnd;
         this.alignment = alignment;
+
+        hashCode = Objects.hash(this.segmentId, this.external, this.segmentStart,
+                                this.segmentEnd, this.fragmentStart, this.fragmentEnd,
+                                this.alignment, getTags());
     }
 
 
@@ -167,6 +175,31 @@ public final class Fragment extends Gfa2Record {
      */
     public Alignment getAlignment() {
         return alignment;
+    }
+
+    @Override
+    public int hashCode() {
+        return hashCode;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+         if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Fragment)) {
+            return false;
+        }
+        Fragment f = (Fragment) o;
+
+        return Objects.equals(segmentId, f.getSegmentId())
+            && Objects.equals(external, f.getExternal())
+            && Objects.equals(segmentStart, f.getSegmentStart())
+            && Objects.equals(segmentEnd, f.getSegmentEnd())
+            && Objects.equals(fragmentStart, f.getFragmentStart())
+            && Objects.equals(fragmentEnd, f.getFragmentEnd())
+            && Objects.equals(alignment, f.getAlignment())
+            && Objects.equals(getTags(), f.getTags());
     }
 
     @Override

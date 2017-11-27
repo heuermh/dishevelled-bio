@@ -28,6 +28,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.annotation.Nullable;
 
@@ -54,6 +55,9 @@ public final class Segment extends Gfa2Record {
     /** Optional sequence for this segment. */
     private final String sequence;
 
+    /** Cached hash code. */
+    private final int hashCode;
+
 
     /**
      * Create a new segment GFA 2.0 record.
@@ -75,6 +79,8 @@ public final class Segment extends Gfa2Record {
         this.id = id;
         this.length = length;
         this.sequence = sequence;
+
+        hashCode = Objects.hash(this.id, this.length, this.sequence, getTags());
     }
 
 
@@ -103,6 +109,27 @@ public final class Segment extends Gfa2Record {
      */
     public String getSequence() {
         return sequence;
+    }
+
+    @Override
+    public int hashCode() {
+        return hashCode;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+         if (o == this) {
+            return true;
+        }
+        if (!(o instanceof Segment)) {
+            return false;
+        }
+        Segment s = (Segment) o;
+
+        return Objects.equals(id, s.getId())
+            && Objects.equals(length, s.getLength())
+            && Objects.equals(sequence, s.getSequence())
+            && Objects.equals(getTags(), s.getTags());
     }
 
     @Override
