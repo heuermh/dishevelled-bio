@@ -42,6 +42,9 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
+import org.dishevelled.bio.assembly.gfa.Reference;
+import org.dishevelled.bio.assembly.gfa.Tag;
+
 /**
  * Path GFA 1.0 record.
  *

@@ -36,6 +36,9 @@ import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.dishevelled.bio.assembly.gfa.Reference;
+import org.dishevelled.bio.assembly.gfa.Tag;
+
 /**
  * Unit test for Path.
  *

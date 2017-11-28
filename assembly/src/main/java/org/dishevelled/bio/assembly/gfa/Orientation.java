@@ -21,7 +21,7 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.assembly.gfa1;
+package org.dishevelled.bio.assembly.gfa;
 
 /**
  * Orientation.

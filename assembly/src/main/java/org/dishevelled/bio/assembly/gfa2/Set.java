@@ -40,6 +40,8 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
+import org.dishevelled.bio.assembly.gfa.Tag;
+
 /**
  * Set GFA 2.0 record.
  *

@@ -23,20 +23,17 @@
 */
 package org.dishevelled.bio.assembly.gfa2;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.util.Map;
 
-import com.google.common.collect.ImmutableMap;
+import org.dishevelled.bio.assembly.gfa.GfaRecord;
+import org.dishevelled.bio.assembly.gfa.Tag;
 
 /**
  * Graphical Fragment Assembly (GFA) 2.0 record.
  *
  * @author  Michael Heuer
  */
-public abstract class Gfa2Record {
-    /** Map of tags keyed by tag name. */
-    private final Map<String, Tag> tags;
+public abstract class Gfa2Record extends GfaRecord {
 
     /**
      * Create a new GFA 2.0 record with the specifed tags.
@@ -44,18 +41,6 @@ public abstract class Gfa2Record {
      * @param tags tags, must not be null
      */
     protected Gfa2Record(final Map<String, Tag> tags) {
-        checkNotNull(tags);
-        this.tags = ImmutableMap.copyOf(tags);
-    }
-
-    /**
-     * Return an immutable map of tags keyed by tag name
-     * for this GFA 2.0 record.
-     *
-     * @return an immutable map of tags keyed by tag name
-     *    for this GFA 2.0 record
-     */
-    public final Map<String, Tag> getTags() {
-        return tags;
+        super(tags);
     }
 }

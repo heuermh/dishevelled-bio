@@ -21,26 +21,8 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.assembly.gfa1;
-
-import java.util.Map;
-
-import org.dishevelled.bio.assembly.gfa.GfaRecord;
-import org.dishevelled.bio.assembly.gfa.Tag;
 
 /**
- * Graphical Fragment Assembly (GFA) 1.0 record.
- *
- * @author  Michael Heuer
+ * Graphical Fragment Assembly (GFA) support common to 1.0 and 2.0 versions.
  */
-public abstract class Gfa1Record extends GfaRecord {
-
-    /**
-     * Create a new GFA 1.0 record with the specifed tags.
-     *
-     * @param tags tags, must not be null
-     */
-    protected Gfa1Record(final Map<String, Tag> tags) {
-        super(tags);
-    }
-}
+package org.dishevelled.bio.assembly.gfa;

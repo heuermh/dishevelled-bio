@@ -21,17 +21,41 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.assembly.gfa2;
+package org.dishevelled.bio.assembly.gfa;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.Map;
+
+import com.google.common.collect.ImmutableMap;
 
 /**
- * Orientation.
+ * Graphical Fragment Assembly (GFA) record.
  *
  * @author  Michael Heuer
  */
-public enum Orientation {
-    /** Forward orientation. */
-    FORWARD,
+public abstract class GfaRecord {
+    /** Map of tags keyed by tag name. */
+    private final Map<String, Tag> tags;
 
-    /** Reverse orientation. */
-    REVERSE
+    /**
+     * Create a new GFA record with the specifed tags.
+     *
+     * @param tags tags, must not be null
+     */
+    protected GfaRecord(final Map<String, Tag> tags) {
+        checkNotNull(tags);
+        this.tags = ImmutableMap.copyOf(tags);
+    }
+
+    /**
+     * Return an immutable map of tags keyed by tag name
+     * for this GFA record.
+     *
+     * @return an immutable map of tags keyed by tag name
+     *    for this GFA record
+     */
+    public final Map<String, Tag> getTags() {
+        return tags;
+    }
 }

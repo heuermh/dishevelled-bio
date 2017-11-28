@@ -39,6 +39,8 @@ import com.google.common.base.Splitter;
 
 import com.google.common.collect.ImmutableMap;
 
+import org.dishevelled.bio.assembly.gfa.Tag;
+
 /**
  * Segment GFA 1.0 record.
  *

@@ -39,6 +39,9 @@ import com.google.common.base.Splitter;
 
 import com.google.common.collect.ImmutableMap;
 
+import org.dishevelled.bio.assembly.gfa.Reference;
+import org.dishevelled.bio.assembly.gfa.Tag;
+
 /**
  * Containment GFA 1.0 record.
  *
