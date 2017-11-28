@@ -42,6 +42,11 @@
       </dependency>
       <dependency>
         <groupId>org.dishevelled</groupId>
+        <artifactId>dsh-bio-assembly</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.dishevelled</groupId>
         <artifactId>dsh-bio-feature</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -130,6 +135,11 @@
     </dependency>
     <dependency>
       <groupId>org.dishevelled</groupId>
+      <artifactId>dsh-bio-assembly</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.dishevelled</groupId>
       <artifactId>dsh-bio-feature</artifactId>
       <scope>compile</scope>
     </dependency>
@@ -214,6 +224,10 @@
             <program>
               <id>dsh-filter-vcf</id>
               <mainClass>org.dishevelled.bio.tools.FilterVcf</mainClass>
+            </program>
+            <program>
+              <id>dsh-gfa1-to-gfa2</id>
+              <mainClass>org.dishevelled.bio.tools.Gfa1ToGfa2</mainClass>
             </program>
             <program>
               <id>dsh-interleave-fastq</id>
