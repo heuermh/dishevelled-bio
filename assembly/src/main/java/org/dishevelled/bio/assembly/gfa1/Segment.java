@@ -143,6 +143,8 @@ public final class Segment extends Gfa1Record {
         if (tokens.size() < 3) {
             throw new IllegalArgumentException("value must have at least three tokens, was " + tokens.size());
         }
+        String id = tokens.get(1);
+        String sequence = "*".equals(tokens.get(2)) ? null : tokens.get(2);
 
         ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
         for (int i = 3; i < tokens.size(); i++) {
@@ -150,6 +152,6 @@ public final class Segment extends Gfa1Record {
             tags.put(tag.getName(), tag);
         }
 
-        return new Segment(tokens.get(1), tokens.get(2), tags.build());
+        return new Segment(id, sequence, tags.build());
     }
 }
