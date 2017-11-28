@@ -101,6 +101,7 @@ public final class Path extends Gfa2Record {
     public List<Reference> getReferences() {
         return references;
     }
+
     @Override
     public int hashCode() {
         return hashCode;

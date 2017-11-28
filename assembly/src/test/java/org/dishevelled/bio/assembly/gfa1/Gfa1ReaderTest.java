@@ -31,7 +31,6 @@ import static org.dishevelled.bio.assembly.gfa1.Gfa1Reader.stream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
-import java.io.StringReader;
 
 import org.junit.After;
 import org.junit.Before;

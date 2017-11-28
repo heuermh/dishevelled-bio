@@ -23,8 +23,6 @@
 */
 package org.dishevelled.bio.tools;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import static org.dishevelled.compress.Readers.reader;
 import static org.dishevelled.compress.Writers.writer;
 
@@ -33,9 +31,6 @@ import java.io.PrintWriter;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import java.util.concurrent.Callable;
 

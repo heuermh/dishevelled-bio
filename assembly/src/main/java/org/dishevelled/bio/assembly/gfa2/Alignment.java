@@ -23,7 +23,6 @@
 */
 package org.dishevelled.bio.assembly.gfa2;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
