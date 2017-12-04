@@ -137,7 +137,7 @@ public final class SnpEffVariantAnnotation {
      *
      * @return the alternate allele for this SnpEff variant annotation, if any
      */
-    public String alternateAllele() {
+    public String getAlternateAllele() {
         return alternateAllele;
     }
 
@@ -146,7 +146,7 @@ public final class SnpEffVariantAnnotation {
      *
      * @return the list of effects for this SnpEff variant annotation
      */
-    public List<String> effects() {
+    public List<String> getEffects() {
         return effects;
     }
 
@@ -155,7 +155,7 @@ public final class SnpEffVariantAnnotation {
      *
      * @return the annotation impact for this SnpEff variant annotation, if any
      */
-    public String annotationImpact() {
+    public String getAnnotationImpact() {
         return annotationImpact;
     }
 
@@ -164,7 +164,7 @@ public final class SnpEffVariantAnnotation {
      *
      * @return the gene name for this SnpEff variant annotation, if any
      */
-    public String geneName() {
+    public String getGeneName() {
         return geneName;
     }
 
@@ -173,7 +173,7 @@ public final class SnpEffVariantAnnotation {
      *
      * @return the gene id for this SnpEff variant annotation, if any
      */
-    public String geneId() {
+    public String getGeneId() {
         return geneId;
     }
 
@@ -182,7 +182,7 @@ public final class SnpEffVariantAnnotation {
      *
      * @return the feature type for this SnpEff variant annotation, if any
      */
-    public String featureType() {
+    public String getFeatureType() {
         return featureType;
     }
 
@@ -191,25 +191,25 @@ public final class SnpEffVariantAnnotation {
      *
      * @return the feature id for this SnpEff variant annotation, if any
      */
-    public String featureId() {
+    public String getFeatureId() {
         return featureId;
     }
 
     /**
-     * Return the transcript bio type for this SnpEff variant annotation, if any.
+     * Return the transcript biotype for this SnpEff variant annotation, if any.
      *
-     * @return the transcript bio type for this SnpEff variant annotation, if any
+     * @return the transcript biotype for this SnpEff variant annotation, if any
      */
-    public String biotype() {
+    public String getBiotype() {
         return biotype;
     }
 
     /**
      * Return the intron or exon rank for this SnpEff variant annotation, if any.
      *
-     * @return the intorn or exon rank for this SnpEff variant annotation, if any
+     * @return the intron or exon rank for this SnpEff variant annotation, if any
      */
-    public Integer rank() {
+    public Integer getRank() {
         return rank;
     }
 
@@ -218,7 +218,7 @@ public final class SnpEffVariantAnnotation {
      *
      * @return the total number of introns or exons for this SnpEff variant annotation, if any
      */
-    public Integer total() {
+    public Integer getTotal() {
         return total;
     }
 
@@ -227,7 +227,7 @@ public final class SnpEffVariantAnnotation {
      *
      * @return the HGVS.c annotation for this SnpEff variant annotation, if any
      */
-    public String transcriptHgvs() {
+    public String getTranscriptHgvs() {
         return transcriptHgvs;
     }
 
@@ -236,7 +236,7 @@ public final class SnpEffVariantAnnotation {
      *
      * @return the HGVS.p annotation for this SnpEff variant annotation, if any
      */
-    public String proteinHgvs() {
+    public String getProteinHgvs() {
         return proteinHgvs;
     }
 
@@ -245,7 +245,7 @@ public final class SnpEffVariantAnnotation {
      *
      * @return the cDNA position for this SnpEff variant annotation, if any
      */
-    public Integer cdnaPosition() {
+    public Integer getCdnaPosition() {
         return cdnaPosition;
     }
 
@@ -254,7 +254,7 @@ public final class SnpEffVariantAnnotation {
      *
      * @return the cDNA length for this SnpEff variant annotation, if any
      */
-    public Integer cdnaLength() {
+    public Integer getCdnaLength() {
         return cdnaLength;
     }
 
@@ -263,7 +263,7 @@ public final class SnpEffVariantAnnotation {
      *
      * @return the CDS position for this SnpEff variant annotation, if any
      */
-    public Integer cdsPosition() {
+    public Integer getCdsPosition() {
         return cdsPosition;
     }
 
@@ -272,7 +272,7 @@ public final class SnpEffVariantAnnotation {
      *
      * @return the CDS length for this SnpEff variant annotation, if any
      */
-    public Integer cdsLength() {
+    public Integer getCdsLength() {
         return cdsLength;
     }
 
@@ -281,7 +281,7 @@ public final class SnpEffVariantAnnotation {
      *
      * @return the amino acid position for this SnpEff variant annotation, if any
      */
-    public Integer proteinPosition() {
+    public Integer getProteinPosition() {
         return proteinPosition;
     }
 
@@ -290,7 +290,7 @@ public final class SnpEffVariantAnnotation {
      *
      * @return the amino acid length for this SnpEff variant annotation, if any
      */
-    public Integer proteinLength() {
+    public Integer getProteinLength() {
         return proteinLength;
     }
 
@@ -299,7 +299,7 @@ public final class SnpEffVariantAnnotation {
      *
      * @return the distance for this SnpEff variant annotation, if any
      */
-    public Integer distance() {
+    public Integer getDistance() {
         return distance;
     }
 
@@ -308,7 +308,7 @@ public final class SnpEffVariantAnnotation {
      *
      * @return the list of messages for this SnpEff variant annotation
      */
-    public List<String> messages() {
+    public List<String> getMessages() {
         return messages;
     }
 

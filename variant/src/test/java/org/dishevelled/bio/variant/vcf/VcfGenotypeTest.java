@@ -25,11 +25,9 @@ package org.dishevelled.bio.variant.vcf;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 import static org.dishevelled.bio.variant.vcf.VcfGenotype.builder;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
 

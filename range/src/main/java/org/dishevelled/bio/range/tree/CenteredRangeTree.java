@@ -25,7 +25,6 @@ package org.dishevelled.bio.range.tree;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -193,8 +192,8 @@ public final class CenteredRangeTree<C extends Comparable> extends AbstractRange
             overlapByUpperEndpoint = Lists.newArrayList(overlap);
             Ordering<Range<C>> orderingByLowerEndpoint = Ranges.orderingByLowerEndpoint();
             Ordering<Range<C>> reverseOrderingByUpperEndpoint = Ranges.reverseOrderingByUpperEndpoint();
-            Collections.sort(overlapByLowerEndpoint, orderingByLowerEndpoint);
-            Collections.sort(overlapByUpperEndpoint, reverseOrderingByUpperEndpoint);
+            overlapByLowerEndpoint.sort(orderingByLowerEndpoint);
+            overlapByUpperEndpoint.sort(reverseOrderingByUpperEndpoint);
         }
 
 

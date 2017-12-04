@@ -36,8 +36,6 @@ import org.bdgenomics.convert.Converter;
 import org.bdgenomics.convert.ConversionException;
 import org.bdgenomics.convert.ConversionStringency;
 
-import org.bdgenomics.convert.bdgenomics.BdgenomicsModule;
-
 import org.dishevelled.bio.variant.vcf.header.VcfHeaderLineType;
 
 import org.slf4j.Logger;

@@ -26,10 +26,6 @@ package org.dishevelled.bio.read;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
-import java.io.Reader;
-
-import java.util.Collections;
-import java.util.List;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentMap;
@@ -43,8 +39,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Ordering;
-import com.google.common.collect.Lists;
 
 import org.biojava.bio.program.fastq.Fastq;
 import org.biojava.bio.program.fastq.SangerFastqReader;

@@ -26,7 +26,6 @@ package org.dishevelled.bio.range.entrytree;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -204,8 +203,8 @@ public final class CenteredRangeTree<C extends Comparable, V> extends AbstractRa
             Ordering<Range<C>> reverseOrderingByUpperEndpoint = Ranges.reverseOrderingByUpperEndpoint();
             Ordering<Entry<C, V>> entryOrderingByLowerEndpoint = new EntryOrdering(orderingByLowerEndpoint);
             Ordering<Entry<C, V>> entryReverseOrderingByUpperEndpoint = new EntryOrdering(reverseOrderingByUpperEndpoint);
-            Collections.sort(overlapByLowerEndpoint, entryOrderingByLowerEndpoint);
-            Collections.sort(overlapByUpperEndpoint, entryReverseOrderingByUpperEndpoint);
+            overlapByLowerEndpoint.sort(entryOrderingByLowerEndpoint);
+            overlapByUpperEndpoint.sort(entryReverseOrderingByUpperEndpoint);
         }
 
 
@@ -307,8 +306,8 @@ public final class CenteredRangeTree<C extends Comparable, V> extends AbstractRa
      * @param entries range entries, must not be null
      * @return a new range tree from the specified range entries
      */
-    public static <C extends Comparable, V> RangeTree<C, V> create(final Iterable<Entry<C, V>> ranges) {
-        return new CenteredRangeTree<C, V>(ranges);
+    public static <C extends Comparable, V> RangeTree<C, V> create(final Iterable<Entry<C, V>> entries) {
+        return new CenteredRangeTree<C, V>(entries);
     }
 
     /**
@@ -323,7 +322,7 @@ public final class CenteredRangeTree<C extends Comparable, V> extends AbstractRa
     public static <C extends Comparable, V> RangeTree<C, V> create(final List<Range<C>> ranges, final List<V> values) {
         checkNotNull(ranges);
         checkNotNull(values);
-        checkArgument(ranges.size() == values.size(), "ranges and values must be equal size");
+        checkArgument(ranges.size() == values.size(), "entries and values must be equal size");
 
         int size = ranges.size();
         List<Entry<C, V>> entries = Lists.newArrayListWithExpectedSize(size);

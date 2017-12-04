@@ -76,26 +76,26 @@ public class SnpEffVariantAnnotationTest {
     @Test
     public void testValueOf() {
         SnpEffVariantAnnotation ann = valueOf("T|upstream_gene_variant|MODIFIER|TAS1R3|ENSG00000169962|transcript|ENST00000339381.5|protein_coding||c.-485C>T|||||453|");
-        assertEquals("T", ann.alternateAllele());
-        assertTrue(ann.effects().contains("upstream_gene_variant"));
-        assertEquals("MODIFIER", ann.annotationImpact());
-        assertEquals("TAS1R3", ann.geneName());
-        assertEquals("ENSG00000169962", ann.geneId());
-        assertEquals("transcript", ann.featureType());
-        assertEquals("ENST00000339381.5", ann.featureId());
-        assertEquals("protein_coding", ann.biotype());
-        assertNull(ann.rank());
-        assertNull(ann.total());
-        assertEquals("c.-485C>T", ann.transcriptHgvs());
-        assertNull(ann.proteinHgvs());
-        assertNull(ann.cdnaPosition());
-        assertNull(ann.cdnaLength());
-        assertNull(ann.cdsPosition());
-        assertNull(ann.cdsLength());
-        assertNull(ann.proteinPosition());
-        assertNull(ann.proteinLength());
-        assertEquals(Integer.valueOf(453), ann.distance());
-        assertTrue(ann.messages().isEmpty());
+        assertEquals("T", ann.getAlternateAllele());
+        assertTrue(ann.getEffects().contains("upstream_gene_variant"));
+        assertEquals("MODIFIER", ann.getAnnotationImpact());
+        assertEquals("TAS1R3", ann.getGeneName());
+        assertEquals("ENSG00000169962", ann.getGeneId());
+        assertEquals("transcript", ann.getFeatureType());
+        assertEquals("ENST00000339381.5", ann.getFeatureId());
+        assertEquals("protein_coding", ann.getBiotype());
+        assertNull(ann.getRank());
+        assertNull(ann.getTotal());
+        assertEquals("c.-485C>T", ann.getTranscriptHgvs());
+        assertNull(ann.getProteinHgvs());
+        assertNull(ann.getCdnaPosition());
+        assertNull(ann.getCdnaLength());
+        assertNull(ann.getCdsPosition());
+        assertNull(ann.getCdsLength());
+        assertNull(ann.getProteinPosition());
+        assertNull(ann.getProteinLength());
+        assertEquals(Integer.valueOf(453), ann.getDistance());
+        assertTrue(ann.getMessages().isEmpty());
         assertEquals("T|upstream_gene_variant|MODIFIER|TAS1R3|ENSG00000169962|transcript|ENST00000339381.5|protein_coding||c.-485C>T|||||453|", ann.toString());
     }
 

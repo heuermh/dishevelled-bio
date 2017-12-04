@@ -40,7 +40,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.bdgenomics.convert.Converter;
-import org.bdgenomics.convert.ConversionStringency;
 
 import org.bdgenomics.convert.bdgenomics.BdgenomicsModule;
 

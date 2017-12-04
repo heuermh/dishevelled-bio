@@ -57,7 +57,7 @@ public final class GapPenalties {
      *
      * @return the match penalty
      */
-    public short match() {
+    public short getMatch() {
         return match;
     }
 
@@ -66,7 +66,7 @@ public final class GapPenalties {
      *
      * @return the replace penalty
      */
-    public short replace() {
+    public short getReplace() {
         return replace;
     }
 
@@ -75,7 +75,7 @@ public final class GapPenalties {
      *
      * @return the insert penalty
      */
-    public short insert() {
+    public short getInsert() {
         return insert;
     }
 
@@ -84,7 +84,7 @@ public final class GapPenalties {
      *
      * @return the delete penalty
      */
-    public short delete() {
+    public short getDelete() {
         return delete;
     }
 
@@ -93,7 +93,7 @@ public final class GapPenalties {
      *
      * @return the extend penalty
      */
-    public short extend() {
+    public short getExtend() {
         return extend;
     }
 

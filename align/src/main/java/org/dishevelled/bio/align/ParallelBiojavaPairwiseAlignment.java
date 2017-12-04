@@ -147,11 +147,11 @@ public final class ParallelBiojavaPairwiseAlignment extends AbstractPairwiseAlig
 
         @Override
         public AlignmentPair call() {
-            SmithWaterman smithWaterman = new SmithWaterman(gapPenalties.match(),
-                                                            gapPenalties.replace(),
-                                                            gapPenalties.insert(),
-                                                            gapPenalties.delete(),
-                                                            gapPenalties.extend(),
+            SmithWaterman smithWaterman = new SmithWaterman(gapPenalties.getMatch(),
+                                                            gapPenalties.getReplace(),
+                                                            gapPenalties.getInsert(),
+                                                            gapPenalties.getDelete(),
+                                                            gapPenalties.getExtend(),
                                                             substitutionMatrix);
             return smithWaterman.pairwiseAlignment(query, subject);
         }
@@ -178,11 +178,11 @@ public final class ParallelBiojavaPairwiseAlignment extends AbstractPairwiseAlig
 
         @Override
         public AlignmentPair call() throws Exception {
-            NeedlemanWunsch needlemanWunsch = new NeedlemanWunsch(gapPenalties.match(),
-                                                                  gapPenalties.replace(),
-                                                                  gapPenalties.insert(),
-                                                                  gapPenalties.delete(),
-                                                                  gapPenalties.extend(),
+            NeedlemanWunsch needlemanWunsch = new NeedlemanWunsch(gapPenalties.getMatch(),
+                                                                  gapPenalties.getReplace(),
+                                                                  gapPenalties.getInsert(),
+                                                                  gapPenalties.getDelete(),
+                                                                  gapPenalties.getExtend(),
                                                                   substitutionMatrix);
             return needlemanWunsch.pairwiseAlignment(query, subject);
         }

@@ -25,8 +25,6 @@ package org.dishevelled.bio.range.entrytree;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.List;
-
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Range;
 

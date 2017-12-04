@@ -30,7 +30,6 @@ import static org.junit.Assert.assertNull;
 import htsjdk.variant.vcf.VCFFormatHeaderLine;
 import htsjdk.variant.vcf.VCFHeaderLineCount;
 import htsjdk.variant.vcf.VCFHeaderLineType;
-import htsjdk.variant.vcf.VCFInfoHeaderLine;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -39,12 +38,9 @@ import org.bdgenomics.convert.Converter;
 import org.bdgenomics.convert.ConversionException;
 import org.bdgenomics.convert.ConversionStringency;
 
-import org.bdgenomics.convert.bdgenomics.BdgenomicsModule;
-
 import org.dishevelled.bio.variant.vcf.header.VcfFormatHeaderLine;
 import org.dishevelled.bio.variant.vcf.header.VcfHeaderLineNumber;
 import org.dishevelled.bio.variant.vcf.header.VcfHeaderLineType;
-import org.dishevelled.bio.variant.vcf.header.VcfInfoHeaderLine;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

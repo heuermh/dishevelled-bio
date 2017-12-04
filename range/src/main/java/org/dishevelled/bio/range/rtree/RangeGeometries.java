@@ -152,7 +152,7 @@ public final class RangeGeometries {
 
           Since we are representing genomic coordinate systems, the expectation is
           that endpoints are instance of Integer, Long, or BigInteger; thus for open
-          lower and upper bounds we can safely add or substract 1.0 respectively.
+          lower and upper bounds we can safely add or subtract 1.0 respectively.
 
           Then by convention a rectangle with y1 0.0 and height of 1.0 is used.
 

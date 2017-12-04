@@ -68,11 +68,11 @@ public final class BiojavaPairwiseAlignment extends AbstractPairwiseAlignment im
             return Collections.<AlignmentPair>emptyList();
         }
 
-        SmithWaterman smithWaterman = new SmithWaterman(gapPenalties.match(),
-                                                        gapPenalties.replace(),
-                                                        gapPenalties.insert(),
-                                                        gapPenalties.delete(),
-                                                        gapPenalties.extend(),
+        SmithWaterman smithWaterman = new SmithWaterman(gapPenalties.getMatch(),
+                                                        gapPenalties.getReplace(),
+                                                        gapPenalties.getInsert(),
+                                                        gapPenalties.getDelete(),
+                                                        gapPenalties.getExtend(),
                                                         getSubstitutionMatrix());
 
         List<AlignmentPair> alignmentPairs = Lists.newArrayListWithExpectedSize(queries.size() * subjects.size());
@@ -97,11 +97,11 @@ public final class BiojavaPairwiseAlignment extends AbstractPairwiseAlignment im
             return Collections.<AlignmentPair>emptyList();
         }
 
-        NeedlemanWunsch needlemanWunsch = new NeedlemanWunsch(gapPenalties.match(),
-                                                              gapPenalties.replace(),
-                                                              gapPenalties.insert(),
-                                                              gapPenalties.delete(),
-                                                              gapPenalties.extend(),
+        NeedlemanWunsch needlemanWunsch = new NeedlemanWunsch(gapPenalties.getMatch(),
+                                                              gapPenalties.getReplace(),
+                                                              gapPenalties.getInsert(),
+                                                              gapPenalties.getDelete(),
+                                                              gapPenalties.getExtend(),
                                                               getSubstitutionMatrix());
 
         List<AlignmentPair> alignmentPairs = Lists.newArrayListWithExpectedSize(queries.size() * subjects.size());

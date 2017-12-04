@@ -47,11 +47,11 @@ public final class GapPenaltiesTest {
     public void testCreate() {
         GapPenalties gapPenalties = create(0, 1, 2, 3, 4);
 
-        assertEquals((short) 0, gapPenalties.match());
-        assertEquals((short) 1, gapPenalties.replace());
-        assertEquals((short) 2, gapPenalties.insert());
-        assertEquals((short) 3, gapPenalties.delete());
-        assertEquals((short) 4, gapPenalties.extend());
+        assertEquals((short) 0, gapPenalties.getMatch());
+        assertEquals((short) 1, gapPenalties.getReplace());
+        assertEquals((short) 2, gapPenalties.getInsert());
+        assertEquals((short) 3, gapPenalties.getDelete());
+        assertEquals((short) 4, gapPenalties.getExtend());
     }
 
     @Test
@@ -64,10 +64,10 @@ public final class GapPenaltiesTest {
             .withExtend(4)
             .build();
 
-        assertEquals((short) 0, gapPenalties.match());
-        assertEquals((short) 1, gapPenalties.replace());
-        assertEquals((short) 2, gapPenalties.insert());
-        assertEquals((short) 3, gapPenalties.delete());
-        assertEquals((short) 4, gapPenalties.extend());
+        assertEquals((short) 0, gapPenalties.getMatch());
+        assertEquals((short) 1, gapPenalties.getReplace());
+        assertEquals((short) 2, gapPenalties.getInsert());
+        assertEquals((short) 3, gapPenalties.getDelete());
+        assertEquals((short) 4, gapPenalties.getExtend());
     }
 }

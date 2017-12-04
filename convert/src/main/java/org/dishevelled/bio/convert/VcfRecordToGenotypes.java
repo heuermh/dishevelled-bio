@@ -89,7 +89,7 @@ final class VcfRecordToGenotypes extends AbstractConverter<VcfRecord, List<Genot
 
             for (Map.Entry<String, VcfGenotype> entry : vcfRecord.getGenotypes().entrySet()) {
                 String sampleId = entry.getKey();
-                gb.setSampleId(entry.getKey());
+                gb.setSampleId(sampleId);
 
                 VcfGenotype genotype = entry.getValue();
                 String gt = genotype.getGt();

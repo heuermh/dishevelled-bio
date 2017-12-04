@@ -36,10 +36,10 @@ import org.biojava.bio.alignment.AlignmentPair;
  */
 public interface PairwiseAlignment {
     /** Default local alignment gap penalties, <code>match -1 replace 3 insert 2 delete 2 extend 1</code>. */
-    final GapPenalties DEFAULT_LOCAL_GAP_PENALTIES = GapPenalties.create(-1, 3, 2, 2, 1);
+    GapPenalties DEFAULT_LOCAL_GAP_PENALTIES = GapPenalties.create(-1, 3, 2, 2, 1);
 
     /** Default global alignment gap penalties, <code>match 0 replace 2 insert 4 delete 4 extend 6</code>. */
-    final GapPenalties DEFAULT_GLOBAL_GAP_PENALTIES = GapPenalties.create(0, 2, 4, 4, 6);
+    GapPenalties DEFAULT_GLOBAL_GAP_PENALTIES = GapPenalties.create(0, 2, 4, 4, 6);
 
 
     /**

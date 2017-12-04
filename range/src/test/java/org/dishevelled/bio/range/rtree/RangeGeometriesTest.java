@@ -39,7 +39,6 @@ import com.github.davidmoten.rtree.geometry.Geometries;
 
 import com.google.common.collect.Range;
 
-import org.junit.Before;
 import org.junit.Test;
 
 /**
