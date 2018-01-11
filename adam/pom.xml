@@ -34,20 +34,7 @@
   <artifactId>dsh-bio-adam</artifactId>
   <name>dsh-bio-adam</name>
   <description>Adapt dsh-bio models to ADAM.</description>
-  <properties>
-    <adam.version>0.23.0</adam.version>
-    <spark.version>2.2.0</spark.version>
-  </properties>
   <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-shade-plugin</artifactId>
-          <version>2.4.3</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -90,39 +77,6 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.apache.spark</groupId>
-        <artifactId>spark-core_2.11</artifactId>
-        <version>${spark.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.spark</groupId>
-        <artifactId>spark-sql_2.11</artifactId>
-        <version>${spark.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.bdgenomics.adam</groupId>
-        <artifactId>adam-core-spark2_2.11</artifactId>
-        <version>${adam.version}</version>
-        <exclusions>
-          <exclusion>
-            <groupId>com.esotericsoftware.kryo</groupId>
-            <artifactId>kryo</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-client</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-mapreduce</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
         <groupId>org.dishevelled</groupId>
         <artifactId>dsh-bio-convert</artifactId>
         <version>${project.version}</version>
@@ -141,23 +95,28 @@
   </dependencyManagement>
   <dependencies>
     <dependency>
+      <groupId>de.javakaffee</groupId>
+      <artifactId>kryo-serializers</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.spark</groupId>
-      <artifactId>spark-core_2.11</artifactId>
+      <artifactId>spark-core_${scala.version.prefix}</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.spark</groupId>
-      <artifactId>spark-sql_2.11</artifactId>
+      <artifactId>spark-sql_${scala.version.prefix}</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.bdgenomics.adam</groupId>
-      <artifactId>adam-core-spark2_2.11</artifactId>
+      <artifactId>adam-core-spark2_${scala.version.prefix}</artifactId>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -174,17 +133,6 @@
       <groupId>org.dishevelled</groupId>
       <artifactId>dsh-bio-feature</artifactId>
       <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>de.javakaffee</groupId>
-      <artifactId>kryo-serializers</artifactId>
-      <version>0.41</version>
-      <exclusions>
-        <exclusion>
-          <groupId>com.esotericsoftware</groupId>
-          <artifactId>kryo</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
   </dependencies>
 </project>
