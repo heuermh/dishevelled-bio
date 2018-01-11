@@ -55,7 +55,7 @@
   </modules>
 
   <properties>
-    <bdg-convert.version>0.1</bdg-convert.version>
+    <bdg-convert.version>0.2.0</bdg-convert.version>
     <biojava.version>1.9.2</biojava.version>
     <commons-csv.version>1.4</commons-csv.version>
     <commons-io.version>2.5</commons-io.version>
@@ -95,6 +95,11 @@
       <dependency>
         <groupId>org.bdgenomics.convert</groupId>
         <artifactId>convert</artifactId>
+        <version>${bdg-convert.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.bdgenomics.convert</groupId>
+        <artifactId>convert-htsjdk</artifactId>
         <version>${bdg-convert.version}</version>
       </dependency>
       <dependency>

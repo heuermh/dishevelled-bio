@@ -64,6 +64,11 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>org.bdgenomics.convert</groupId>
+      <artifactId>convert-htsjdk</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>org.dishevelled</groupId>
       <artifactId>dsh-bio-variant</artifactId>
       <scope>compile</scope>
