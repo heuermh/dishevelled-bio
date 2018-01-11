@@ -2,6 +2,8 @@
 dishevelled.org bio
 
 [![Build Status](https://travis-ci.org/heuermh/dishevelled-bio.svg?branch=master)](https://travis-ci.org/heuermh/dishevelled-bio)
+[![Maven Central](https://img.shields.io/maven-central/v/org.dishevelled/dsh-bio.svg?maxAge=600)](http://search.maven.org/#search%7Cga%7C1%7Corg.dishevelled)
+
 
 ### Hacking dishevelled-bio
 
