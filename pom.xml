@@ -53,6 +53,7 @@
     <module>read</module>
     <module>variant</module>
     <module>tools</module>
+    <module>benchmarks</module>
   </modules>
 
   <properties>
