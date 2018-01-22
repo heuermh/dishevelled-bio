@@ -188,7 +188,7 @@ public final class SplitFasta extends AbstractSplit {
 
             Long b = bytes.wasFound() ? toBytes(bytes.getValue()) : null;
 
-            String p = null;
+            String p = prefix.getValue();
             if (!prefix.wasFound()) {
                 if (inputFile.wasFound()) {
                     p = getBaseName(inputFile.getValue());
@@ -198,7 +198,7 @@ public final class SplitFasta extends AbstractSplit {
                 }
             }
 
-            String s = null;
+            String s = suffix.getValue();
             if (!suffix.wasFound()) {
                 if (inputFile.wasFound()) {
                     s = getFileExtensions(inputFile.getValue());
