@@ -85,7 +85,25 @@ arguments:
 ```
 
 
-Across the dishevelled-bio command line tools, stdin and stdout should behave as expected,
-and files and streams compressed with GZIP, BZip2, and block-compressed GZIP (BGZF) files
-are handled transparently. Use file extensions `.gz`, `.bzip2`, and `.bgz/.bgzf` respectively
+Across the dishevelled.org bio command line tools, stdin and stdout should behave as expected,
+and files and streams compressed with GZIP, BZip2, and block-compressed GZIP (BGZF) are
+handled transparently. Use file extensions `.gz`, `.bzip2`, and `.bgz/.bgzf` respectively
 to force the issue, if necessary.
+
+
+### Installing dishevelled-bio via Conda
+
+The dishevelled.org bio command line tools are available in Conda via Bioconda, https://bioconda.github.io/
+
+```bash
+$ conda install dsh-bio
+```
+
+
+### Installing dishevelled-bio via Homebrew
+
+The dishevelled.org bio command line tools are available in Homebrew via Brewsci/bio, https://github.com/brewsci/homebrew-bio
+
+```bash
+$ brew install brewsci/bio/dsh-bio
+```
