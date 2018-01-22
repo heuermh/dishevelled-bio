@@ -150,15 +150,27 @@ public final class SplitFasta extends AbstractSplit {
 
     static final String getBaseName(final File file) {
         String baseName = Files.getNameWithoutExtension(file.getName());
-        // trim trailing .fa if present
-        return baseName.endsWith(".fa") ? baseName.substring(baseName.length() - 3) : baseName;
+        // trim trailing .fa or .fasta if present after trimming compression extension
+        if (baseName.endsWith(".fa")) {
+            return baseName.substring(0, baseName.length() - 3);
+        }
+        else if (baseName.endsWith(".fasta")) {
+            return baseName.substring(0, baseName.length() - 6);
+        }
+        return baseName;
     }
 
     static final String getFileExtensions(final File file) {
         String baseName = Files.getNameWithoutExtension(file.getName());
         String extension = Files.getFileExtension(file.getName());
-        // add .fa to extension if present
-        return baseName.endsWith(".fa") ? ".fa." + extension : "." + extension;
+        // add .fa or .fasta to extension if present
+        if (baseName.endsWith(".fa")) {
+            return ".fa." + extension;
+        }
+        else if (baseName.endsWith(".fasta")) {
+            return ".fasta." + extension;
+        }
+        return extension;
     }
 
     /**

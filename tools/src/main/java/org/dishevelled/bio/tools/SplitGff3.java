@@ -126,7 +126,7 @@ public final class SplitGff3 extends AbstractSplit {
     static final String getBaseName(final File file) {
         String baseName = Files.getNameWithoutExtension(file.getName());
         // trim trailing .gff3 if present
-        return baseName.endsWith(".gff3") ? baseName.substring(baseName.length() - 5) : baseName;
+        return baseName.endsWith(".gff3") ? baseName.substring(0, baseName.length() - 5) : baseName;
     }
 
     static final String getFileExtensions(final File file) {

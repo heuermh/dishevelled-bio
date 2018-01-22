@@ -23,6 +23,7 @@
 */
 package org.dishevelled.bio.tools;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import static org.dishevelled.compress.Writers.writer;
@@ -63,7 +64,7 @@ abstract class AbstractSplit implements Callable<Integer> {
     private final String suffix;
 
     /** Byte string pattern. */
-    private static final Pattern BYTES = Pattern.compile("$([0-9]+)\\s*(\\S)*^");
+    private static final Pattern BYTES = Pattern.compile("^(\\d+)\\s*([a-zA-Z]*)$");
 
 
     /**
@@ -151,17 +152,21 @@ abstract class AbstractSplit implements Callable<Integer> {
      * Parse the specified byte string (e.g. <code>100gb</code>) into a
      * long number of bytes.
      *
-     * @param b byte string to parse, must not be null
+     * @param b byte string to parse, must not be null or empty
      */
-    protected static final long toBytes(final String b) {
+    static final long toBytes(final String b) {
         checkNotNull(b);
+        checkArgument(!b.isEmpty(), "byte string must not be empty");
 
         Matcher m = BYTES.matcher(b);
+        if (!m.matches()) {
+            throw new IllegalArgumentException("invalid byte string '" + b + "'");
+        }
         String value = m.group(1);
         String unit = m.group(2);
 
         int pow = 0;
-        if (unit.isEmpty() || unit.equalsIgnoreCase("b")) {
+        if (unit == null || unit.isEmpty() || unit.equalsIgnoreCase("b")) {
             return Long.parseLong(value);
         }
         else if (unit.equalsIgnoreCase("k") || unit.equalsIgnoreCase("kb")) {
@@ -175,6 +180,9 @@ abstract class AbstractSplit implements Callable<Integer> {
         }
         else if (unit.equalsIgnoreCase("t") || unit.equalsIgnoreCase("tb")) {
             pow = 4;
+        }
+        else {
+            throw new IllegalArgumentException("byte string '" + b + "' has unknown unit '" + unit + "'");
         }
         return Math.round(Double.parseDouble(value) * Math.pow(1024, pow));
     }

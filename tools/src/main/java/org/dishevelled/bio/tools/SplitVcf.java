@@ -144,7 +144,7 @@ public final class SplitVcf extends AbstractSplit {
     static final String getBaseName(final File file) {
         String baseName = Files.getNameWithoutExtension(file.getName());
         // trim trailing .vcf if present
-        return baseName.endsWith(".vcf") ? baseName.substring(baseName.length() - 4) : baseName;
+        return baseName.endsWith(".vcf") ? baseName.substring(0, baseName.length() - 4) : baseName;
     }
 
     static final String getFileExtensions(final File file) {

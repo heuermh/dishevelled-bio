@@ -128,15 +128,27 @@ public final class SplitFastq extends AbstractSplit {
 
     static final String getBaseName(final File file) {
         String baseName = Files.getNameWithoutExtension(file.getName());
-        // trim trailing .fq if present
-        return baseName.endsWith(".fq") ? baseName.substring(baseName.length() - 3) : baseName;
+        // trim trailing .fq or .fastq if present after trimming compression extension
+        if (baseName.endsWith(".fq")) {
+            return baseName.substring(0, baseName.length() - 3);
+        }
+        else if (baseName.endsWith(".fastq")) {
+            return baseName.substring(0, baseName.length() - 6);
+        }
+        return baseName;
     }
 
     static final String getFileExtensions(final File file) {
         String baseName = Files.getNameWithoutExtension(file.getName());
         String extension = Files.getFileExtension(file.getName());
-        // add .fq to extension if present
-        return baseName.endsWith(".fq") ? ".fq." + extension : "." + extension;
+        // add .fq or .fastq to extension if present
+        if (baseName.endsWith(".fq")) {
+            return ".fq." + extension;
+        }
+        else if (baseName.endsWith(".fastq")) {
+            return ".fastq." + extension;
+        }
+        return extension;
     }
 
     /**
