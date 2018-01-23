@@ -179,6 +179,7 @@ public final class SplitFasta extends AbstractSplit {
      * @param args command line args
      */
     public static void main(final String[] args) {
+        Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
         FileArgument inputFile = new FileArgument("i", "input-file", "input FASTA file, default stdin", false);
         StringArgument bytes = new StringArgument("b", "bytes", "split input file at next record after each n bytes", false);
@@ -186,13 +187,17 @@ public final class SplitFasta extends AbstractSplit {
         StringArgument prefix = new StringArgument("p", "prefix", "output file prefix", false);
         StringArgument suffix = new StringArgument("s", "suffix", "output file suffix, e.g. .fa.gz", false);
         IntegerArgument lineWidth = new IntegerArgument("w", "line-width", "line width, default " + DEFAULT_LINE_WIDTH, false);
-        ArgumentList arguments = new ArgumentList(help, inputFile, bytes, records, prefix, suffix, lineWidth);
+        ArgumentList arguments = new ArgumentList(about, help, inputFile, bytes, records, prefix, suffix, lineWidth);
         CommandLine commandLine = new CommandLine(args);
 
         SplitFasta splitFasta = null;
         try
         {
             CommandLineParser.parse(commandLine, arguments);
+            if (about.wasFound()) {
+                About.about(System.out);
+                System.exit(0);
+            }
             if (help.wasFound()) {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
@@ -230,6 +235,10 @@ public final class SplitFasta extends AbstractSplit {
             splitFasta = new SplitFasta(inputFile.getValue(), b, records.getValue(), p, s, lineWidth.getValue(DEFAULT_LINE_WIDTH));
         }
         catch (CommandLineParseException | NullPointerException e) {
+            if (about.wasFound()) {
+                About.about(System.out);
+                System.exit(0);
+            }
             if (help.wasFound()) {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);

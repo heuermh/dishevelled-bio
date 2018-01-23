@@ -51,12 +51,20 @@ public final class Tools implements Callable<Integer> {
     private final SortedMap<String, Command> commands;
     private static final String USAGE = "dsh-bio [command] [args]";
 
+    /**
+     * Create a new tools callable with the specified map of commands keyed
+     * by name and array of arguments.
+     *
+     * @param args args, must not be null
+     * @param commands map of commands keyed by name, must not be null
+     */
     public Tools(final String[] args, final SortedMap<String, Command> commands) {
         checkNotNull(args);
         checkNotNull(commands);
         this.args = args;
         this.commands = ImmutableSortedMap.copyOf(commands);
     }
+
 
     @Override
     public Integer call() throws Exception {
@@ -72,6 +80,11 @@ public final class Tools implements Callable<Integer> {
         return 0;
     }
 
+    /**
+     * Return the usage message.
+     *
+     * @return the usage message
+     */
     String usage() {
         StringBuilder sb = new StringBuilder();
         sb.append(USAGE);
@@ -86,10 +99,23 @@ public final class Tools implements Callable<Integer> {
         return sb.toString();
     }
 
+
+    /**
+     * Return an array containing the first element of the specified array.
+     *
+     * @param args args
+     * @return an array containing the first element of the specified array
+     */
     static String[] first(final String[] args) {
         return args.length == 0 ? args : new String[] { args[0] };
     }
 
+    /**
+     * Drop the first element from the specified array.
+     *
+     * @param args args
+     * @return a copy of the specified array after dropping the first element
+     */
     static String[] dropFirst(final String[] args) {
         if (args.length == 0) {
             return args;
@@ -102,6 +128,7 @@ public final class Tools implements Callable<Integer> {
         return remainder;
     }
 
+    /** Map of commands keyed by command name. */
     static SortedMap<String, Command> COMMANDS = new ImmutableSortedMap.Builder<String, Command>(Ordering.natural())
         .put("disinterleave-fastq", new Command("disinterleave-fastq", "convert interleaved FASTQ format into first and second sequence files in FASTQ format", DisinterleaveFastq.class))
         .put("downsample-fastq", new Command("downsample-fastq", "downsample sequences from files in FASTQ format", DownsampleFastq.class))
@@ -127,25 +154,57 @@ public final class Tools implements Callable<Integer> {
         .put("vcf-samples", new Command("vcf-samples", "extract samples from VCF format", VcfSamples.class))
         .build();
 
+    /**
+     * Command.
+     */
     static class Command {
+        /** Name for this command. */
         private final String name;
+
+        /** Description for this command. */
         private final String description;
+
+        /** Class for this command. */
         private final Class<?> commandClass;
 
+
+        /**
+         * Create a new command.
+         *
+         * @param name name for this command
+         * @param description description for this command
+         * @param commandClass class for this command
+         */
         Command(final String name, final String description, final Class<?> commandClass) {
             this.name = name;
             this.description = description;
             this.commandClass = commandClass;
         }
 
+
+        /**
+         * Return the name for this command.
+         *
+         * @return the name for this command
+         */
         String getName() {
             return name;
         }
 
+        /**
+         * Return the description for this command.
+         *
+         * @return the description for this command
+         */
         String getDescription() {
             return description;
         }
 
+        /**
+         * Return the class for this command.
+         *
+         * @return the class for this command
+         */
         Class<?> getCommandClass() {
             return commandClass;
         }
@@ -159,8 +218,9 @@ public final class Tools implements Callable<Integer> {
      */
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
+        Switch version = new Switch("v", "version", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        ArgumentList arguments = new ArgumentList(about, help);
+        ArgumentList arguments = new ArgumentList(about, version, help);
         CommandLine commandLine = new CommandLine(first(args));
 
         Tools tools = new Tools(args, COMMANDS);
@@ -170,7 +230,7 @@ public final class Tools implements Callable<Integer> {
             if (args.length == 0) {
                 throw new CommandLineParseException("[command] required");
             }
-            if (about.wasFound()) {
+            if (about.wasFound() || version.wasFound()) {
                 About.about(System.out);
                 System.exit(0);
             }
@@ -180,6 +240,14 @@ public final class Tools implements Callable<Integer> {
             }
         }
         catch (CommandLineParseException e) {
+            if (about.wasFound() || version.wasFound()) {
+                About.about(System.out);
+                System.exit(0);
+            }
+            if (help.wasFound()) {
+                Usage.usage(tools.usage(), null, commandLine, arguments, System.out);
+                System.exit(0);
+            }
             Usage.usage(tools.usage(), e, commandLine, arguments, System.err);
             System.exit(-1);
         }

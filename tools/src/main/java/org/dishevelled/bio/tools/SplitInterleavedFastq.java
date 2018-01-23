@@ -145,19 +145,24 @@ public final class SplitInterleavedFastq extends AbstractSplit {
      * @param args command line args
      */
     public static void main(final String[] args) {
+        Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
         FileArgument inputFile = new FileArgument("i", "input-file", "input interleaved FASTQ file, default stdin", false);
         StringArgument bytes = new StringArgument("b", "bytes", "split input file at next pair of records after each n bytes", false);
         LongArgument records = new LongArgument("r", "records", "split input file after each n records, respecting pairs", false);
         StringArgument prefix = new StringArgument("p", "prefix", "output file prefix", false);
         StringArgument suffix = new StringArgument("s", "suffix", "output file suffix, e.g. .ifq.gz", false);
-        ArgumentList arguments = new ArgumentList(help, inputFile, bytes, records, prefix, suffix);
+        ArgumentList arguments = new ArgumentList(about, help, inputFile, bytes, records, prefix, suffix);
         CommandLine commandLine = new CommandLine(args);
 
         SplitInterleavedFastq splitInterleavedFastq = null;
         try
         {
             CommandLineParser.parse(commandLine, arguments);
+            if (about.wasFound()) {
+                About.about(System.out);
+                System.exit(0);
+            }
             if (help.wasFound()) {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
@@ -195,6 +200,10 @@ public final class SplitInterleavedFastq extends AbstractSplit {
             splitInterleavedFastq = new SplitInterleavedFastq(inputFile.getValue(), b, records.getValue(), p, s);
         }
         catch (CommandLineParseException | NullPointerException e) {
+            if (about.wasFound()) {
+                About.about(System.out);
+                System.exit(0);
+            }
             if (help.wasFound()) {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
