@@ -142,14 +142,33 @@ public final class FilterVcf implements Callable<Integer> {
         }
     }
 
+    /**
+     * Filter.
+     */
     interface Filter {
+
+        /**
+         * Return true if the specified VCF record should be accepted by this filter.
+         *
+         * @param record VCF record
+         * @return true if the specified VCF record should be accepted by this filter
+         */
         boolean accept(VcfRecord record);
     }
 
-    static final class IdFilter implements Filter {
+    /**
+     * Id filter.
+     */
+    public static final class IdFilter implements Filter {
+        /** List of ids. */
         private final List<String> ids;
 
-        IdFilter(final List<String> ids) {
+        /**
+         * Create a new id filter with the specified list of ids.
+         *
+         * @param ids list of ids, must not be null
+         */
+        public IdFilter(final List<String> ids) {
             checkNotNull(ids);
             this.ids = ids;
         }
@@ -165,12 +184,25 @@ public final class FilterVcf implements Callable<Integer> {
         }
     }
 
-    static final class RangeFilter implements Filter {
+    /**
+     * Range filter.
+     */
+    public static final class RangeFilter implements Filter {
+        /** Chromosome. */
         private final String chrom;
+
+        /** Range. */
         private final Range<Long> range;
+
+        /** Range format regular expression. */
         private final Pattern RANGE = Pattern.compile("^(.*):([0-9]+)-([0-9]+)$");
 
-        RangeFilter(final String value) {
+        /**
+         * Create a new range filter with the specified range format.
+         *
+         * @param value range format, must not be null
+         */
+        public RangeFilter(final String value) {
             checkNotNull(value);
             Matcher m = RANGE.matcher(value);
             if (!m.matches()) {
@@ -188,10 +220,19 @@ public final class FilterVcf implements Callable<Integer> {
         }
     }
 
-    static final class QualFilter implements Filter {
+    /**
+     * Quality score filter.
+     */
+    public static final class QualFilter implements Filter {
+        /** Quality score. */
         private final double qual;
 
-        QualFilter(final double qual) {
+        /**
+         * Create a new quality score filter with the specified quality score.
+         *
+         * @param qual quality score
+         */
+        public QualFilter(final double qual) {
             this.qual = qual;
         }
 
@@ -201,7 +242,10 @@ public final class FilterVcf implements Callable<Integer> {
         }
     }
 
-    static final class FilterFilter implements Filter {
+    /**
+     * Filter filter.
+     */
+    public static final class FilterFilter implements Filter {
         @Override
         public boolean accept(final VcfRecord record) {
             return (record.getFilter().length == 1 && "PASS".equals(record.getFilter()[0]));
