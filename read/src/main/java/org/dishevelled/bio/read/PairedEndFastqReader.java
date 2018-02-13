@@ -50,14 +50,14 @@ import org.biojava.bio.program.fastq.StreamListener;
  * @author  Michael Heuer
  */
 public final class PairedEndFastqReader {
-    /** Pattern for the left or first read of a paired end read, relies on convention of "<code> 1</code>" or "<code>\1</code>" in the description line. */
-    static final Pattern LEFT = Pattern.compile("^.*[ \\\\]1.*$");
+    /** Pattern for the left or first read of a paired end read, relies on conventions around "<code>1</code>" in the description line. */
+    static final Pattern LEFT = Pattern.compile("^.*[/ +_\\\\]1.*$|^.* 1:[YN]:[02468]+:[0-9]+$");
 
-    /** Pattern for the right or second read of a paired end read, relies on convention of "<code> 2</code>" or "<code>\2</code>" in the description line. */
-    static final Pattern RIGHT = Pattern.compile("^.*[ \\\\]2.*$");
+    /** Pattern for the right or second read of a paired end read, relies on conventions around "<code>2</code>" in the description line. */
+    static final Pattern RIGHT = Pattern.compile("^.*[/ +_\\\\]2.*$|^.* 2:[YN]:[02468]+:[0-9]+$");
 
-    /** Pattern for capturing the prefix of a paired end read name, relies on convention of "<code> 1</code>", "<code>\1</code>", "<code> 2</code>", or "<code>\2</code>" in the description line. */
-    static final Pattern PREFIX = Pattern.compile("^(.+)[ \\\\][12].*$");
+    /** Pattern to split the prefix of a paired end read name, relies on conventions around "<code>1</code>" or "<code>2</code>" in the description line. */
+    static final Pattern PREFIX = Pattern.compile("[/ +_\\\\]+[12]");
 
 
     /**
@@ -211,10 +211,7 @@ public final class PairedEndFastqReader {
      */
     public static String prefix(final Fastq fastq) {
         checkNotNull(fastq);
-        Matcher m = PREFIX.matcher(fastq.getDescription());
-        if (!m.matches()) {
-            throw new PairedEndFastqReaderException("could not parse prefix from description " + fastq.getDescription());
-        }
-        return m.group(1);
+        String[] tokens = PREFIX.split(fastq.getDescription());
+        return tokens[0];
     }
 }

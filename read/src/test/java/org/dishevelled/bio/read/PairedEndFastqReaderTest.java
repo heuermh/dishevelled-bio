@@ -66,8 +66,6 @@ public final class PairedEndFastqReaderTest {
     public void setUp() throws Exception {
         left = Fastq.builder().withDescription("prefix 1").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build();
         right = Fastq.builder().withDescription("prefix 2").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build();
-
-        invalidPrefix = Fastq.builder().withDescription("no-space").withSequence("aaaaa").withQuality("44444").build();
         mismatchPrefix = Fastq.builder().withDescription("mismatch 2").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build();
 
         ByteArrayOutputStream first = new ByteArrayOutputStream();
@@ -119,14 +117,57 @@ public final class PairedEndFastqReaderTest {
     }
 
     @Test
+    public void testPrefixPlus() {
+        assertEquals("prefix", prefix(Fastq.builder().withDescription("prefix+1").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
+        assertEquals("prefix", prefix(Fastq.builder().withDescription("prefix+2").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
+    }
+
+    @Test
+    public void testPrefixUnderscore() {
+        assertEquals("prefix", prefix(Fastq.builder().withDescription("prefix_1").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
+        assertEquals("prefix", prefix(Fastq.builder().withDescription("prefix_2").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
+    }
+
+    @Test
     public void testPrefixBackslash() {
         assertEquals("prefix", prefix(Fastq.builder().withDescription("prefix\\1").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
         assertEquals("prefix", prefix(Fastq.builder().withDescription("prefix\\2").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
     }
 
-    @Test(expected=PairedEndFastqReaderException.class)
-    public void testPrefixInvalidPrefix() {
-        prefix(invalidPrefix);
+    @Test
+    public void testPrefixForwardSlash() {
+        assertEquals("prefix", prefix(Fastq.builder().withDescription("prefix/1").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
+        assertEquals("prefix", prefix(Fastq.builder().withDescription("prefix/2").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
+    }
+
+    @Test
+    public void testPrefixWhitespacePlus() {
+        assertEquals("prefix", prefix(Fastq.builder().withDescription("prefix +1").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
+        assertEquals("prefix", prefix(Fastq.builder().withDescription("prefix +2").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
+    }
+
+    @Test
+    public void testPrefixWhitespaceUnderscore() {
+        assertEquals("prefix", prefix(Fastq.builder().withDescription("prefix _1").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
+        assertEquals("prefix", prefix(Fastq.builder().withDescription("prefix _2").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
+    }
+
+    @Test
+    public void testPrefixWhitespaceBackslash() {
+        assertEquals("prefix", prefix(Fastq.builder().withDescription("prefix \\1").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
+        assertEquals("prefix", prefix(Fastq.builder().withDescription("prefix \\2").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
+    }
+
+    @Test
+    public void testPrefixWhitespaceForwardSlash() {
+        assertEquals("prefix", prefix(Fastq.builder().withDescription("prefix /1").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
+        assertEquals("prefix", prefix(Fastq.builder().withDescription("prefix /2").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
+    }
+
+    @Test
+    public void testPrefixIlluminaMetadata() {
+        assertEquals("prefix", prefix(Fastq.builder().withDescription("prefix 1:N:0:2").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
+        assertEquals("prefix", prefix(Fastq.builder().withDescription("prefix 2:Y:2:42").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
     }
 
     @Test(expected=NullPointerException.class)
@@ -173,24 +214,6 @@ public final class PairedEndFastqReaderTest {
                     assertEquals(PairedEndFastqReaderTest.this.left.getDescription(), left.getDescription());
                 }
             });
-    }
-
-    @Test(expected=IOException.class)
-    public void testStreamPairedInvalidPrefixLeft() throws Exception {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        new SangerFastqWriter().write(outputStream, invalidPrefix);
-        Reader invalidPrefixReader = new StringReader(outputStream.toString());
-
-        streamPaired(invalidPrefixReader, secondReader, listener);
-    }
-
-    @Test(expected=IOException.class)
-    public void testStreamPairedInvalidPrefixRight() throws Exception {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        new SangerFastqWriter().write(outputStream, invalidPrefix);
-        Reader invalidPrefixReader = new StringReader(outputStream.toString());
-
-        streamPaired(firstReader, invalidPrefixReader, listener);
     }
 
     @Test
@@ -247,33 +270,6 @@ public final class PairedEndFastqReaderTest {
     @Test(expected=IOException.class)
     public void testStreamInterleavedUnpairedRight() throws Exception {
         streamInterleaved(secondReader, listener);
-    }
-
-    @Test(expected=IOException.class)
-    public void testStreamInterleavedInvalidPrefix() throws Exception {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        new SangerFastqWriter().write(outputStream, invalidPrefix);
-        Reader invalidPrefixReader = new StringReader(outputStream.toString());
-
-        streamInterleaved(invalidPrefixReader, listener);
-    }
-
-    @Test(expected=IOException.class)
-    public void testStreamInterleavedInvalidPrefixLeft() throws Exception {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        new SangerFastqWriter().write(outputStream, ImmutableList.of(left, right, invalidPrefix));
-        Reader invalidPrefixLeftReader = new StringReader(outputStream.toString());
-
-        streamInterleaved(invalidPrefixLeftReader, listener);
-    }
-
-    @Test(expected=IOException.class)
-    public void testStreamInterleavedInvalidPrefixRight() throws Exception {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        new SangerFastqWriter().write(outputStream, ImmutableList.of(left, invalidPrefix));
-        Reader invalidPrefixRightReader = new StringReader(outputStream.toString());
-
-        streamInterleaved(invalidPrefixRightReader, listener);
     }
 
     @Test(expected=IOException.class)
