@@ -210,7 +210,7 @@ final class SamFields {
      * of size equal to the specified length.
      *
      * @param key key, must not be null
-     * @param length length,, must be greater than zero
+     * @param length length, must be greater than zero
      * @param fields, must not be null
      * @return the Type=B first letter [cCsSiI] field value for the specified key parsed into an immutable list of integers
      *    of size equal to the specified length

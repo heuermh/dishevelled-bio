@@ -27,7 +27,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import static org.dishevelled.bio.alignment.sam.SamFields.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -277,8 +276,8 @@ public final class SamRecord {
         private String seq;
         private String qual;
         private ImmutableListMultimap.Builder<String, String> fields = ImmutableListMultimap.builder();
-        private Map<String, String> fieldTypes = new HashMap<String, String>();
-        private Map<String, String> fieldArrayTypes = new HashMap<String, String>();
+        private ImmutableMap.Builder<String, String> fieldTypes = ImmutableMap.builder();
+        private ImmutableMap.Builder<String, String> fieldArrayTypes = ImmutableMap.builder();
 
         /**
          * Private no-arg constructor.
@@ -348,7 +347,7 @@ public final class SamRecord {
         }
 
         public Builder withField(final String tag, final String type, final String value) {
-            return withArrayField(tag, type, value);
+            return withArrayField(tag, type, null, value);
         }
 
         public Builder withArrayField(final String tag, final String type, @Nullable final String arrayType, final String... values) {
@@ -371,14 +370,14 @@ public final class SamRecord {
             return this;
         }
 
-        public Builder replaceField(final String tag, final String type, final String... values) {
-            return this.replaceField(tag, type, null, values);
+        public Builder replaceField(final String tag, final String type, final String value) {
+            return replaceArrayField(tag, type, null, value);
         }
 
-        public Builder replaceField(final String tag, final String type, @Nullable final String arrayType, final String... values) {
+        public Builder replaceArrayField(final String tag, final String type, @Nullable final String arrayType, final String... values) {
             checkNotNull(values);
 
-            // copy old info values except tag
+            // copy old field values except tag
             ListMultimap<String, String> oldFields = this.fields.build();
             this.fields = ImmutableListMultimap.builder();
             for (String key : oldFields.keys()) {
@@ -386,14 +385,29 @@ public final class SamRecord {
                     this.fields.putAll(key, oldFields.get(key));
                 }
             }
+            Map<String, String> oldFieldTypes = this.fieldTypes.build();
+            this.fieldTypes = ImmutableMap.builder();
+            for (String key : oldFieldTypes.keySet()) {
+                if (!key.equals(tag)) {
+                    this.fieldTypes.put(key, oldFieldTypes.get(key));
+                }
+            }
+            Map<String, String> oldFieldArrayTypes = this.fieldArrayTypes.build();
+            this.fieldArrayTypes = ImmutableMap.builder();
+            for (String key : oldFieldArrayTypes.keySet()) {
+                if (!key.equals(tag)) {
+                    this.fieldArrayTypes.put(key, oldFieldArrayTypes.get(key));
+                }
+            }
+
             // add new value(s)
             return withArrayField(tag, type, arrayType, values);
         }
 
         public Builder replaceFields(final ListMultimap<String, String> fields, final Map<String, String> fieldTypes, final Map<String, String> fieldArrayTypes) {
             this.fields = ImmutableListMultimap.builder();
-            this.fieldTypes = new HashMap<String, String>();
-            this.fieldArrayTypes = new HashMap<String, String>();
+            this.fieldTypes = ImmutableMap.builder();
+            this.fieldArrayTypes = ImmutableMap.builder();
             return withFields(fields, fieldTypes, fieldArrayTypes);
         }
 
@@ -411,8 +425,8 @@ public final class SamRecord {
             seq = null;
             qual = null;
             fields = ImmutableListMultimap.builder();
-            fieldTypes = new HashMap<String, String>();
-            fieldArrayTypes = new HashMap<String, String>();
+            fieldTypes = ImmutableMap.builder();
+            fieldArrayTypes = ImmutableMap.builder();
             return this;
         }
 
@@ -421,7 +435,7 @@ public final class SamRecord {
             // todo: check if seq and qual are the same length
             //   etc.
             
-            return new SamRecord(lineNumber, qname, flag, rname, pos, mapq, cigar, rnext, pnext, tlen, seq, qual, fields.build(), ImmutableMap.copyOf(fieldTypes), ImmutableMap.copyOf(fieldArrayTypes));
+            return new SamRecord(lineNumber, qname, flag, rname, pos, mapq, cigar, rnext, pnext, tlen, seq, qual, fields.build(), fieldTypes.build(), fieldArrayTypes.build());
         }
     }
 }
