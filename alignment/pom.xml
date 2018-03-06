@@ -50,6 +50,11 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>org.dishevelled</groupId>
       <artifactId>dsh-compress</artifactId>
       <scope>test</scope>

@@ -27,6 +27,8 @@ import static org.dishevelled.bio.alignment.sam.SamReader.parse;
 import static org.dishevelled.bio.alignment.sam.SamReader.stream;
 import static org.dishevelled.bio.alignment.sam.SamReader.records;
 
+import static org.apache.commons.codec.binary.Hex.decodeHex;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -42,10 +44,14 @@ import java.net.URL;
 
 import java.nio.CharBuffer;
 
+import java.util.Arrays;
+
 import com.google.common.collect.ImmutableList;
 
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
+
+import com.google.common.primitives.Bytes;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -157,6 +163,101 @@ public final class SamReaderTest {
     @Test
     public void testRecordsInputStream() throws Exception {
         validateRecords(records(createInputStream(SAM)));
+    }
+
+    @Test
+    public void testRecordsTags() throws Exception {
+        for (SamRecord record : records(createInputStream("tags.sam"))) {
+            if ("StandardTags".equals(record.getQname())) {
+                // NM:i:0  MD:Z:10  XS:A:-
+                assertEquals(0, record.getFieldInteger("NM"));
+                assertEquals("10", record.getFieldString("MD"));
+                assertEquals('-', record.getFieldCharacter("XS"));
+                assertEquals("i", record.getFieldTypes().get("NM"));
+                assertEquals("Z", record.getFieldTypes().get("MD"));
+                assertEquals("A", record.getFieldTypes().get("XS"));
+            }
+            else if ("MDTagWithEdits".equals(record.getQname())) {
+                // NM:i:2  MD:Z:3G4T1
+                assertEquals(2, record.getFieldInteger("NM"));
+                assertEquals("3G4T1", record.getFieldString("MD"));
+                assertEquals("i", record.getFieldTypes().get("NM"));
+                assertEquals("Z", record.getFieldTypes().get("MD"));
+            }
+            else if ("HexByteArray".equals(record.getQname())) {
+                // NM:i:0  MD:Z:10  XB:H:010203
+                assertEquals(0, record.getFieldInteger("NM"));
+                assertEquals("10", record.getFieldString("MD"));
+                assertEquals("010203", record.getFieldString("XB"));
+                assertTrue(Arrays.equals(decodeHex("010203"), record.getFieldByteArray("XB")));
+                assertEquals(Bytes.asList(decodeHex("010203")), record.getFieldBytes("XB"));
+                assertEquals("i", record.getFieldTypes().get("NM"));
+                assertEquals("Z", record.getFieldTypes().get("MD"));
+                assertEquals("H", record.getFieldTypes().get("XB"));
+            }
+            else if ("LengthOneArrays".equals(record.getQname())) {
+                // NM:i:0  MD:Z:10  XB:B:c,1  XI:B:i,1  XS:B:s,1  XF:B:f,1
+                assertEquals(0, record.getFieldInteger("NM"));
+                assertEquals("10", record.getFieldString("MD"));
+                assertEquals(ImmutableList.of(1), record.getFieldIntegers("XB"));
+                assertEquals(ImmutableList.of(1), record.getFieldIntegers("XI"));
+                assertEquals(ImmutableList.of(1), record.getFieldIntegers("XS"));
+                assertEquals(ImmutableList.of(1.0f), record.getFieldFloats("XF"));
+                assertEquals("B", record.getFieldTypes().get("XB"));
+                assertEquals("c", record.getFieldArrayTypes().get("XB"));
+                assertEquals("B", record.getFieldTypes().get("XI"));
+                assertEquals("i", record.getFieldArrayTypes().get("XI"));
+                assertEquals("B", record.getFieldTypes().get("XS"));
+                assertEquals("s", record.getFieldArrayTypes().get("XS"));
+                assertEquals("B", record.getFieldTypes().get("XF"));
+                assertEquals("f", record.getFieldArrayTypes().get("XF"));
+            }
+            else if ("LongerArrays".equals(record.getQname())) {
+                // NM:i:0  MD:Z:10  XB:B:c,1,2,3  XI:B:i,1,2,3  XS:B:s,1,2,3  XS:B:f,1,2,3
+                assertEquals(0, record.getFieldInteger("NM"));
+                assertEquals("10", record.getFieldString("MD"));
+                assertEquals(ImmutableList.of(1, 2, 3), record.getFieldIntegers("XB"));
+                assertEquals(ImmutableList.of(1, 2, 3), record.getFieldIntegers("XI"));
+                assertEquals(ImmutableList.of(1, 2, 3), record.getFieldIntegers("XS"));
+                assertEquals(ImmutableList.of(1.0f, 2.0f, 3.0f), record.getFieldFloats("XF"));
+                assertEquals("B", record.getFieldTypes().get("XB"));
+                assertEquals("c", record.getFieldArrayTypes().get("XB"));
+                assertEquals("B", record.getFieldTypes().get("XI"));
+                assertEquals("i", record.getFieldArrayTypes().get("XI"));
+                assertEquals("B", record.getFieldTypes().get("XS"));
+                assertEquals("s", record.getFieldArrayTypes().get("XS"));
+                assertEquals("B", record.getFieldTypes().get("XF"));
+                assertEquals("f", record.getFieldArrayTypes().get("XF"));
+            }
+            else if ("SignedArrays".equals(record.getQname())) {
+                // NM:i:0  MD:Z:10  XB:B:c,-1  XI:B:i,-1  XS:B:s,-1
+                assertEquals(0, record.getFieldInteger("NM"));
+                assertEquals("10", record.getFieldString("MD"));
+                assertEquals(ImmutableList.of(-1), record.getFieldIntegers("XB"));
+                assertEquals(ImmutableList.of(-1), record.getFieldIntegers("XI"));
+                assertEquals(ImmutableList.of(-1), record.getFieldIntegers("XS"));
+                assertEquals("B", record.getFieldTypes().get("XB"));
+                assertEquals("c", record.getFieldArrayTypes().get("XB"));
+                assertEquals("B", record.getFieldTypes().get("XI"));
+                assertEquals("i", record.getFieldArrayTypes().get("XI"));
+                assertEquals("B", record.getFieldTypes().get("XS"));
+                assertEquals("s", record.getFieldArrayTypes().get("XS"));
+            }
+            else if ("UnsignedArrays".equals(record.getQname())) {
+                // NM:i:0  MD:Z:10  XB:B:C,1,2,3  XI:B:I,1,2,3  XS:B:S,1,2,3
+                assertEquals(0, record.getFieldInteger("NM"));
+                assertEquals("10", record.getFieldString("MD"));
+                assertEquals(ImmutableList.of(1, 2, 3), record.getFieldIntegers("XB"));
+                assertEquals(ImmutableList.of(1, 2, 3), record.getFieldIntegers("XI"));
+                assertEquals(ImmutableList.of(1, 2, 3), record.getFieldIntegers("XS"));
+                assertEquals("B", record.getFieldTypes().get("XB"));
+                assertEquals("C", record.getFieldArrayTypes().get("XB"));
+                assertEquals("B", record.getFieldTypes().get("XI"));
+                assertEquals("I", record.getFieldArrayTypes().get("XI"));
+                assertEquals("B", record.getFieldTypes().get("XS"));
+                assertEquals("S", record.getFieldArrayTypes().get("XS"));
+            }
+        }
     }
 
     private static void validateRecord(final SamRecord record) {

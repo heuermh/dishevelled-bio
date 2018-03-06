@@ -176,7 +176,8 @@ public final class SamParser {
 
                     if (isArrayType(type)) {
                         String arrayType = value.substring(0, 1);
-                        String[] values = value.substring(1).split(",");
+                        // note there should be a comma after array type, e.g. ZT:B:i,1,2,3
+                        String[] values = value.substring(2).split(",");
                         listener.arrayField(tag, type, arrayType, values);
                     }
                     else {

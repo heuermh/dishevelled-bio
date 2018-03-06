@@ -25,7 +25,14 @@ package org.dishevelled.bio.alignment.sam;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import static org.dishevelled.bio.alignment.sam.SamFields.*;
+import static org.dishevelled.bio.alignment.sam.SamFields.parseByteArray;
+import static org.dishevelled.bio.alignment.sam.SamFields.parseBytes;
+import static org.dishevelled.bio.alignment.sam.SamFields.parseCharacter;
+import static org.dishevelled.bio.alignment.sam.SamFields.parseFloat;
+import static org.dishevelled.bio.alignment.sam.SamFields.parseFloats;
+import static org.dishevelled.bio.alignment.sam.SamFields.parseInteger;
+import static org.dishevelled.bio.alignment.sam.SamFields.parseIntegers;
+import static org.dishevelled.bio.alignment.sam.SamFields.parseString;
 
 import java.util.List;
 import java.util.Map;
@@ -35,7 +42,6 @@ import javax.annotation.Nullable;
 
 import javax.annotation.concurrent.Immutable;
 
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ListMultimap;
@@ -202,6 +208,14 @@ public final class SamRecord {
 
     public int getFieldInteger(final String key) {
         return parseInteger(key, fields);
+    }
+
+    public byte[] getFieldByteArray(final String key) {
+        return parseByteArray(key, fields);
+    }
+
+    public List<Byte> getFieldBytes(final String key) {
+        return parseBytes(key, fields);
     }
 
     public String getFieldString(final String key) {

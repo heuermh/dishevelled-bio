@@ -49,6 +49,13 @@ public final class SamWriter {
         // empty
     }
 
+
+    /**
+     * Write SAM with the specified print writer.
+     *
+     * @param records zero or more SAM records, must not be null
+     * @param writer print writer to write SAM with, must not be null
+     */
     public static void write(final List<SamRecord> records,
                              final PrintWriter writer) {
 
@@ -60,6 +67,12 @@ public final class SamWriter {
         }
     }
 
+    /**
+     * Write a SAM record with the specified print writer.
+     *
+     * @param record SAM record, must not be null
+     * @param writer print writer to write SAM with, must not be null
+     */
     public static void writeRecord(final SamRecord record, final PrintWriter writer) {
         checkNotNull(record);
         checkNotNull(writer);

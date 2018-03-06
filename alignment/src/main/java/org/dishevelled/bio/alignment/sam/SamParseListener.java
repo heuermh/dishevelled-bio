@@ -143,7 +143,7 @@ public interface SamParseListener {
      *
      * @param tag optional array field tag
      * @param type optional array field type
-     * @param type optional array type
+     * @param arrayType optional array type
      * @param values one or more optional array field values
      * @throws IOException if an I/O error occurs
      */

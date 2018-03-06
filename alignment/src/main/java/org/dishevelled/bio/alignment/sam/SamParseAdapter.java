@@ -101,7 +101,7 @@ public class SamParseAdapter implements SamParseListener {
     public void arrayField(final String tag, final String type, final String arrayType, final String... values) throws IOException {
         // empty
     }
-                
+
     @Override
     public boolean complete() throws IOException {
         return true;

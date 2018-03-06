@@ -62,6 +62,7 @@
     <bdg-convert.version>0.3.0</bdg-convert.version>
     <biojava.version>1.9.2</biojava.version>
     <commons-csv.version>1.4</commons-csv.version>
+    <commons-codec.version>1.11</commons-codec.version>
     <commons-io.version>2.5</commons-io.version>
     <commons-math3.version>3.6</commons-math3.version>
     <dsh-bitset.version>3.0</dsh-bitset.version>
@@ -110,6 +111,11 @@
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-math3</artifactId>
         <version>${commons-math3.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-codec</groupId>
+        <artifactId>commons-codec</artifactId>
+        <version>${commons-codec.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.spark</groupId>

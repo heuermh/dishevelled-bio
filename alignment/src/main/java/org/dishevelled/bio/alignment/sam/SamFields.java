@@ -26,12 +26,18 @@ package org.dishevelled.bio.alignment.sam;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import static org.apache.commons.codec.binary.Hex.decodeHex;
+
 import java.util.List;
 
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ListMultimap;
+
+import com.google.common.primitives.Bytes;
+
+import org.apache.commons.codec.DecoderException;
 
 /**
  * Utility methods on SAM fields.
@@ -66,7 +72,7 @@ final class SamFields {
      * Parse the Type=A field value for the specified key into a character.
      *
      * @param key key, must not be null
-     * @param fields, must not be null
+     * @param fields fields, must not be null
      * @return the Type=A field value for the specified key parsed into a character
      */
     static char parseCharacter(final String key, final ListMultimap<String, String> fields) {
@@ -87,7 +93,7 @@ final class SamFields {
      * Parse the Type=i field value for the specified key into an integer.
      *
      * @param key key, must not be null
-     * @param fields, must not be null
+     * @param fields fields, must not be null
      * @return the Type=i field value for the specified key parsed into an integer
      */
     static int parseInteger(final String key, final ListMultimap<String, String> fields) {
@@ -108,7 +114,7 @@ final class SamFields {
      * Parse the Type=f field value for the specified key into a float.
      *
      * @param key key, must not be null
-     * @param fields, must not be null
+     * @param fields fields, must not be null
      * @return the Type=f field value for the specified key parsed into a float
      */
     static float parseFloat(final String key, final ListMultimap<String, String> fields) {
@@ -129,7 +135,7 @@ final class SamFields {
      * Return the Type=Z field value for the specified key as a string.
      *
      * @param key key, must not be null
-     * @param fields, must not be null
+     * @param fields fields, must not be null
      * @return the Type=Z field value for the specified key as a string
      */
     static String parseString(final String key, final ListMultimap<String, String> fields) {
@@ -146,6 +152,42 @@ final class SamFields {
         return values.get(0);
     }
 
+    /**
+     * Return the Type=H field value for the specified key as a byte array.
+     *
+     * @param key key, must not be null
+     * @param fields fields, must not be null
+     * @return the Type=H field value for the specified key as a byte array
+     */
+    static byte[] parseByteArray(final String key, final ListMultimap<String, String> fields) {
+        checkNotNull(key);
+        checkNotNull(fields);
+
+        List<String> values = fields.get(key);
+        if (values.isEmpty()) {
+            throw new IllegalArgumentException("Type=H value missing for key " + key);
+        }
+        if (values.size() > 1) {
+            throw new IllegalArgumentException("more than one Type=H value for key " + key);
+        }
+        try {
+            return decodeHex(values.get(0));
+        }
+        catch (DecoderException e) {
+            throw new IllegalArgumentException("could not decode hex value for key " + key, e);
+        }
+    }
+
+    /**
+     * Return the Type=H field value for the specified key as a list of bytes.
+     *
+     * @param key key, must not be null
+     * @param fields fields, must not be null
+     * @return the Type=H field value for the specified key as a list of bytes
+     */
+    static List<Byte> parseBytes(final String key, final ListMultimap<String, String> fields) {
+        return Bytes.asList(parseByteArray(key, fields));
+    }
 
     /**
      * Convert the specified list of strings into an immutable list of Integers.
@@ -183,7 +225,7 @@ final class SamFields {
      * Parse the Type=B first letter [cCsSiI] field value for the specified key into an immutable list of integers.
      *
      * @param key key, must not be null
-     * @param fields, must not be null
+     * @param fields fields, must not be null
      * @return the Type=B first letter [cCsSiI] field value for the specified key parsed into an immutable list of integers
      */
     static List<Integer> parseIntegers(final String key, final ListMultimap<String, String> fields) {
@@ -196,7 +238,7 @@ final class SamFields {
      * Parse the Type=B first letter f field value for the specified key into an immutable list of floats.
      *
      * @param key key, must not be null
-     * @param fields, must not be null
+     * @param fields fields, must not be null
      * @return the Type=f first letter f field value for the specified key parsed into an immutable list of floats
      */
     static List<Float> parseFloats(final String key, final ListMultimap<String, String> fields) {
@@ -211,7 +253,7 @@ final class SamFields {
      *
      * @param key key, must not be null
      * @param length length, must be greater than zero
-     * @param fields, must not be null
+     * @param fields fields, must not be null
      * @return the Type=B first letter [cCsSiI] field value for the specified key parsed into an immutable list of integers
      *    of size equal to the specified length
      */
@@ -233,7 +275,7 @@ final class SamFields {
      *
      * @param key key, must not be null
      * @param length length, must be greater than zero
-     * @param fields, must not be null
+     * @param fields fields, must not be null
      * @return the Type=B first letter f field value for the specified key parsed into an immutable list of floats
      *    of size equal to the specified length
      */

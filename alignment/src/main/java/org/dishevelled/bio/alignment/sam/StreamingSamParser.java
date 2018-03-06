@@ -128,7 +128,7 @@ public final class StreamingSamParser {
                 public void arrayField(final String tag, final String type, final String arrayType, final String... values) throws IOException {
                     builder.withArrayField(tag, type, arrayType, values);
                 }
-                
+
                 @Override
                 public boolean complete() throws IOException {
                     listener.record(builder.build());
