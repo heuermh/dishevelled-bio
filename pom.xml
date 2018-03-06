@@ -45,6 +45,7 @@
   <modules>
     <module>adam</module>
     <module>align</module>
+    <module>alignment</module>
     <module>assembly</module>
     <module>convert</module>
     <module>convert-htsjdk</module>
@@ -58,7 +59,7 @@
 
   <properties>
     <adam.version>0.23.0</adam.version>
-    <bdg-convert.version>0.2.0</bdg-convert.version>
+    <bdg-convert.version>0.3.0</bdg-convert.version>
     <biojava.version>1.9.2</biojava.version>
     <commons-csv.version>1.4</commons-csv.version>
     <commons-io.version>2.5</commons-io.version>
@@ -72,7 +73,7 @@
     <maven.enforcer.maven-version>[3.1.1,)</maven.enforcer.maven-version>
     <maven.enforcer.jdk-version>[1.8,)</maven.enforcer.jdk-version>
     <rtree.version>0.4.1</rtree.version>
-    <scala.version>2.11.8</scala.version>
+    <scala.version>2.11.12</scala.version>
     <scala.version.prefix>2.11</scala.version.prefix>
     <slf4j.version>1.7.25</slf4j.version>
     <spark.version>2.2.0</spark.version>
