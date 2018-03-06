@@ -55,7 +55,7 @@ public final class StreamingSamParser {
         checkNotNull(readable);
         checkNotNull(listener);
 
-        SamParser.parse(readable, new SamParseListener() {
+        SamParser.parse(readable, new SamParseAdapter() {
                 /** SAM record builder. */
                 private final SamRecord.Builder builder = SamRecord.builder();
 

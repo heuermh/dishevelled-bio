@@ -165,7 +165,7 @@ public final class SamParser {
 
                 // All optional fields follow the TAG:TYPE:VALUE format where TAG is a two-character
                 // string that matches /[A-Za-z][A-Za-z0-9]/.
-                for (String field : tokens.subList(11, tokens.size() + 1)) {
+                for (String field : tokens.subList(11, tokens.size())) {
                     List<String> fieldTokens = Splitter.on(":").splitToList(field);
                     if (fieldTokens.size() < 3) {
                         throw new IOException("invalid field at line number " + lineNumber + ", expected 3 tokens, found " + fieldTokens.size());
