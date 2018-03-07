@@ -213,4 +213,47 @@ public final class SamRecordTest {
         assertEquals("hello world", record.getFieldString("ZZ"));
         assertEquals(ImmutableList.of(1, 2), record.getFieldIntegers("ZB"));
     }
+
+    @Test
+    public void testBuilderCopy() {
+        SamRecord record = SamRecord.builder()
+            .withLineNumber(1)
+            .withQname("qname")
+            .withFlag(1)
+            .withRname("rname")
+            .withPos(42)
+            .withMapq(10)
+            .withCigar("8M")
+            .withRnext("rnext")
+            .withPnext(36)
+            .withTlen(88)
+            .withSeq("AATTCCGG")
+            .withQual("12344321")
+            .withField("ZA", "A", "c")
+            .withField("ZI", "i", "42")
+            .withField("ZF", "f", "3.14")
+            .withField("ZZ", "Z", "hello world")
+            .withArrayField("ZB", "B", "i", "1", "2")
+            .withArrayField("ZT", "B", "f", "3.4", "4.5")
+            .build();
+
+        SamRecord copy = SamRecord.builder(record)
+            .withQname("copy of qname")
+            .build();
+
+        assertEquals("copy of qname", copy.getQname());
+        assertEquals(record.getFlag(), copy.getFlag());
+        assertEquals(record.getRname(), copy.getRname());
+        assertEquals(record.getPos(), copy.getPos());
+        assertEquals(record.getMapq(), copy.getMapq());
+        assertEquals(record.getCigar(), copy.getCigar());
+        assertEquals(record.getRnext(), copy.getRnext());
+        assertEquals(record.getPnext(), copy.getPnext());
+        assertEquals(record.getTlen(), copy.getTlen());
+        assertEquals(record.getSeq(), copy.getSeq());
+        assertEquals(record.getQual(), copy.getQual());
+        assertEquals(record.getFields(), copy.getFields());
+        assertEquals(record.getFieldTypes(), copy.getFieldTypes());
+        assertEquals(record.getFieldArrayTypes(), copy.getFieldArrayTypes());
+    }
 }

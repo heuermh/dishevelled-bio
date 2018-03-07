@@ -27,7 +27,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.PrintWriter;
 
-import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.concurrent.Immutable;
@@ -100,8 +99,7 @@ public final class SamWriter {
         sb.append("\t");
         sb.append(record.getQualOpt().orElse("*"));
 
-        for (Iterator<String> iterator = record.getFields().keySet().iterator(); iterator.hasNext(); ) {
-            String tag = iterator.next();
+        for (String tag : record.getFields().keySet()) {
             String type = record.getFieldTypes().get(tag);
             String arrayType = record.getFieldArrayTypes().get(tag);
 
@@ -111,18 +109,16 @@ public final class SamWriter {
             if ("B".equals(type) && arrayType == null) {
                 throw new IllegalArgumentException("missing array type for tag " + tag + " type " + type + ", fieldArrayTypes = " + record.getFieldArrayTypes());
             }
+            sb.append("\t");
             sb.append(tag);
             sb.append(":");
             sb.append(type);
             sb.append(":");
             if (arrayType != null) {
                 sb.append(arrayType);
+                sb.append(",");
             }
             sb.append(Joiner.on(",").join(record.getFields().get(tag)));
-
-            if (iterator.hasNext()) {
-                sb.append("\t");
-            }
         }
         writer.println(sb.toString());
     }

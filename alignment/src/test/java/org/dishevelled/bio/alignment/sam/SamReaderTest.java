@@ -36,9 +36,11 @@ import static org.junit.Assert.assertTrue;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import java.net.URL;
 
@@ -258,6 +260,61 @@ public final class SamReaderTest {
                 assertEquals("S", record.getFieldArrayTypes().get("XS"));
             }
         }
+    }
+
+    @Test
+    public void testRoundTripDefaults() throws Exception {
+        SamRecord expected = SamRecord.builder().build();
+
+        File tmp = File.createTempFile("samReaderTest", ".sam");
+        tmp.deleteOnExit();
+        try (PrintWriter writer = new PrintWriter(new FileWriter(tmp))) {
+            SamWriter.writeRecord(expected, writer);
+        }
+        SamRecord observed = records(tmp).iterator().next();
+
+        assertEquals(expected.getQname(), observed.getQname());
+        assertEquals(expected.getFlag(), observed.getFlag());
+        assertEquals(expected.getRname(), observed.getRname());
+        assertEquals(expected.getPos(), observed.getPos());
+        assertEquals(expected.getMapq(), observed.getMapq());
+        assertEquals(expected.getCigar(), observed.getCigar());
+        assertEquals(expected.getRnext(), observed.getRnext());
+        assertEquals(expected.getPnext(), observed.getPnext());
+        assertEquals(expected.getTlen(), observed.getTlen());
+        assertEquals(expected.getSeq(), observed.getSeq());
+        assertEquals(expected.getQual(), observed.getQual());
+        assertEquals(expected.getFields(), observed.getFields());
+        assertEquals(expected.getFieldTypes(), observed.getFieldTypes());
+        assertEquals(expected.getFieldArrayTypes(), observed.getFieldArrayTypes());
+    }
+
+    @Test
+    public void testRoundTripOptionalFields() throws Exception {
+        SamRecord expected = SamRecord.builder()
+            .withField("ZA", "A", "c")
+            .withField("ZI", "i", "42")
+            .withField("ZF", "f", "3.14")
+            .withField("ZH", "H", "010203")
+            .withField("ZZ", "Z", "hello world!")
+            .withArrayField("ZB", "B", "i", "1", "2")
+            .withArrayField("ZT", "B", "f", "3.4", "4.5")
+            .build();
+
+        File tmp = File.createTempFile("samReaderTest", ".sam");
+        tmp.deleteOnExit();
+        try (PrintWriter writer = new PrintWriter(new FileWriter(tmp))) {
+            SamWriter.writeRecord(expected, writer);
+        }
+        SamRecord observed = records(tmp).iterator().next();
+
+        assertEquals(expected.getFieldCharacter("ZA"), observed.getFieldCharacter("ZA"));
+        assertEquals(expected.getFieldInteger("ZI"), observed.getFieldInteger("ZI"));
+        assertEquals(expected.getFieldFloat("ZF"), observed.getFieldFloat("ZF"), 0.1f);
+        assertTrue(Arrays.equals(expected.getFieldByteArray("ZH"), observed.getFieldByteArray("ZH")));
+        assertEquals(expected.getFieldString("ZZ"), observed.getFieldString("ZZ"));
+        assertEquals(expected.getFieldIntegers("ZB"), observed.getFieldIntegers("ZB"));
+        assertEquals(expected.getFieldFloats("ZT"), observed.getFieldFloats("ZT"));
     }
 
     private static void validateRecord(final SamRecord record) {

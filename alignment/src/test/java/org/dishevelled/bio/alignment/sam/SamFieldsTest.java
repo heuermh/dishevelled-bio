@@ -23,6 +23,7 @@
 */
 package org.dishevelled.bio.alignment.sam;
 
+import static org.dishevelled.bio.alignment.sam.SamFields.parseByteArray;
 import static org.dishevelled.bio.alignment.sam.SamFields.parseCharacter;
 import static org.dishevelled.bio.alignment.sam.SamFields.parseInteger;
 import static org.dishevelled.bio.alignment.sam.SamFields.parseIntegers;
@@ -54,6 +55,7 @@ public final class SamFieldsTest {
             .put("ZA", "c")
             .put("ZI", "42")
             .put("ZF", "3.14")
+            .put("ZH", "010203")
             .put("ZB", "1")
             .put("ZB", "2")
             .put("ZT", "3.4")
@@ -180,6 +182,31 @@ public final class SamFieldsTest {
     @Test
     public void testParseString() {
         assertEquals("hello world", parseString("ZZ", fields));
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testParseByteArrayNullKey() {
+        parseByteArray(null, fields);
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testParseByteArrayNullFields() {
+        parseByteArray("ZH", null);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testParseByteArrayEmptyValues() {
+        parseByteArray("ZE", fields);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testParseByteArrayTooManyValues() {
+        parseByteArray("ZB", fields);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testParseByteArrayWrongType() {
+        parseByteArray("ZF", fields);
     }
 
 

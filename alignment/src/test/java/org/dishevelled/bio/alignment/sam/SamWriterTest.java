@@ -108,8 +108,8 @@ public final class SamWriterTest {
         assertTrue(sam.contains("ms:i:3614"));
         assertTrue(sam.contains("mc:i:60612"));
         assertTrue(sam.contains("MC:Z:101M"));
-        assertTrue(sam.contains("ZB:B:i1,2"));
-        assertTrue(sam.contains("ZT:B:f3.4,4.5"));
+        assertTrue(sam.contains("ZB:B:i,1,2"));
+        assertTrue(sam.contains("ZT:B:f,3.4,4.5"));
     }
 
     @Test(expected=NullPointerException.class)
@@ -137,7 +137,7 @@ public final class SamWriterTest {
         assertTrue(sam.contains("ms:i:3614"));
         assertTrue(sam.contains("mc:i:60612"));
         assertTrue(sam.contains("MC:Z:101M"));
-        assertTrue(sam.contains("ZB:B:i1,2"));
-        assertTrue(sam.contains("ZT:B:f3.4,4.5"));
+        assertTrue(sam.contains("ZB:B:i,1,2"));
+        assertTrue(sam.contains("ZT:B:f,3.4,4.5"));
     }
 }
