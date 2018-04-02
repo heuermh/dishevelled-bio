@@ -30,8 +30,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
 
-import org.dishevelled.bio.tools.FilterVcf;
-import org.dishevelled.bio.tools.FilterVcf.QualFilter;
+import org.dishevelled.bio.tools.FilterSam;
+import org.dishevelled.bio.tools.FilterSam.MapqFilter;
 
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.Level;
@@ -41,35 +41,35 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
 
 /**
- * FilterVcf benchmarks.
+ * FilterSam benchmarks.
  *
  * @author  Michael Heuer
  */
 @State(Scope.Thread)
-public class FilterVcfBenchmarks {
-    private File inputVcfFile;
-    private File outputVcfFile;
+public class FilterSamBenchmarks {
+    private File inputSamFile;
+    private File outputSamFile;
 
     @Setup(Level.Invocation)
     public void setUp() throws Exception {
-        inputVcfFile = File.createTempFile("filterVcfBenchmarks", ".vcf.gz");
-        outputVcfFile = File.createTempFile("filterVcfBenchmarks", ".vcf.gz");
+        inputSamFile = File.createTempFile("filterSamBenchmarks", ".sam.gz");
+        outputSamFile = File.createTempFile("filterSamBenchmarks", ".sam.gz");
 
-        copyResource("HG001_GRCh38_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-10X-SOLID_CHROM1-X_v.3.3.2_highconf_PGandRTGphasetransfer.10k.0.vcf.gz", inputVcfFile);
+        copyResource("NA12878-platinum-chr20.10k.sam.gz", inputSamFile);
     }
 
     @TearDown(Level.Invocation)
     public void tearDown() {
-        inputVcfFile.delete();
-        outputVcfFile.delete();
+        inputSamFile.delete();
+        outputSamFile.delete();
     }
 
     @Benchmark
-    public void filterVcfByQualityScore() throws Exception {
-        new FilterVcf(ImmutableList.of(new QualFilter(30.0d)), inputVcfFile, outputVcfFile).call();
+    public void filterSamByMapq() throws Exception {
+        new FilterSam(ImmutableList.of(new MapqFilter(30)), inputSamFile, outputSamFile).call();
     }
 
     private static void copyResource(final String name, final File file) throws Exception {
-        Files.write(Resources.toByteArray(FilterVcfBenchmarks.class.getResource(name)), file);
+        Files.write(Resources.toByteArray(FilterSamBenchmarks.class.getResource(name)), file);
     }
 }
