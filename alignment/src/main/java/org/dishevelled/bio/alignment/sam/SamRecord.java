@@ -410,9 +410,1622 @@ public final class SamRecord {
 
     */
 
-    // public boolean containsAm()
-    // public int getAm()
-    // public Optional<Integer> getAmOpt()
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>AM</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>AM</code>
+     */
+    public boolean containsAm() {
+        return containsFieldKey("AM");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>AM</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>AM</code>
+     *    as an integer
+     */
+    public int getAm() {
+        return getFieldInteger("AM");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>AM</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>AM</code>
+     *   as an integer
+     */
+    public Optional<Integer> getAmOpt() {
+        return getFieldIntegerOpt("AM");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>AS</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>AS</code>
+     */
+    public boolean containsAs() {
+        return containsFieldKey("AS");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>AS</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>AS</code>
+     *    as an integer
+     */
+    public int getAs() {
+        return getFieldInteger("AS");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>AS</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>AS</code>
+     *   as an integer
+     */
+    public Optional<Integer> getAsOpt() {
+        return getFieldIntegerOpt("AS");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>BC</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>BC</code>
+     */
+    public boolean containsBc() {
+        return containsFieldKey("BC");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>BC</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>BC</code>
+     *    as a string
+     */
+    public String getBc() {
+        return getFieldString("BC");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>BC</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>BC</code>
+     *   as a string
+     */
+    public Optional<String> getBcOpt() {
+        return getFieldStringOpt("BC");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>BQ</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>BQ</code>
+     */
+    public boolean containsBq() {
+        return containsFieldKey("BQ");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>BQ</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>BQ</code>
+     *    as a string
+     */
+    public String getBq() {
+        return getFieldString("BQ");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>BQ</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>BQ</code>
+     *   as a string
+     */
+    public Optional<String> getBqOpt() {
+        return getFieldStringOpt("BQ");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>BZ</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>BZ</code>
+     */
+    public boolean containsBz() {
+        return containsFieldKey("BZ");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>BZ</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>BZ</code>
+     *    as a string
+     */
+    public String getBz() {
+        return getFieldString("BZ");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>BZ</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>BZ</code>
+     *   as a string
+     */
+    public Optional<String> getBzOpt() {
+        return getFieldStringOpt("BZ");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>CC</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>CC</code>
+     */
+    public boolean containsCc() {
+        return containsFieldKey("CC");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>CC</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>CC</code>
+     *    as a string
+     */
+    public String getCc() {
+        return getFieldString("CC");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>CC</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>CC</code>
+     *   as a string
+     */
+    public Optional<String> getCcOpt() {
+        return getFieldStringOpt("CC");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>CG</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>CG</code>
+     */
+    public boolean containsCg() {
+        return containsFieldKey("CG");
+    }
+
+    /**
+     * Return the Type=B first letter I value for the reserved key <code>CG</code>
+     * as an immutable list of integers.
+     *
+     * @return the Type=B first letter I value for the reserved key <code>CG</code>
+     *    as an immutable list of integers
+     */
+    public List<Integer> getCg() {
+        return getFieldIntegers("CG");
+    }
+
+    /**
+     * Return an optional Type=B first letter I value for the reserved key <code>CG</code>
+     * as an immutable list of integers.
+     *
+     * @return an optional Type=B first letter I value for the reserved key <code>CG</code>
+     *   as an immutable list of integers
+     */
+    public Optional<List<Integer>> getCgOpt() {
+        return getFieldIntegersOpt("CG");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>CM</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>CM</code>
+     */
+    public boolean containsCm() {
+        return containsFieldKey("CM");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>CM</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>CM</code>
+     *    as an integer
+     */
+    public int getCm() {
+        return getFieldInteger("CM");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>CM</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>CM</code>
+     *   as an integer
+     */
+    public Optional<Integer> getCmOpt() {
+        return getFieldIntegerOpt("CM");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>CO</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>CO</code>
+     */
+    public boolean containsCo() {
+        return containsFieldKey("CO");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>CO</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>CO</code>
+     *    as a string
+     */
+    public String getCo() {
+        return getFieldString("CO");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>CO</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>CO</code>
+     *   as a string
+     */
+    public Optional<String> getCoOpt() {
+        return getFieldStringOpt("CO");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>CP</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>CP</code>
+     */
+    public boolean containsCp() {
+        return containsFieldKey("CP");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>CP</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>CP</code>
+     *    as an integer
+     */
+    public int getCp() {
+        return getFieldInteger("CP");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>CP</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>CP</code>
+     *   as an integer
+     */
+    public Optional<Integer> getCpOpt() {
+        return getFieldIntegerOpt("CP");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>CQ</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>CQ</code>
+     */
+    public boolean containsCq() {
+        return containsFieldKey("CQ");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>CQ</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>CQ</code>
+     *    as a string
+     */
+    public String getCq() {
+        return getFieldString("CQ");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>CQ</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>CQ</code>
+     *   as a string
+     */
+    public Optional<String> getCqOpt() {
+        return getFieldStringOpt("CQ");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>CS</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>CS</code>
+     */
+    public boolean containsCs() {
+        return containsFieldKey("CS");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>CS</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>CS</code>
+     *    as a string
+     */
+    public String getCs() {
+        return getFieldString("CS");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>CS</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>CS</code>
+     *   as a string
+     */
+    public Optional<String> getCsOpt() {
+        return getFieldStringOpt("CS");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>CT</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>CT</code>
+     */
+    public boolean containsCt() {
+        return containsFieldKey("CT");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>CT</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>CT</code>
+     *    as a string
+     */
+    public String getCt() {
+        return getFieldString("CT");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>CT</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>CT</code>
+     *   as a string
+     */
+    public Optional<String> getCtOpt() {
+        return getFieldStringOpt("CT");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>E2</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>E2</code>
+     */
+    public boolean containsE2() {
+        return containsFieldKey("E2");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>E2</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>E2</code>
+     *    as a string
+     */
+    public String getE2() {
+        return getFieldString("E2");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>E2</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>E2</code>
+     *   as a string
+     */
+    public Optional<String> getE2Opt() {
+        return getFieldStringOpt("E2");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>FI</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>FI</code>
+     */
+    public boolean containsFi() {
+        return containsFieldKey("FI");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>FI</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>FI</code>
+     *    as an integer
+     */
+    public int getFi() {
+        return getFieldInteger("FI");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>FI</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>FI</code>
+     *   as an integer
+     */
+    public Optional<Integer> getFiOpt() {
+        return getFieldIntegerOpt("FI");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>FS</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>FS</code>
+     */
+    public boolean containsFs() {
+        return containsFieldKey("FS");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>FS</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>FS</code>
+     *    as a string
+     */
+    public String getFs() {
+        return getFieldString("FS");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>FS</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>FS</code>
+     *   as a string
+     */
+    public Optional<String> getFsOpt() {
+        return getFieldStringOpt("FS");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>FZ</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>FZ</code>
+     */
+    public boolean containsFz() {
+        return containsFieldKey("FZ");
+    }
+
+    /**
+     * Return the Type=B first letter S value for the reserved key <code>FZ</code>
+     * as an immutable list of integers.
+     *
+     * @return the Type=B first letter S value for the reserved key <code>FZ</code>
+     *    as an immutable list of integers
+     */
+    public List<Integer> getFz() {
+        return getFieldIntegers("FZ");
+    }
+
+    /**
+     * Return an optional Type=B first letter S value for the reserved key <code>FZ</code>
+     * as an immutable list of integers.
+     *
+     * @return an optional Type=B first letter S value for the reserved key <code>FZ</code>
+     *   as an immutable list of integers
+     */
+    public Optional<List<Integer>> getFzOpt() {
+        return getFieldIntegersOpt("FZ");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>H0</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>H0</code>
+     */
+    public boolean containsH0() {
+        return containsFieldKey("H0");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>H0</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>H0</code>
+     *    as an integer
+     */
+    public int getH0() {
+        return getFieldInteger("H0");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>H0</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>H0</code>
+     *   as an integer
+     */
+    public Optional<Integer> getH0Opt() {
+        return getFieldIntegerOpt("H0");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>H1</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>H1</code>
+     */
+    public boolean containsH1() {
+        return containsFieldKey("H1");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>H1</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>H1</code>
+     *    as an integer
+     */
+    public int getH1() {
+        return getFieldInteger("H1");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>H1</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>H1</code>
+     *   as an integer
+     */
+    public Optional<Integer> getH1Opt() {
+        return getFieldIntegerOpt("H1");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>H2</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>H2</code>
+     */
+    public boolean containsH2() {
+        return containsFieldKey("H2");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>H2</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>H2</code>
+     *    as an integer
+     */
+    public int getH2() {
+        return getFieldInteger("H2");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>H2</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>H2</code>
+     *   as an integer
+     */
+    public Optional<Integer> getH2Opt() {
+        return getFieldIntegerOpt("H2");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>HI</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>HI</code>
+     */
+    public boolean containsHi() {
+        return containsFieldKey("HI");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>HI</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>HI</code>
+     *    as an integer
+     */
+    public int getHi() {
+        return getFieldInteger("HI");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>HI</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>HI</code>
+     *   as an integer
+     */
+    public Optional<Integer> getHiOpt() {
+        return getFieldIntegerOpt("HI");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>IH</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>IH</code>
+     */
+    public boolean containsIh() {
+        return containsFieldKey("IH");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>IH</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>IH</code>
+     *    as an integer
+     */
+    public int getIh() {
+        return getFieldInteger("IH");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>IH</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>IH</code>
+     *   as an integer
+     */
+    public Optional<Integer> getIhOpt() {
+        return getFieldIntegerOpt("IH");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>LB</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>LB</code>
+     */
+    public boolean containsLb() {
+        return containsFieldKey("LB");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>LB</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>LB</code>
+     *    as a string
+     */
+    public String getLb() {
+        return getFieldString("LB");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>LB</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>LB</code>
+     *   as a string
+     */
+    public Optional<String> getLbOpt() {
+        return getFieldStringOpt("LB");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>MC</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>MC</code>
+     */
+    public boolean containsMc() {
+        return containsFieldKey("MC");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>MC</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>MC</code>
+     *    as a string
+     */
+    public String getMc() {
+        return getFieldString("MC");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>MC</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>MC</code>
+     *   as a string
+     */
+    public Optional<String> getMcOpt() {
+        return getFieldStringOpt("MC");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>MD</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>MD</code>
+     */
+    public boolean containsMd() {
+        return containsFieldKey("MD");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>MD</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>MD</code>
+     *    as a string
+     */
+    public String getMd() {
+        return getFieldString("MD");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>MD</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>MD</code>
+     *   as a string
+     */
+    public Optional<String> getMdOpt() {
+        return getFieldStringOpt("MD");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>MI</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>MI</code>
+     */
+    public boolean containsMi() {
+        return containsFieldKey("MI");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>MI</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>MI</code>
+     *    as a string
+     */
+    public String getMi() {
+        return getFieldString("MI");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>MI</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>MI</code>
+     *   as a string
+     */
+    public Optional<String> getMiOpt() {
+        return getFieldStringOpt("MI");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>MQ</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>MQ</code>
+     */
+    public boolean containsMq() {
+        return containsFieldKey("MQ");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>MQ</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>MQ</code>
+     *    as an integer
+     */
+    public int getMq() {
+        return getFieldInteger("MQ");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>MQ</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>MQ</code>
+     *   as a integer
+     */
+    public Optional<Integer> getMqOpt() {
+        return getFieldIntegerOpt("MQ");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>NH</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>NH</code>
+     */
+    public boolean containsNh() {
+        return containsFieldKey("NH");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>NH</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>NH</code>
+     *    as an integer
+     */
+    public int getNh() {
+        return getFieldInteger("NH");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>NH</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>NH</code>
+     *   as an integer
+     */
+    public Optional<Integer> getNhOpt() {
+        return getFieldIntegerOpt("NH");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>NM</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>NM</code>
+     */
+    public boolean containsNm() {
+        return containsFieldKey("NM");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>NM</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>NM</code>
+     *    as an integer
+     */
+    public int getNm() {
+        return getFieldInteger("NM");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>NM</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>NM</code>
+     *   as an integer
+     */
+    public Optional<Integer> getNmOpt() {
+        return getFieldIntegerOpt("NM");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>OC</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>OC</code>
+     */
+    public boolean containsOc() {
+        return containsFieldKey("OC");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>OC</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>OC</code>
+     *    as a string
+     */
+    public String getOc() {
+        return getFieldString("OC");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>OC</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>OC</code>
+     *   as a string
+     */
+    public Optional<String> getOcOpt() {
+        return getFieldStringOpt("OC");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>OP</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>OP</code>
+     */
+    public boolean containsOp() {
+        return containsFieldKey("OP");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>OP</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>OP</code>
+     *    as an integer
+     */
+    public int getOp() {
+        return getFieldInteger("OP");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>OP</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>OP</code>
+     *   as an integer
+     */
+    public Optional<Integer> getOpOpt() {
+        return getFieldIntegerOpt("OP");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>OQ</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>OQ</code>
+     */
+    public boolean containsOq() {
+        return containsFieldKey("OQ");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>OQ</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>OQ</code>
+     *    as a string
+     */
+    public String getOq() {
+        return getFieldString("OQ");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>OQ</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>OQ</code>
+     *   as a string
+     */
+    public Optional<String> getOqOpt() {
+        return getFieldStringOpt("OQ");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>OX</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>OX</code>
+     */
+    public boolean containsOx() {
+        return containsFieldKey("OX");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>OX</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>OX</code>
+     *    as a string
+     */
+    public String getOx() {
+        return getFieldString("OX");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>OX</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>OX</code>
+     *   as a string
+     */
+    public Optional<String> getOxOpt() {
+        return getFieldStringOpt("OX");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>PG</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>PG</code>
+     */
+    public boolean containsPg() {
+        return containsFieldKey("PG");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>PG</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>PG</code>
+     *    as a string
+     */
+    public String getPg() {
+        return getFieldString("PG");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>PG</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>PG</code>
+     *   as a string
+     */
+    public Optional<String> getPgOpt() {
+        return getFieldStringOpt("PG");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>PQ</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>PQ</code>
+     */
+    public boolean containsPq() {
+        return containsFieldKey("PQ");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>PQ</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>PQ</code>
+     *    as a integer
+     */
+    public int getPq() {
+        return getFieldInteger("PQ");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>PQ</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>PQ</code>
+     *   as a integer
+     */
+    public Optional<Integer> getPqOpt() {
+        return getFieldIntegerOpt("PQ");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>PT</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>PT</code>
+     */
+    public boolean containsPt() {
+        return containsFieldKey("PT");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>PT</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>PT</code>
+     *    as a string
+     */
+    public String getPt() {
+        return getFieldString("PT");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>PT</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>PT</code>
+     *   as a string
+     */
+    public Optional<String> getPtOpt() {
+        return getFieldStringOpt("PT");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>PU</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>PU</code>
+     */
+    public boolean containsPu() {
+        return containsFieldKey("PU");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>PU</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>PU</code>
+     *    as a string
+     */
+    public String getPu() {
+        return getFieldString("PU");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>PU</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>PU</code>
+     *   as a string
+     */
+    public Optional<String> getPuOpt() {
+        return getFieldStringOpt("PU");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>Q2</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>Q2</code>
+     */
+    public boolean containsQ2() {
+        return containsFieldKey("Q2");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>Q2</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>Q2</code>
+     *    as a string
+     */
+    public String getQ2() {
+        return getFieldString("Q2");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>Q2</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>Q2</code>
+     *   as a string
+     */
+    public Optional<String> getQ2Opt() {
+        return getFieldStringOpt("Q2");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>QT</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>QT</code>
+     */
+    public boolean containsQT() {
+        return containsFieldKey("QT");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>QT</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>QT</code>
+     *    as a string
+     */
+    public String getQT() {
+        return getFieldString("QT");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>QT</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>QT</code>
+     *   as a string
+     */
+    public Optional<String> getQTOpt() {
+        return getFieldStringOpt("QT");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>QX</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>QX</code>
+     */
+    public boolean containsQX() {
+        return containsFieldKey("QX");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>QX</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>QX</code>
+     *    as a string
+     */
+    public String getQX() {
+        return getFieldString("QX");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>QX</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>QX</code>
+     *   as a string
+     */
+    public Optional<String> getQXOpt() {
+        return getFieldStringOpt("QX");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>R2</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>R2</code>
+     */
+    public boolean containsR2() {
+        return containsFieldKey("R2");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>R2</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>R2</code>
+     *    as a string
+     */
+    public String getR2() {
+        return getFieldString("R2");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>R2</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>R2</code>
+     *   as a string
+     */
+    public Optional<String> getR2Opt() {
+        return getFieldStringOpt("R2");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>RG</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>RG</code>
+     */
+    public boolean containsRg() {
+        return containsFieldKey("RG");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>RG</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>RG</code>
+     *    as a string
+     */
+    public String getRg() {
+        return getFieldString("RG");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>RG</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>RG</code>
+     *   as a string
+     */
+    public Optional<String> getRgOpt() {
+        return getFieldStringOpt("RG");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>RT</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>RT</code>
+     */
+    public boolean containsRt() {
+        return containsFieldKey("RT");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>RT</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>RT</code>
+     *    as a string
+     */
+    public String getRt() {
+        return getFieldString("RT");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>RT</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>RT</code>
+     *   as a string
+     */
+    public Optional<String> getRtOpt() {
+        return getFieldStringOpt("RT");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>RX</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>RX</code>
+     */
+    public boolean containsRx() {
+        return containsFieldKey("RX");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>RX</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>RX</code>
+     *    as a string
+     */
+    public String getRx() {
+        return getFieldString("RX");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>RX</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>RX</code>
+     *   as a string
+     */
+    public Optional<String> getRxOpt() {
+        return getFieldStringOpt("RX");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>SA</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>SA</code>
+     */
+    public boolean containsSa() {
+        return containsFieldKey("SA");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>SA</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>SA</code>
+     *    as a string
+     */
+    public String getSa() {
+        return getFieldString("SA");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>SA</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>SA</code>
+     *   as a string
+     */
+    public Optional<String> getSaOpt() {
+        return getFieldStringOpt("SA");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>SM</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>SM</code>
+     */
+    public boolean containsSm() {
+        return containsFieldKey("SM");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>SM</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>SM</code>
+     *    as a integer
+     */
+    public int getSm() {
+        return getFieldInteger("SM");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>SM</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>SM</code>
+     *   as a integer
+     */
+    public Optional<Integer> getSmOpt() {
+        return getFieldIntegerOpt("SM");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>TC</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>TC</code>
+     */
+    public boolean containsTc() {
+        return containsFieldKey("TC");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>TC</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>TC</code>
+     *    as a integer
+     */
+    public int getTc() {
+        return getFieldInteger("TC");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>TC</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>TC</code>
+     *   as a integer
+     */
+    public Optional<Integer> getTcOpt() {
+        return getFieldIntegerOpt("TC");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>U2</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>U2</code>
+     */
+    public boolean containsU2() {
+        return containsFieldKey("U2");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>U2</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>U2</code>
+     *    as a string
+     */
+    public String getU2() {
+        return getFieldString("U2");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>U2</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>U2</code>
+     *   as a string
+     */
+    public Optional<String> getU2Opt() {
+        return getFieldStringOpt("U2");
+    }
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>UQ</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>UQ</code>
+     */
+    public boolean containsUq() {
+        return containsFieldKey("UQ");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>UQ</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>UQ</code>
+     *    as an integer
+     */
+    public int getUq() {
+        return getFieldInteger("UQ");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>UQ</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>UQ</code>
+     *   as an integer
+     */
+    public Optional<Integer> getUqOpt() {
+        return getFieldIntegerOpt("UQ");
+    }
 
     /**
      * Return true if this SAM record contains the specified optional field key.
