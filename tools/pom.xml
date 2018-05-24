@@ -228,6 +228,10 @@
               <mainClass>org.dishevelled.bio.tools.FastqDescription</mainClass>
             </program>
             <program>
+              <id>dsh-fastq-sequence-length</id>
+              <mainClass>org.dishevelled.bio.tools.FastqSequenceLength</mainClass>
+            </program>
+            <program>
               <id>dsh-fastq-to-fasta</id>
               <mainClass>org.dishevelled.bio.tools.FastqToFasta</mainClass>
             </program>
