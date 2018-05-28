@@ -44,6 +44,7 @@
   </scm>
   <modules>
     <module>adam</module>
+    <module>adam-explorer</module>
     <module>align</module>
     <module>alignment</module>
     <module>assembly</module>
