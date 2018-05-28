@@ -51,5 +51,5 @@ res0: Int = 0
 scala>
 ```
 
-![adam-explorer screenshot](https://github.com/heuermh/cannoli/raw/master/images/screen-shot.png)
+![adam-explorer screenshot](https://github.com/heuermh/dishevelled-bio/raw/master/adam-explorer/images/screen-shot.png)
 
