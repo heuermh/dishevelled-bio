@@ -30,14 +30,8 @@ import java.util.concurrent.ExecutionException;
 
 import java.util.stream.Collectors;
 
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
-import javax.swing.WindowConstants;
 
 import javax.swing.border.EmptyBorder;
 
@@ -48,16 +42,12 @@ import ca.odell.glazedlists.gui.TableFormat;
 
 import htsjdk.variant.vcf.VCFHeaderLine;
 
-import org.bdgenomics.adam.rdd.GenomicDataset;
-
 import org.bdgenomics.adam.rdd.variant.VariantRDD;
 
 import org.bdgenomics.adam.models.SequenceRecord;
 
 import org.bdgenomics.formats.avro.Contig;
 import org.bdgenomics.formats.avro.Variant;
-import org.bdgenomics.formats.avro.ProcessingStep;
-import org.bdgenomics.formats.avro.RecordGroup;
 
 import org.dishevelled.eventlist.view.CountLabel;
 import org.dishevelled.eventlist.view.ElementsTable;

@@ -26,9 +26,6 @@ package org.dishevelled.bio.adam.explorer;
 import javax.swing.border.EmptyBorder;
 
 import ca.odell.glazedlists.EventList;
-import ca.odell.glazedlists.GlazedLists;
-
-import ca.odell.glazedlists.gui.TableFormat;
 
 import htsjdk.variant.vcf.VCFHeaderLine;
 

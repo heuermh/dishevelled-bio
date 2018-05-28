@@ -36,7 +36,7 @@ import org.dishevelled.bio.assembly.gfa.Tag;
 public abstract class Gfa1Record extends GfaRecord {
 
     /**
-     * Create a new GFA 1.0 record with the specifed tags.
+     * Create a new GFA 1.0 record with the specified tags.
      *
      * @param tags tags, must not be null
      */

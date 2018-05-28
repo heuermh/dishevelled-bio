@@ -158,7 +158,7 @@ public final class Alignment {
      * @param value value
      * @return true if the specified value is a cigar
      */
-    static boolean isCigar(final String value) {
+    private static boolean isCigar(final String value) {
         return CIGAR.matcher(value).matches();
     }
 
@@ -180,7 +180,7 @@ public final class Alignment {
             .on(",")
             .splitToList(value)
             .stream()
-            .map(v -> Integer.valueOf(v))
+            .map(Integer::valueOf)
             .collect(Collectors.toList());
 
         return new Alignment(trace);

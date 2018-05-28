@@ -67,7 +67,7 @@ public final class Path extends Gfa2Record {
      *
      * @param id identifier, if any
      * @param references list of reference, must not be null
-     * @param tags targs, must not be null
+     * @param tags tags, must not be null
      */
     public Path(@Nullable final String id,
                 final List<Reference> references,
@@ -153,7 +153,7 @@ public final class Path extends Gfa2Record {
             .on(" ")
             .splitToList(tokens.get(2))
             .stream()
-            .map(v -> Reference.valueOf(v))
+            .map(Reference::valueOf)
             .collect(Collectors.toList());
 
         ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();

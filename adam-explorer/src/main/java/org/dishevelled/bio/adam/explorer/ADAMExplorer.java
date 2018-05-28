@@ -23,28 +23,9 @@
 */
 package org.dishevelled.bio.adam.explorer;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import java.util.concurrent.ExecutionException;
-
-import java.util.stream.Collectors;
-
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JTable;
 import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
-
-import javax.swing.border.EmptyBorder;
-
-import ca.odell.glazedlists.EventList;
-import ca.odell.glazedlists.GlazedLists;
-
-import ca.odell.glazedlists.gui.TableFormat;
-
-import org.bdgenomics.adam.rdd.GenomicDataset;
 
 import org.bdgenomics.adam.rdd.feature.FeatureRDD;
 import org.bdgenomics.adam.rdd.fragment.FragmentRDD;
@@ -54,22 +35,6 @@ import org.bdgenomics.adam.rdd.read.AlignmentRecordRDD;
 //import org.bdgenomics.adam.rdd.sequence.SliceRDD;
 import org.bdgenomics.adam.rdd.variant.GenotypeRDD;
 import org.bdgenomics.adam.rdd.variant.VariantRDD;
-
-import org.bdgenomics.adam.models.SequenceRecord;
-
-import org.bdgenomics.formats.avro.AlignmentRecord;
-import org.bdgenomics.formats.avro.ProcessingStep;
-import org.bdgenomics.formats.avro.RecordGroup;
-
-import org.dishevelled.eventlist.view.CountLabel;
-import org.dishevelled.eventlist.view.ElementsList;
-import org.dishevelled.eventlist.view.ElementsTable;
-
-import org.dishevelled.iconbundle.tango.TangoProject;
-
-import org.dishevelled.layout.LabelFieldPanel;
-
-import scala.collection.JavaConversions;
 
 /**
  * Interactive explorer for ADAM data models.

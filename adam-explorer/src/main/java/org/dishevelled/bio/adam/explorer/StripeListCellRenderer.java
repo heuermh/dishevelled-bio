@@ -26,15 +26,10 @@ package org.dishevelled.bio.adam.explorer;
 import java.awt.Component;
 import java.awt.Color;
 
-import java.util.List;
-import java.util.Map;
-
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.UIManager;
-
-import javax.swing.border.EmptyBorder;
 
 /**
  * Stripe list cell renderer.
@@ -66,7 +61,7 @@ final class StripeListCellRenderer extends DefaultListCellRenderer {
         return label;
     }
 
-    static void install(final JList list) {
+    static <T> void install(final JList<T> list) {
         StripeListCellRenderer renderer = new StripeListCellRenderer();
         list.setCellRenderer(renderer);
     }

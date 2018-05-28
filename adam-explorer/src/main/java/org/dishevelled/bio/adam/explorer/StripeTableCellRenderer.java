@@ -32,8 +32,6 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.UIManager;
 
-import javax.swing.border.EmptyBorder;
-
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
@@ -48,14 +46,7 @@ final class StripeTableCellRenderer extends DefaultTableCellRenderer {
     public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected, final boolean hasFocus, final int row, final int column)
     {
         JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        /*
-          Table.background
-          Table.focusCellBackground
-          Table.focusCellForeground
-          Table.foreground
-          Table.selectionBackground
-          Table.selectionForeground
-         */
+
         if (isSelected) {
             label.setForeground(UIManager.getColor("Table.selectionForeground"));
             label.setBackground(UIManager.getColor("Table.selectionBackground"));
