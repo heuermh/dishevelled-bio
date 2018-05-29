@@ -43,52 +43,24 @@ import htsjdk.variant.variantcontext.writer.VariantContextWriterBuilder;
 import htsjdk.variant.vcf.VCFCodec;
 import htsjdk.variant.vcf.VCFHeader;
 
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.Level;
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.Setup;
-import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.annotations.TearDown;
-
 /**
- * FilterVcf-equivalent in htsjdk benchmarks.
+ * Separate main to run FilterVcf-equivalent in htsjdk benchmark once.
  *
  * @author  Michael Heuer
  */
-@State(Scope.Thread)
-public class FilterVcfHtsjdkBenchmarks {
-    private File inputVcfFile;
-    private File outputVcfFile;
-
-    @Setup(Level.Invocation)
-    public void setUp() throws Exception {
-        inputVcfFile = File.createTempFile("filterVcfHtsjdkBenchmarks", ".vcf.gz");
-        outputVcfFile = File.createTempFile("filterVcfHtsjdkBenchmarks", ".vcf.gz");
-
-        copyResource("HG001_GRCh38_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-10X-SOLID_CHROM1-X_v.3.3.2_highconf_PGandRTGphasetransfer.10k.0.vcf.gz", inputVcfFile);
-    }
-
-    @TearDown(Level.Invocation)
-    public void tearDown() {
-        inputVcfFile.delete();
-        outputVcfFile.delete();
-    }
-
-    private AbstractFeatureReader<VariantContext, LineIterator> createReader() throws Exception {
+public final class runFilterVcfHtsjdkOnce {
+    private static AbstractFeatureReader<VariantContext, LineIterator> createReader(final File inputVcfFile) throws Exception {
         return AbstractFeatureReader.getFeatureReader(inputVcfFile.getAbsolutePath(), new VCFCodec(), false);
     }
 
-    private VariantContextWriter createWriter() throws Exception {
-        return new VariantContextWriterBuilder()
-            .setOutputFile(outputVcfFile)
-            .setOutputFileType(VariantContextWriterBuilder.OutputType.VCF)
-            .unsetOption(Options.INDEX_ON_THE_FLY)
-            .build();
+    private static VariantContextWriter createWriter(final File outputVcfFile) throws Exception {
+        return new VariantContextWriterBuilder().setOutputFile(outputVcfFile).setOutputFileType(VariantContextWriterBuilder.OutputType.VCF).unsetOption(Options.INDEX_ON_THE_FLY).build();
     }
 
-    @Benchmark
-    public void filterVcfByQualityScore() throws Exception {
-        try (final AbstractFeatureReader<VariantContext, LineIterator> reader = createReader(); final VariantContextWriter writer = createWriter()) {
+    public static void filterVcfByQualityScore() throws Exception {
+        File inputVcfFile = new File("src/main/resources/org/dishevelled/bio/benchmarks/HG001_GRCh38_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-10X-SOLID_CHROM1-X_v.3.3.2_highconf_PGandRTGphasetransfer.10k.0.vcf.gz");
+        File outputVcfFile = new File("filtered.vcf.gz");
+        try (final AbstractFeatureReader<VariantContext, LineIterator> reader = createReader(inputVcfFile); final VariantContextWriter writer = createWriter(outputVcfFile)) {
             writer.writeHeader((VCFHeader) reader.getHeader());
             for (final VariantContext vc : reader.iterator()) {
                 if (vc.getPhredScaledQual() >= 30.0d) {
@@ -98,7 +70,14 @@ public class FilterVcfHtsjdkBenchmarks {
         }
     }
 
-    private static void copyResource(final String name, final File file) throws Exception {
-        Files.write(Resources.toByteArray(FilterVcfHtsjdkBenchmarks.class.getResource(name)), file);
+    /**
+     * Main.
+     *
+     * @param args command line arguments, ignored
+     */
+    public static void main(final String args[]) throws Exception {
+        long t = System.nanoTime();
+        filterVcfByQualityScore();
+        System.out.println("took " + (System.nanoTime() - t));
     }
 }
