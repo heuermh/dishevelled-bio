@@ -23,12 +23,11 @@
 */
 package org.dishevelled.bio.benchmarks;
 
+import static org.dishevelled.bio.benchmarks.Utils.copyResource;
+
 import java.io.File;
 
 import com.google.common.collect.ImmutableList;
-
-import com.google.common.io.Files;
-import com.google.common.io.Resources;
 
 import htsjdk.tribble.AbstractFeatureReader;
 
@@ -96,9 +95,5 @@ public class FilterVcfHtsjdkBenchmarks {
                 }
             }
         }
-    }
-
-    private static void copyResource(final String name, final File file) throws Exception {
-        Files.write(Resources.toByteArray(FilterVcfHtsjdkBenchmarks.class.getResource(name)), file);
     }
 }

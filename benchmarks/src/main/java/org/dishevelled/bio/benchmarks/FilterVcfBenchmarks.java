@@ -23,12 +23,11 @@
 */
 package org.dishevelled.bio.benchmarks;
 
+import static org.dishevelled.bio.benchmarks.Utils.copyResource;
+
 import java.io.File;
 
 import com.google.common.collect.ImmutableList;
-
-import com.google.common.io.Files;
-import com.google.common.io.Resources;
 
 import org.dishevelled.bio.tools.FilterVcf;
 import org.dishevelled.bio.tools.FilterVcf.QualFilter;
@@ -67,9 +66,5 @@ public class FilterVcfBenchmarks {
     @Benchmark
     public void filterVcfByQualityScore() throws Exception {
         new FilterVcf(ImmutableList.of(new QualFilter(30.0d)), inputVcfFile, outputVcfFile).call();
-    }
-
-    private static void copyResource(final String name, final File file) throws Exception {
-        Files.write(Resources.toByteArray(FilterVcfBenchmarks.class.getResource(name)), file);
     }
 }

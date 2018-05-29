@@ -23,12 +23,11 @@
 */
 package org.dishevelled.bio.benchmarks;
 
+import static org.dishevelled.bio.benchmarks.Utils.copyResource;
+
 import java.io.File;
 
 import com.google.common.collect.ImmutableList;
-
-import com.google.common.io.Files;
-import com.google.common.io.Resources;
 
 import org.dishevelled.bio.tools.FilterSam;
 import org.dishevelled.bio.tools.FilterSam.MapqFilter;
@@ -67,9 +66,5 @@ public class FilterSamBenchmarks {
     @Benchmark
     public void filterSamByMapq() throws Exception {
         new FilterSam(ImmutableList.of(new MapqFilter(30)), inputSamFile, outputSamFile).call();
-    }
-
-    private static void copyResource(final String name, final File file) throws Exception {
-        Files.write(Resources.toByteArray(FilterSamBenchmarks.class.getResource(name)), file);
     }
 }
