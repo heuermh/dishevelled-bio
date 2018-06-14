@@ -220,6 +220,10 @@
               <mainClass>org.dishevelled.bio.tools.ExtractFastq</mainClass>
             </program>
             <program>
+              <id>dsh-extract-fastq-by-length</id>
+              <mainClass>org.dishevelled.bio.tools.ExtractFastqByLength</mainClass>
+            </program>
+            <program>
               <id>dsh-fasta-to-fastq</id>
               <mainClass>org.dishevelled.bio.tools.FastaToFastq</mainClass>
             </program>

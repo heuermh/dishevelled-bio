@@ -135,6 +135,7 @@ public final class Tools implements Callable<Integer> {
         .put("downsample-interleaved-fastq", new Command("downsample-interleaved-fastq", "downsample sequences from a file in interleaved FASTQ format", DownsampleInterleavedFastq.class))
         .put("extract-fasta", new Command("extract-fasta", "extract matching sequences in FASTA format", ExtractFasta.class))
         .put("extract-fastq", new Command("extract-fastq", "extract matching sequences in FASTQ format", ExtractFastq.class))
+        .put("extract-fastq-by-length", new Command("extract-fastq-by-length", "extract sequences in FASTQ format with a range of lengths", ExtractFastqByLength.class))
         .put("fasta-to-fastq", new Command("fasta-to-fastq", "convert sequences in FASTA format to FASTQ format", FastaToFastq.class))
         .put("fastq-description", new Command("fastq-description", "output description lines from sequences in FASTQ format", FastqDescription.class))
         .put("fastq-sequence-length", new Command("fastq-sequence-length", "output sequence lengths from sequences in FASTQ format", FastqSequenceLength.class))
