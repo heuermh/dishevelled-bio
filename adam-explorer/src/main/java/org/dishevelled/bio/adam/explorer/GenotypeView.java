@@ -68,6 +68,11 @@ final class GenotypeView extends LabelFieldPanel {
     private final GenotypeModel model;
     private final GenotypeTable table;
 
+    /**
+     * Create a new genotype view with the specified dataset.
+     *
+     * @param dataset dataset, must not be null
+     */
     GenotypeView(final GenotypeRDD dataset) {
         super();
         model = new GenotypeModel(dataset);
@@ -106,6 +111,11 @@ final class GenotypeView extends LabelFieldPanel {
         private final EventList<VCFHeaderLine> headerLines;
         private final EventList<Genotype> genotypes;
 
+        /**
+         * Create a new genotype model with the specified dataset.
+         *
+         * @param dataset dataset, must not be null
+         */
         GenotypeModel(final GenotypeRDD dataset) {
             this.dataset = dataset;
             genotypes = GlazedLists.eventList(new ArrayList<Genotype>());
@@ -175,6 +185,11 @@ final class GenotypeView extends LabelFieldPanel {
         private static final String[] COLUMN_LABELS = { "Contig Name", "Start", "End", "Ref", "Alt", "Alleles", "Sample" };
         private static final TableFormat<Genotype> TABLE_FORMAT = GlazedLists.tableFormat(Genotype.class, PROPERTY_NAMES, COLUMN_LABELS);
 
+        /**
+         * Create a new genotype table with the specified model.
+         *
+         * @param model model, must not be null
+         */
         GenotypeTable(final GenotypeModel model) {
             super("Genotypes:", model.getGenotypes(), TABLE_FORMAT);
 

@@ -61,6 +61,11 @@ final class StripeListCellRenderer extends DefaultListCellRenderer {
         return label;
     }
 
+    /**
+     * Install a stripe list cell renderer for the specified list.
+     *
+     * @param list list, must not be null
+     */
     static <T> void install(final JList<T> list) {
         StripeListCellRenderer renderer = new StripeListCellRenderer();
         list.setCellRenderer(renderer);

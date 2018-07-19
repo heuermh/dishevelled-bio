@@ -75,6 +75,11 @@ final class AlignmentView extends LabelFieldPanel {
     private final AlignmentModel model;
     private final AlignmentTable table;
 
+    /**
+     * Create a new alignment view with the specified dataset.
+     *
+     * @param dataset dataset, must not be null
+     */
     AlignmentView(final AlignmentRecordRDD dataset) {
         super();
         model = new AlignmentModel(dataset);
@@ -113,6 +118,11 @@ final class AlignmentView extends LabelFieldPanel {
         private final EventList<ProcessingStep> processingSteps;
         private final EventList<AlignmentRecord> alignments;
 
+        /**
+         * Create a new alignment model with the specified dataset.
+         *
+         * @param dataset dataset, must not be null
+         */
         AlignmentModel(final AlignmentRecordRDD dataset) {
             this.dataset = dataset;
             alignments = GlazedLists.eventList(new ArrayList<AlignmentRecord>());
@@ -183,6 +193,11 @@ final class AlignmentView extends LabelFieldPanel {
         private static final String[] COLUMN_LABELS = { "Contig Name", "Start", "End", "Read Name", "Sample", "Read Group" };
         private static final TableFormat<AlignmentRecord> TABLE_FORMAT = GlazedLists.tableFormat(AlignmentRecord.class, PROPERTY_NAMES, COLUMN_LABELS);
 
+        /**
+         * Create a new alignment table with the specified model.
+         *
+         * @param model model, must not be null
+         */
         AlignmentTable(final AlignmentModel model) {
             super("Alignments:", model.getAlignments(), TABLE_FORMAT);
 

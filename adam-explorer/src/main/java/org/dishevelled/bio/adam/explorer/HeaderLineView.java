@@ -42,6 +42,11 @@ import org.dishevelled.layout.LabelFieldPanel;
  */
 final class HeaderLineView extends LabelFieldPanel {
 
+    /**
+     * Create a new header line view with the specified header lines.
+     *
+     * @param headerLines header lines, must not be null
+     */
     HeaderLineView(final EventList<VCFHeaderLine> headerLines) {
         super();
         setBorder(new EmptyBorder(12, 12, 12, 12));
@@ -54,6 +59,11 @@ final class HeaderLineView extends LabelFieldPanel {
      */
     static class HeaderLineList extends ElementsList<VCFHeaderLine> {
 
+        /**
+         * Create a new header line list with the specified header lines.
+         *
+         * @param headerLines header lines, must not be null
+         */
         HeaderLineList(final EventList<VCFHeaderLine> headerLines) {
             super("Header lines:", headerLines);
 

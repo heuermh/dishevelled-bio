@@ -37,6 +37,11 @@ import org.bdgenomics.adam.rdd.GenomicDataset;
  */
 class DatasetCountLabel extends JLabel {
 
+    /**
+     * Create a new dataset count label for the specified dataset.
+     *
+     * @param dataset dataset, must not be null
+     */
     DatasetCountLabel(final GenomicDataset dataset) {
         super("");
         new SwingWorker<Long, Void>() {

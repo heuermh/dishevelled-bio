@@ -67,6 +67,11 @@ final class VariantView extends LabelFieldPanel {
     private final VariantModel model;
     private final VariantTable table;
 
+    /**
+     * Create a new variant view with the specified dataset.
+     *
+     * @param dataset dataset, must not be null
+     */
     VariantView(final VariantRDD dataset) {
         super();
         model = new VariantModel(dataset);
@@ -103,6 +108,11 @@ final class VariantView extends LabelFieldPanel {
         private final EventList<VCFHeaderLine> headerLines;
         private final EventList<Variant> variants;
 
+        /**
+         * Create a new variant model with the specified dataset.
+         *
+         * @param dataset dataset, must not be null
+         */
         VariantModel(final VariantRDD dataset) {
             this.dataset = dataset;
             variants = GlazedLists.eventList(new ArrayList<Variant>());
@@ -167,6 +177,11 @@ final class VariantView extends LabelFieldPanel {
         private static final String[] COLUMN_LABELS = { "Contig Name", "Start", "End", "Ref", "Alt" };
         private static final TableFormat<Variant> TABLE_FORMAT = GlazedLists.tableFormat(Variant.class, PROPERTY_NAMES, COLUMN_LABELS);
 
+        /**
+         * Create a new variant table with the specified model.
+         *
+         * @param model model, must not be null
+         */
         VariantTable(final VariantModel model) {
             super("Variants:", model.getVariants(), TABLE_FORMAT);
 

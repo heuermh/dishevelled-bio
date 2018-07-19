@@ -45,6 +45,11 @@ import org.dishevelled.layout.LabelFieldPanel;
  */
 final class SequenceView extends LabelFieldPanel {
 
+    /**
+     * Create a new sequence view with the specified sequences.
+     *
+     * @param sequences sequences, must not be null
+     */
     SequenceView(final EventList<SequenceRecord> sequences) {
         super();
         setBorder(new EmptyBorder(12, 12, 12, 12));
@@ -60,6 +65,11 @@ final class SequenceView extends LabelFieldPanel {
         private static final String[] COLUMN_LABELS = { "Name", "Length" };
         private static final TableFormat<SequenceRecord> TABLE_FORMAT = GlazedLists.tableFormat(SequenceRecord.class, PROPERTY_NAMES, COLUMN_LABELS);
 
+        /**
+         * Create a new sequence table with the specified sequences.
+         *
+         * @param sequences sequences, must not be null
+         */
         SequenceTable(final EventList<SequenceRecord> sequences) {
             super("Sequences:", sequences, TABLE_FORMAT);
 

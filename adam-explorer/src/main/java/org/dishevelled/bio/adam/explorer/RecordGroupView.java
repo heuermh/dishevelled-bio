@@ -45,6 +45,11 @@ import org.dishevelled.layout.LabelFieldPanel;
  */
 final class RecordGroupView extends LabelFieldPanel {
 
+    /**
+     * Create a new record group view with the specified record groups.
+     *
+     * @param recordGroups record groups, must not be null
+     */
     RecordGroupView(final EventList<RecordGroup> recordGroups) {
         super();
         setBorder(new EmptyBorder(12, 12, 12, 12));
@@ -60,6 +65,11 @@ final class RecordGroupView extends LabelFieldPanel {
         private static final String[] COLUMN_LABELS = { "Name", "Sample", "Sequencing Center", "Description", "Run Date", "Flow Order", "Key Sequence", "Library", "Insert Size", "Platform", "Platform Unit" };
         private static final TableFormat<RecordGroup> TABLE_FORMAT = GlazedLists.tableFormat(RecordGroup.class, PROPERTY_NAMES, COLUMN_LABELS);
 
+        /**
+         * Create a new record group table with the specified record groups.
+         *
+         * @param recordGroups record groups, must not be null
+         */
         RecordGroupTable(final EventList<RecordGroup> recordGroups) {
             super("Record groups:", recordGroups, TABLE_FORMAT);
 

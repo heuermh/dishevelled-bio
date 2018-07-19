@@ -65,6 +65,11 @@ final class FeatureView extends LabelFieldPanel {
     private final FeatureModel model;
     private final FeatureTable table;
 
+    /**
+     * Create a new feature view with the specified dataset.
+     *
+     * @param dataset dataset, must not be null
+     */
     FeatureView(final FeatureRDD dataset) {
         super();
         model = new FeatureModel(dataset);
@@ -99,6 +104,11 @@ final class FeatureView extends LabelFieldPanel {
         private final EventList<Contig> sequences;
         private final EventList<Feature> features;
 
+        /**
+         * Create a new feature model with the specified dataset.
+         *
+         * @param dataset dataset, must not be null
+         */
         FeatureModel(final FeatureRDD dataset) {
             this.dataset = dataset;
             features = GlazedLists.eventList(new ArrayList<Feature>());
@@ -157,6 +167,11 @@ final class FeatureView extends LabelFieldPanel {
         private static final String[] COLUMN_LABELS = { "Contig Name", "Start", "End", "Strand", "Name", "Identifier", "Type", "Score" };
         private static final TableFormat<Feature> TABLE_FORMAT = GlazedLists.tableFormat(Feature.class, PROPERTY_NAMES, COLUMN_LABELS);
 
+        /**
+         * Create a new feature table with the specified model.
+         *
+         * @param model model, must not be null
+         */
         FeatureTable(final FeatureModel model) {
             super("Features:", model.getFeatures(), TABLE_FORMAT);
 

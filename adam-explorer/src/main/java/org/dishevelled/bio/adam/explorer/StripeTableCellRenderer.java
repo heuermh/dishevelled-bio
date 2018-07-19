@@ -73,6 +73,11 @@ final class StripeTableCellRenderer extends DefaultTableCellRenderer {
         return label;
     }
 
+    /**
+     * Install a stripe table cell renderer for the specified table.
+     *
+     * @param table table, must not be null
+     */
     static void install(final JTable table) {
         StripeTableCellRenderer renderer = new StripeTableCellRenderer();
         table.setDefaultRenderer(Boolean.class, renderer);

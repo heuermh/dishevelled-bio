@@ -45,6 +45,11 @@ import org.dishevelled.layout.LabelFieldPanel;
  */
 final class ContigView extends LabelFieldPanel {
 
+    /**
+     * Create a new contig view with the specified sequences.
+     *
+     * @param sequences sequences, must not be null
+     */
     ContigView(final EventList<Contig> sequences) {
         super();
         setBorder(new EmptyBorder(12, 12, 12, 12));
@@ -60,6 +65,11 @@ final class ContigView extends LabelFieldPanel {
         private static final String[] COLUMN_LABELS = { "Index", "Name", "Length", "Assembly", "Species", "Checksum (md5)", "URL" };
         private static final TableFormat<Contig> TABLE_FORMAT = GlazedLists.tableFormat(Contig.class, PROPERTY_NAMES, COLUMN_LABELS);
 
+        /**
+         * Create a new contig table with the specified sequences.
+         *
+         * @param sequences sequences, must not be null
+         */
         ContigTable(final EventList<Contig> sequences) {
             super("Sequences:", sequences, TABLE_FORMAT);
 

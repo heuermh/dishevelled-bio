@@ -45,6 +45,11 @@ import org.dishevelled.layout.LabelFieldPanel;
  */
 final class SampleView extends LabelFieldPanel {
 
+    /**
+     * Create a new sample view with the specified samples.
+     *
+     * @param samples samples, must not be null
+     */
     SampleView(final EventList<Sample> samples) {
         super();
         setBorder(new EmptyBorder(12, 12, 12, 12));
@@ -60,6 +65,11 @@ final class SampleView extends LabelFieldPanel {
         private static final String[] COLUMN_LABELS = { "Name", "Identifier" }; // todo: include processing step table?
         private static final TableFormat<Sample> TABLE_FORMAT = GlazedLists.tableFormat(Sample.class, PROPERTY_NAMES, COLUMN_LABELS);
 
+        /**
+         * Create a new sample table with the specified samples.
+         *
+         * @param samples samples, must not be null
+         */
         SampleTable(final EventList<Sample> samples) {
             super("Samples:", samples, TABLE_FORMAT);
 

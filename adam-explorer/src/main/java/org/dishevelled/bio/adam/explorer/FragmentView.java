@@ -65,6 +65,11 @@ final class FragmentView extends LabelFieldPanel {
     private final FragmentModel model;
     private final FragmentTable table;
 
+    /**
+     * Create a new fragment view with the specified dataset.
+     *
+     * @param dataset dataset, must not be null
+     */
     FragmentView(final FragmentRDD dataset) {
         super();
         model = new FragmentModel(dataset);
@@ -99,6 +104,11 @@ final class FragmentView extends LabelFieldPanel {
         private final EventList<Contig> sequences;
         private final EventList<Fragment> fragments;
 
+        /**
+         * Create a new fragment model with the specified dataset.
+         *
+         * @param dataset dataset, must not be null
+         */
         FragmentModel(final FragmentRDD dataset) {
             this.dataset = dataset;
             fragments = GlazedLists.eventList(new ArrayList<Fragment>());
@@ -157,6 +167,11 @@ final class FragmentView extends LabelFieldPanel {
         private static final String[] COLUMN_LABELS = { "Name", "Insert Size", "Run", "Instrument", "Alignments" };
         private static final TableFormat<Fragment> TABLE_FORMAT = GlazedLists.tableFormat(Fragment.class, PROPERTY_NAMES, COLUMN_LABELS);
 
+        /**
+         * Create a new fragment table with the specified model.
+         *
+         * @param model model, must not be null
+         */
         FragmentTable(final FragmentModel model) {
             super("Fragments:", model.getFragments(), TABLE_FORMAT);
 

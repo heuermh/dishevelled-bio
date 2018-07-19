@@ -43,6 +43,12 @@ import org.bdgenomics.adam.rdd.variant.VariantRDD;
  */
 public final class ADAMExplorer {
 
+    /**
+     * Explore the specified alignments.
+     *
+     * @param alignments alignments to expore, must not be null
+     * @return an exit code
+     */
     public static int explore(final AlignmentRecordRDD alignments) {
         SwingUtilities.invokeLater(new Runnable() {
                 @Override
@@ -57,6 +63,12 @@ public final class ADAMExplorer {
      * Alignment explorer.
      */
     static class AlignmentExplorer extends JFrame {
+
+        /**
+         * Create a new alignment explorer.
+         *
+         * @param alignments alignments to explore, must not be null
+         */
         AlignmentExplorer(final AlignmentRecordRDD alignments) {
             super("Alignments");
             setSize(970, 600);
@@ -65,6 +77,12 @@ public final class ADAMExplorer {
         }
     }
 
+    /**
+     * Explore the specified features.
+     *
+     * @param features features to expore, must not be null
+     * @return an exit code
+     */
     public static int explore(final FeatureRDD features) {
         SwingUtilities.invokeLater(new Runnable() {
                 @Override
@@ -79,6 +97,12 @@ public final class ADAMExplorer {
      * Feature explorer.
      */
     static class FeatureExplorer extends JFrame {
+
+        /**
+         * Create a new feature explorer.
+         *
+         * @param features features to explore, must not be null
+         */
         FeatureExplorer(final FeatureRDD features) {
             super("Features");
             setSize(970, 600);
@@ -87,6 +111,12 @@ public final class ADAMExplorer {
         }
     }
 
+    /**
+     * Explore the specified fragments.
+     *
+     * @param fragments fragments to expore, must not be null
+     * @return an exit code
+     */
     public static int explore(final FragmentRDD fragments) {
         SwingUtilities.invokeLater(new Runnable() {
                 @Override
@@ -101,6 +131,12 @@ public final class ADAMExplorer {
      * Fragment explorer.
      */
     static class FragmentExplorer extends JFrame {
+
+        /**
+         * Create a new fragment explorer.
+         *
+         * @param fragments fragments to explore, must not be null
+         */
         FragmentExplorer(final FragmentRDD fragments) {
             super("Fragments");
             setSize(970, 600);
@@ -109,6 +145,12 @@ public final class ADAMExplorer {
         }
     }
 
+    /**
+     * Explore the specified genotypes.
+     *
+     * @param genotypes genotypes to expore, must not be null
+     * @return an exit code
+     */
     public static int explore(final GenotypeRDD genotypes) {
         SwingUtilities.invokeLater(new Runnable() {
                 @Override
@@ -123,6 +165,12 @@ public final class ADAMExplorer {
      * Genotype explorer.
      */
     static class GenotypeExplorer extends JFrame {
+
+        /**
+         * Create a new genotype explorer.
+         *
+         * @param genotypes genotypes to explore, must not be null
+         */
         GenotypeExplorer(final GenotypeRDD genotypes) {
             super("Genotypes");
             setSize(970, 600);
@@ -190,6 +238,12 @@ public final class ADAMExplorer {
     }
     */
 
+    /**
+     * Explore the specified variants.
+     *
+     * @param variants variants to expore, must not be null
+     * @return an exit code
+     */
     public static int explore(final VariantRDD variants) {
         SwingUtilities.invokeLater(new Runnable() {
                 @Override
@@ -204,6 +258,12 @@ public final class ADAMExplorer {
      * Variant explorer.
      */
     static class VariantExplorer extends JFrame {
+
+        /**
+         * Create a new variant explorer.
+         *
+         * @param variants variants to explore, must not be null
+         */
         VariantExplorer(final VariantRDD variants) {
             super("Variants");
             setSize(970, 600);

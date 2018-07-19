@@ -45,6 +45,11 @@ import org.dishevelled.layout.LabelFieldPanel;
  */
 final class ProcessingStepView extends LabelFieldPanel {
 
+    /**
+     * Create a new processing step view with the specified processing steps.
+     *
+     * @param processingSteps processing steps, must not be null
+     */
     ProcessingStepView(final EventList<ProcessingStep> processingSteps) {
         super();
         setBorder(new EmptyBorder(12, 12, 12, 12));
@@ -60,6 +65,11 @@ final class ProcessingStepView extends LabelFieldPanel {
         private static final String[] COLUMN_LABELS = { "Step", "Previous Step", "Program Name", "Version", "Command Line", "Description" };
         private static final TableFormat<ProcessingStep> TABLE_FORMAT = GlazedLists.tableFormat(ProcessingStep.class, PROPERTY_NAMES, COLUMN_LABELS);
 
+        /**
+         * Create a new processing step table with the specified processing steps.
+         *
+         * @param processingSteps processing steps, must not be null
+         */
         ProcessingStepTable(final EventList<ProcessingStep> processingSteps) {
             super("Processing steps:", processingSteps, TABLE_FORMAT);
 
