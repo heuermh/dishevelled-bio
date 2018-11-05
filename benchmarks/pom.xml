@@ -34,7 +34,7 @@
   <name>dsh-bio-benchmarks</name>
   <description>Benchmarks.</description>
   <properties>
-    <htsjdk.version>2.13.2</htsjdk.version>
+    <htsjdk.version>2.16.1</htsjdk.version>
     <jmh.version>1.19</jmh.version>
     <uberjar.name>dsh-bio-benchmarks</uberjar.name>
   </properties>
