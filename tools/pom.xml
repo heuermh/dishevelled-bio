@@ -204,6 +204,10 @@
           <repositoryName>lib</repositoryName>
           <programs>
             <program>
+              <id>dsh-compress-fastq</id>
+              <mainClass>org.dishevelled.bio.tools.CompressFastq</mainClass>
+            </program>
+            <program>
               <id>dsh-disinterleave-fastq</id>
               <mainClass>org.dishevelled.bio.tools.DisinterleaveFastq</mainClass>
             </program>

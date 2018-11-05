@@ -32,8 +32,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import java.util.concurrent.Callable;
-
 import org.apache.hadoop.conf.Configuration;
 
 import org.biojava.bio.program.fastq.Fastq;
