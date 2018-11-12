@@ -54,6 +54,7 @@
     <module>feature</module>
     <module>range</module>
     <module>read</module>
+    <module>sequence</module>
     <module>variant</module>
     <module>tools</module>
     <module>benchmarks</module>
