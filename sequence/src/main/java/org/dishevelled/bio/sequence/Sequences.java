@@ -163,13 +163,11 @@ public final class Sequences {
 
         bytes.mark();
         int length = sequence.length();
-        for (int i = 0; i < sequence.length(); i += 4) {
-            // todo: compare against direct charAt; string as byte array
-            String substring = sequence.substring(i, Math.min(length, i + 4));
-            int base0 = toInt(substring.charAt(0));
-            int base1 = substring.length() > 1 ? toInt(substring.charAt(1)) : 0;
-            int base2 = substring.length() > 2 ? toInt(substring.charAt(2)) : 0;
-            int base3 = substring.length() > 3 ? toInt(substring.charAt(3)) : 0;
+        for (int i = 0; i < length; i += 4) {
+            int base0 = toInt(sequence.charAt(i));
+            int base1 = (i + 1 < length) ? toInt(sequence.charAt(i + 1)) : 0;
+            int base2 = (i + 2 < length) ? toInt(sequence.charAt(i + 2)) : 0;
+            int base3 = (i + 3 < length) ? toInt(sequence.charAt(i + 3)) : 0;
             bytes.put((byte) ((base0 << 6) + (base1 << 4) + (base2 << 2) + base3));
         }
         bytes.reset();
@@ -300,11 +298,9 @@ public final class Sequences {
         checkNotNull(bytes);
         bytes.mark();
         int length = sequence.length();
-        for (int i = 0; i < sequence.length(); i += 2) {
-            // todo: compare against direct charAt; string as byte array
-            String substring = sequence.substring(i, Math.min(length, i + 2));
-            int base0 = nibbleToInt(substring.charAt(0));
-            int base1 = substring.length() > 1 ? nibbleToInt(substring.charAt(1)) : 0;
+        for (int i = 0; i < length; i += 2) {
+            int base0 = nibbleToInt(sequence.charAt(i));
+            int base1 = (i + 1 < length) ? nibbleToInt(sequence.charAt(i + 1)) : 0;
             bytes.put((byte) ((base0 << 4) + base1));
         }
         bytes.reset();
