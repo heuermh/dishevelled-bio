@@ -352,10 +352,22 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>timestamp-property</id>
+            <goals>
+              <goal>timestamp-property</goal>
+            </goals>
+            <configuration>
+              <name>build-helper-maven-plugin.build.timestamp</name>
+              <pattern>yyyy-MM-dd</pattern>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
-  <properties>
-    <maven.build.timestamp>${maven.build.timestamp}</maven.build.timestamp>
-    <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
-  </properties>
 </project>

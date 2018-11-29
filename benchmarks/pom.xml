@@ -34,45 +34,32 @@
   <name>dsh-bio-benchmarks</name>
   <description>Benchmarks.</description>
   <properties>
-    <htsjdk.version>2.16.1</htsjdk.version>
-    <jmh.version>1.19</jmh.version>
     <uberjar.name>dsh-bio-benchmarks</uberjar.name>
   </properties>
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>com.github.samtools</groupId>
-        <artifactId>htsjdk</artifactId>
-        <version>${htsjdk.version}</version>
+        <groupId>org.dishevelled</groupId>
+        <artifactId>dsh-bio-tools</artifactId>
+        <version>${project.version}</version>
+        <scope>compile</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>
     <dependency>
-      <groupId>com.github.samtools</groupId>
-      <artifactId>htsjdk</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>org.dishevelled</groupId>
       <artifactId>dsh-bio-tools</artifactId>
-      <version>${project.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.openjdk.jmh</groupId>
       <artifactId>jmh-core</artifactId>
-      <version>${jmh.version}</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.openjdk.jmh</groupId>
       <artifactId>jmh-generator-annprocess</artifactId>
-      <version>${jmh.version}</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
