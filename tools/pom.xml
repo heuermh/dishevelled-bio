@@ -364,6 +364,7 @@
             <configuration>
               <name>build-helper-maven-plugin.build.timestamp</name>
               <pattern>yyyy-MM-dd</pattern>
+              <locale>en_US</locale>
             </configuration>
           </execution>
         </executions>
