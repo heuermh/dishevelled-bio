@@ -47,6 +47,8 @@ import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.LongArgument;
 import org.dishevelled.commandline.argument.StringArgument;
 
+import org.dishevelled.compress.Compress;
+
 /**
  * Split GFF3 files.
  *
@@ -183,14 +185,18 @@ public final class SplitGff3 extends AbstractSplit {
                     s = getFileExtensions(inputFile.getValue());
                 }
                 else {
-                    // if (Compress.isBgzfInputStream(...)) {
-                    //   s = ".gff3.bgz";
-                    // else if (Compress.isGzipInputStream(...)) { // method does not yet exist
-                    //   s = ".gff3.gz";
-                    // else if (Compress.isBzip2InputStream(...)) { // method does not yet exist
-                    //   s = ".gff3.bz2"
-                    // }
-                    s = ".gff3";
+                    if (Compress.isBgzfInputStream(System.in)) {
+                        s = ".gff3.bgz";
+                    }
+                    else if (Compress.isGzipInputStream(System.in)) {
+                        s = ".gff3.gz";
+                    }
+                    else if (Compress.isBzip2InputStream(System.in)) {
+                        s = ".gff3.bz2";
+                    }
+                    else {
+                        s = ".gff3";
+                    }
                 }
             }
 

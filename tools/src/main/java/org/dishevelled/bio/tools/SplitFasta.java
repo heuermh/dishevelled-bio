@@ -49,6 +49,8 @@ import org.dishevelled.commandline.argument.IntegerArgument;
 import org.dishevelled.commandline.argument.LongArgument;
 import org.dishevelled.commandline.argument.StringArgument;
 
+import org.dishevelled.compress.Compress;
+
 /**
  * Split FASTA files.
  *
@@ -221,14 +223,18 @@ public final class SplitFasta extends AbstractSplit {
                     s = getFileExtensions(inputFile.getValue());
                 }
                 else {
-                    // if (Compress.isBgzfInputStream(...)) {
-                    //   s = ".fa.bgz";
-                    // else if (Compress.isGzipInputStream(...)) { // method does not yet exist
-                    //   s = ".fa.gz";
-                    // else if (Compress.isBzip2InputStream(...)) { // method does not yet exist
-                    //   s = ".fa.bz2"
-                    // }
-                    s = ".fa";
+                    if (Compress.isBgzfInputStream(System.in)) {
+                        s = ".fa.bgz";
+                    }
+                    else if (Compress.isGzipInputStream(System.in)) {
+                        s = ".fa.gz";
+                    }
+                    else if (Compress.isBzip2InputStream(System.in)) {
+                        s = ".fa.bz2";
+                    }
+                    else {
+                        s = ".fa";
+                    }
                 }
             }
 

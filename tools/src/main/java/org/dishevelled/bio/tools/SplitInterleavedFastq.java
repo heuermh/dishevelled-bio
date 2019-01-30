@@ -49,6 +49,8 @@ import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.LongArgument;
 import org.dishevelled.commandline.argument.StringArgument;
 
+import org.dishevelled.compress.Compress;
+
 /**
  * Split interleaved FASTQ files.
  *
@@ -186,14 +188,18 @@ public final class SplitInterleavedFastq extends AbstractSplit {
                     s = getFileExtensions(inputFile.getValue());
                 }
                 else {
-                    // if (Compress.isBgzfInputStream(...)) {
-                    //   s = ".ifq.bgz";
-                    // else if (Compress.isGzipInputStream(...)) { // method does not yet exist
-                    //   s = ".ifq.gz";
-                    // else if (Compress.isBzip2InputStream(...)) { // method does not yet exist
-                    //   s = ".ifq.bz2"
-                    // }
-                    s = ".ifq";
+                    if (Compress.isBgzfInputStream(System.in)) {
+                        s = ".ifq.bgz";
+                    }
+                    else if (Compress.isGzipInputStream(System.in)) {
+                        s = ".ifq.gz";
+                    }
+                    else if (Compress.isBzip2InputStream(System.in)) {
+                        s = ".ifq.bz2";
+                    }
+                    else {
+                        s = ".ifq";
+                    }
                 }
             }
 

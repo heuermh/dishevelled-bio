@@ -47,6 +47,8 @@ import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.LongArgument;
 import org.dishevelled.commandline.argument.StringArgument;
 
+import org.dishevelled.compress.Compress;
+
 /**
  * Split BED files.
  *
@@ -183,17 +185,20 @@ public final class SplitBed extends AbstractSplit {
                     s = getFileExtensions(inputFile.getValue());
                 }
                 else {
-                    // if (Compress.isBgzfInputStream(...)) {
-                    //   s = ".bed.bgz";
-                    // else if (Compress.isGzipInputStream(...)) { // method does not yet exist
-                    //   s = ".bed.gz";
-                    // else if (Compress.isBzip2InputStream(...)) { // method does not yet exist
-                    //   s = ".bed.bz2"
-                    // }
-                    s = ".bed";
+                    if (Compress.isBgzfInputStream(System.in)) {
+                        s = ".bed.bgz";
+                    }
+                    else if (Compress.isGzipInputStream(System.in)) {
+                        s = ".bed.gz";
+                    }
+                    else if (Compress.isBzip2InputStream(System.in)) {
+                        s = ".bed.bz2";
+                    }
+                    else {
+                        s = ".bed";
+                    }
                 }
             }
-
             splitBed = new SplitBed(inputFile.getValue(), b, records.getValue(), p, s);
         }
         catch (CommandLineParseException | NullPointerException e) {
