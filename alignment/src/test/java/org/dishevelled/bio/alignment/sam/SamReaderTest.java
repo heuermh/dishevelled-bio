@@ -1,7 +1,7 @@
 /*
 
     dsh-bio-alignment  Aligments.
-    Copyright (c) 2013-2018 held jointly by the individual authors.
+    Copyright (c) 2013-2019 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Lesser General Public License as published
@@ -38,7 +38,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -356,11 +355,11 @@ public final class SamReaderTest {
         assertEquals(180, count);
     }
 
-    private static URL createUrl(final String name) throws Exception {
+    private static URL createUrl(final String name) {
         return SamReaderTest.class.getResource(name);
     }
 
-    private static InputStream createInputStream(final String name) throws IOException {
+    private static InputStream createInputStream(final String name) {
         return SamReaderTest.class.getResourceAsStream(name);
     }
 

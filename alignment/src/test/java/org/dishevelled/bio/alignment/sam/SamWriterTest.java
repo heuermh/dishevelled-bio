@@ -1,7 +1,7 @@
 /*
 
     dsh-bio-alignment  Aligments.
-    Copyright (c) 2013-2018 held jointly by the individual authors.
+    Copyright (c) 2013-2019 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Lesser General Public License as published
@@ -26,7 +26,6 @@ package org.dishevelled.bio.alignment.sam;
 import static org.dishevelled.bio.alignment.sam.SamWriter.write;
 import static org.dishevelled.bio.alignment.sam.SamWriter.writeRecord;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayOutputStream;
@@ -52,7 +51,7 @@ public final class SamWriterTest {
     private static final String SAM_RECORD = "ERR194147.765130386\t99\tchr20\t60250\t60\t101M\t=\t60512\t363\tACTCCATCCCATTCCATTCCACTCCCTTCATTTCCATTCCAGTCCATTCCATTCCATTCCATTCCATTCCACTCCACTCCATTCCATTCCACTGCACTCCA\tCCCFFFFFHHHHHJJJJJJJJJJJJJJJJJJJJJJJJJIJJJJJJIIJJJJJJJJJJJJJHIIJIJGIJJJJJJJJJJJJJIJJJJJJJJJJJGGHHHFF@";
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         record = SamRecord.builder()
             .withQname("ERR194147.765130386")
             .withFlag(99)
@@ -84,17 +83,17 @@ public final class SamWriterTest {
     }
 
     @Test(expected=NullPointerException.class)
-    public void testWriteNullRecords() throws Exception {
+    public void testWriteNullRecords() {
         write(null, writer);
     }
 
     @Test(expected=NullPointerException.class)
-    public void testWriteNullPrintWriter() throws Exception {
+    public void testWriteNullPrintWriter() {
         write(records, null);
     }
 
     @Test
-    public void testWrite() throws Exception {
+    public void testWrite() {
         write(records, writer);
         writer.close();
         String sam = outputStream.toString();
@@ -113,17 +112,17 @@ public final class SamWriterTest {
     }
 
     @Test(expected=NullPointerException.class)
-    public void testWriteRecordNullRecord() throws Exception {
+    public void testWriteRecordNullRecord() {
         writeRecord(null, writer);
     }
 
     @Test(expected=NullPointerException.class)
-    public void testWriteRecordNullPrintWriter() throws Exception {
+    public void testWriteRecordNullPrintWriter() {
         writeRecord(record, null);
     }
 
     @Test
-    public void testWriteRecord() throws Exception {
+    public void testWriteRecord() {
         writeRecord(record, writer);
         writer.close();
         String sam = outputStream.toString();

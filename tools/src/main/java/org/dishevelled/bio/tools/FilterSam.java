@@ -1,7 +1,7 @@
 /*
 
     dsh-bio-tools  Command line tools.
-    Copyright (c) 2013-2018 held jointly by the individual authors.
+    Copyright (c) 2013-2019 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Lesser General Public License as published
@@ -59,7 +59,6 @@ import org.dishevelled.commandline.Usage;
 import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
 import org.dishevelled.commandline.argument.StringArgument;
-import org.dishevelled.commandline.argument.StringListArgument;
 
 /**
  * Filter alignments in SAM format.

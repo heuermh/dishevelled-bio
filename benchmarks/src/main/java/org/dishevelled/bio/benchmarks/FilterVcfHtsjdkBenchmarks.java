@@ -1,7 +1,7 @@
 /*
 
     dsh-bio-benchmarks.  Benchmarks.
-    Copyright (c) 2013-2018 held jointly by the individual authors.
+    Copyright (c) 2013-2019 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Lesser General Public License as published
@@ -26,8 +26,6 @@ package org.dishevelled.bio.benchmarks;
 import static org.dishevelled.bio.benchmarks.Utils.copyResource;
 
 import java.io.File;
-
-import com.google.common.collect.ImmutableList;
 
 import htsjdk.tribble.AbstractFeatureReader;
 
@@ -77,7 +75,7 @@ public class FilterVcfHtsjdkBenchmarks {
         return AbstractFeatureReader.getFeatureReader(inputVcfFile.getAbsolutePath(), new VCFCodec(), false);
     }
 
-    private VariantContextWriter createWriter() throws Exception {
+    private VariantContextWriter createWriter() {
         return new VariantContextWriterBuilder()
             .setOutputFile(outputVcfFile)
             .setOutputFileType(VariantContextWriterBuilder.OutputType.VCF)

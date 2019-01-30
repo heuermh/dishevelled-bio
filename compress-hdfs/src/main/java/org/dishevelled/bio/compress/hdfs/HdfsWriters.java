@@ -1,7 +1,7 @@
 /*
 
     dsh-bio-compress-hdfs  HDFS support for dsh-compress.
-    Copyright (c) 2013-2018 held jointly by the individual authors.
+    Copyright (c) 2013-2019 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Lesser General Public License as published
@@ -33,7 +33,6 @@ import static org.dishevelled.compress.Writers.bzip2OutputStreamWriter;
 import static org.dishevelled.compress.Writers.gzipOutputStreamWriter;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;

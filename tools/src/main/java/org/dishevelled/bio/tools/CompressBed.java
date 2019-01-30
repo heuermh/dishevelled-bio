@@ -1,7 +1,7 @@
 /*
 
     dsh-bio-tools  Command line tools.
-    Copyright (c) 2013-2018 held jointly by the individual authors.
+    Copyright (c) 2013-2019 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Lesser General Public License as published
@@ -28,7 +28,6 @@ import static org.dishevelled.compress.Writers.writer;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 
 import java.util.concurrent.Callable;
@@ -46,7 +45,6 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
-import org.dishevelled.commandline.argument.StringArgument;
 
 /**
  * Compress features in BED format to splittable bgzf or bzip2 compression codecs.

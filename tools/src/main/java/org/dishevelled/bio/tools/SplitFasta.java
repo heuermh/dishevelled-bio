@@ -1,7 +1,7 @@
 /*
 
     dsh-bio-tools  Command line tools.
-    Copyright (c) 2013-2018 held jointly by the individual authors.
+    Copyright (c) 2013-2019 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Lesser General Public License as published
@@ -137,10 +137,10 @@ public final class SplitFasta extends AbstractSplit {
     // copied with mods from biojava-legacy FastaFormat, as it uses PrintStream not PrintWriter
     static String describeSequence(final Sequence sequence) {
         return sequence.getAnnotation().containsProperty(DESCRIPTION_LINE) ?
-            (String) sequence.getAnnotation().getProperty(DESCRIPTION_LINE) : (String) sequence.getName();
+            (String) sequence.getAnnotation().getProperty(DESCRIPTION_LINE) : sequence.getName();
     }
 
-    static void writeSequence(final Sequence sequence, final int lineWidth, final PrintWriter writer) throws IOException {
+    static void writeSequence(final Sequence sequence, final int lineWidth, final PrintWriter writer) {
         writer.print(">");
         writer.println(describeSequence(sequence));
         for (int i = 1, length = sequence.length(); i <= length; i += lineWidth) {

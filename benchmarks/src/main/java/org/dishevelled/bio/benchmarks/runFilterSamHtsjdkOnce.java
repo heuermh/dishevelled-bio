@@ -1,7 +1,7 @@
 /*
 
     dsh-bio-benchmarks.  Benchmarks.
-    Copyright (c) 2013-2018 held jointly by the individual authors.
+    Copyright (c) 2013-2019 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Lesser General Public License as published
@@ -25,11 +25,6 @@ package org.dishevelled.bio.benchmarks;
 
 import java.io.File;
 
-import com.google.common.collect.ImmutableList;
-
-import com.google.common.io.Files;
-import com.google.common.io.Resources;
-
 import htsjdk.samtools.SAMFileWriter;
 import htsjdk.samtools.SAMFileWriterFactory;
 import htsjdk.samtools.SAMRecord;
@@ -43,7 +38,7 @@ import htsjdk.samtools.SamReaderFactory;
  */
 public final class runFilterSamHtsjdkOnce {
 
-    public static void filterSamByMapq() throws Exception {
+    public static void filterSamByMapq() {
         SamReader reader = null;
         SAMFileWriter writer = null;
         try {
@@ -79,7 +74,7 @@ public final class runFilterSamHtsjdkOnce {
      *
      * @param args command line arguments, ignored
      */
-    public static void main(final String args[]) throws Exception {
+    public static void main(final String args[]) {
         long t = System.nanoTime();
         filterSamByMapq();
         System.out.println("took " + (System.nanoTime() - t));

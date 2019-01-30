@@ -1,7 +1,7 @@
 /*
 
     dsh-bio-benchmarks.  Benchmarks.
-    Copyright (c) 2013-2018 held jointly by the individual authors.
+    Copyright (c) 2013-2019 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Lesser General Public License as published
@@ -65,7 +65,7 @@ public class FilterSamHtsjdkBenchmarks {
     }
 
     @Benchmark
-    public void filterSamByMapq() throws Exception {
+    public void filterSamByMapq() {
         SamReader reader = null;
         SAMFileWriter writer = null;
         try {

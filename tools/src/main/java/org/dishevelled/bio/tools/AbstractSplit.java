@@ -1,7 +1,7 @@
 /*
 
     dsh-bio-tools  Command line tools.
-    Copyright (c) 2013-2018 held jointly by the individual authors.
+    Copyright (c) 2013-2019 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Lesser General Public License as published
@@ -80,8 +80,8 @@ abstract class AbstractSplit implements Callable<Integer> {
         checkNotNull(prefix);
         checkNotNull(suffix);
         this.inputFile = inputFile;
-        this.bytes = bytes == null ? Long.MAX_VALUE : bytes.longValue();
-        this.records = records == null ? Long.MAX_VALUE : records.longValue();
+        this.bytes = bytes == null ? Long.MAX_VALUE : bytes;
+        this.records = records == null ? Long.MAX_VALUE : records;
         this.prefix = prefix;
         this.suffix = suffix;
     }
@@ -122,17 +122,17 @@ abstract class AbstractSplit implements Callable<Integer> {
         }
 
         @Override
-        protected void beforeWrite(final int n) throws IOException {
+        protected void beforeWrite(final int n) {
             count.addAndGet(n);
         }
 
         /**
          * Return the count of <code>char</code>s written to the writer
-         * proxyied by this counting writer.  Note the number of <code>char</code>s
+         * proxied by this counting writer.  Note the number of <code>char</code>s
          * written to the writer is not necessarily number of bytes written to disk.
          *
          * @return the count of <code>char</code>s written to the writer
-         *    proxyied by this counting writer
+         *    proxied by this counting writer
          */
         long getCount() {
             return count.longValue();

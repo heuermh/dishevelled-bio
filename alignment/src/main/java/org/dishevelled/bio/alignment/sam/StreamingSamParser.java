@@ -1,7 +1,7 @@
 /*
 
     dsh-bio-alignment  Aligments.
-    Copyright (c) 2013-2018 held jointly by the individual authors.
+    Copyright (c) 2013-2019 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Lesser General Public License as published
@@ -60,77 +60,77 @@ public final class StreamingSamParser {
                 private final SamRecord.Builder builder = SamRecord.builder();
 
                 @Override
-                public void lineNumber(final long lineNumber) throws IOException {
+                public void lineNumber(final long lineNumber) {
                     builder.withLineNumber(lineNumber);
                 }
 
                 @Override
-                public void qname(final String qname) throws IOException {
+                public void qname(final String qname) {
                     builder.withQname(qname);
                 }
 
                 @Override
-                public void flag(final int flag) throws IOException {
+                public void flag(final int flag) {
                     builder.withFlag(flag);
                 }
 
                 @Override
-                public void rname(final String rname) throws IOException {
+                public void rname(final String rname) {
                     builder.withRname(rname);
                 }
 
                 @Override
-                public void pos(final int pos) throws IOException {
+                public void pos(final int pos) {
                     builder.withPos(pos);
                 }
 
                 @Override
-                public void mapq(final int mapq) throws IOException {
+                public void mapq(final int mapq) {
                     builder.withMapq(mapq);
                 }
 
                 @Override
-                public void cigar(final String cigar) throws IOException {
+                public void cigar(final String cigar) {
                     builder.withCigar(cigar);
                 }
 
                 @Override
-                public void rnext(final String rnext) throws IOException {
+                public void rnext(final String rnext) {
                     builder.withRnext(rnext);
                 }
 
                 @Override
-                public void pnext(final int pnext) throws IOException {
+                public void pnext(final int pnext) {
                     builder.withPnext(pnext);
                 }
 
                 @Override
-                public void tlen(final int tlen) throws IOException {
+                public void tlen(final int tlen) {
                     builder.withTlen(tlen);
                 }
 
                 @Override
-                public void seq(final String seq) throws IOException {
+                public void seq(final String seq) {
                     builder.withSeq(seq);
                 }
 
                 @Override
-                public void qual(final String qual) throws IOException {
+                public void qual(final String qual) {
                     builder.withQual(qual);
                 }
 
                 @Override
-                public void field(final String tag, final String type, final String value) throws IOException {
+                public void field(final String tag, final String type, final String value) {
                     builder.withField(tag, type, value);
                 }
 
                 @Override
-                public void arrayField(final String tag, final String type, final String arrayType, final String... values) throws IOException {
+                public void arrayField(final String tag, final String type, final String arrayType, final String... values) {
                     builder.withArrayField(tag, type, arrayType, values);
                 }
 
                 @Override
-                public boolean complete() throws IOException {
+                public boolean complete() {
                     listener.record(builder.build());
                     builder.reset();
                     return true;
