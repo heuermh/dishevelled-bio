@@ -23,12 +23,11 @@
 */
 package org.dishevelled.bio.benchmarks;
 
+import static org.dishevelled.bio.benchmarks.Utils.copyResource;
+
 import java.io.File;
 
 import com.google.common.collect.ImmutableList;
-
-import com.google.common.io.Files;
-import com.google.common.io.Resources;
 
 import htsjdk.tribble.AbstractFeatureReader;
 
@@ -65,7 +64,7 @@ public class FilterVcfHtsjdkBenchmarks {
         inputVcfFile = File.createTempFile("filterVcfHtsjdkBenchmarks", ".vcf.gz");
         outputVcfFile = File.createTempFile("filterVcfHtsjdkBenchmarks", ".vcf.gz");
 
-        copyResource("NA12878.0.vcf.gz", inputVcfFile);
+        copyResource("HG001_GRCh38_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-10X-SOLID_CHROM1-X_v.3.3.2_highconf_PGandRTGphasetransfer.10k.0.vcf.gz", inputVcfFile);
     }
 
     @TearDown(Level.Invocation)
@@ -79,7 +78,11 @@ public class FilterVcfHtsjdkBenchmarks {
     }
 
     private VariantContextWriter createWriter() throws Exception {
-        return new VariantContextWriterBuilder().setOutputFile(outputVcfFile).setOutputFileType(VariantContextWriterBuilder.OutputType.VCF).unsetOption(Options.INDEX_ON_THE_FLY).build();
+        return new VariantContextWriterBuilder()
+            .setOutputFile(outputVcfFile)
+            .setOutputFileType(VariantContextWriterBuilder.OutputType.VCF)
+            .unsetOption(Options.INDEX_ON_THE_FLY)
+            .build();
     }
 
     @Benchmark
@@ -92,9 +95,5 @@ public class FilterVcfHtsjdkBenchmarks {
                 }
             }
         }
-    }
-
-    private static void copyResource(final String name, final File file) throws Exception {
-        Files.write(Resources.toByteArray(FilterVcfHtsjdkBenchmarks.class.getResource(name)), file);
     }
 }

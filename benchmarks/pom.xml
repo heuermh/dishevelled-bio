@@ -34,30 +34,32 @@
   <name>dsh-bio-benchmarks</name>
   <description>Benchmarks.</description>
   <properties>
-    <jmh.version>1.19</jmh.version>
     <uberjar.name>dsh-bio-benchmarks</uberjar.name>
   </properties>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.dishevelled</groupId>
+        <artifactId>dsh-bio-tools</artifactId>
+        <version>${project.version}</version>
+        <scope>compile</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <dependencies>
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <scope>compile</scope>
-    </dependency>
     <dependency>
       <groupId>org.dishevelled</groupId>
       <artifactId>dsh-bio-tools</artifactId>
-      <version>${project.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.openjdk.jmh</groupId>
       <artifactId>jmh-core</artifactId>
-      <version>${jmh.version}</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.openjdk.jmh</groupId>
       <artifactId>jmh-generator-annprocess</artifactId>
-      <version>${jmh.version}</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>

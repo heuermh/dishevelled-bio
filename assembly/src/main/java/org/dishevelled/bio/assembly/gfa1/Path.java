@@ -181,7 +181,7 @@ public final class Path extends Gfa1Record {
             .on(",")
             .splitToList(tokens.get(2))
             .stream()
-            .map(v -> Reference.valueOf(v))
+            .map(Reference::valueOf)
             .collect(Collectors.toList());
 
         List<String> overlaps = "*".equals(tokens.get(3)) ? null : ImmutableList.copyOf(Splitter.on(",").split(tokens.get(3)));

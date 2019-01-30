@@ -27,7 +27,7 @@
   <parent>
     <groupId>org.dishevelled</groupId>
     <artifactId>dsh-parent</artifactId>
-    <version>13</version>
+    <version>15-SNAPSHOT</version>
   </parent>
   <artifactId>dsh-bio</artifactId>
   <packaging>pom</packaging>
@@ -49,35 +49,39 @@
     <module>assembly</module>
     <module>convert</module>
     <module>convert-htsjdk</module>
+    <module>compress-hdfs</module>
     <module>feature</module>
     <module>range</module>
     <module>read</module>
+    <module>sequence</module>
     <module>variant</module>
     <module>tools</module>
     <module>benchmarks</module>
   </modules>
 
   <properties>
-    <adam.version>0.23.0</adam.version>
-    <bdg-convert.version>0.3.0</bdg-convert.version>
-    <biojava.version>1.9.2</biojava.version>
-    <commons-csv.version>1.4</commons-csv.version>
+    <adam.version>0.25.0</adam.version>
+    <bdg-convert.version>0.4.0</bdg-convert.version>
+    <biojava.version>1.9.3</biojava.version>
+    <commons-csv.version>1.6</commons-csv.version>
     <commons-codec.version>1.11</commons-codec.version>
-    <commons-io.version>2.5</commons-io.version>
-    <commons-math3.version>3.6</commons-math3.version>
+    <commons-io.version>2.6</commons-io.version>
+    <commons-math3.version>3.6.1</commons-math3.version>
     <dsh-bitset.version>3.0</dsh-bitset.version>
     <dsh-commandline.version>1.1</dsh-commandline.version>
-    <dsh-compress.version>1.2.1</dsh-compress.version>
+    <dsh-compress.version>1.3</dsh-compress.version>
     <dsh-graph.version>1.0</dsh-graph.version>
+    <hadoop.version>2.7.5</hadoop.version>
     <jdk.version>1.8</jdk.version>
-    <kryo-serializers.version>0.41</kryo-serializers.version>
+    <jmh.version>1.21</jmh.version>
+    <kryo-serializers.version>0.42</kryo-serializers.version>
     <maven.enforcer.maven-version>[3.1.1,)</maven.enforcer.maven-version>
     <maven.enforcer.jdk-version>[1.8,)</maven.enforcer.jdk-version>
     <rtree.version>0.4.1</rtree.version>
     <scala.version>2.11.12</scala.version>
     <scala.version.prefix>2.11</scala.version.prefix>
     <slf4j.version>1.7.25</slf4j.version>
-    <spark.version>2.2.0</spark.version>
+    <spark.version>2.3.2</spark.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -116,6 +120,11 @@
         <groupId>commons-codec</groupId>
         <artifactId>commons-codec</artifactId>
         <version>${commons-codec.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.hadoop</groupId>
+        <artifactId>hadoop-client</artifactId>
+        <version>${hadoop.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.spark</groupId>
@@ -206,6 +215,17 @@
         <version>${dsh-graph.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.openjdk.jmh</groupId>
+        <artifactId>jmh-core</artifactId>
+        <version>${jmh.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openjdk.jmh</groupId>
+        <artifactId>jmh-generator-annprocess</artifactId>
+        <version>${jmh.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
         <version>${slf4j.version}</version>
@@ -223,7 +243,12 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-shade-plugin</artifactId>
-          <version>2.4.3</version>
+          <version>3.2.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>3.0.0</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -245,7 +270,7 @@
                 <requireJavaVersion>
                   <version>${maven.enforcer.jdk-version}</version>
                 </requireJavaVersion>
-              </rules>    
+              </rules>
             </configuration>
           </execution>
         </executions>
@@ -261,7 +286,7 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
           <!-- todo:  must manually update the copyright dates here -->
-          <bottom>Copyright (c) 2013-2018 held jointly by the individual authors. Licensed under the &lt;a
+          <bottom>Copyright (c) 2013-2019 held jointly by the individual authors. Licensed under the &lt;a
             href="http://www.fsf.org/licensing/licenses/lgpl.html"&gt;GNU Lesser General Public License&lt;a&gt; (LGPL).
           </bottom>
         </configuration>

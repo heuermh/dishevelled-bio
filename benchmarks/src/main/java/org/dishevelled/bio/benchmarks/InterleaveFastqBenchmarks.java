@@ -23,10 +23,9 @@
 */
 package org.dishevelled.bio.benchmarks;
 
-import java.io.File;
+import static org.dishevelled.bio.benchmarks.Utils.copyResource;
 
-import com.google.common.io.Files;
-import com.google.common.io.Resources;
+import java.io.File;
 
 import org.dishevelled.bio.tools.InterleaveFastq;
 
@@ -71,9 +70,5 @@ public class InterleaveFastqBenchmarks {
     @Benchmark
     public void interleaveFastq() throws Exception {
         new InterleaveFastq(firstFastqFile, secondFastqFile, pairedFile, unpairedFile).call();
-    }
-
-    private static void copyResource(final String name, final File file) throws Exception {
-        Files.write(Resources.toByteArray(InterleaveFastqBenchmarks.class.getResource(name)), file);
     }
 }

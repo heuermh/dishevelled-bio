@@ -39,7 +39,7 @@ public abstract class GfaRecord {
     private final Map<String, Tag> tags;
 
     /**
-     * Create a new GFA record with the specifed tags.
+     * Create a new GFA record with the specified tags.
      *
      * @param tags tags, must not be null
      */

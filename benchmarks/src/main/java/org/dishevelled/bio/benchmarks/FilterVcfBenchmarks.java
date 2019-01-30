@@ -23,12 +23,11 @@
 */
 package org.dishevelled.bio.benchmarks;
 
+import static org.dishevelled.bio.benchmarks.Utils.copyResource;
+
 import java.io.File;
 
 import com.google.common.collect.ImmutableList;
-
-import com.google.common.io.Files;
-import com.google.common.io.Resources;
 
 import org.dishevelled.bio.tools.FilterVcf;
 import org.dishevelled.bio.tools.FilterVcf.QualFilter;
@@ -55,7 +54,7 @@ public class FilterVcfBenchmarks {
         inputVcfFile = File.createTempFile("filterVcfBenchmarks", ".vcf.gz");
         outputVcfFile = File.createTempFile("filterVcfBenchmarks", ".vcf.gz");
 
-        copyResource("NA12878.0.vcf.gz", inputVcfFile);
+        copyResource("HG001_GRCh38_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-10X-SOLID_CHROM1-X_v.3.3.2_highconf_PGandRTGphasetransfer.10k.0.vcf.gz", inputVcfFile);
     }
 
     @TearDown(Level.Invocation)
@@ -67,9 +66,5 @@ public class FilterVcfBenchmarks {
     @Benchmark
     public void filterVcfByQualityScore() throws Exception {
         new FilterVcf(ImmutableList.of(new QualFilter(30.0d)), inputVcfFile, outputVcfFile).call();
-    }
-
-    private static void copyResource(final String name, final File file) throws Exception {
-        Files.write(Resources.toByteArray(FilterVcfBenchmarks.class.getResource(name)), file);
     }
 }

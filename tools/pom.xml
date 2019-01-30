@@ -42,6 +42,11 @@
       </dependency>
       <dependency>
         <groupId>org.dishevelled</groupId>
+        <artifactId>dsh-bio-alignment</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.dishevelled</groupId>
         <artifactId>dsh-bio-assembly</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -135,6 +140,11 @@
     </dependency>
     <dependency>
       <groupId>org.dishevelled</groupId>
+      <artifactId>dsh-bio-alignment</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.dishevelled</groupId>
       <artifactId>dsh-bio-assembly</artifactId>
       <scope>compile</scope>
     </dependency>
@@ -194,6 +204,22 @@
           <repositoryName>lib</repositoryName>
           <programs>
             <program>
+              <id>dsh-compress-bed</id>
+              <mainClass>org.dishevelled.bio.tools.CompressBed</mainClass>
+            </program>
+            <program>
+              <id>dsh-compress-fastq</id>
+              <mainClass>org.dishevelled.bio.tools.CompressFastq</mainClass>
+            </program>
+            <program>
+              <id>dsh-compress-gff3</id>
+              <mainClass>org.dishevelled.bio.tools.CompressGff3</mainClass>
+            </program>
+            <program>
+              <id>dsh-compress-vcf</id>
+              <mainClass>org.dishevelled.bio.tools.CompressVcf</mainClass>
+            </program>
+            <program>
               <id>dsh-disinterleave-fastq</id>
               <mainClass>org.dishevelled.bio.tools.DisinterleaveFastq</mainClass>
             </program>
@@ -210,12 +236,20 @@
               <mainClass>org.dishevelled.bio.tools.ExtractFastq</mainClass>
             </program>
             <program>
+              <id>dsh-extract-fastq-by-length</id>
+              <mainClass>org.dishevelled.bio.tools.ExtractFastqByLength</mainClass>
+            </program>
+            <program>
               <id>dsh-fasta-to-fastq</id>
               <mainClass>org.dishevelled.bio.tools.FastaToFastq</mainClass>
             </program>
             <program>
               <id>dsh-fastq-description</id>
               <mainClass>org.dishevelled.bio.tools.FastqDescription</mainClass>
+            </program>
+            <program>
+              <id>dsh-fastq-sequence-length</id>
+              <mainClass>org.dishevelled.bio.tools.FastqSequenceLength</mainClass>
             </program>
             <program>
               <id>dsh-fastq-to-fasta</id>
@@ -318,10 +352,23 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>timestamp-property</id>
+            <goals>
+              <goal>timestamp-property</goal>
+            </goals>
+            <configuration>
+              <name>build-helper-maven-plugin.build.timestamp</name>
+              <pattern>yyyy-MM-dd</pattern>
+              <locale>en_US</locale>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
-  <properties>
-    <maven.build.timestamp>${maven.build.timestamp}</maven.build.timestamp>
-    <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
-  </properties>
 </project>

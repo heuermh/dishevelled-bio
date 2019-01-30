@@ -1,0 +1,33 @@
+
+    /**
+     * Return true if the optional fields for this SAM record contain
+     * the reserved key <code>${upper}</code>.
+     *
+     * @return if the optional fields for this SAM record contain
+     *    the reserved key <code>${upper}</code>
+     */
+    public boolean contains${mixed}() {
+        return containsFieldKey("${upper}");
+    }
+
+    /**
+     * Return the Type=${typeAbbrev} value for the reserved key <code>${upper}</code>
+     * as a ${typeDescription}.
+     *
+     * @return the Type=${typeAbbrev} value for the reserved key <code>${upper}</code>
+     *    as a ${typeDescription}
+     */
+    public ${typeReturnValue} get${mixed}() {
+        return getField${typeClass}("${upper}");
+    }
+
+    /**
+     * Return an optional Type=${typeAbbrev} value for the reserved key <code>${upper}</code>
+     * as a ${typeDescription}.
+     *
+     * @return an optional Type=${typeAbbrev} value for the reserved key <code>${upper}</code>
+     *   as a ${typeDescription}
+     */
+    public Optional<${typeClass}> get${mixed}Opt() {
+        return getInfo${typeClass}Opt("${upper}");
+    }

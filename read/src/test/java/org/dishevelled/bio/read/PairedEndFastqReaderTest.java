@@ -165,9 +165,39 @@ public final class PairedEndFastqReaderTest {
     }
 
     @Test
+    public void testIsLeftIlluminaMetadata() {
+        assertTrue(isLeft(Fastq.builder().withDescription("prefix 1:N:0:2").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
+        assertFalse(isLeft(Fastq.builder().withDescription("prefix 2:Y:2:42").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
+    }
+
+    @Test
+    public void testIsRightIlluminaMetadata() {
+        assertFalse(isRight(Fastq.builder().withDescription("prefix 1:N:0:2").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
+        assertTrue(isRight(Fastq.builder().withDescription("prefix 2:Y:2:42").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
+    }
+
+    @Test
     public void testPrefixIlluminaMetadata() {
         assertEquals("prefix", prefix(Fastq.builder().withDescription("prefix 1:N:0:2").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
         assertEquals("prefix", prefix(Fastq.builder().withDescription("prefix 2:Y:2:42").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
+    }
+
+    @Test
+    public void testIsLeftIndexSequences() {
+        assertTrue(isLeft(Fastq.builder().withDescription("HISEQ_HU01:89:H7YRLADXX:1:1101:1116:2123 1:N:0:ATCACG").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
+        assertFalse(isLeft(Fastq.builder().withDescription("HISEQ_HU01:89:H7YRLADXX:1:1101:1116:2123 2:N:0:ATCACG").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
+    }
+
+    @Test
+    public void testIsRightIndexSequences() {
+        assertFalse(isRight(Fastq.builder().withDescription("HISEQ_HU01:89:H7YRLADXX:1:1101:1116:2123 1:N:0:ATCACG").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
+        assertTrue(isRight(Fastq.builder().withDescription("HISEQ_HU01:89:H7YRLADXX:1:1101:1116:2123 2:N:0:ATCACG").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
+    }
+
+    @Test
+    public void testPrefixIndexSequences() {
+        assertEquals("HISEQ_HU01:89:H7YRLADXX:1:1101:1116:2123", prefix(Fastq.builder().withDescription("HISEQ_HU01:89:H7YRLADXX:1:1101:1116:2123 1:N:0:ATCACG").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
+        assertEquals("HISEQ_HU01:89:H7YRLADXX:1:1101:1116:2123", prefix(Fastq.builder().withDescription("HISEQ_HU01:89:H7YRLADXX:1:1101:1116:2123 2:N:0:ATCACG").withSequence("aaaaatttttcccccggggg").withQuality("44444222224444422222").build()));
     }
 
     @Test(expected=NullPointerException.class)
