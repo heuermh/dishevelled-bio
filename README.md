@@ -28,13 +28,19 @@ usage:
 dsh-bio [command] [args]
 
 commands:
+  compress-bed    compress features in BED format to splittable bgzf or bzip2 compression codecs
+  compress-fastq    compress sequences in FASTQ format to splittable bgzf or bzip2 compression codecs
+  compress-gff3    compress features in GFF3 format to splittable bgzf or bzip2 compression codecs
+  compress-vcf    compress variants and genotypes in VCF format to splittable bgzf or bzip2 compression codecs
   disinterleave-fastq    convert interleaved FASTQ format into first and second sequence files in FASTQ format
   downsample-fastq    downsample sequences from files in FASTQ format
   downsample-interleaved-fastq    downsample sequences from a file in interleaved FASTQ format
   extract-fasta    extract matching sequences in FASTA format
   extract-fastq    extract matching sequences in FASTQ format
+  extract-fastq-by-length    extract sequences in FASTQ format with a range of lengths
   fasta-to-fastq    convert sequences in FASTA format to FASTQ format
   fastq-description    output description lines from sequences in FASTQ format
+  fastq-sequence-length    output sequence lengths from sequences in FASTQ format
   fastq-to-fasta    convert sequences in FASTQ format to FASTA format
   filter-vcf    filter variants in VCF format
   gfa1-to-gfa2    convert GFA 1.0 format to GFA 2.0 format
@@ -52,6 +58,7 @@ commands:
 
 arguments:
    -a, --about  display about message [optional]
+   -v, --version  display about message [optional]
    -h, --help  display help message [optional]
 
 
@@ -60,6 +67,7 @@ usage:
 dsh-split-bed -r 100 -i foo.bed.gz
 
 arguments:
+   -a, --about  display about message [optional]
    -h, --help  display help message [optional]
    -i, --input-file [class java.io.File]  input BED file, default stdin [optional]
    -b, --bytes [class java.lang.String]  split input file at next record after each n bytes [optional]
@@ -76,6 +84,7 @@ usage:
 dsh-split-bed -r 100 -i foo.bed.gz
 
 arguments:
+   -a, --about  display about message [optional]
    -h, --help  display help message [optional]
    -i, --input-file [class java.io.File]  input BED file, default stdin [optional]
    -b, --bytes [class java.lang.String]  split input file at next record after each n bytes [optional]
