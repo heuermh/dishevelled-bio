@@ -60,30 +60,148 @@ public final class SamReadGroupHeaderLine extends AbstractSamHeaderLine {
 
     // optional fields
 
-    // CN, DS, DT, FO, KS, LB, PG, PI, PL, PM, PU, SM
+    public boolean containsCn() {
+        return containsFieldKey("CN");
+    }
+
+    public String getCn() {
+        return getField("CN");
+    }
+
+    public Optional<String> getCnOpt() {
+        return getFieldOpt("CN");
+    }
+
+    public boolean containsDs() {
+        return containsFieldKey("DS");
+    }
+
+    public String getDs() {
+        return getField("DS");
+    }
+
+    public Optional<String> getDsOpt() {
+        return getFieldOpt("DS");
+    }
+
+    public boolean containsDt() {
+        return containsFieldKey("DT");
+    }
+
+    public String getDt() {
+        return getField("DT");
+    }
+
+    public Optional<String> getDtOpt() {
+        return getFieldOpt("DT");
+    }
+
+    public boolean containsFo() {
+        return containsFieldKey("FO");
+    }
+
+    public String getFo() {
+        return getField("FO");
+    }
+
+    public Optional<String> getFoOpt() {
+        return getFieldOpt("FO");
+    }
+
+    public boolean containsKs() {
+        return containsFieldKey("KS");
+    }
+
+    public String getKs() {
+        return getField("KS");
+    }
+
+    public Optional<String> getKsOpt() {
+        return getFieldOpt("KS");
+    }
+
+    public boolean containsLb() {
+        return containsFieldKey("LB");
+    }
+
+    public String getLb() {
+        return getField("LB");
+    }
+
+    public Optional<String> getLbOpt() {
+        return getFieldOpt("LB");
+    }
     
-    public boolean containsSo() {
-        return containsFieldKey("SO");
+    public boolean containsPg() {
+        return containsFieldKey("PG");
     }
 
-    public String getSo() {
-        return getField("SO");
+    public String getPg() {
+        return getField("PG");
     }
 
-    public Optional<String> getSoOpt() {
-        return getFieldOpt("SO");
+    public Optional<String> getPgOpt() {
+        return getFieldOpt("PG");
     }
 
-    public boolean containsGo() {
-        return containsFieldKey("GO");
+    public boolean containsPi() {
+        return containsFieldKey("PI");
     }
 
-    public String getGo() {
-        return getField("GO");
+    public String getPi() {
+        return getField("PI");
     }
 
-    public Optional<String> getGoOpt() {
-        return getFieldOpt("GO");
+    public Optional<String> getPiOpt() {
+        return getFieldOpt("PI");
+    }
+
+    public boolean containsPl() {
+        return containsFieldKey("PL");
+    }
+
+    public String getPl() {
+        return getField("PL");
+    }
+
+    public Optional<String> getPlOpt() {
+        return getFieldOpt("PL");
+    }
+
+    public boolean containsPm() {
+        return containsFieldKey("PM");
+    }
+
+    public String getPm() {
+        return getField("PM");
+    }
+
+    public Optional<String> getPmOpt() {
+        return getFieldOpt("PM");
+    }
+
+    public boolean containsPu() {
+        return containsFieldKey("PU");
+    }
+
+    public String getPu() {
+        return getField("PU");
+    }
+
+    public Optional<String> getPuOpt() {
+        return getFieldOpt("PU");
+    }
+
+    public boolean containsSm() {
+        return containsFieldKey("SM");
+    }
+
+    public String getSm() {
+        return getField("SM");
+    }
+
+    public Optional<String> getSmOpt() {
+        return getFieldOpt("SM");
     }
 
     @Override
@@ -98,20 +216,82 @@ public final class SamReadGroupHeaderLine extends AbstractSamHeaderLine {
         sb.append(getId());
 
         // optional fields
-        if (containsSo()) {
+        if (containsCn()) {
             sb.append("\t");
-            sb.append("SO:");
-            sb.append(getSo());
+            sb.append("CN:");
+            sb.append(getCn());
         }
-        if (containsGo()) {
+        if (containsDs()) {
             sb.append("\t");
-            sb.append("GO:");
-            sb.append(getGo());
+            sb.append("DS:");
+            sb.append(getDs());
+        }
+        if (containsDt()) {
+            sb.append("\t");
+            sb.append("DT:");
+            sb.append(getDt());
+        }
+        if (containsFo()) {
+            sb.append("\t");
+            sb.append("FO:");
+            sb.append(getFo());
+        }
+        if (containsKs()) {
+            sb.append("\t");
+            sb.append("KS:");
+            sb.append(getKs());
+        }
+        if (containsLb()) {
+            sb.append("\t");
+            sb.append("LB:");
+            sb.append(getLb());
+        }
+        if (containsPg()) {
+            sb.append("\t");
+            sb.append("PG:");
+            sb.append(getPg());
+        }
+        if (containsPi()) {
+            sb.append("\t");
+            sb.append("PI:");
+            sb.append(getPi());
+        }
+        if (containsPl()) {
+            sb.append("\t");
+            sb.append("PL:");
+            sb.append(getPl());
+        }
+        if (containsPm()) {
+            sb.append("\t");
+            sb.append("PM:");
+            sb.append(getPm());
+        }
+        if (containsPu()) {
+            sb.append("\t");
+            sb.append("PU:");
+            sb.append(getPu());
+        }
+        if (containsSm()) {
+            sb.append("\t");
+            sb.append("SM:");
+            sb.append(getSm());
         }
 
         // remaining fields
         Set<String> remainingKeys = new HashSet<String>(getFields().keySet());
         remainingKeys.remove("ID");
+        remainingKeys.remove("CN");
+        remainingKeys.remove("DS");
+        remainingKeys.remove("DT");
+        remainingKeys.remove("FO");
+        remainingKeys.remove("KS");
+        remainingKeys.remove("LB");
+        remainingKeys.remove("PG");
+        remainingKeys.remove("PI");
+        remainingKeys.remove("PL");
+        remainingKeys.remove("PM");
+        remainingKeys.remove("PU");
+        remainingKeys.remove("SM");
 
         for (String key : remainingKeys) {
             sb.append("\t");

@@ -60,30 +60,64 @@ public final class SamProgramHeaderLine extends AbstractSamHeaderLine {
 
     // optional fields
 
-    // PN, CL, PP, DS, VN
-
-    public boolean containsSo() {
-        return containsFieldKey("SO");
+    public boolean containsPn() {
+        return containsFieldKey("PN");
     }
 
-    public String getSo() {
-        return getField("SO");
+    public String getPn() {
+        return getField("PN");
     }
 
-    public Optional<String> getSoOpt() {
-        return getFieldOpt("SO");
+    public Optional<String> getPnOpt() {
+        return getFieldOpt("PN");
     }
 
-    public boolean containsGo() {
-        return containsFieldKey("GO");
+    public boolean containsCl() {
+        return containsFieldKey("CL");
     }
 
-    public String getGo() {
-        return getField("GO");
+    public String getCl() {
+        return getField("CL");
     }
 
-    public Optional<String> getGoOpt() {
-        return getFieldOpt("GO");
+    public Optional<String> getClOpt() {
+        return getFieldOpt("CL");
+    }
+
+    public boolean containsPp() {
+        return containsFieldKey("PP");
+    }
+
+    public String getPp() {
+        return getField("PP");
+    }
+
+    public Optional<String> getPpOpt() {
+        return getFieldOpt("PP");
+    }
+
+    public boolean containsDs() {
+        return containsFieldKey("DS");
+    }
+
+    public String getDs() {
+        return getField("DS");
+    }
+
+    public Optional<String> getDsOpt() {
+        return getFieldOpt("DS");
+    }
+
+    public boolean containsVn() {
+        return containsFieldKey("VN");
+    }
+
+    public String getVn() {
+        return getField("VN");
+    }
+
+    public Optional<String> getVnOpt() {
+        return getFieldOpt("VN");
     }
 
     @Override
@@ -98,20 +132,40 @@ public final class SamProgramHeaderLine extends AbstractSamHeaderLine {
         sb.append(getId());
 
         // optional fields
-        if (containsSo()) {
+        if (containsPn()) {
             sb.append("\t");
-            sb.append("SO:");
-            sb.append(getSo());
+            sb.append("PN:");
+            sb.append(getPn());
         }
-        if (containsGo()) {
+        if (containsCl()) {
             sb.append("\t");
-            sb.append("GO:");
-            sb.append(getGo());
+            sb.append("CL:");
+            sb.append(getCl());
+        }
+        if (containsPp()) {
+            sb.append("\t");
+            sb.append("PP:");
+            sb.append(getPp());
+        }
+        if (containsDs()) {
+            sb.append("\t");
+            sb.append("DS:");
+            sb.append(getDs());
+        }
+        if (containsVn()) {
+            sb.append("\t");
+            sb.append("VN:");
+            sb.append(getVn());
         }
 
         // remaining fields
         Set<String> remainingKeys = new HashSet<String>(getFields().keySet());
         remainingKeys.remove("ID");
+        remainingKeys.remove("PN");
+        remainingKeys.remove("CL");
+        remainingKeys.remove("PP");
+        remainingKeys.remove("DS");
+        remainingKeys.remove("VN");
 
         for (String key : remainingKeys) {
             sb.append("\t");
