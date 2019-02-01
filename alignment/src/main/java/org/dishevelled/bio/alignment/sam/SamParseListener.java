@@ -41,6 +41,14 @@ public interface SamParseListener {
     void lineNumber(long lineNumber) throws IOException;
 
     /**
+     * Notify this parse listener of a header line.
+     *
+     * @param headerLine header line
+     * @throws IOException if an I/O error occurs
+     */
+    void headerLine(String headerLine) throws IOException;
+
+    /**
      * Notify this parse listener of a QNAME mandatory field.
      *
      * @param qname QNAME mandatory field

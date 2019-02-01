@@ -38,6 +38,11 @@ public class SamParseAdapter implements SamParseListener {
     }
 
     @Override
+    public void headerLine(final String headerLine) throws IOException {
+        // empty
+    }
+
+    @Override
     public void qname(final String qname) throws IOException {
         // empty
     }

@@ -1671,7 +1671,7 @@ public final class SamRecord {
      * @return if the optional fields for this SAM record contain
      *    the reserved key <code>QT</code>
      */
-    public boolean containsQT() {
+    public boolean containsQt() {
         return containsFieldKey("QT");
     }
 
@@ -1682,7 +1682,7 @@ public final class SamRecord {
      * @return the Type=Z value for the reserved key <code>QT</code>
      *    as a string
      */
-    public String getQT() {
+    public String getQt() {
         return getFieldString("QT");
     }
 
@@ -1693,7 +1693,7 @@ public final class SamRecord {
      * @return an optional Type=Z value for the reserved key <code>QT</code>
      *   as a string
      */
-    public Optional<String> getQTOpt() {
+    public Optional<String> getQtOpt() {
         return getFieldStringOpt("QT");
     }
 
@@ -1704,7 +1704,7 @@ public final class SamRecord {
      * @return if the optional fields for this SAM record contain
      *    the reserved key <code>QX</code>
      */
-    public boolean containsQX() {
+    public boolean containsQx() {
         return containsFieldKey("QX");
     }
 
@@ -1715,7 +1715,7 @@ public final class SamRecord {
      * @return the Type=Z value for the reserved key <code>QX</code>
      *    as a string
      */
-    public String getQX() {
+    public String getQx() {
         return getFieldString("QX");
     }
 
@@ -1726,7 +1726,7 @@ public final class SamRecord {
      * @return an optional Type=Z value for the reserved key <code>QX</code>
      *   as a string
      */
-    public Optional<String> getQXOpt() {
+    public Optional<String> getQxOpt() {
         return getFieldStringOpt("QX");
     }
 

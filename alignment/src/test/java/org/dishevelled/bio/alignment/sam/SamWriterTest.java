@@ -44,14 +44,20 @@ import org.junit.Test;
  * @author  Michael Heuer
  */
 public final class SamWriterTest {
+    private SamHeader header;
     private SamRecord record;
     private List<SamRecord> records;
     private ByteArrayOutputStream outputStream;
     private PrintWriter writer;
+    private static final String SAM_HEADER = "@HD\tVN:1.5\tSO:coordinate";
     private static final String SAM_RECORD = "ERR194147.765130386\t99\tchr20\t60250\t60\t101M\t=\t60512\t363\tACTCCATCCCATTCCATTCCACTCCCTTCATTTCCATTCCAGTCCATTCCATTCCATTCCATTCCATTCCACTCCACTCCATTCCATTCCACTGCACTCCA\tCCCFFFFFHHHHHJJJJJJJJJJJJJJJJJJJJJJJJJIJJJJJJIIJJJJJJJJJJJJJHIIJIJGIJJJJJJJJJJJJJIJJJJJJJJJJJGGHHHFF@";
 
     @Before
     public void setUp() {
+        header = SamHeader.builder()
+            .withHeaderLine(SamHeaderLine.valueOf(SAM_HEADER))
+            .build();
+
         record = SamRecord.builder()
             .withQname("ERR194147.765130386")
             .withFlag(99)
@@ -83,21 +89,26 @@ public final class SamWriterTest {
     }
 
     @Test(expected=NullPointerException.class)
+    public void testWriteNullHeaders() {
+        write(null, records, writer);
+    }
+
+    @Test(expected=NullPointerException.class)
     public void testWriteNullRecords() {
-        write(null, writer);
+        write(header, null, writer);
     }
 
     @Test(expected=NullPointerException.class)
     public void testWriteNullPrintWriter() {
-        write(records, null);
+        write(header, records, null);
     }
 
     @Test
     public void testWrite() {
-        write(records, writer);
+        write(header, records, writer);
         writer.close();
         String sam = outputStream.toString();
-        assertTrue(sam.startsWith(SAM_RECORD));
+        assertTrue(sam.startsWith(SAM_HEADER));
         assertTrue(sam.contains("NM:i:0"));
         assertTrue(sam.contains("MD:Z:101"));
         assertTrue(sam.contains("AS:i:101"));

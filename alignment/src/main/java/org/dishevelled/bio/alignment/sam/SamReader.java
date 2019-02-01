@@ -93,9 +93,9 @@ public final class SamReader {
      * @return the SAM header read from the specified readable
      * @throws IOException if an I/O error occurs
      */
-    //public static SamHeader header(final Readable readable) throws IOException {
-    //    return SamHeaderParser.header(readable);
-    //}
+    public static SamHeader header(final Readable readable) throws IOException {
+        return SamHeaderParser.header(readable);
+    }
 
     /**
      * Read zero or more SAM records from the specified readable.
@@ -105,7 +105,6 @@ public final class SamReader {
      * @throws IOException if an I/O error occurs
      */
     public static Iterable<SamRecord> records(final Readable readable) throws IOException {
-        //return SamRecordParser.records(readable);
         Collect collect = new Collect();
         StreamingSamParser.stream(readable, collect);
         return collect.getRecords();
@@ -114,7 +113,7 @@ public final class SamReader {
     /**
      * Collect.
      */
-    private static final class Collect implements SamStreamListener {
+    private static final class Collect extends SamStreamAdapter {
         /** Arbitrary large capacity for list of SAM records. */
         private static final int CAPACITY = 10000000;
 
@@ -145,13 +144,13 @@ public final class SamReader {
      * @return the SAM header read from the specified file
      * @throws IOException if an I/O error occurs
      */
-    //public static SamHeader header(final File file) throws IOException {
-    //    checkNotNull(file);
-    //    // could also use Files.asCharSource(file, Charsets.UTF_8).openBufferedStream()
-    //    try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-    //        return header(reader);
-    //    }
-    //}
+    public static SamHeader header(final File file) throws IOException {
+        checkNotNull(file);
+        // could also use Files.asCharSource(file, Charsets.UTF_8).openBufferedStream()
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            return header(reader);
+        }
+    }
 
     /**
      * Read the SAM header from the specified URL.
@@ -160,12 +159,12 @@ public final class SamReader {
      * @return the SAM header read from the specified URL
      * @throws IOException if an I/O error occurs
      */
-    //public static SamHeader header(final URL url) throws IOException {
-    //    checkNotNull(url);
-    //    try (BufferedReader reader = Resources.asCharSource(url, Charsets.UTF_8).openBufferedStream()) {
-    //        return header(reader);
-    //    }
-    //}
+    public static SamHeader header(final URL url) throws IOException {
+        checkNotNull(url);
+        try (BufferedReader reader = Resources.asCharSource(url, Charsets.UTF_8).openBufferedStream()) {
+            return header(reader);
+        }
+    }
 
     /**
      * Read the SAM header from the specified input stream.
@@ -174,12 +173,12 @@ public final class SamReader {
      * @return the SAM header read from the specified input stream
      * @throws IOException if an I/O error occurs
      */
-    //public static SamHeader header(final InputStream inputStream) throws IOException {
-    //    checkNotNull(inputStream);
-    //    try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-    //        return header(reader);
-    //    }
-    //}
+    public static SamHeader header(final InputStream inputStream) throws IOException {
+        checkNotNull(inputStream);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            return header(reader);
+        }
+    }
 
     /**
      * Read zero or more SAM records from the specified file.

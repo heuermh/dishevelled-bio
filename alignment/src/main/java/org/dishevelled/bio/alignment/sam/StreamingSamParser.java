@@ -56,83 +56,131 @@ public final class StreamingSamParser {
         checkNotNull(listener);
 
         SamParser.parse(readable, new SamParseAdapter() {
+                /** Line number. */
+                private long lineNumber = 0L;
+
+                /** True if the header is complete. */
+                private boolean headerComplete = false;
+
+                /** SAM header builder. */
+                private final SamHeader.Builder headerBuilder = SamHeader.builder();
+
                 /** SAM record builder. */
-                private final SamRecord.Builder builder = SamRecord.builder();
+                private final SamRecord.Builder recordBuilder = SamRecord.builder();
 
                 @Override
                 public void lineNumber(final long lineNumber) {
-                    builder.withLineNumber(lineNumber);
+                    this.lineNumber = lineNumber;
+                    recordBuilder.withLineNumber(lineNumber);
+                }
+
+                @Override
+                public void headerLine(final String headerLine) throws IOException {
+                    try {
+                        if (headerLine.startsWith("@HD")) {
+                            headerBuilder.withHeaderLine(SamHeaderLine.valueOf(headerLine));
+                        }
+                        else if (headerLine.startsWith("@SQ")) {
+                            headerBuilder.withSequenceHeaderLine(SamSequenceHeaderLine.valueOf(headerLine));
+                        }
+                        else if (headerLine.startsWith("@RG")) {
+                            headerBuilder.withReadGroupHeaderLine(SamReadGroupHeaderLine.valueOf(headerLine));
+                        }
+                        else if (headerLine.startsWith("@PG")) {
+                            headerBuilder.withProgramHeaderLine(SamProgramHeaderLine.valueOf(headerLine));
+                        }
+                        else if (headerLine.startsWith("@CO")) {
+                            headerBuilder.withCommentHeaderLine(SamCommentHeaderLine.valueOf(headerLine));
+                        }
+                        else {
+                            String tag = headerLine.substring(0, Math.min(3, headerLine.length()));
+                            throw new IOException("found invalid SAM header line tag " + tag + " at line number " + lineNumber);
+                        }
+                    }
+                    catch (IllegalArgumentException e) {
+                        throw new IOException("could not parse SAM header line at line number " + lineNumber + ", caught " + e.getMessage(), e);
+                    }
                 }
 
                 @Override
                 public void qname(final String qname) {
-                    builder.withQname(qname);
+                    recordBuilder.withQname(qname);
                 }
 
                 @Override
                 public void flag(final int flag) {
-                    builder.withFlag(flag);
+                    recordBuilder.withFlag(flag);
                 }
 
                 @Override
                 public void rname(final String rname) {
-                    builder.withRname(rname);
+                    recordBuilder.withRname(rname);
                 }
 
                 @Override
                 public void pos(final int pos) {
-                    builder.withPos(pos);
+                    recordBuilder.withPos(pos);
                 }
 
                 @Override
                 public void mapq(final int mapq) {
-                    builder.withMapq(mapq);
+                    recordBuilder.withMapq(mapq);
                 }
 
                 @Override
                 public void cigar(final String cigar) {
-                    builder.withCigar(cigar);
+                    recordBuilder.withCigar(cigar);
                 }
 
                 @Override
                 public void rnext(final String rnext) {
-                    builder.withRnext(rnext);
+                    recordBuilder.withRnext(rnext);
                 }
 
                 @Override
                 public void pnext(final int pnext) {
-                    builder.withPnext(pnext);
+                    recordBuilder.withPnext(pnext);
                 }
 
                 @Override
                 public void tlen(final int tlen) {
-                    builder.withTlen(tlen);
+                    recordBuilder.withTlen(tlen);
                 }
 
                 @Override
                 public void seq(final String seq) {
-                    builder.withSeq(seq);
+                    recordBuilder.withSeq(seq);
                 }
 
                 @Override
                 public void qual(final String qual) {
-                    builder.withQual(qual);
+                    recordBuilder.withQual(qual);
                 }
 
                 @Override
                 public void field(final String tag, final String type, final String value) {
-                    builder.withField(tag, type, value);
+                    recordBuilder.withField(tag, type, value);
                 }
 
                 @Override
                 public void arrayField(final String tag, final String type, final String arrayType, final String... values) {
-                    builder.withArrayField(tag, type, arrayType, values);
+                    recordBuilder.withArrayField(tag, type, arrayType, values);
                 }
 
                 @Override
-                public boolean complete() {
-                    listener.record(builder.build());
-                    builder.reset();
+                public boolean complete() throws IOException {
+                    if (!headerComplete) {
+                        try {
+                            listener.header(headerBuilder.build());
+                        }
+                        catch (IllegalArgumentException e) {
+                            throw new IOException("could not parse SAM header, caught " + e.getMessage(), e);
+                        }
+                        headerComplete = true;
+                    }
+
+                    listener.record(recordBuilder.build());
+                    recordBuilder.reset();
                     return true;
                 }
             });

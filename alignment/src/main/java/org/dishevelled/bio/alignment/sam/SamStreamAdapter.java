@@ -31,6 +31,11 @@ package org.dishevelled.bio.alignment.sam;
 public class SamStreamAdapter implements SamStreamListener {
 
     @Override
+    public void header(final SamHeader header) {
+        // empty
+    }
+
+    @Override
     public void record(final SamRecord record) {
         // empty
     }

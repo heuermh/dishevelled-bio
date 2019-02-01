@@ -95,13 +95,12 @@ public final class SamParser {
         @Override
         public boolean processLine(final String line) throws IOException {
             lineNumber++;
+            listener.lineNumber(lineNumber);
 
             if (line.startsWith("@")) {
-                // todo: header
+                listener.headerLine(line);
             }
             else {
-                listener.lineNumber(lineNumber);
-
                 List<String> tokens = Splitter.on("\t").splitToList(line);
                 if (tokens.size() < 11) {
                     throw new IOException("invalid record at line number " + lineNumber + ", expected 11 or more tokens, found " + tokens.size());

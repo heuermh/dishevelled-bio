@@ -71,7 +71,7 @@ public final class SamReaderTest {
 
     @Before
     public void setUp() {
-        readable = CharBuffer.wrap("@HD	VN:1.5\tSO:coordinate");
+        readable = CharBuffer.wrap("@HD\tVN:1.5\tSO:coordinate");
         emptyReadable = CharBuffer.wrap("");
         parseListener = new SamParseAdapter();
         streamListener = new SamStreamAdapter();

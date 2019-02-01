@@ -31,6 +31,13 @@ package org.dishevelled.bio.alignment.sam;
 public interface SamStreamListener {
 
     /**
+     * Notify this listener of a SAM header.
+     *
+     * @param header SAM header
+     */
+    void header(SamHeader header);
+
+    /**
      * Notify this listener of a SAM record.
      *
      * @param record SAM record

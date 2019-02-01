@@ -27,8 +27,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.PrintWriter;
 
-import java.util.List;
-
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Joiner;
@@ -55,9 +53,51 @@ public final class SamWriter {
      * @param records zero or more SAM records, must not be null
      * @param writer print writer to write SAM with, must not be null
      */
-    public static void write(final List<SamRecord> records,
+    public static void write(final SamHeader header,
+                             final Iterable<SamRecord> records,
                              final PrintWriter writer) {
 
+        checkNotNull(header);
+        checkNotNull(records);
+        checkNotNull(writer);
+
+        writeHeader(header, writer);
+        writeRecords(records, writer);
+    }
+
+    /**
+     * Write SAM header with the specified print writer.
+     *
+     * @param header SAM header, must not be null
+     * @param writer print writer to write SAM with, must not be null
+     */
+    public static void writeHeader(final SamHeader header, final PrintWriter writer) {
+        checkNotNull(header);
+        checkNotNull(writer);
+
+        header.getHeaderLineOpt().ifPresent(hl -> writer.println(hl));
+        for (SamSequenceHeaderLine sequenceHeaderLine : header.getSequenceHeaderLines()) {
+            writer.println(sequenceHeaderLine);
+        }
+        for (SamReadGroupHeaderLine readGroupHeaderLine : header.getReadGroupHeaderLines()) {
+            writer.println(readGroupHeaderLine);
+        }
+        for (SamProgramHeaderLine programHeaderLine : header.getProgramHeaderLines()) {
+            writer.println(programHeaderLine);
+        }
+        for (SamCommentHeaderLine commentHeaderLine : header.getCommentHeaderLines()) {
+            writer.println(commentHeaderLine);
+        }
+    }
+
+    /**
+     * Write SAM records with the specified print writer.
+     *
+     * @param records zero or more SAM records, must not be null
+     * @param writer print writer to write SAM with, must not be null
+     */
+    public static void writeRecords(final Iterable<SamRecord> records,
+                                    final PrintWriter writer) {
         checkNotNull(records);
         checkNotNull(writer);
 
