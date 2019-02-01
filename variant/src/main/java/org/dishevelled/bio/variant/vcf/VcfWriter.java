@@ -59,7 +59,7 @@ public final class VcfWriter {
      */
     public static void write(final VcfHeader header,
                              final List<VcfSample> samples,
-                             final List<VcfRecord> records,
+                             final Iterable<VcfRecord> records,
                              final PrintWriter writer) {
 
         writeHeader(header, writer);
@@ -111,7 +111,7 @@ public final class VcfWriter {
      * @param writer print writer to write VCF with, must not be null
      */
     public static void writeRecords(final List<VcfSample> samples,
-                                    final List<VcfRecord> records,
+                                    final Iterable<VcfRecord> records,
                                     final PrintWriter writer) {
         checkNotNull(samples);
         checkNotNull(records);

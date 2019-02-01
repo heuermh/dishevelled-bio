@@ -234,6 +234,7 @@ public final class VcfHeaderLines {
     public VcfHeaderLine getFileFormat() {
         return fileFormat;
     }
+
     /**
      * Return VCF key=value header lines.
      *

@@ -30,11 +30,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.concurrent.Immutable;
+
 /**
  * VCF header parser.
  *
  * @author  Michael Heuer
  */
+@Immutable
 public final class VcfHeaderParser {
 
     /**
