@@ -39,6 +39,12 @@ import java.util.regex.Pattern;
 
 import java.util.concurrent.Callable;
 
+import javax.script.Compilable;
+import javax.script.CompiledScript;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Range;
 
@@ -253,6 +259,43 @@ public final class FilterVcf implements Callable<Integer> {
     }
 
     /**
+     * Script filter.
+     */
+    public static final class ScriptFilter implements Filter {
+        /** Compiled script. */
+        private final CompiledScript compiledScript;
+
+        /**
+         * Create a new script filter with the specified script.
+         *
+         * @param script script
+         */
+        public ScriptFilter(final String script) {
+            ScriptEngineManager factory = new ScriptEngineManager();
+            ScriptEngine engine = factory.getEngineByName("JavaScript");
+            try {
+                Compilable compilable = (Compilable) engine;
+                compiledScript = compilable.compile("function test(r) { return (" + script + ") }\nvar result = test(r)");
+            }
+            catch (ScriptException e) {
+                throw new IllegalArgumentException("could not compile script, caught " + e.getMessage(), e);
+            }
+         }
+
+        @Override
+        public boolean accept(final VcfRecord record) {
+            try {
+                compiledScript.getEngine().put("r", record);
+                compiledScript.eval();
+                return (Boolean) compiledScript.getEngine().get("result");
+            }
+            catch (ScriptException e) {
+                throw new RuntimeException("could not evaluate compiled script, caught " + e.getMessage(), e);
+            }
+        }
+    }
+
+    /**
      * Main.
      *
      * @param args command line args
@@ -264,10 +307,11 @@ public final class FilterVcf implements Callable<Integer> {
         StringArgument rangeFilter = new StringArgument("r", "range", "filter by range, specify as chrom:start-end in 0-based coordindates", false);
         DoubleArgument qualFilter = new DoubleArgument("q", "qual", "filter by quality score", false);
         Switch filterFilter = new Switch("f", "filter", "filter to records that have passed all filters");
+        StringArgument scriptFilter = new StringArgument("e", "script", "filter by script, eval against r", false);
         FileArgument inputVcfFile = new FileArgument("i", "input-vcf-file", "input VCF file, default stdin", false);
         FileArgument outputVcfFile = new FileArgument("o", "output-vcf-file", "output VCF file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, idFilter, rangeFilter, qualFilter, filterFilter, inputVcfFile, outputVcfFile);
+        ArgumentList arguments = new ArgumentList(about, help, idFilter, rangeFilter, qualFilter, filterFilter, scriptFilter, inputVcfFile, outputVcfFile);
         CommandLine commandLine = new CommandLine(args);
 
         FilterVcf filterVcf = null;
@@ -293,7 +337,10 @@ public final class FilterVcf implements Callable<Integer> {
             }
             if (filterFilter.wasFound()) {
                 filters.add(new FilterFilter());
-            }            
+            }
+            if (scriptFilter.wasFound()) {
+                filters.add(new ScriptFilter(scriptFilter.getValue()));
+            }
             filterVcf = new FilterVcf(filters, inputVcfFile.getValue(), outputVcfFile.getValue());
         }
         catch (CommandLineParseException e) {

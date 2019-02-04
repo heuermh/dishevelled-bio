@@ -39,11 +39,18 @@ import java.util.regex.Pattern;
 
 import java.util.concurrent.Callable;
 
+import javax.script.Compilable;
+import javax.script.CompiledScript;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Range;
 
 import org.dishevelled.bio.range.Ranges;
 
+import org.dishevelled.bio.alignment.sam.SamHeader;
 import org.dishevelled.bio.alignment.sam.SamReader;
 import org.dishevelled.bio.alignment.sam.SamRecord;
 import org.dishevelled.bio.alignment.sam.SamWriter;
@@ -69,7 +76,7 @@ public final class FilterSam implements Callable<Integer> {
     private final List<Filter> filters;
     private final File inputSamFile;
     private final File outputSamFile;
-    private static final String USAGE = "dsh-filter-sam --mapq 30 -i input.sam.gz -o output.sam.gz";
+    private static final String USAGE = "dsh-filter-sam --mapq 30 -i input.sam.bgz -o output.sam.bgz";
 
 
     /**
@@ -95,6 +102,11 @@ public final class FilterSam implements Callable<Integer> {
 
             final PrintWriter w = writer;
             SamReader.stream(reader(inputSamFile), new SamStreamAdapter() {
+                    @Override
+                    public void header(final SamHeader header) {
+                        SamWriter.writeHeader(header, w);
+                    }
+
                     @Override
                     public void record(final SamRecord record) {
                         // write out record
@@ -193,6 +205,43 @@ public final class FilterSam implements Callable<Integer> {
     }
 
     /**
+     * Script filter.
+     */
+    public static final class ScriptFilter implements Filter {
+        /** Compiled script. */
+        private final CompiledScript compiledScript;
+
+        /**
+         * Create a new script filter with the specified script.
+         *
+         * @param script script
+         */
+        public ScriptFilter(final String script) {
+            ScriptEngineManager factory = new ScriptEngineManager();
+            ScriptEngine engine = factory.getEngineByName("JavaScript");
+            try {
+                Compilable compilable = (Compilable) engine;
+                compiledScript = compilable.compile("function test(r) { return (" + script + ") }\nvar result = test(r)");
+            }
+            catch (ScriptException e) {
+                throw new IllegalArgumentException("could not compile script, caught " + e.getMessage(), e);
+            }
+         }
+
+        @Override
+        public boolean accept(final SamRecord record) {
+            try {
+                compiledScript.getEngine().put("r", record);
+                compiledScript.eval();
+                return (Boolean) compiledScript.getEngine().get("result");
+            }
+            catch (ScriptException e) {
+                throw new RuntimeException("could not evaluate compiled script, caught " + e.getMessage(), e);
+            }
+        }
+    }
+
+    /**
      * Main.
      *
      * @param args command line args
@@ -202,10 +251,11 @@ public final class FilterSam implements Callable<Integer> {
         Switch help = new Switch("h", "help", "display help message");
         StringArgument rangeFilter = new StringArgument("r", "range", "filter by range, specify as chrom:start-end in 0-based coordindates", false);
         IntegerArgument mapqFilter = new IntegerArgument("q", "mapq", "filter by mapq", false);
+        StringArgument scriptFilter = new StringArgument("e", "script", "filter by script, eval against r", false);
         FileArgument inputSamFile = new FileArgument("i", "input-sam-file", "input SAM file, default stdin", false);
         FileArgument outputSamFile = new FileArgument("o", "output-sam-file", "output SAM file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, rangeFilter, mapqFilter, inputSamFile, outputSamFile);
+        ArgumentList arguments = new ArgumentList(about, help, rangeFilter, mapqFilter, scriptFilter, inputSamFile, outputSamFile);
         CommandLine commandLine = new CommandLine(args);
 
         FilterSam filterSam = null;
@@ -225,6 +275,9 @@ public final class FilterSam implements Callable<Integer> {
             }
             if (mapqFilter.wasFound()) {
                 filters.add(new MapqFilter(mapqFilter.getValue()));
+            }
+            if (scriptFilter.wasFound()) {
+                filters.add(new ScriptFilter(scriptFilter.getValue()));
             }
             filterSam = new FilterSam(filters, inputSamFile.getValue(), outputSamFile.getValue());
         }
