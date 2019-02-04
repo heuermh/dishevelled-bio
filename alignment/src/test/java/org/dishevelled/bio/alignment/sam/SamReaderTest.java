@@ -23,6 +23,7 @@
 */
 package org.dishevelled.bio.alignment.sam;
 
+import static org.dishevelled.bio.alignment.sam.SamReader.header;
 import static org.dishevelled.bio.alignment.sam.SamReader.parse;
 import static org.dishevelled.bio.alignment.sam.SamReader.stream;
 import static org.dishevelled.bio.alignment.sam.SamReader.records;
@@ -30,6 +31,7 @@ import static org.dishevelled.bio.alignment.sam.SamReader.records;
 import static org.apache.commons.codec.binary.Hex.decodeHex;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -46,8 +48,10 @@ import java.net.URL;
 import java.nio.CharBuffer;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
@@ -117,6 +121,71 @@ public final class SamReaderTest {
                     }
                 });
         }
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testHeaderNullReadable() throws Exception {
+        header((Readable) null);
+    }
+
+    @Test
+    public void testHeaderEmptyReadable() throws Exception {
+        SamHeader header = header(emptyReadable);
+        assertFalse(header.getHeaderLineOpt().isPresent());
+        assertTrue(header.getSequenceHeaderLines().isEmpty());
+        assertTrue(header.getReadGroupHeaderLines().isEmpty());
+        assertTrue(header.getProgramHeaderLines().isEmpty());
+        assertTrue(header.getCommentHeaderLines().isEmpty());
+    }
+
+    @Test
+    public void testHeader() throws Exception {
+        SamHeader header = header(readable);
+        assertTrue(header.getHeaderLineOpt().isPresent());
+        SamHeaderLine headerLine = header.getHeaderLineOpt().get();
+        assertEquals("1.5", headerLine.getVn());
+        assertEquals("1.5", headerLine.getField("VN"));
+        assertTrue(headerLine.getFieldOpt("VN").isPresent());
+        assertEquals("1.5", headerLine.getFieldOpt("VN").get());
+        assertEquals("1.5", headerLine.getFields().get("VN"));
+        assertEquals("coordinate", headerLine.getSo());
+        assertEquals("coordinate", headerLine.getFields().get("SO"));
+        assertFalse(headerLine.containsGo());
+        assertFalse(headerLine.getFields().containsKey("GO"));
+        assertTrue(header.getSequenceHeaderLines().isEmpty());
+        assertTrue(header.getReadGroupHeaderLines().isEmpty());
+        assertTrue(header.getProgramHeaderLines().isEmpty());
+        assertTrue(header.getCommentHeaderLines().isEmpty());
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testHeadeNullFile() throws Exception {
+        header((File) null);
+    }
+
+    @Test
+    public void testHeaderFile() throws Exception {
+        validateHeader(header(createFile(SAM)));
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testHeaderNullUrl() throws Exception {
+        header((URL) null);
+    }
+
+    @Test
+    public void testHeaderUrl() throws Exception {
+        validateHeader(header(createUrl(SAM)));
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testHeaderNullInputStream() throws Exception {
+        header((InputStream) null);
+    }
+
+    @Test
+    public void testHeaderInputStream() throws Exception {
+        validateHeader(header(createInputStream(SAM)));
     }
 
     @Test(expected=NullPointerException.class)
@@ -314,6 +383,81 @@ public final class SamReaderTest {
         assertEquals(expected.getFieldString("ZZ"), observed.getFieldString("ZZ"));
         assertEquals(expected.getFieldIntegers("ZB"), observed.getFieldIntegers("ZB"));
         assertEquals(expected.getFieldFloats("ZT"), observed.getFieldFloats("ZT"));
+    }
+
+    @Test
+    public void testRoundTripWholeFile() throws Exception {
+        SamHeader expectedHeader = header(createFile(SAM));
+        Iterable<SamRecord> expectedRecords = records(createFile(SAM));
+        SamRecord expectedRecord = expectedRecords.iterator().next();
+
+        File tmp = File.createTempFile("samReaderTest", ".sam");
+        tmp.deleteOnExit();
+        try (PrintWriter writer = new PrintWriter(new FileWriter(tmp))) {
+            SamWriter.write(expectedHeader, expectedRecords, writer);
+        }
+
+        SamHeader observedHeader = header(tmp);
+        assertTrue(observedHeader.getHeaderLineOpt().isPresent());
+        assertEquals(expectedHeader.getSequenceHeaderLines().size(), observedHeader.getSequenceHeaderLines().size());
+        assertEquals(expectedHeader.getReadGroupHeaderLines().size(), observedHeader.getReadGroupHeaderLines().size());
+        assertEquals(expectedHeader.getProgramHeaderLines().size(), observedHeader.getProgramHeaderLines().size());
+        assertEquals(expectedHeader.getCommentHeaderLines().size(), observedHeader.getCommentHeaderLines().size());
+
+        Iterable<SamRecord> observedRecords = records(tmp);
+        assertEquals(Iterables.size(expectedRecords), Iterables.size(observedRecords));
+    }
+
+    private static void validateHeader(final SamHeader header) {
+        assertNotNull(header);
+
+        assertTrue(header.getHeaderLineOpt().isPresent());
+        SamHeaderLine headerLine = header.getHeaderLineOpt().get();
+        assertEquals("1.5", headerLine.getVn());
+        assertEquals("1.5", headerLine.getFields().get("VN"));
+        assertEquals("coordinate", headerLine.getSo());
+        assertEquals("coordinate", headerLine.getFields().get("SO"));
+        assertFalse(headerLine.containsGo());
+        assertFalse(headerLine.getFields().containsKey("GO"));
+
+        assertFalse(header.getSequenceHeaderLines().isEmpty());
+        for (SamSequenceHeaderLine sequenceHeaderLine : header.getSequenceHeaderLines()) {
+            if ("chr6".equals(sequenceHeaderLine.getSn())) {
+                assertEquals("chr6", sequenceHeaderLine.getFields().get("SN"));
+                assertEquals("170805979", sequenceHeaderLine.getLn());
+                assertEquals("170805979", sequenceHeaderLine.getFields().get("LN"));
+                assertFalse(sequenceHeaderLine.containsSp());
+                assertFalse(sequenceHeaderLine.getFields().containsKey("SP"));
+            }
+        }
+
+        assertFalse(header.getReadGroupHeaderLines().isEmpty());
+        assertEquals(1, header.getReadGroupHeaderLines().size());
+        SamReadGroupHeaderLine readGroupHeaderLine = header.getReadGroupHeaderLines().get(0);
+        assertEquals("NA12878-1", readGroupHeaderLine.getId());
+        assertEquals("NA12878-1", readGroupHeaderLine.getFields().get("ID"));
+        assertEquals("NA12878-1", readGroupHeaderLine.getSm());
+        assertEquals("NA12878-1", readGroupHeaderLine.getPu());
+        assertEquals("illumina", readGroupHeaderLine.getPl());
+        assertEquals("illumina", readGroupHeaderLine.getFields().get("PL"));
+
+        assertFalse(header.getProgramHeaderLines().isEmpty());
+        for (SamProgramHeaderLine programHeaderLine : header.getProgramHeaderLines()) {
+            if ("bwa_3".equals(programHeaderLine.getId())) {
+                assertEquals("bwa_3", programHeaderLine.getFields().get("ID"));
+                assertEquals("bwa", programHeaderLine.getPn());
+                assertEquals("0.7.15-r1140", programHeaderLine.getVn());
+                assertEquals("0.7.15-r1140", programHeaderLine.getFields().get("VN"));
+            }
+        }
+
+        assertFalse(header.getCommentHeaderLines().isEmpty());
+        for (SamCommentHeaderLine commentHeaderLine : header.getCommentHeaderLines()) {
+            if ("all".equals(commentHeaderLine.getFields().get("ST")) && "all".equals(commentHeaderLine.getFields().get("PA"))) {
+                assertEquals("checksum", commentHeaderLine.getFields().get("TY"));
+                assertEquals("crc32prod", commentHeaderLine.getFields().get("HA"));
+            }
+        }
     }
 
     private static void validateRecord(final SamRecord record) {

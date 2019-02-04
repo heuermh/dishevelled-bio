@@ -450,7 +450,4 @@ public final class SamHeader {
                                  commentHeaderLines);
         }
     }
-
-    // use SamHeaderWriter for writing, SamHeaderParser for parsing
-    // do not include toString or valueOf
 }
