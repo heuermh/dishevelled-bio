@@ -220,6 +220,10 @@
               <mainClass>org.dishevelled.bio.tools.CompressVcf</mainClass>
             </program>
             <program>
+              <id>dsh-compress-sam</id>
+              <mainClass>org.dishevelled.bio.tools.CompressSam</mainClass>
+            </program>
+            <program>
               <id>dsh-disinterleave-fastq</id>
               <mainClass>org.dishevelled.bio.tools.DisinterleaveFastq</mainClass>
             </program>
@@ -298,6 +302,10 @@
             <program>
               <id>dsh-split-interleaved-fastq</id>
               <mainClass>org.dishevelled.bio.tools.SplitInterleavedFastq</mainClass>
+            </program>
+            <program>
+              <id>dsh-split-sam</id>
+              <mainClass>org.dishevelled.bio.tools.SplitSam</mainClass>
             </program>
             <program>
               <id>dsh-split-vcf</id>
