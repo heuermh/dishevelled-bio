@@ -49,6 +49,7 @@ import org.dishevelled.commandline.argument.FileArgument;
 /**
  * Output sequence lengths from sequences in FASTQ format.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 public final class FastqSequenceLength implements Callable<Integer> {

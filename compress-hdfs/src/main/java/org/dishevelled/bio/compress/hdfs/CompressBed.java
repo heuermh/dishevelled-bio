@@ -42,6 +42,7 @@ import org.dishevelled.bio.feature.BedWriter;
 /**
  * Compress features in BED format on HDFS to splittable bgzf or bzip2 compression codecs.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 public final class CompressBed {

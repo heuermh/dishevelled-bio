@@ -33,6 +33,7 @@ import java.nio.ByteBuffer;
 /**
  * Utility methods on sequences.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 public final class Sequences {

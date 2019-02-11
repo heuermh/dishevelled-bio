@@ -49,6 +49,7 @@ import org.dishevelled.commandline.argument.FileArgument;
 /**
  * Compress features in BED format to splittable bgzf or bzip2 compression codecs.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 public final class CompressBed implements Callable<Integer> {

@@ -46,6 +46,7 @@ import org.dishevelled.bio.alignment.sam.SamStreamAdapter;
 /**
  * Compress alignments in SAM format on HDFS to splittable bgzf or bzip2 compression codecs.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 public final class CompressSam {

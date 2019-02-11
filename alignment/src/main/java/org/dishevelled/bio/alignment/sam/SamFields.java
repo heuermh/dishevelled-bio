@@ -42,6 +42,7 @@ import org.apache.commons.codec.DecoderException;
 /**
  * Utility methods on SAM fields.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 @Immutable

@@ -38,6 +38,7 @@ import javax.annotation.concurrent.Immutable;
 /**
  * SAM read group header line.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 @Immutable

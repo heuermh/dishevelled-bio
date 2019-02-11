@@ -46,6 +46,7 @@ import com.google.common.io.Resources;
 /**
  * SAM reader.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 @Immutable

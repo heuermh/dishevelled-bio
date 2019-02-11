@@ -32,6 +32,7 @@ import com.google.common.io.Resources;
 /**
  * Benchmarks utility methods.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 final class Utils {

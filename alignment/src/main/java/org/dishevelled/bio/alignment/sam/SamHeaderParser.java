@@ -36,6 +36,7 @@ import com.google.common.collect.ImmutableMap;
 /**
  * SAM header parser.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 @Immutable

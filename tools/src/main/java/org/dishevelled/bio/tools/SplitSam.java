@@ -56,6 +56,7 @@ import org.dishevelled.compress.Compress;
 /**
  * Split SAM files.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 public final class SplitSam extends AbstractSplit {

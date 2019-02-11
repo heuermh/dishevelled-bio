@@ -28,6 +28,7 @@ import java.io.IOException;
 /**
  * SAM parse listener.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 public interface SamParseListener {

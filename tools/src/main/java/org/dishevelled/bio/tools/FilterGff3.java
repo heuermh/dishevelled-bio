@@ -69,6 +69,7 @@ import org.dishevelled.commandline.argument.StringArgument;
 /**
  * Filter features in GFF3 format.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 public final class FilterGff3 implements Callable<Integer> {

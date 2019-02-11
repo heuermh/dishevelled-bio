@@ -38,6 +38,7 @@ import com.google.common.collect.ImmutableList;
 /**
  * SAM header.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 @Immutable

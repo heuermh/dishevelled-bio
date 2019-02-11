@@ -50,6 +50,7 @@ import org.openjdk.jmh.annotations.TearDown;
 /**
  * FilterVcf-equivalent in htsjdk benchmarks.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 @State(Scope.Thread)

@@ -53,6 +53,7 @@ import org.dishevelled.commandline.argument.IntegerArgument;
 /**
  * Extract sequences in FASTQ format with a range of lengths.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 @SuppressWarnings("deprecation")

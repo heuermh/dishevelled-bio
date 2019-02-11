@@ -28,6 +28,7 @@ import java.io.IOException;
 /**
  * Abstract implementation of SamParseListener.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 public class SamParseAdapter implements SamParseListener {

@@ -47,6 +47,7 @@ import org.dishevelled.bio.variant.vcf.VcfStreamAdapter;
 /**
  * Compress variants and genotypes in VCF format on HDFS to splittable bgzf or bzip2 compression codecs.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 public final class CompressVcf {

@@ -49,6 +49,7 @@ import com.google.common.collect.ListMultimap;
 /**
  * SAM record.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 @Immutable

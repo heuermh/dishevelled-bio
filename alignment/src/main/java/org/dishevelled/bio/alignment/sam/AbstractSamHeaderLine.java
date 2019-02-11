@@ -35,6 +35,7 @@ import com.google.common.collect.ImmutableMap;
 /**
  * Abstract SAM header line.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 abstract class AbstractSamHeaderLine {

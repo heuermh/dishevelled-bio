@@ -260,6 +260,8 @@ public final class FilterVcf implements Callable<Integer> {
 
     /**
      * Script filter.
+     *
+     * @since 1.1
      */
     public static final class ScriptFilter implements Filter {
         /** Compiled script. */

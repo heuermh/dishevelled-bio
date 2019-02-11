@@ -45,6 +45,7 @@ import org.apache.hadoop.fs.Path;
 /**
  * HDFS readers with support for bgzf, gzip, and bzip2 compression.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 public final class HdfsReaders {

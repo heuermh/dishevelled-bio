@@ -45,6 +45,7 @@ import org.biojava.bio.program.fastq.StreamListener;
 /**
  * Compress sequences in FASTQ format on HDFS to splittable bgzf or bzip2 compression codecs.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 public final class CompressFastq {

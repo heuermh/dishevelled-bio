@@ -53,6 +53,7 @@ import org.dishevelled.commandline.argument.FileArgument;
 /**
  * Compress alignments in SAM format to splittable bgzf or bzip2 compression codecs.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 public final class CompressSam implements Callable<Integer> {

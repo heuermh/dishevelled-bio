@@ -54,6 +54,7 @@ import org.dishevelled.commandline.argument.FileArgument;
 /**
  * Compress variants or genotypes in VCF format to splittable bgzf or bzip2 compression codecs.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 public final class CompressVcf implements Callable<Integer> {

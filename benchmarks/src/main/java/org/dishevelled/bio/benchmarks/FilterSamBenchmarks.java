@@ -42,6 +42,7 @@ import org.openjdk.jmh.annotations.TearDown;
 /**
  * FilterSam benchmarks.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 @State(Scope.Thread)

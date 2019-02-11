@@ -34,6 +34,7 @@ import com.google.common.base.Joiner;
 /**
  * SAM writer.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 @Immutable

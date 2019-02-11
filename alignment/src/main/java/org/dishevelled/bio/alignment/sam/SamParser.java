@@ -39,6 +39,7 @@ import com.google.common.io.LineProcessor;
 /**
  * Low-level SAM parser.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 @Immutable

@@ -26,6 +26,7 @@ package org.dishevelled.bio.alignment.sam;
 /**
  * SAM stream listener.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 public interface SamStreamListener {

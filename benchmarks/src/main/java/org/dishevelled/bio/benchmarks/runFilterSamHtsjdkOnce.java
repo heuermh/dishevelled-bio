@@ -34,6 +34,7 @@ import htsjdk.samtools.SamReaderFactory;
 /**
  * Separate main to run FilterSam-equivalent in htsjdk benchmark once.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 public final class runFilterSamHtsjdkOnce {

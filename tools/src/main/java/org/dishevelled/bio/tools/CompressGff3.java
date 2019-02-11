@@ -49,6 +49,7 @@ import org.dishevelled.commandline.argument.FileArgument;
 /**
  * Compress features in GFF3 format to splittable bgzf or bzip2 compression codecs.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 public final class CompressGff3 implements Callable<Integer> {

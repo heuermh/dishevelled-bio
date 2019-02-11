@@ -26,6 +26,7 @@ package org.dishevelled.bio.alignment.sam;
 /**
  * Abstract implementation of SamStreamListener.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 public class SamStreamAdapter implements SamStreamListener {

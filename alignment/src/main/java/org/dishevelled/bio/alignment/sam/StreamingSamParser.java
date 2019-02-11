@@ -32,6 +32,7 @@ import javax.annotation.concurrent.Immutable;
 /**
  * Streaming SAM parser.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 @Immutable

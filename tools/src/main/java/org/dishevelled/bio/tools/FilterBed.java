@@ -69,6 +69,7 @@ import org.dishevelled.commandline.argument.StringArgument;
 /**
  * Filter features in BED format.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 public final class FilterBed implements Callable<Integer> {

@@ -41,6 +41,7 @@ import htsjdk.variant.vcf.VCFHeader;
 /**
  * Separate main to run FilterVcf-equivalent in htsjdk benchmark once.
  *
+ * @since 1.1
  * @author  Michael Heuer
  */
 public final class runFilterVcfHtsjdkOnce {
