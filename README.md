@@ -94,11 +94,28 @@ arguments:
 ```
 
 
+#### Compression
+
 Across the dishevelled.org bio command line tools, stdin and stdout should behave as expected,
 and files and streams compressed with GZIP, BZip2, and block-compressed GZIP (BGZF) are
 handled transparently. Use file extensions `.gz`, `.bz2`, and `.bgz` respectively
 to force the issue, if necessary.
 
+
+#### Expressions
+
+Commands with a `--script` argument expect an expression written in JavaScript that evaluates
+to boolean true or false against a record, provided in the context as variable `r`.  For example,
+with `dsh-filter-bed`, to filter BED records by chromosome and score
+
+```javascript
+1 == r.getChrom() && r.getScore() > 10.0
+```
+specified on the command line as
+
+```bash
+$ dsh-filter-bed -i input.bed --script "1 == r.getChrom() && r.getScore() > 10.0"
+```
 
 ### Installing dishevelled-bio via Conda
 
