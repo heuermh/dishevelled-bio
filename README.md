@@ -114,12 +114,12 @@ to boolean true or false against a record, provided in the context as variable `
 with `dsh-filter-bed`, to filter BED records by chromosome and score
 
 ```javascript
-1 == r.getChrom() && r.getScore() > 10.0
+r.getChrom() == 1 && r.getScore() > 10.0
 ```
 specified on the command line as
 
 ```bash
-$ dsh-filter-bed -i input.bed --script "1 == r.getChrom() && r.getScore() > 10.0"
+$ dsh-filter-bed -i input.bed --script "r.getChrom() == 1 && r.getScore() > 10.0"
 ```
 
 ### Installing dishevelled-bio via Conda
