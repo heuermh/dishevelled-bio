@@ -31,6 +31,7 @@ commands:
   compress-bed    compress features in BED format to splittable bgzf or bzip2 compression codecs
   compress-fastq    compress sequences in FASTQ format to splittable bgzf or bzip2 compression codecs
   compress-gff3    compress features in GFF3 format to splittable bgzf or bzip2 compression codecs
+  compress-sam    compress alignments in SAM format to splittable bgzf or bzip2 compression codecs
   compress-vcf    compress variants and genotypes in VCF format to splittable bgzf or bzip2 compression codecs
   disinterleave-fastq    convert interleaved FASTQ format into first and second sequence files in FASTQ format
   downsample-fastq    downsample sequences from files in FASTQ format
@@ -42,6 +43,9 @@ commands:
   fastq-description    output description lines from sequences in FASTQ format
   fastq-sequence-length    output sequence lengths from sequences in FASTQ format
   fastq-to-fasta    convert sequences in FASTQ format to FASTA format
+  filter-bed    filter features in BED format
+  filter-gff3    filter features in GFF3 format
+  filter-sam    filter alignments in SAM format
   filter-vcf    filter variants in VCF format
   gfa1-to-gfa2    convert GFA 1.0 format to GFA 2.0 format
   interleave-fastq    convert first and second sequence files in FASTQ format to interleaved FASTQ format
@@ -51,6 +55,7 @@ commands:
   split-fastq    split files in FASTQ format
   split-gff3    split files in GFF3 format
   split-interleaved-fastq    split files in interleaved FASTQ format
+  split-sam    split files in SAM format
   split-vcf    split files in VCF format
   variant-table-to-vcf    convert Ensembl variant table to VCF format
   vcf-pedigree    extract a pedigree from VCF format
