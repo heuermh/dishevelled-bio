@@ -79,7 +79,7 @@ final class VcfRecordToVariants extends AbstractConverter<VcfRecord, List<Varian
         }
 
         final Variant.Builder vb = Variant.newBuilder()
-            .setContigName(vcfRecord.getChrom())
+            .setReferenceName(vcfRecord.getChrom())
             .setReferenceAllele(vcfRecord.getRef())
             .setStart(vcfRecord.getPos() - 1L);
 

@@ -83,7 +83,7 @@ final class VcfRecordToGenotypes extends AbstractConverter<VcfRecord, List<Genot
         for (Variant variant : variants) {
             Genotype.Builder gb = Genotype.newBuilder()
                 .setVariant(variant)
-                .setContigName(variant.getContigName())
+                .setReferenceName(variant.getReferenceName())
                 .setStart(variant.getStart())
                 .setEnd(variant.getEnd());
 

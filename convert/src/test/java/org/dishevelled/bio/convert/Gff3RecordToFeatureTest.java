@@ -111,7 +111,7 @@ public final class Gff3RecordToFeatureTest {
     public void testConvert() {
         Gff3Record gff3Record = Gff3Record.valueOf("1\tEnsembl\tgene\t1335276\t1349350\t.\t-\t.\tID=ENSG00000107404;Name=ENSG00000107404;biotype=protein_coding");
         Feature feature = gff3RecordConverter.convert(gff3Record, ConversionStringency.STRICT, logger);
-        assertEquals("1", feature.getContigName());
+        assertEquals("1", feature.getReferenceName());
         assertEquals(Long.valueOf(1335275L), feature.getStart());
         assertEquals(Long.valueOf(1349350L), feature.getEnd());
         assertEquals("ENSG00000107404", feature.getName());

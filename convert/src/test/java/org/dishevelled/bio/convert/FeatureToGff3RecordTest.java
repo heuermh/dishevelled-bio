@@ -117,7 +117,7 @@ public final class FeatureToGff3RecordTest {
         attributes.put("biotype", "protein_coding");
 
         Feature feature = Feature.newBuilder()
-            .setContigName("1")
+            .setReferenceName("1")
             .setStart(1335275L)
             .setEnd(1349350L)
             .setName("ENSG00000107404")

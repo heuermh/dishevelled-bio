@@ -60,10 +60,10 @@ import org.bdgenomics.adam.models.SequenceRecord;
 
 import org.bdgenomics.adam.rdd.ADAMContext;
 
-import org.bdgenomics.adam.rdd.feature.FeatureRDD;
+import org.bdgenomics.adam.rdd.feature.FeatureDataset;
 
-import org.bdgenomics.adam.rdd.variant.GenotypeRDD;
-import org.bdgenomics.adam.rdd.variant.VariantRDD;
+import org.bdgenomics.adam.rdd.variant.GenotypeDataset;
+import org.bdgenomics.adam.rdd.variant.VariantDataset;
 
 import org.bdgenomics.convert.Converter;
 import org.bdgenomics.convert.ConversionStringency;
@@ -170,12 +170,12 @@ public class DishevelledAdamContext extends ADAMContext {
      * @param path path in BED format
      * @throws IOException if an I/O error occurs
      */
-    public FeatureRDD dshLoadBed(final String path) throws IOException {
+    public FeatureDataset dshLoadBed(final String path) throws IOException {
         log().info("Loading " + path + " as BED format...");
         try (BufferedReader reader = reader(path)) {
             JavaRDD<BedRecord> bedRecords = javaSparkContext.parallelize((List<BedRecord>) BedReader.read(reader));
             JavaRDD<Feature> features = bedRecords.map(record -> bedFeatureConverter.convert(record, ConversionStringency.STRICT, log()));
-            return FeatureRDD.apply(features.rdd());
+            return FeatureDataset.apply(features.rdd());
         }
     }
 
@@ -185,12 +185,12 @@ public class DishevelledAdamContext extends ADAMContext {
      * @param path path in GFF3 format
      * @throws IOException if an I/O error occurs
      */
-    public FeatureRDD dshLoadGff3(final String path) throws IOException {
+    public FeatureDataset dshLoadGff3(final String path) throws IOException {
         log().info("Loading " + path + " as GFF3 format...");
         try (BufferedReader reader = reader(path)) {
             JavaRDD<Gff3Record> gff3Records = javaSparkContext.parallelize((List<Gff3Record>) Gff3Reader.read(reader));
             JavaRDD<Feature> features = gff3Records.map(record -> gff3FeatureConverter.convert(record, ConversionStringency.STRICT, log()));
-            return FeatureRDD.apply(features.rdd());
+            return FeatureDataset.apply(features.rdd());
         }
     }
 
@@ -200,7 +200,7 @@ public class DishevelledAdamContext extends ADAMContext {
      * @param path path in VCF/BCF format
      * @throws IOException if an I/O error occurs
      */
-    public VariantRDD dshLoadVariants(final String path) throws IOException {
+    public VariantDataset dshLoadVariants(final String path) throws IOException {
         log().info("Loading " + path + " in VCF/BCF format as variants...");
 
         // read header
@@ -213,7 +213,7 @@ public class DishevelledAdamContext extends ADAMContext {
         try (BufferedReader reader = reader(path)) {
             JavaRDD<VcfRecord> vcfRecords = javaSparkContext.parallelize((List<VcfRecord>) VcfReader.records(reader));
             JavaRDD<Variant> variants = vcfRecords.flatMap(record -> variantConverter.convert(record, ConversionStringency.STRICT, log()).iterator());
-            return VariantRDD.apply(variants.rdd(), createSequenceDictionary(vcfHeaderLines), createHeaderLines(vcfHeaderLines));
+            return VariantDataset.apply(variants.rdd(), createSequenceDictionary(vcfHeaderLines), createHeaderLines(vcfHeaderLines));
         }
     }
 
@@ -223,7 +223,7 @@ public class DishevelledAdamContext extends ADAMContext {
      * @param path path in VCF/BCF format
      * @throws IOException if an I/O error occurs
      */
-    public GenotypeRDD dshLoadGenotypes(final String path) throws IOException {
+    public GenotypeDataset dshLoadGenotypes(final String path) throws IOException {
         log().info("Loading " + path + " in VCF/BCF format as genotypes...");
 
         // read header
@@ -236,14 +236,14 @@ public class DishevelledAdamContext extends ADAMContext {
         List<Sample> samples = new ArrayList<Sample>();
         try (BufferedReader reader = reader(path)) {
             for (VcfSample sample : VcfReader.samples(reader)) {
-                samples.add(Sample.newBuilder().setSampleId(sample.getId()).build());
+                samples.add(Sample.newBuilder().setId(sample.getId()).build());
             }
         }
         // read records
         try (BufferedReader reader = reader(path)) {
             JavaRDD<VcfRecord> vcfRecords = javaSparkContext.parallelize((List<VcfRecord>) VcfReader.records(reader));
             JavaRDD<Genotype> genotypes = vcfRecords.flatMap(record -> genotypeConverter.convert(record, ConversionStringency.STRICT, log()).iterator());
-            return GenotypeRDD.apply(genotypes.rdd(), createSequenceDictionary(vcfHeaderLines), JavaConversions.asScalaBuffer(samples), createHeaderLines(vcfHeaderLines));
+            return GenotypeDataset.apply(genotypes.rdd(), createSequenceDictionary(vcfHeaderLines), JavaConversions.asScalaBuffer(samples), createHeaderLines(vcfHeaderLines));
         }
     }
 

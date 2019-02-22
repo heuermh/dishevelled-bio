@@ -79,7 +79,7 @@ final class BedRecordToFeature extends AbstractConverter<BedRecord, Feature> {
             return null;
         }
         final Feature.Builder fb = Feature.newBuilder()
-            .setContigName(bedRecord.getChrom())
+            .setReferenceName(bedRecord.getChrom())
             .setStart(bedRecord.getStart())
             .setEnd(bedRecord.getEnd());
 

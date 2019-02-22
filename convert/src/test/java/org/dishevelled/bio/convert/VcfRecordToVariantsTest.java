@@ -169,7 +169,7 @@ public final class VcfRecordToVariantsTest {
         assertEquals(1, variants.size());
 
         Variant variant = variants.get(0);
-        assertEquals("1", variant.getContigName());
+        assertEquals("1", variant.getReferenceName());
         assertEquals(Long.valueOf(14297L - 1L), variant.getStart());
         assertEquals(Long.valueOf(variant.getStart() + 4L), variant.getEnd());
         assertEquals("CTGT", variant.getReferenceAllele());

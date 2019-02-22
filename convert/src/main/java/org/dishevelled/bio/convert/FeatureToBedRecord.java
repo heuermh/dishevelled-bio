@@ -77,7 +77,7 @@ final class FeatureToBedRecord extends AbstractConverter<Feature, BedRecord> {
 
         BedRecord bedRecord = null;
         try {
-            String chrom = feature.getContigName();
+            String chrom = feature.getReferenceName();
             long start = feature.getStart();
             long end = feature.getEnd();
             String name = feature.getName();

@@ -100,7 +100,7 @@ final class Gff3RecordToFeature extends AbstractConverter<Gff3Record, Feature> {
             return null;
         }
         final Feature.Builder fb = Feature.newBuilder()
-            .setContigName(gff3Record.getSeqid())
+            .setReferenceName(gff3Record.getSeqid())
             .setSource(gff3Record.getSource())
             .setFeatureType(gff3Record.getFeatureType())
             .setStart(gff3Record.getStart())

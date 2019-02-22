@@ -92,7 +92,7 @@ final class FeatureToGff3Record extends AbstractConverter<Feature, Gff3Record> {
             return null;
         }
 
-        String seqid = feature.getContigName();
+        String seqid = feature.getReferenceName();
         String source = feature.getSource();
         String featureType = feature.getFeatureType();
         long start = feature.getStart();

@@ -95,7 +95,7 @@ public final class BedRecordToFeatureTest {
     public void testConvert() {
         BedRecord bedRecord = BedRecord.valueOf("chr1\t11873\t14409\tuc001aaa.3\t0\t+\t11873\t11873\t0\t3\t354,109,1189\t0,739,1347");
         Feature feature = bedRecordConverter.convert(bedRecord, ConversionStringency.STRICT, logger);
-        assertEquals("chr1", feature.getContigName());
+        assertEquals("chr1", feature.getReferenceName());
         assertEquals(Long.valueOf(11873L), feature.getStart());
         assertEquals(Long.valueOf(14409L), feature.getEnd());
         assertEquals("uc001aaa.3", feature.getName());

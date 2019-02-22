@@ -99,7 +99,7 @@ public final class VariantToVcfRecordTest {
     @Test(expected=ConversionException.class)
     public void testConvertNullAltStrict() {
         Variant v = Variant.newBuilder()
-            .setContigName("1")
+            .setReferenceName("1")
             .setReferenceAllele("A")
             .setStart(1000L)
             .setEnd(1001L)
@@ -114,7 +114,7 @@ public final class VariantToVcfRecordTest {
     @Test
     public void testConvertNullAltLenient() {
         Variant v = Variant.newBuilder()
-            .setContigName("1")
+            .setReferenceName("1")
             .setReferenceAllele("A")
             .setStart(1000L)
             .setEnd(1001L)
@@ -129,7 +129,7 @@ public final class VariantToVcfRecordTest {
     @Test
     public void testConvertNullAltSilent() {
         Variant v = Variant.newBuilder()
-            .setContigName("1")
+            .setReferenceName("1")
             .setReferenceAllele("A")
             .setStart(1000L)
             .setEnd(1001L)
@@ -160,7 +160,7 @@ public final class VariantToVcfRecordTest {
             .build();
             
         Variant v = Variant.newBuilder()
-            .setContigName("1")
+            .setReferenceName("1")
             .setReferenceAllele("A")
             .setAlternateAllele("T")
             .setStart(1000L)

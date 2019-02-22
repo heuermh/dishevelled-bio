@@ -106,7 +106,7 @@ public final class FeatureToBedRecordTest {
         attributes.put("blockStarts", "0,739,1347");
 
         Feature feature = Feature.newBuilder()
-            .setContigName("chr1")
+            .setReferenceName("chr1")
             .setStart(11873L)
             .setEnd(14409L)
             .setName("uc001aaa.3")

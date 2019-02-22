@@ -181,14 +181,14 @@ public final class VcfRecordToGenotypesTest {
         // is there a filter (by sampleId) in jdk8 collections?
         for (Genotype genotype : genotypes) {
             Variant variant = genotype.getVariant();
-            assertEquals("1", variant.getContigName());
+            assertEquals("1", variant.getReferenceName());
             assertEquals(Long.valueOf(14297L - 1L), variant.getStart());
             assertEquals(Long.valueOf(variant.getStart() + 4L), variant.getEnd());
             assertEquals("CTGT", variant.getReferenceAllele());
             assertEquals("C", variant.getAlternateAllele());
             assertTrue(variant.getNames().isEmpty());
 
-            assertEquals("1", genotype.getContigName());
+            assertEquals("1", genotype.getReferenceName());
             assertEquals(Long.valueOf(14297L - 1L), genotype.getStart());
             assertEquals(Long.valueOf(variant.getStart() + 4L), genotype.getEnd());
 

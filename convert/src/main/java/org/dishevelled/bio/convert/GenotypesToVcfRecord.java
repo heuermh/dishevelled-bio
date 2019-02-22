@@ -113,7 +113,7 @@ final class GenotypesToVcfRecord extends AbstractConverter<List<Genotype>, VcfRe
 
         VcfRecord.Builder vb = VcfRecord.builder()
             .withLineNumber(-1L)
-            .withChrom(variant.getContigName())
+            .withChrom(variant.getReferenceName())
             .withPos(variant.getStart() + 1L)
             .withId(toStringArray(variant.getNames()))
             .withRef(variant.getReferenceAllele())
