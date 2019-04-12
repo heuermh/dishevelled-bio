@@ -25,8 +25,10 @@ package org.dishevelled.bio.sequence;
 
 import static org.dishevelled.bio.sequence.Sequences.decode;
 import static org.dishevelled.bio.sequence.Sequences.decodeWithNs;
+import static org.dishevelled.bio.sequence.Sequences.decodeWithAmbiguity;
 import static org.dishevelled.bio.sequence.Sequences.encode;
 import static org.dishevelled.bio.sequence.Sequences.encodeWithNs;
+import static org.dishevelled.bio.sequence.Sequences.encodeWithAmbiguity;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -267,5 +269,108 @@ public final class SequencesTest {
         catch (IllegalArgumentException e) {
             assertTrue(e.getMessage().contains("invalid symbol"));
         }
+    }
+
+    // ---
+
+    @Test(expected=NullPointerException.class)
+    public void testDecodeWithAmbiguityNullBytes() throws Exception {
+        decodeWithAmbiguity(null, 1);
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testDecodeWithAmbiguityIllegalLength() throws Exception {
+        decodeWithAmbiguity(bytes, -1);
+    }
+
+    @Test
+    public void testDecodeWithAmbiguityLengthZero() throws Exception {
+        assertEquals("", decodeWithAmbiguity(bytes, 0));
+    }
+
+    @Test
+    public void testDecodeWithAmbiguityGs() throws Exception {
+        bytes.mark();
+        // bits 0100 0100 is 68
+        bytes.put((byte) 68).limit(1).reset();
+        assertEquals("GG", decodeWithAmbiguity(bytes, 2));
+    }
+
+    @Test
+    public void testDecodeWithAmbiguityTs() throws Exception {
+        bytes.mark();
+        // bits 1000 1000 is 136
+        bytes.put((byte) 136).limit(1).reset();
+        assertEquals("TT", decodeWithAmbiguity(bytes, 2));
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testEncodeWithAmbiguityNullSequence() {
+        encodeWithAmbiguity(null);
+    }
+
+    @Test
+    public void testEncodeWithAmbiguityEmptySequence() {
+        ByteBuffer encoded = encodeWithAmbiguity("");
+        assertNotNull(encoded);
+    }
+
+    @Test
+    public void testEncodeWithAmbiguity() {
+        ByteBuffer encoded = encodeWithAmbiguity("atgc");
+        assertNotNull(encoded);
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testEncodeWithAmbiguityByteBufferNullSequence() {
+        encodeWithAmbiguity(null, bytes);
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testEncodeWithAmbiguityByteBufferNullBytes() {
+        encodeWithAmbiguity("atcg", null);
+    }
+
+    @Test
+    public void testEncodeWithAmbiguityByteBufferEmptySequence() {
+        ByteBuffer encoded = encodeWithAmbiguity("", bytes);
+        assertNotNull(encoded);
+    }
+
+    @Test
+    public void testEncodeWithAmbiguityByteBuffer() {
+        ByteBuffer encoded = encodeWithAmbiguity("atgc", bytes);
+        assertNotNull(encoded);
+    }
+
+    @Test
+    public void ambiguousNibbleRoundTripMod4() throws Exception {
+        assertEquals("ATGC", decodeWithAmbiguity(encodeWithAmbiguity("AtgC"), 4));
+    }
+
+    @Test
+    public void ambiguousNibbleRoundTripEven() throws Exception {
+        assertEquals("ATGCCC", decodeWithAmbiguity(encodeWithAmbiguity("ATgcCC"), 6));
+    }
+
+    @Test
+    public void ambiguousNibbleRoundTripOdd() throws Exception {
+        assertEquals("ATGCCCTTA", decodeWithAmbiguity(encodeWithAmbiguity("ATGCcCTTA"), 9));
+    }
+
+    @Test
+    public void ambiguousNibbleRoundTripAmbiguity() throws Exception {
+        assertEquals("ATGCNNNNCGTA", decodeWithAmbiguity(encodeWithAmbiguity("ATGCNnnNCGTA"), 12));
+    }
+
+    @Test
+    public void testEncodeWithAmbiguityAllAmbiguousSymbols() throws Exception {
+        assertEquals("=AACCMMGGRRSSVVTTWWYYHHKKDDBBNN", decodeWithAmbiguity(encodeWithAmbiguity("=AaCcMmGgRrSsVvTtWwYyHhKkDdBbNn"), 31));
+    }
+
+    @Test
+    public void testEncodeWithAmbiguityInvalidSymbols() throws Exception {
+        // all invalid symbols are mapped to `N`
+        assertEquals("ATGCTNNNNN", decodeWithAmbiguity(encodeWithAmbiguity("ATGCT.zZ3#"), 10));
     }
 }
