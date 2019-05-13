@@ -171,10 +171,10 @@ public class DishevelledAdamContext extends ADAMContext {
      * @throws IOException if an I/O error occurs
      */
     public FeatureDataset dshLoadBed(final String path) throws IOException {
-        log().info("Loading " + path + " as BED format...");
+        info("Loading " + path + " as BED format...");
         try (BufferedReader reader = reader(path)) {
             JavaRDD<BedRecord> bedRecords = javaSparkContext.parallelize((List<BedRecord>) BedReader.read(reader));
-            JavaRDD<Feature> features = bedRecords.map(record -> bedFeatureConverter.convert(record, ConversionStringency.STRICT, log()));
+            JavaRDD<Feature> features = bedRecords.map(record -> bedFeatureConverter.convert(record, ConversionStringency.STRICT, logger().logger()));
             return FeatureDataset.apply(features.rdd());
         }
     }
@@ -186,10 +186,10 @@ public class DishevelledAdamContext extends ADAMContext {
      * @throws IOException if an I/O error occurs
      */
     public FeatureDataset dshLoadGff3(final String path) throws IOException {
-        log().info("Loading " + path + " as GFF3 format...");
+        info("Loading " + path + " as GFF3 format...");
         try (BufferedReader reader = reader(path)) {
             JavaRDD<Gff3Record> gff3Records = javaSparkContext.parallelize((List<Gff3Record>) Gff3Reader.read(reader));
-            JavaRDD<Feature> features = gff3Records.map(record -> gff3FeatureConverter.convert(record, ConversionStringency.STRICT, log()));
+            JavaRDD<Feature> features = gff3Records.map(record -> gff3FeatureConverter.convert(record, ConversionStringency.STRICT, logger().logger()));
             return FeatureDataset.apply(features.rdd());
         }
     }
@@ -201,7 +201,7 @@ public class DishevelledAdamContext extends ADAMContext {
      * @throws IOException if an I/O error occurs
      */
     public VariantDataset dshLoadVariants(final String path) throws IOException {
-        log().info("Loading " + path + " in VCF/BCF format as variants...");
+        info("Loading " + path + " in VCF/BCF format as variants...");
 
         // read header
         VcfHeaderLines vcfHeaderLines = null;
@@ -212,7 +212,7 @@ public class DishevelledAdamContext extends ADAMContext {
         // read records
         try (BufferedReader reader = reader(path)) {
             JavaRDD<VcfRecord> vcfRecords = javaSparkContext.parallelize((List<VcfRecord>) VcfReader.records(reader));
-            JavaRDD<Variant> variants = vcfRecords.flatMap(record -> variantConverter.convert(record, ConversionStringency.STRICT, log()).iterator());
+            JavaRDD<Variant> variants = vcfRecords.flatMap(record -> variantConverter.convert(record, ConversionStringency.STRICT, logger().logger()).iterator());
             return VariantDataset.apply(variants.rdd(), createSequenceDictionary(vcfHeaderLines), createHeaderLines(vcfHeaderLines));
         }
     }
@@ -224,7 +224,7 @@ public class DishevelledAdamContext extends ADAMContext {
      * @throws IOException if an I/O error occurs
      */
     public GenotypeDataset dshLoadGenotypes(final String path) throws IOException {
-        log().info("Loading " + path + " in VCF/BCF format as genotypes...");
+        info("Loading " + path + " in VCF/BCF format as genotypes...");
 
         // read header
         VcfHeaderLines vcfHeaderLines = null;
@@ -242,7 +242,7 @@ public class DishevelledAdamContext extends ADAMContext {
         // read records
         try (BufferedReader reader = reader(path)) {
             JavaRDD<VcfRecord> vcfRecords = javaSparkContext.parallelize((List<VcfRecord>) VcfReader.records(reader));
-            JavaRDD<Genotype> genotypes = vcfRecords.flatMap(record -> genotypeConverter.convert(record, ConversionStringency.STRICT, log()).iterator());
+            JavaRDD<Genotype> genotypes = vcfRecords.flatMap(record -> genotypeConverter.convert(record, ConversionStringency.STRICT, logger().logger()).iterator());
             return GenotypeDataset.apply(genotypes.rdd(), createSequenceDictionary(vcfHeaderLines), JavaConversions.asScalaBuffer(samples), createHeaderLines(vcfHeaderLines));
         }
     }
@@ -263,7 +263,7 @@ public class DishevelledAdamContext extends ADAMContext {
             String id = entry.getKey();
             VcfInfoHeaderLine infoHeaderLine = entry.getValue();
             if (!infoHeaderLines.containsKey(id)) {
-                infoHeaderLines.put(id, infoHeaderLineConverter.convert(infoHeaderLine, ConversionStringency.STRICT, log()));
+                infoHeaderLines.put(id, infoHeaderLineConverter.convert(infoHeaderLine, ConversionStringency.STRICT, logger().logger()));
             }
         }
 
@@ -275,13 +275,13 @@ public class DishevelledAdamContext extends ADAMContext {
             String id = entry.getKey();
             VcfFormatHeaderLine formatHeaderLine = entry.getValue();
             if (!formatHeaderLines.containsKey(id)) {
-                formatHeaderLines.put(id, formatHeaderLineConverter.convert(formatHeaderLine, ConversionStringency.STRICT, log()));
+                formatHeaderLines.put(id, formatHeaderLineConverter.convert(formatHeaderLine, ConversionStringency.STRICT, logger().logger()));
             }
         }
 
         List<VCFFilterHeaderLine> filterHeaderLines = new ArrayList<VCFFilterHeaderLine>(vcfHeaderLines.getFilterHeaderLines().size());
         for (VcfFilterHeaderLine filterHeaderLine : vcfHeaderLines.getFilterHeaderLines().values()) {
-            filterHeaderLines.add(filterHeaderLineConverter.convert(filterHeaderLine, ConversionStringency.STRICT, log()));
+            filterHeaderLines.add(filterHeaderLineConverter.convert(filterHeaderLine, ConversionStringency.STRICT, logger().logger()));
         }
 
         List<VCFHeaderLine> headerLines = new ArrayList<VCFHeaderLine>(infoHeaderLines.size() + formatHeaderLines.size() + filterHeaderLines.size());
@@ -289,6 +289,18 @@ public class DishevelledAdamContext extends ADAMContext {
         headerLines.addAll(formatHeaderLines.values());
         headerLines.addAll(filterHeaderLines);
         return JavaConversions.asScalaBuffer(headerLines);
+    }
+
+    /**
+     * Log the specified info message.
+     *
+     * @param message info message to log
+     */
+    private void info(final String message) {
+        // necessary because it doesn't appear possible to implement scala.Function0 from java
+        if (logger().isInfoEnabled()) {
+            logger().logger().info(message);
+        }
     }
 
     static SequenceDictionary createSequenceDictionary(final VcfHeaderLines vcfHeaderLines) {
