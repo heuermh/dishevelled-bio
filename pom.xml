@@ -60,7 +60,7 @@
   </modules>
 
   <properties>
-    <adam.version>0.27.0</adam.version>
+    <adam.version>0.28.0-SNAPSHOT</adam.version>
     <bdg-convert.version>0.7.0-SNAPSHOT</bdg-convert.version>
     <biojava.version>1.9.3</biojava.version>
     <commons-csv.version>1.6</commons-csv.version>
