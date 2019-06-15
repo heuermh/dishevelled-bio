@@ -44,6 +44,11 @@
   </dependencyManagement>
   <dependencies>
     <dependency>
+      <groupId>com.github.samtools</groupId>
+      <artifactId>htsjdk</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>com.google.code.findbugs</groupId>
       <artifactId>jsr305</artifactId>
       <scope>compile</scope>
@@ -54,9 +59,19 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>com.google.inject</groupId>
+      <artifactId>guice</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.avro</groupId>
+      <artifactId>avro</artifactId>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.bdgenomics.convert</groupId>
@@ -66,6 +81,11 @@
     <dependency>
       <groupId>org.bdgenomics.convert</groupId>
       <artifactId>convert-htsjdk</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.bdgenomics.bdg-formats</groupId>
+      <artifactId>bdg-formats</artifactId>
       <scope>compile</scope>
     </dependency>
     <dependency>

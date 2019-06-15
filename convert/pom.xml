@@ -59,6 +59,11 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>com.google.inject</groupId>
+      <artifactId>guice</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
@@ -69,6 +74,11 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>org.bdgenomics.bdg-formats</groupId>
+      <artifactId>bdg-formats</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>org.dishevelled</groupId>
       <artifactId>dsh-bio-feature</artifactId>
       <scope>compile</scope>
@@ -76,6 +86,11 @@
     <dependency>
       <groupId>org.dishevelled</groupId>
       <artifactId>dsh-bio-variant</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.avro</groupId>
+      <artifactId>avro</artifactId>
       <scope>compile</scope>
     </dependency>
     <dependency>

@@ -61,7 +61,9 @@
 
   <properties>
     <adam.version>0.28.0-SNAPSHOT</adam.version>
+    <avro.version>1.8.2</avro.version>
     <bdg-convert.version>0.7.0-SNAPSHOT</bdg-convert.version>
+    <bdg-formats.version>0.12.0</bdg-formats.version>
     <biojava.version>1.9.3</biojava.version>
     <commons-csv.version>1.6</commons-csv.version>
     <commons-codec.version>1.11</commons-codec.version>
@@ -72,6 +74,7 @@
     <dsh-compress.version>1.4-SNAPSHOT</dsh-compress.version>
     <dsh-graph.version>1.0</dsh-graph.version>
     <hadoop.version>2.7.5</hadoop.version>
+    <htsjdk.version>2.19.0</htsjdk.version>
     <jdk.version>1.8</jdk.version>
     <jmh.version>1.21</jmh.version>
     <kryo-serializers.version>0.42</kryo-serializers.version>
@@ -89,6 +92,11 @@
         <groupId>com.github.davidmoten</groupId>
         <artifactId>rtree</artifactId>
         <version>${rtree.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.samtools</groupId>
+        <artifactId>htsjdk</artifactId>
+        <version>${htsjdk.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-io</groupId>
@@ -127,27 +135,26 @@
         <version>${hadoop.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.apache.avro</groupId>
+        <artifactId>avro</artifactId>
+        <version>${avro.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.apache.spark</groupId>
         <artifactId>spark-core_${scala.version.prefix}</artifactId>
         <version>${spark.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.spark</groupId>
-        <artifactId>spark-sql_${scala.version.prefix}</artifactId>
-        <version>${spark.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.bdgenomics.adam</groupId>
-        <artifactId>adam-core-spark2_${scala.version.prefix}</artifactId>
-        <version>${adam.version}</version>
         <exclusions>
           <exclusion>
-            <groupId>com.esotericsoftware.kryo</groupId>
-            <artifactId>kryo</artifactId>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
           </exclusion>
           <exclusion>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
+            <groupId>com.thoughtworks.paranamer</groupId>
+            <artifactId>paranamer</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
           </exclusion>
           <exclusion>
             <groupId>org.apache.hadoop</groupId>
@@ -157,17 +164,96 @@
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-mapreduce</artifactId>
           </exclusion>
+          <exclusion>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>*</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.xerial.snappy</groupId>
+            <artifactId>snappy-java</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-sql_${scala.version.prefix}</artifactId>
+        <version>${spark.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.bdgenomics.adam</groupId>
+        <artifactId>adam-assembly-spark2_${scala.version.prefix}</artifactId>
+        <version>${adam.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>com.thoughtworks.paranamer</groupId>
+            <artifactId>paranamer</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.bdgenomics.bdg-formats</groupId>
+            <artifactId>bdg-formats</artifactId>
+          </exclusion>
         </exclusions>
       </dependency>
       <dependency>
         <groupId>org.bdgenomics.convert</groupId>
         <artifactId>convert</artifactId>
         <version>${bdg-convert.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.bdgenomics.bdg-formats</groupId>
+            <artifactId>bdg-formats</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>org.bdgenomics.convert</groupId>
         <artifactId>convert-htsjdk</artifactId>
         <version>${bdg-convert.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.github.samtools</groupId>
+            <artifactId>htsjdk</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.bdgenomics.bdg-formats</groupId>
+        <artifactId>bdg-formats</artifactId>
+        <version>${bdg-formats.version}</version>
       </dependency>
       <dependency>
         <groupId>org.biojava</groupId>
