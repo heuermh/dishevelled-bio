@@ -76,7 +76,6 @@ public final class SplitBed extends AbstractSplit {
         BufferedReader reader = null;
         try {
             reader = reader(inputFile);
-
             BedReader.stream(reader, new BedListener() {
                     private long r = 0L;
                     private int files = 0;
@@ -122,6 +121,7 @@ public final class SplitBed extends AbstractSplit {
             catch (Exception e) {
                 // ignore
             }
+            closeWriters();
         }
     }
 

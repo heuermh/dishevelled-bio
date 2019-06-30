@@ -125,6 +125,7 @@ public final class SplitFastq extends AbstractSplit {
             catch (Exception e) {
                 // ignore
             }
+            closeWriters();
         }
     }
 

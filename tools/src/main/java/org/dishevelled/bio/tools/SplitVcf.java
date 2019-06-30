@@ -140,6 +140,7 @@ public final class SplitVcf extends AbstractSplit {
             catch (Exception e) {
                 // ignore
             }
+            closeWriters();
         }
     }
 

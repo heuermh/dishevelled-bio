@@ -133,6 +133,7 @@ public final class SplitSam extends AbstractSplit {
             catch (Exception e) {
                 // ignore
             }
+            closeWriters();
         }
     }
 

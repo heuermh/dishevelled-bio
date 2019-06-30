@@ -124,15 +124,6 @@ public final class SplitFasta extends AbstractSplit {
                     }
                 }
             }
-
-            // close the last writer, if any
-            try {
-                writer.close();
-            }
-            catch (Exception e) {
-                // ignore
-            }
-
             return 0;
         }
         finally {
@@ -142,6 +133,7 @@ public final class SplitFasta extends AbstractSplit {
             catch (Exception e) {
                 // ignore
             }
+            closeWriters();
         }
     }
 

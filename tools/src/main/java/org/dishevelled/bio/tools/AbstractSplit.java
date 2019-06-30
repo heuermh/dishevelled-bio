@@ -33,6 +33,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import java.util.concurrent.Callable;
 
 import java.util.concurrent.atomic.AtomicLong;
@@ -63,6 +66,9 @@ abstract class AbstractSplit implements Callable<Integer> {
     /** Output file suffix. */
     private final String suffix;
 
+    /** List of writers to close. */
+    private final List<CountingWriter> writers = new ArrayList<CountingWriter>();
+
     /** Byte string pattern. */
     private static final Pattern BYTES = Pattern.compile("^(\\d+)\\s*([a-zA-Z]*)$");
 
@@ -86,6 +92,19 @@ abstract class AbstractSplit implements Callable<Integer> {
         this.suffix = suffix;
     }
 
+    /**
+     * Attempt to close writers created by createCountingWriter.
+     */
+    protected final void closeWriters() {
+        for (CountingWriter writer : writers) {
+            try {
+                writer.close();
+            }
+            catch (Exception e) {
+                // ignore
+            }
+        }
+    }
 
     /**
      * Create and return a new CountingWriter for a file name consisting
@@ -97,7 +116,9 @@ abstract class AbstractSplit implements Callable<Integer> {
      */
     protected final CountingWriter createCountingWriter(final int n) {
         try {
-            return new CountingWriter(writer(new File(prefix + n + suffix)));
+            CountingWriter writer = new CountingWriter(writer(new File(prefix + n + suffix)));
+            writers.add(writer);
+            return writer;
         }
         catch (IOException e) {
             throw new RuntimeException("could not create writer for file " + prefix + n + suffix, e);

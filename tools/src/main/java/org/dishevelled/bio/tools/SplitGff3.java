@@ -122,6 +122,7 @@ public final class SplitGff3 extends AbstractSplit {
             catch (Exception e) {
                 // ignore
             }
+            closeWriters();
         }
     }
 
