@@ -60,7 +60,7 @@
   </modules>
 
   <properties>
-    <adam.version>0.28.0-SNAPSHOT</adam.version>
+    <adam.version>0.28.0</adam.version>
     <avro.version>1.8.2</avro.version>
     <bdg-convert.version>0.7.0-SNAPSHOT</bdg-convert.version>
     <bdg-formats.version>0.13.0</bdg-formats.version>
