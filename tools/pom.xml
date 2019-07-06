@@ -224,6 +224,10 @@
               <mainClass>org.dishevelled.bio.tools.CompressSam</mainClass>
             </program>
             <program>
+              <id>dsh-create-sequence-dictionary</id>
+              <mainClass>org.dishevelled.bio.tools.CreateSequenceDictionary</mainClass>
+            </program>
+            <program>
               <id>dsh-disinterleave-fastq</id>
               <mainClass>org.dishevelled.bio.tools.DisinterleaveFastq</mainClass>
             </program>

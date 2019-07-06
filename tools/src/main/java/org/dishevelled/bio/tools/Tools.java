@@ -135,6 +135,7 @@ public final class Tools implements Callable<Integer> {
         .put("compress-gff3", new Command("compress-gff3", "compress features in GFF3 format to splittable bgzf or bzip2 compression codecs", CompressBed.class))
         .put("compress-sam", new Command("compress-sam", "compress alignments in SAM format to splittable bgzf or bzip2 compression codecs", CompressSam.class))
         .put("compress-vcf", new Command("compress-vcf", "compress variants and genotypes in VCF format to splittable bgzf or bzip2 compression codecs", CompressVcf.class))
+        .put("create-sequence-dictionary", new Command("create-sequence-dictionary", "create a SequenceDictionary from sequences in FASTA format", CreateSequenceDictionary.class))
         .put("disinterleave-fastq", new Command("disinterleave-fastq", "convert interleaved FASTQ format into first and second sequence files in FASTQ format", DisinterleaveFastq.class))
         .put("downsample-fastq", new Command("downsample-fastq", "downsample sequences from files in FASTQ format", DownsampleFastq.class))
         .put("downsample-interleaved-fastq", new Command("downsample-interleaved-fastq", "downsample sequences from a file in interleaved FASTQ format", DownsampleInterleavedFastq.class))
