@@ -91,7 +91,7 @@ public final class CreateSequenceDictionary implements Callable<Integer> {
 
                 String name = sequence.getName();
                 int length = sequence.length();
-                String md5Hex = DigestUtils.md5Hex(sequence.seqString());
+                String md5Hex = DigestUtils.md5Hex(sequence.seqString().toUpperCase());
 
                 StringBuilder sb = new StringBuilder();
                 sb.append("@SQ\tSN:");
