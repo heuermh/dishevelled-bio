@@ -328,6 +328,10 @@
               <mainClass>org.dishevelled.bio.tools.SplitVcf</mainClass>
             </program>
             <program>
+              <id>dsh-truncate-fasta</id>
+              <mainClass>org.dishevelled.bio.tools.TruncateFasta</mainClass>
+            </program>
+            <program>
               <id>dsh-variant-table-to-vcf</id>
               <mainClass>org.dishevelled.bio.tools.EnsemblVariantTableToVcf</mainClass>
             </program>
