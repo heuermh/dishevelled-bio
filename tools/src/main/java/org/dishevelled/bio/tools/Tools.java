@@ -131,8 +131,9 @@ public final class Tools implements Callable<Integer> {
     /** Map of commands keyed by command name. */
     static SortedMap<String, Command> COMMANDS = new ImmutableSortedMap.Builder<String, Command>(Ordering.natural())
         .put("compress-bed", new Command("compress-bed", "compress features in BED format to splittable bgzf or bzip2 compression codecs", CompressBed.class))
+        .put("compress-fasta", new Command("compress-fasta", "compress sequences in FASTA format to splittable bgzf or bzip2 compression codecs", CompressFasta.class))
         .put("compress-fastq", new Command("compress-fastq", "compress sequences in FASTQ format to splittable bgzf or bzip2 compression codecs", CompressFastq.class))
-        .put("compress-gff3", new Command("compress-gff3", "compress features in GFF3 format to splittable bgzf or bzip2 compression codecs", CompressBed.class))
+        .put("compress-gff3", new Command("compress-gff3", "compress features in GFF3 format to splittable bgzf or bzip2 compression codecs", CompressGff3.class))
         .put("compress-sam", new Command("compress-sam", "compress alignments in SAM format to splittable bgzf or bzip2 compression codecs", CompressSam.class))
         .put("compress-vcf", new Command("compress-vcf", "compress variants and genotypes in VCF format to splittable bgzf or bzip2 compression codecs", CompressVcf.class))
         .put("create-sequence-dictionary", new Command("create-sequence-dictionary", "create a SequenceDictionary from sequences in FASTA format", CreateSequenceDictionary.class))

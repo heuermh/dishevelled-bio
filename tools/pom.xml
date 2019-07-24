@@ -208,6 +208,10 @@
               <mainClass>org.dishevelled.bio.tools.CompressBed</mainClass>
             </program>
             <program>
+              <id>dsh-compress-fasta</id>
+              <mainClass>org.dishevelled.bio.tools.CompressFasta</mainClass>
+            </program>
+            <program>
               <id>dsh-compress-fastq</id>
               <mainClass>org.dishevelled.bio.tools.CompressFastq</mainClass>
             </program>
