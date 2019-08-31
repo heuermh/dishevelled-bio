@@ -29,10 +29,12 @@ dsh-bio [command] [args]
 
 commands:
   compress-bed    compress features in BED format to splittable bgzf or bzip2 compression codecs
+  compress-fasta    compress sequences in FASTA format to splittable bgzf or bzip2 compression codecs
   compress-fastq    compress sequences in FASTQ format to splittable bgzf or bzip2 compression codecs
   compress-gff3    compress features in GFF3 format to splittable bgzf or bzip2 compression codecs
   compress-sam    compress alignments in SAM format to splittable bgzf or bzip2 compression codecs
   compress-vcf    compress variants and genotypes in VCF format to splittable bgzf or bzip2 compression codecs
+  create-sequence-dictionary    create a SequenceDictionary from sequences in FASTA format
   disinterleave-fastq    convert interleaved FASTQ format into first and second sequence files in FASTQ format
   downsample-fastq    downsample sequences from files in FASTQ format
   downsample-interleaved-fastq    downsample sequences from a file in interleaved FASTQ format
@@ -57,6 +59,7 @@ commands:
   split-interleaved-fastq    split files in interleaved FASTQ format
   split-sam    split files in SAM format
   split-vcf    split files in VCF format
+  truncate-fasta    truncate sequences in FASTA format
   variant-table-to-vcf    convert Ensembl variant table to VCF format
   vcf-pedigree    extract a pedigree from VCF format
   vcf-samples    extract samples from VCF format
