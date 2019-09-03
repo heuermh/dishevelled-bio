@@ -33,10 +33,6 @@ import java.io.PrintWriter;
 
 import java.util.concurrent.Callable;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
-
 import org.biojava.bio.seq.Sequence;
 import org.biojava.bio.seq.SequenceIterator;
 import org.biojava.bio.seq.SequenceTools;
@@ -52,7 +48,6 @@ import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
-import org.dishevelled.commandline.argument.StringArgument;
 
 /**
  * Truncate sequences in FASTA format.
