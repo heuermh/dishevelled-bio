@@ -9,8 +9,8 @@ dishevelled.org bio
 
 Install
 
- * JDK 1.8 or later, http://openjdk.java.net
- * Apache Maven 3.3.9 or later, http://maven.apache.org
+ * JDK 1.8 or later, https://openjdk.java.net
+ * Apache Maven 3.3.9 or later, https://maven.apache.org
 
 To build
 
@@ -127,7 +127,7 @@ $ dsh-filter-bed -i input.bed --script "r.getChrom() == 1 && r.getScore() > 10.0
 
 ### Installing dishevelled-bio via Conda
 
-The dishevelled.org bio command line tools are available in Conda via Bioconda, https://bioconda.github.io/
+The dishevelled.org bio command line tools are available in Conda via Bioconda, https://bioconda.github.io
 
 ```bash
 $ conda install dsh-bio
@@ -141,3 +141,14 @@ The dishevelled.org bio command line tools are available in Homebrew via Brewsci
 ```bash
 $ brew install brewsci/bio/dsh-bio
 ```
+
+
+### Installing dishevelled-bio via Docker
+
+The dishevelled.org bio command line tools are available in Docker via BioContainers, https://biocontainers.pro
+
+```bash
+$ docker pull quay.io/biocontainers/dsh-bio:{tag}
+```
+
+Find `{tag}` on the tag search page, https://quay.io/repository/biocontainers/dsh-bio?tab=tags
