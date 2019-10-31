@@ -29,6 +29,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 
@@ -87,6 +88,15 @@ public final class Set extends Gfa2Record {
      */
     public String getId() {
         return id;
+    }
+
+    /**
+     * Return an optional wrapping the identifier for this set.
+     *
+     * @return an optional wrapping the identifier for this set
+     */
+    public Optional<String> getIdOpt() {
+        return Optional.ofNullable(id);
     }
 
     /**

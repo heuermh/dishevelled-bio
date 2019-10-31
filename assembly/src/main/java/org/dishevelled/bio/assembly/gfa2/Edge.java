@@ -29,6 +29,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 
@@ -193,6 +194,15 @@ public final class Edge extends Gfa2Record {
      */
     public Alignment getAlignment() {
         return alignment;
+    }
+
+    /**
+     * Return an optional wrapping the alignment for this edge.
+     *
+     * @return an optional wrapping the alignment for this edge
+     */
+    public Optional<Alignment> getAlignmentOpt() {
+        return Optional.ofNullable(alignment);
     }
 
     @Override

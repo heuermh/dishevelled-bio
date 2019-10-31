@@ -29,6 +29,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 
@@ -128,6 +129,15 @@ public final class Containment extends Gfa1Record {
      */
     public String getOverlap() {
         return overlap;
+    }
+
+    /**
+     * Return an optional wrapping the overlap in cigar format for this containment.
+     *
+     * @return an optional wrapping the overlap in cigar format for this containment
+     */
+    public Optional<String> getOverlapOpt() {
+        return Optional.ofNullable(overlap);
     }
 
     @Override

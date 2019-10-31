@@ -27,6 +27,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import java.util.regex.Pattern;
 
@@ -108,6 +109,15 @@ public final class Alignment {
     }
 
     /**
+     * Return an optional wrapping the cigar for this alignment.
+     *
+     * @return an optional wrapping the cigar for this alignment
+     */
+    public Optional<String> getCigarOpt() {
+        return Optional.ofNullable(cigar);
+    }
+
+    /**
      * Return true if this alignment has a trace.
      *
      * @return true if this alignment has a trace
@@ -125,6 +135,15 @@ public final class Alignment {
      */
     public List<Integer> getTrace() {
         return trace;
+    }
+
+    /**
+     * Return an optional wrapping the trace for this alignment.
+     *
+     * @return an optional wrapping the trace for this alignment
+     */
+    public Optional<List<Integer>> getTraceOpt() {
+        return Optional.ofNullable(trace);
     }
 
     @Override

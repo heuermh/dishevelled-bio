@@ -29,6 +29,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import java.util.stream.Collectors;
 
@@ -91,6 +92,15 @@ public final class Path extends Gfa2Record {
      */
     public String getId() {
         return id;
+    }
+
+    /**
+     * Return an optional wrapping the identifier for this path.
+     *
+     * @return an optional wrapping the identifier for this path
+     */
+    public Optional<String> getIdOpt() {
+        return Optional.ofNullable(id);
     }
 
     /**

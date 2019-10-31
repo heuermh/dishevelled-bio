@@ -29,6 +29,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import java.util.stream.Collectors;
 
@@ -126,6 +127,15 @@ public final class Path extends Gfa1Record {
      */
     public List<String> getOverlaps() {
         return overlaps;
+    }
+
+    /**
+     * Return an optional wrapping the list of overlaps in cigar format for this path.
+     *
+     * @return an optional wrapping the list of overlap in cigar format for this path
+     */
+    public Optional<List<String>> getOverlapsOpt() {
+        return Optional.ofNullable(overlaps);
     }
 
     @Override

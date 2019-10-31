@@ -29,6 +29,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 
@@ -111,6 +112,15 @@ public final class Gap extends Gfa2Record {
     }
 
     /**
+     * Return an optional wrapping the identifier for this gap.
+     *
+     * @return an optional wrapping the identifier for this gap
+     */
+    public Optional<String> getIdOpt() {
+        return Optional.ofNullable(id);
+    }
+
+    /**
      * Return the source reference for this gap.
      *
      * @return the source reference for this gap
@@ -144,6 +154,15 @@ public final class Gap extends Gfa2Record {
      */
     public Integer getVariance() {
         return variance;
+    }
+
+    /**
+     * Return an optional wrapping the variance for this gap.
+     *
+     * @return an optional wrapping the variance for this gap
+     */
+    public Optional<Integer> getVarianceOpt() {
+        return Optional.ofNullable(variance);
     }
 
     @Override

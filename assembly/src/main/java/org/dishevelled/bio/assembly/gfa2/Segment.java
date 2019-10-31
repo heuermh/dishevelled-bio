@@ -29,6 +29,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 
@@ -96,6 +97,15 @@ public final class Segment extends Gfa2Record {
     }
 
     /**
+     * Return an optional wrapping the identifier for this segment.
+     *
+     * @return an optional wrapping the identifier for this segment
+     */
+    public Optional<String> getIdOpt() {
+        return Optional.ofNullable(id);
+    }
+
+    /**
      * Return the length for this segment.
      *
      * @return the length for this segment
@@ -111,6 +121,15 @@ public final class Segment extends Gfa2Record {
      */
     public String getSequence() {
         return sequence;
+    }
+
+    /**
+     * Return an optional wrapping the sequence for this segment.
+     *
+     * @return an optional wrapping the sequence for this segment
+     */
+    public Optional<String> getSequenceOpt() {
+        return Optional.ofNullable(sequence);
     }
 
     @Override
