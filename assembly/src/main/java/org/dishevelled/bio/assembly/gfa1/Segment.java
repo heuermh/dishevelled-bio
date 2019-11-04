@@ -107,6 +107,279 @@ public final class Segment extends Gfa1Record {
         return Optional.ofNullable(sequence);
     }
 
+
+    // optional fields
+
+    /**
+     * Return true if the tags for this segment contain
+     * the reserved key <code>LN</code>.
+     *
+     * @return if the tags for this segment contain
+     *    the reserved key <code>LN</code>
+     */
+    public boolean containsLn() {
+        return containsTagKey("LN");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>LN</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>LN</code>
+     *    as an integer
+     */
+    public int getLn() {
+        return getTagInteger("LN");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>LN</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>LN</code>
+     *   as an integer
+     */
+    public Optional<Integer> getLnOpt() {
+        return getTagIntegerOpt("LN");
+    }
+
+    public boolean containsLength() {
+        return containsLn();
+    }
+    public int getLength() {
+        return getLn();
+    }
+    public Optional<Integer> getLengthOpt() {
+        return getLnOpt();
+    }
+
+    //
+
+    /**
+     * Return true if the tags for this segment contain
+     * the reserved key <code>RC</code>.
+     *
+     * @return if the tags for this segment contain
+     *    the reserved key <code>RC</code>
+     */
+    public boolean containsRc() {
+        return containsTagKey("RC");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>RC</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>RC</code>
+     *    as an integer
+     */
+    public int getRc() {
+        return getTagInteger("RC");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>RC</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>RC</code>
+     *   as an integer
+     */
+    public Optional<Integer> getRcOpt() {
+        return getTagIntegerOpt("RC");
+    }
+
+    public boolean containsReadCount() {
+        return containsRc();
+    }
+    public int getReadCount() {
+        return getRc();
+    }
+    public Optional<Integer> getReadCountOpt() {
+        return getRcOpt();
+    }
+
+    //
+
+    /**
+     * Return true if the tags for this segment contain
+     * the reserved key <code>FC</code>.
+     *
+     * @return if the tags for this segment contain
+     *    the reserved key <code>FC</code>
+     */
+    public boolean containsFc() {
+        return containsTagKey("FC");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>FC</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>FC</code>
+     *    as an integer
+     */
+    public int getFc() {
+        return getTagInteger("FC");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>FC</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>FC</code>
+     *   as an integer
+     */
+    public Optional<Integer> getFcOpt() {
+        return getTagIntegerOpt("FC");
+    }
+
+    public boolean containsFragmentCount() {
+        return containsFc();
+    }
+    public int getFragmentCount() {
+        return getFc();
+    }
+    public Optional<Integer> getFragmentCountOpt() {
+        return getFcOpt();
+    }
+
+    //
+
+    /**
+     * Return true if the tags for this segment contain
+     * the reserved key <code>KC</code>.
+     *
+     * @return if the tags for this segment contain
+     *    the reserved key <code>KC</code>
+     */
+    public boolean containsKc() {
+        return containsTagKey("KC");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>KC</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>KC</code>
+     *    as an integer
+     */
+    public int getKc() {
+        return getTagInteger("KC");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>KC</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>KC</code>
+     *   as an integer
+     */
+    public Optional<Integer> getKcOpt() {
+        return getTagIntegerOpt("KC");
+    }
+
+    public boolean containsKmerCount() {
+        return containsKc();
+    }
+    public int getKmerCount() {
+        return getKc();
+    }
+    public Optional<Integer> getKmerCountOpt() {
+        return getKcOpt();
+    }
+
+    //
+
+    /**
+     * Return true if the tags for this segment contain
+     * the reserved key <code>SH</code>.
+     *
+     * @return if the tags for this segment contain
+     *    the reserved key <code>SH</code>
+     */
+    public boolean containsSh() {
+        return containsTagKey("SH");
+    }
+
+    /**
+     * Return the Type=H value for the reserved key <code>SH</code>
+     * as a byte array.
+     *
+     * @return the Type=Z value for the reserved key <code>SH</code>
+     *    as a byte array
+     */
+    public byte[] getSh() {
+        return getTagByteArray("SH");
+    }
+
+    /**
+     * Return an optional Type=H value for the reserved key <code>SH</code>
+     * as a byte array.
+     *
+     * @return an optional Type=H value for the reserved key <code>SH</code>
+     *   as a byte array
+     */
+    public Optional<byte[]> getShOpt() {
+        return getTagByteArrayOpt("SH");
+    }
+
+    public boolean containsSequenceChecksum() {
+        return containsSh();
+    }
+    public byte[] getSequenceChecksum() {
+        return getSh();
+    }
+    public Optional<byte[]> getSequenceChecksumOpt() {
+        return getShOpt();
+    }
+
+    //
+
+    /**
+     * Return true if the tags for this segment contain
+     * the reserved key <code>UR</code>.
+     *
+     * @return if the tags for this segment contain
+     *    the reserved key <code>UR</code>
+     */
+    public boolean containsUr() {
+        return containsTagKey("UR");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>UR</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>UR</code>
+     *    as a string
+     */
+    public String getUr() {
+        return getTagString("UR");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>UR</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>UR</code>
+     *   as a string
+     */
+    public Optional<String> getUrOpt() {
+        return getTagStringOpt("UR");
+    }
+
+    public boolean containsSequenceUri() {
+        return containsUr();
+    }
+    public String getSequenceUri() {
+        return getUr();
+    }
+    public Optional<String> getSequenceUriOpt() {
+        return getUrOpt();
+    }
+
+    //
+
     @Override
     public int hashCode() {
         return hashCode;

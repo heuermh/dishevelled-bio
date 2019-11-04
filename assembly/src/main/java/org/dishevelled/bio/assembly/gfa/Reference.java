@@ -79,6 +79,24 @@ public final class Reference {
         return orientation;
     }
 
+    /**
+     * Return true if the orientation for this reference is <code>Orientation.FORWARD</code>.
+     *
+     * @return true if the orientation for this reference is <code>Orientation.FORWARD</code>
+     */
+    public boolean isForwardOrientation() {
+        return orientation.isForward();
+    }
+
+    /**
+     * Return true if the orientation for this reference is <code>Orientation.REVERSE</code>.
+     *
+     * @return true if the orientation for this reference is <code>Orientation.REVERSE</code>
+     */
+    public boolean isReverseOrientation() {
+        return orientation.isReverse();
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(id, orientation);

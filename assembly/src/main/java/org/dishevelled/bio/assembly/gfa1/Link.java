@@ -124,6 +124,268 @@ public final class Link extends Gfa1Record {
         return Optional.ofNullable(overlap);
     }
 
+
+    // optional fields
+
+    /**
+     * Return true if the tags for this link contain
+     * the reserved key <code>MQ</code>.
+     *
+     * @return if the tags for this link contain
+     *    the reserved key <code>MQ</code>
+     */
+    public boolean containsMq() {
+        return containsTagKey("MQ");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>MQ</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>MQ</code>
+     *    as an integer
+     */
+    public int getMq() {
+        return getTagInteger("MQ");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>MQ</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>MQ</code>
+     *   as an integer
+     */
+    public Optional<Integer> getMqOpt() {
+        return getTagIntegerOpt("MQ");
+    }
+
+    public boolean containsMappingQuality() {
+        return containsMq();
+    }
+    public int getMappingQuality() {
+        return getMq();
+    }
+    public Optional<Integer> getMappingQualityOpt() {
+        return getMqOpt();
+    }
+
+    //
+
+    /**
+     * Return true if the tags for this link contain
+     * the reserved key <code>NM</code>.
+     *
+     * @return if the tags for this link contain
+     *    the reserved key <code>NM</code>
+     */
+    public boolean containsNm() {
+        return containsTagKey("NM");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>NM</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>NM</code>
+     *    as an integer
+     */
+    public int getNm() {
+        return getTagInteger("NM");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>NM</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>NM</code>
+     *   as an integer
+     */
+    public Optional<Integer> getNmOpt() {
+        return getTagIntegerOpt("NM");
+    }
+
+    public boolean containsMismatchCount() {
+        return containsNm();
+    }
+    public int getMismatchCount() {
+        return getNm();
+    }
+    public Optional<Integer> getMismatchCountOpt() {
+        return getNmOpt();
+    }
+
+    //
+
+    /**
+     * Return true if the tags for this link contain
+     * the reserved key <code>RC</code>.
+     *
+     * @return if the tags for this link contain
+     *    the reserved key <code>RC</code>
+     */
+    public boolean containsRc() {
+        return containsTagKey("RC");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>RC</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>RC</code>
+     *    as an integer
+     */
+    public int getRc() {
+        return getTagInteger("RC");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>RC</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>RC</code>
+     *   as an integer
+     */
+    public Optional<Integer> getRcOpt() {
+        return getTagIntegerOpt("RC");
+    }
+
+    public boolean containsReadCount() {
+        return containsRc();
+    }
+    public int getReadCount() {
+        return getRc();
+    }
+    public Optional<Integer> getReadCountOpt() {
+        return getRcOpt();
+    }
+
+    //
+
+    /**
+     * Return true if the tags for this link contain
+     * the reserved key <code>FC</code>.
+     *
+     * @return if the tags for this link contain
+     *    the reserved key <code>FC</code>
+     */
+    public boolean containsFc() {
+        return containsTagKey("FC");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>FC</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>FC</code>
+     *    as an integer
+     */
+    public int getFc() {
+        return getTagInteger("FC");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>FC</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>FC</code>
+     *   as an integer
+     */
+    public Optional<Integer> getFcOpt() {
+        return getTagIntegerOpt("FC");
+    }
+
+    public boolean containsFragmentCount() {
+        return containsFc();
+    }
+    public int getFragmentCount() {
+        return getFc();
+    }
+    public Optional<Integer> getFragmentCountOpt() {
+        return getFcOpt();
+    }
+
+    //
+
+    /**
+     * Return true if the tags for this link contain
+     * the reserved key <code>KC</code>.
+     *
+     * @return if the tags for this link contain
+     *    the reserved key <code>KC</code>
+     */
+    public boolean containsKc() {
+        return containsTagKey("KC");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>KC</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the reserved key <code>KC</code>
+     *    as an integer
+     */
+    public int getKc() {
+        return getTagInteger("KC");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>KC</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the reserved key <code>KC</code>
+     *   as an integer
+     */
+    public Optional<Integer> getKcOpt() {
+        return getTagIntegerOpt("KC");
+    }
+
+    public boolean containsKmerCount() {
+        return containsKc();
+    }
+    public int getKmerCount() {
+        return getKc();
+    }
+    public Optional<Integer> getKmerCountOpt() {
+        return getKcOpt();
+    }
+
+    //
+
+    /**
+     * Return true if the tags for this segment contain
+     * the reserved key <code>ID</code>.
+     *
+     * @return if the tags for this segment contain
+     *    the reserved key <code>ID</code>
+     */
+    public boolean containsId() {
+        return containsTagKey("ID");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>ID</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>ID</code>
+     *    as a string
+     */
+    public String getId() {
+        return getTagString("ID");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>ID</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>ID</code>
+     *   as a string
+     */
+    public Optional<String> getIdOpt() {
+        return getTagStringOpt("ID");
+    }
+
+
     @Override
     public int hashCode() {
         return hashCode;

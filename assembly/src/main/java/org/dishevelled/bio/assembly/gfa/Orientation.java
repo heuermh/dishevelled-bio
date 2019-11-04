@@ -29,9 +29,37 @@ package org.dishevelled.bio.assembly.gfa;
  * @author  Michael Heuer
  */
 public enum Orientation {
+
     /** Forward orientation. */
     FORWARD,
 
     /** Reverse orientation. */
-    REVERSE
+    REVERSE;
+
+    /**
+     * Return true if this orientation is <code>Orientation.FORWARD</code>.
+     *
+     * @return true if this orientation is <code>Orientation.FORWARD</code>
+     */
+    public boolean isForward() {
+        return FORWARD.equals(this);
+    }
+
+    /**
+     * Return true if this orientation is <code>Orientation.REVERSE</code>.
+     *
+     * @return true if this orientation is <code>Orientation.REVERSE</code>
+     */
+    public boolean isReverse() {
+        return REVERSE.equals(this);
+    }
+
+    /**
+     * Return the orientation opposite of this orientation.
+     *
+     * @return the orientation opposite of this orientation
+     */
+    public Orientation flip() {
+        return isForward() ? REVERSE : FORWARD;
+    }
 }

@@ -28,6 +28,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.annotation.concurrent.Immutable;
 
@@ -53,6 +54,52 @@ public final class Header extends Gfa1Record {
      */
     public Header(final Map<String, Tag> tags) {
         super(tags);
+    }
+
+
+    // optional fields
+
+    /**
+     * Return true if the tags for this segment contain
+     * the reserved key <code>VN</code>.
+     *
+     * @return if the tags for this segment contain
+     *    the reserved key <code>VN</code>
+     */
+    public boolean containsVn() {
+        return containsTagKey("VN");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>VN</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>VN</code>
+     *    as a string
+     */
+    public String getVn() {
+        return getTagString("VN");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>VN</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>VN</code>
+     *   as a string
+     */
+    public Optional<String> getVnOpt() {
+        return getTagStringOpt("Vn");
+    }
+
+    public boolean containsVersionNumber() {
+        return containsVn();
+    }
+    public String getVersionNumber() {
+        return getVn();
+    }
+    public Optional<String> getVersionNumberOpt() {
+        return getVnOpt();
     }
 
 
