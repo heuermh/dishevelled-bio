@@ -27,7 +27,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.concurrent.Immutable;
@@ -54,7 +54,7 @@ public final class Gfa1Reader {
     /**
      * Read zero or more GFA 1.0 records from the specified readable.
      *
-     * @param readable to read from, must not be null
+     * @param readable readable to read from, must not be null
      * @return zero or more GFA 1.0 records read from the specified readable
      * @throws IOException if an I/O error occurs
      */
@@ -63,6 +63,38 @@ public final class Gfa1Reader {
         Collect collect = new Collect();
         stream(readable, collect);
         return collect.records();
+    }
+
+    /**
+     * Read zero or more GFA 1.0 header records from the specified readable. Only header
+     * records at the head of the readable (i.e. those before any containment, link, path, or
+     * segment records) will be returned.
+     *
+     * @param readable readable to read from, must not be null
+     * @return zero or more GFA 1.0 header records read from the specified readable
+     * @throws IOException if an I/O error occurs
+     */
+    public static Iterable<Header> header(final Readable readable) throws IOException {
+        checkNotNull(readable);
+        Headers headers = new Headers();
+        stream(readable, headers);
+        return headers.headers();
+    }
+
+    /**
+     * Read zero or more GFA 1.0 segment records from the specified readable. Only segment
+     * records at the head of the readable (i.e. those before any containment, link, or path
+     * records) will be returned.
+     *
+     * @param readable readable to read from, must not be null
+     * @return zero or more GFA 1.0 segment records read from the specified readable
+     * @throws IOException if an I/O error occurs
+     */
+    public static Iterable<Segment> segments(final Readable readable) throws IOException {
+        checkNotNull(readable);
+        Segments segments = new Segments();
+        stream(readable, segments);
+        return segments.segments();
     }
 
     /**
@@ -79,6 +111,7 @@ public final class Gfa1Reader {
         Gfa1LineProcessor lineProcessor = new Gfa1LineProcessor(listener);
         CharStreams.readLines(readable, lineProcessor);
     }
+
 
     /**
      * GFA 1.0 line processor.
@@ -145,7 +178,7 @@ public final class Gfa1Reader {
      */
     private static class Collect implements Gfa1Listener {
         /** List of collected GFA 1.0 records. */
-        private final List<Gfa1Record> records = new LinkedList<Gfa1Record>();
+        private final List<Gfa1Record> records = new ArrayList<Gfa1Record>(100000);
 
 
         @Override
@@ -161,6 +194,87 @@ public final class Gfa1Reader {
          */
         Iterable<Gfa1Record> records() {
             return records;
+        }
+    }
+
+    /**
+     * Headers.
+     */
+    private static class Headers extends Gfa1Adapter {
+        /** List of collected GFA 1.0 header records. */
+        private final List<Header> headers = new ArrayList<Header>();
+
+        @Override
+        protected boolean containment(final Containment containment) {
+            return false;
+        }
+
+        @Override
+        protected boolean header(final Header header) {
+            headers.add(header);
+            return true;
+        }
+
+        @Override
+        protected boolean path(final Path path) {
+            return false;
+        }
+
+        @Override
+        protected boolean link(final Link link) {
+            return false;
+        }
+
+        @Override
+        protected boolean segment(final Segment segment) {
+            return false;
+        }
+
+        /**
+         * Return zero or more collected GFA 1.0 header records.
+         *
+         * @return zero or more collected GFA 1.0 header records
+         */
+        Iterable<Header> headers() {
+            return headers;
+        }
+    }
+
+    /**
+     * Segments.
+     */
+    private static class Segments extends Gfa1Adapter {
+        /** List of collected GFA 1.0 segment records. */
+        private final List<Segment> segments = new ArrayList<Segment>(10000);
+
+        @Override
+        protected boolean containment(final Containment containment) {
+            return false;
+        }
+
+        @Override
+        protected boolean path(final Path path) {
+            return false;
+        }
+
+        @Override
+        protected boolean link(final Link link) {
+            return false;
+        }
+
+        @Override
+        protected boolean segment(final Segment segment) {
+            segments.add(segment);
+            return true;
+        }
+
+        /**
+         * Return zero or more collected GFA 1.0 segment records.
+         *
+         * @return zero or more collected GFA 1.0 segment records
+         */
+        Iterable<Segment> segments() {
+            return segments;
         }
     }
 }

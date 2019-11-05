@@ -27,7 +27,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import static org.dishevelled.bio.assembly.gfa1.Gfa1Reader.header;
 import static org.dishevelled.bio.assembly.gfa1.Gfa1Reader.read;
+import static org.dishevelled.bio.assembly.gfa1.Gfa1Reader.segments;
 import static org.dishevelled.bio.assembly.gfa1.Gfa1Reader.stream;
 
 import java.io.BufferedReader;
@@ -114,5 +116,35 @@ public class Gfa1ReaderTest {
                     return true;
                 }
             });
+    }
+
+    @Test
+    public void testHeader() throws Exception {
+        int count = 0;
+        for (Header header : header(readable)) {
+            assertNotNull(header);
+            count++;
+        }
+        assertEquals(1, count);
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testHeaderNullReadable() throws Exception {
+        header(null);
+    }
+
+    @Test
+    public void testSegments() throws Exception {
+        int count = 0;
+        for (Segment segment : segments(readable)) {
+            assertNotNull(segment);
+            count++;
+        }
+        assertEquals(20, count);
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testSegmentsNullReadable() throws Exception {
+        segments(null);
     }
 }
