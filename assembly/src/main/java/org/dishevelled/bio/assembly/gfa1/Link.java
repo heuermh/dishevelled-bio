@@ -160,12 +160,35 @@ public final class Link extends Gfa1Record {
         return getTagIntegerOpt("MQ");
     }
 
+    /**
+     * Return true if the tags for this link contain
+     * the reserved key <code>MQ</code>, for mapping quality.
+     *
+     * @return if the tags for this link contain
+     *    the reserved key <code>MQ</code>, for mapping quality
+     */
     public boolean containsMappingQuality() {
         return containsMq();
     }
+
+    /**
+     * Return the mapping quality for this link (Type=i value for
+     * the reserved key <code>MQ</code> as an integer).
+     *
+     * @return the mapping quality for this link (Type=i value for
+     *    the reserved key <code>MQ</code> as an integer)
+     */
     public int getMappingQuality() {
         return getMq();
     }
+
+    /**
+     * Return an optional wrapping the mapping quality for this link
+     * (Type=i value for the reserved key <code>MQ</code> as an integer).
+     *
+     * @return an optional wrapping the mapping quality for this link
+     *    (Type=i value for the reserved key <code>MQ</code> as an integer)
+     */
     public Optional<Integer> getMappingQualityOpt() {
         return getMqOpt();
     }
@@ -205,12 +228,35 @@ public final class Link extends Gfa1Record {
         return getTagIntegerOpt("NM");
     }
 
+    /**
+     * Return true if the tags for this link contain
+     * the reserved key <code>NM</code>, for mismatch count.
+     *
+     * @return if the tags for this link contain
+     *    the reserved key <code>NM</code>, for mismatch count
+     */
     public boolean containsMismatchCount() {
         return containsNm();
     }
+
+    /**
+     * Return the mismatch count for this link (Type=i value for
+     * the reserved key <code>NM</code> as an integer).
+     *
+     * @return the mismatch count for this link (Type=i value for
+     *    the reserved key <code>NM</code> as an integer)
+     */
     public int getMismatchCount() {
         return getNm();
     }
+
+    /**
+     * Return an optional wrapping the mismatch count for this link
+     * (Type=i value for the reserved key <code>NM</code> as an integer).
+     *
+     * @return an optional wrapping the mismatch count for this link
+     *    (Type=i value for the reserved key <code>NM</code> as an integer)
+     */
     public Optional<Integer> getMismatchCountOpt() {
         return getNmOpt();
     }
@@ -250,12 +296,35 @@ public final class Link extends Gfa1Record {
         return getTagIntegerOpt("RC");
     }
 
+    /**
+     * Return true if the tags for this link contain
+     * the reserved key <code>RC</code>, for read count.
+     *
+     * @return if the tags for this link contain
+     *    the reserved key <code>RC</code>, for read count
+     */
     public boolean containsReadCount() {
         return containsRc();
     }
+
+    /**
+     * Return the read count for this link (Type=i value for
+     * the reserved key <code>RC</code> as an integer).
+     *
+     * @return the read count for this link (Type=i value for
+     *    the reserved key <code>RC</code> as an integer)
+     */
     public int getReadCount() {
         return getRc();
     }
+
+    /**
+     * Return an optional wrapping the read count for this link
+     * (Type=i value for the reserved key <code>RC</code> as an integer).
+     *
+     * @return an optional wrapping the read count for this link
+     *    (Type=i value for the reserved key <code>RC</code> as an integer)
+     */
     public Optional<Integer> getReadCountOpt() {
         return getRcOpt();
     }
@@ -295,12 +364,35 @@ public final class Link extends Gfa1Record {
         return getTagIntegerOpt("FC");
     }
 
+    /**
+     * Return true if the tags for this link contain
+     * the reserved key <code>FC</code>, for fragment count.
+     *
+     * @return if the tags for this link contain
+     *    the reserved key <code>FC</code>, for fragment count
+     */
     public boolean containsFragmentCount() {
         return containsFc();
     }
+
+    /**
+     * Return the fragment count for this link (Type=i value for
+     * the reserved key <code>FC</code> as an integer).
+     *
+     * @return the fragment count for this link (Type=i value for
+     *    the reserved key <code>FC</code> as an integer)
+     */
     public int getFragmentCount() {
         return getFc();
     }
+
+    /**
+     * Return an optional wrapping the fragment count for this link
+     * (Type=i value for the reserved key <code>FC</code> as an integer).
+     *
+     * @return an optional wrapping the fragment count for this link
+     *    (Type=i value for the reserved key <code>FC</code> as an integer)
+     */
     public Optional<Integer> getFragmentCountOpt() {
         return getFcOpt();
     }
@@ -340,12 +432,35 @@ public final class Link extends Gfa1Record {
         return getTagIntegerOpt("KC");
     }
 
+    /**
+     * Return true if the tags for this link contain
+     * the reserved key <code>KC</code>, for k-mer count.
+     *
+     * @return if the tags for this link contain
+     *    the reserved key <code>KC</code>, for k-mer count
+     */
     public boolean containsKmerCount() {
         return containsKc();
     }
+
+    /**
+     * Return the k-mer count for this link (Type=i value for
+     * the reserved key <code>KC</code> as an integer).
+     *
+     * @return the k-mer count for this link (Type=i value for
+     *    the reserved key <code>KC</code> as an integer)
+     */
     public int getKmerCount() {
         return getKc();
     }
+
+    /**
+     * Return an optional wrapping the k-mer count for this link
+     * (Type=i value for the reserved key <code>KC</code> as an integer).
+     *
+     * @return an optional wrapping the k-mer count for this link
+     *    (Type=i value for the reserved key <code>KC</code> as an integer)
+     */
     public Optional<Integer> getKmerCountOpt() {
         return getKcOpt();
     }

@@ -143,12 +143,35 @@ public final class Segment extends Gfa1Record {
         return getTagIntegerOpt("LN");
     }
 
+    /**
+     * Return true if the tags for this segment contain
+     * the reserved key <code>LN</code>, for length
+     *
+     * @return if the tags for this segment contain
+     *    the reserved key <code>LN</code>, for length
+     */
     public boolean containsLength() {
         return containsLn();
     }
+
+    /**
+     * Return the length of this segment (Type=i value for
+     * the reserved key <code>LN</code> as an integer).
+     *
+     * @return the length of this segment (Type=i value for
+     *    the reserved key <code>LN</code> as an integer)
+     */
     public int getLength() {
         return getLn();
     }
+
+    /**
+     * Return an optional wrapping the length of this segment
+     * (Type=i value for the reserved key <code>LN</code> as an integer).
+     *
+     * @return an optional wrapping the length of this segment
+     *    (Type=i value for the reserved key <code>LN</code> as an integer)
+     */
     public Optional<Integer> getLengthOpt() {
         return getLnOpt();
     }
@@ -188,12 +211,35 @@ public final class Segment extends Gfa1Record {
         return getTagIntegerOpt("RC");
     }
 
+    /**
+     * Return true if the tags for this segment contain
+     * the reserved key <code>RC</code>, for read count.
+     *
+     * @return if the tags for this segment contain
+     *    the reserved key <code>RC</code>, for read count
+     */
     public boolean containsReadCount() {
         return containsRc();
     }
+
+    /**
+     * Return the read count for this segment (Type=i value for
+     * the reserved key <code>RC</code> as an integer).
+     *
+     * @return the read count for this segment (Type=i value for
+     *    the reserved key <code>RC</code> as an integer)
+     */
     public int getReadCount() {
         return getRc();
     }
+
+    /**
+     * Return an optional wrapping the read count for this segment
+     * (Type=i value for the reserved key <code>RC</code> as an integer).
+     *
+     * @return an optional wrapping the read count for this segment
+     *    (Type=i value for the reserved key <code>RC</code> as an integer)
+     */
     public Optional<Integer> getReadCountOpt() {
         return getRcOpt();
     }
@@ -233,12 +279,35 @@ public final class Segment extends Gfa1Record {
         return getTagIntegerOpt("FC");
     }
 
+    /**
+     * Return true if the tags for this segment contain
+     * the reserved key <code>FC</code>, for fragment count.
+     *
+     * @return if the tags for this segment contain
+     *    the reserved key <code>FC</code>, for fragment count
+     */
     public boolean containsFragmentCount() {
         return containsFc();
     }
+
+    /**
+     * Return true if the tags for this segment contain
+     * the reserved key <code>FC</code>, for fragment count.
+     *
+     * @return if the tags for this segment contain
+     *    the reserved key <code>FC</code>, for fragment count
+     */
     public int getFragmentCount() {
         return getFc();
     }
+
+    /**
+     * Return an optional wrapping the fragment count for this segment
+     * (Type=i value for the reserved key <code>FC</code> as an integer).
+     *
+     * @return an optional wrapping the fragment count for this segment
+     *    (Type=i value for the reserved key <code>FC</code> as an integer)
+     */
     public Optional<Integer> getFragmentCountOpt() {
         return getFcOpt();
     }
@@ -278,12 +347,35 @@ public final class Segment extends Gfa1Record {
         return getTagIntegerOpt("KC");
     }
 
+    /**
+     * Return true if the tags for this segment contain
+     * the reserved key <code>KC</code>, for k-mer count.
+     *
+     * @return if the tags for this segment contain
+     *    the reserved key <code>KC</code>, for k-mer count
+     */
     public boolean containsKmerCount() {
         return containsKc();
     }
+
+    /**
+     * Return the k-mer count for this segment (Type=i value for
+     * the reserved key <code>KC</code> as an integer).
+     *
+     * @return the k-mer count for this segment (Type=i value for
+     *    the reserved key <code>KC</code> as an integer)
+     */
     public int getKmerCount() {
         return getKc();
     }
+
+    /**
+     * Return an optional wrapping the k-mer count for this segment
+     * (Type=i value for the reserved key <code>KC</code> as an integer).
+     *
+     * @return an optional wrapping the k-mer count for this segment
+     *    (Type=i value for the reserved key <code>KC</code> as an integer)
+     */
     public Optional<Integer> getKmerCountOpt() {
         return getKcOpt();
     }
@@ -323,12 +415,39 @@ public final class Segment extends Gfa1Record {
         return getTagByteArrayOpt("SH");
     }
 
+    /**
+     * Return true if the tags for this segment contain
+     * the reserved key <code>SH</code>, for SHA-256 checksum of the
+     * sequence.
+     *
+     * @return if the tags for this segment contain
+     *    the reserved key <code>SH</code>, for SHA-256 checksum of the
+     *    sequence
+     */
     public boolean containsSequenceChecksum() {
         return containsSh();
     }
+
+    /**
+     * Return the SHA-256 checksum of the sequence for this segment
+     * (Type=H value for the reserved key <code>SH</code> as a byte array).
+     *
+     * @return the SHA-256 checksum of the sequence for this segment
+     *    (Type=H value for the reserved key <code>SH</code> as a byte array)
+     */
     public byte[] getSequenceChecksum() {
         return getSh();
     }
+
+    /**
+     * Return an optional wrapping the SHA-256 checksum of the sequence
+     * for this segment (Type=H value for the reserved key <code>SH</code>
+     * as a byte array).
+     *
+     * @return an optional wrapping the SHA-256 checksum of the sequence
+     *    for this segment (Type=H value for the reserved key <code>SH</code>
+     *    as a byte array)
+     */
     public Optional<byte[]> getSequenceChecksumOpt() {
         return getShOpt();
     }
@@ -368,17 +487,45 @@ public final class Segment extends Gfa1Record {
         return getTagStringOpt("UR");
     }
 
+    /**
+     * Return true if the tags for this segment contain
+     * the reserved key <code>UR</code>.
+     *
+     * @return if the tags for this segment contain
+     *    the reserved key <code>UR</code>
+     */
     public boolean containsSequenceUri() {
         return containsUr();
     }
+
+    /**
+     * Return the URI or local file-system path of the sequence for
+     * this segment (Type=Z value for the reserved key <code>UR</code>
+     * as a string). If it does not start with a standard protocol
+     * (e.g. ftp), it is assumed to be a local path.
+     *
+     * @return the URI or local file-system path of the sequence for
+     *    this segment (Type=Z value for the reserved key <code>UR</code>
+     *    as a string)
+     */
     public String getSequenceUri() {
         return getUr();
     }
+
+    /**
+     * Return an optional wrapping the URI or local file-system path of
+     * the sequence for this segment (Type=Z value for the reserved key
+     * <code>UR</code> as a string). If it does not start with a standard
+     * protocol (e.g. ftp), it is assumed to be a local path.
+     *
+     * @return an optional wrapping the URI or local file-system path of
+     *    the sequence for this segment (Type=Z value for the reserved key
+     *    <code>UR</code> as a string)
+     */
     public Optional<String> getSequenceUriOpt() {
         return getUrOpt();
     }
 
-    //
 
     @Override
     public int hashCode() {

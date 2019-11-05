@@ -23,7 +23,9 @@
 */
 package org.dishevelled.bio.assembly.gfa1;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import static org.dishevelled.bio.assembly.gfa1.Gfa1Reader.read;
 import static org.dishevelled.bio.assembly.gfa1.Gfa1Reader.stream;
@@ -63,6 +65,28 @@ public class Gfa1ReaderTest {
     public void testRead() throws Exception {
         for (Gfa1Record record : read(readable)) {
             assertNotNull(record);
+        }
+    }
+
+    @Test
+    public void testTags() throws Exception {
+        for (Gfa1Record record : read(readable)) {
+            if (record instanceof Header) {
+                Header header = (Header) record;
+                assertTrue(header.containsVersionNumber());
+                assertEquals("1.0", header.getVersionNumber());
+            }
+            if (record instanceof Segment) {
+                Segment segment = (Segment) record;
+                if ("1".equals(segment.getId())) {
+                    assertEquals(6871, segment.getLength());
+                    assertEquals(2200067, segment.getReadCount());
+                }
+            }
+            if (record instanceof Link) {
+                Link link = (Link) record;
+                assertEquals("10M", link.getOverlap());
+            }
         }
     }
 

@@ -176,12 +176,35 @@ public final class Containment extends Gfa1Record {
         return getTagIntegerOpt("RC");
     }
 
+    /**
+     * Return true if the tags for this containment contain
+     * the reserved key <code>RC</code>, for read count.
+     *
+     * @return if the tags for this containment contain
+     *    the reserved key <code>RC</code>, for read count
+     */
     public boolean containsReadCount() {
         return containsRc();
     }
+
+    /**
+     * Return the read count for this containment (Type=i value for the
+     * reserved key <code>RC</code> as an integer).
+     *
+     * @return the read count for this containment (Type=i value for the
+     *    reserved key <code>RC</code> as an integer)
+     */
     public int getReadCount() {
         return getRc();
     }
+
+    /**
+     * Return an optional wrapping the read count for this containment
+     * (Type=i value for the reserved key <code>RC</code> as an integer).
+     *
+     * @return an optional wrapping the read count for this containment
+     *    (Type=i value for the reserved key <code>RC</code> as an integer)
+     */
     public Optional<Integer> getReadCountOpt() {
         return getRcOpt();
     }
@@ -221,12 +244,35 @@ public final class Containment extends Gfa1Record {
         return getTagIntegerOpt("NM");
     }
 
+    /**
+     * Return true if the tags for this containment contain
+     * the reserved key <code>NM</code>, for mismatch count.
+     *
+     * @return if the tags for this containment contain
+     *    the reserved key <code>NM</code>, for mismatch count
+     */
     public boolean containsMismatchCount() {
         return containsNm();
     }
+
+    /**
+     * Return the mismatch count for this containment (Type=i value
+     * for the reserved key <code>NM</code> as an integer).
+     *
+     * @return the mismatch count for this containment (Type=i value
+     *    for the reserved key <code>NM</code> as an integer)
+     */
     public int getMismatchCount() {
         return getNm();
     }
+
+    /**
+     * Return an optional wrapping the mismatch count for this containment
+     * (Type=i value for the reserved key <code>NM</code> as an integer).
+     *
+     * @return an optional wrapping the mismatch count for this containment
+     *    (Type=i value for the reserved key <code>NM</code> as an integer)
+     */
     public Optional<Integer> getMismatchCountOpt() {
         return getNmOpt();
     }

@@ -92,12 +92,35 @@ public final class Header extends Gfa1Record {
         return getTagStringOpt("Vn");
     }
 
+    /**
+     * Return true if the tags for this segment contain
+     * the reserved key <code>VN</code>, for version number.
+     *
+     * @return true if the tags for this segment contain
+     *    the reserved key <code>VN</code>, for version number
+     */
     public boolean containsVersionNumber() {
         return containsVn();
     }
+
+    /**
+     * Return the version number for this header (Type=Z value for the
+     * reserved key <code>VN</code> as a string).
+     *
+     * @return the version number for this header (Type=Z value for the
+     *    reserved key <code>VN</code> as a string)
+     */
     public String getVersionNumber() {
         return getVn();
     }
+
+    /**
+     * Return an optional wrapping the version number for this header
+     * (Type Z value for the reserved key <code>VN</code> as a string).
+     *
+     * @return an optional wrapping the version number for this header
+     *    (Type Z value for the reserved key <code>VN</code> as a string)
+     */
     public Optional<String> getVersionNumberOpt() {
         return getVnOpt();
     }
