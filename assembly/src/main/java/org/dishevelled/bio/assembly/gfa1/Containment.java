@@ -114,9 +114,11 @@ public final class Containment extends Gfa1Record {
     }
 
     /**
-     * Return the position for this containment.
+     * Return the position for this containment (0-based coordinate system). The position is
+     * the leftmost position of the contained segment in the container segment in its forward
+     * orientation (i.e. before this is oriented according to the container reference orientation).
      *
-     * @return the position for this containment.
+     * @return the position for this containment (0-based coordinate system)
      */
     public int getPosition() {
         return position;
@@ -147,7 +149,7 @@ public final class Containment extends Gfa1Record {
      * Return true if the tags for this containment contain
      * the reserved key <code>RC</code>.
      *
-     * @return if the tags for this containment contain
+     * @return true if the tags for this containment contain
      *    the reserved key <code>RC</code>
      */
     public boolean containsRc() {
@@ -180,7 +182,7 @@ public final class Containment extends Gfa1Record {
      * Return true if the tags for this containment contain
      * the reserved key <code>RC</code>, for read count.
      *
-     * @return if the tags for this containment contain
+     * @return true if the tags for this containment contain
      *    the reserved key <code>RC</code>, for read count
      */
     public boolean containsReadCount() {
@@ -215,7 +217,7 @@ public final class Containment extends Gfa1Record {
      * Return true if the tags for this containment contain
      * the reserved key <code>NM</code>.
      *
-     * @return if the tags for this containment contain
+     * @return true if the tags for this containment contain
      *    the reserved key <code>NM</code>
      */
     public boolean containsNm() {
@@ -248,7 +250,7 @@ public final class Containment extends Gfa1Record {
      * Return true if the tags for this containment contain
      * the reserved key <code>NM</code>, for mismatch count.
      *
-     * @return if the tags for this containment contain
+     * @return true if the tags for this containment contain
      *    the reserved key <code>NM</code>, for mismatch count
      */
     public boolean containsMismatchCount() {
@@ -283,7 +285,7 @@ public final class Containment extends Gfa1Record {
      * Return true if the tags for this segment contain
      * the reserved key <code>ID</code>.
      *
-     * @return if the tags for this segment contain
+     * @return true if the tags for this segment contain
      *    the reserved key <code>ID</code>
      */
     public boolean containsId() {

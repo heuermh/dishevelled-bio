@@ -131,7 +131,7 @@ public final class Link extends Gfa1Record {
      * Return true if the tags for this link contain
      * the reserved key <code>MQ</code>.
      *
-     * @return if the tags for this link contain
+     * @return true if the tags for this link contain
      *    the reserved key <code>MQ</code>
      */
     public boolean containsMq() {
@@ -164,7 +164,7 @@ public final class Link extends Gfa1Record {
      * Return true if the tags for this link contain
      * the reserved key <code>MQ</code>, for mapping quality.
      *
-     * @return if the tags for this link contain
+     * @return true if the tags for this link contain
      *    the reserved key <code>MQ</code>, for mapping quality
      */
     public boolean containsMappingQuality() {
@@ -199,7 +199,7 @@ public final class Link extends Gfa1Record {
      * Return true if the tags for this link contain
      * the reserved key <code>NM</code>.
      *
-     * @return if the tags for this link contain
+     * @return true if the tags for this link contain
      *    the reserved key <code>NM</code>
      */
     public boolean containsNm() {
@@ -232,7 +232,7 @@ public final class Link extends Gfa1Record {
      * Return true if the tags for this link contain
      * the reserved key <code>NM</code>, for mismatch count.
      *
-     * @return if the tags for this link contain
+     * @return true if the tags for this link contain
      *    the reserved key <code>NM</code>, for mismatch count
      */
     public boolean containsMismatchCount() {
@@ -267,7 +267,7 @@ public final class Link extends Gfa1Record {
      * Return true if the tags for this link contain
      * the reserved key <code>RC</code>.
      *
-     * @return if the tags for this link contain
+     * @return true if the tags for this link contain
      *    the reserved key <code>RC</code>
      */
     public boolean containsRc() {
@@ -300,7 +300,7 @@ public final class Link extends Gfa1Record {
      * Return true if the tags for this link contain
      * the reserved key <code>RC</code>, for read count.
      *
-     * @return if the tags for this link contain
+     * @return true if the tags for this link contain
      *    the reserved key <code>RC</code>, for read count
      */
     public boolean containsReadCount() {
@@ -335,7 +335,7 @@ public final class Link extends Gfa1Record {
      * Return true if the tags for this link contain
      * the reserved key <code>FC</code>.
      *
-     * @return if the tags for this link contain
+     * @return true if the tags for this link contain
      *    the reserved key <code>FC</code>
      */
     public boolean containsFc() {
@@ -368,7 +368,7 @@ public final class Link extends Gfa1Record {
      * Return true if the tags for this link contain
      * the reserved key <code>FC</code>, for fragment count.
      *
-     * @return if the tags for this link contain
+     * @return true if the tags for this link contain
      *    the reserved key <code>FC</code>, for fragment count
      */
     public boolean containsFragmentCount() {
@@ -403,7 +403,7 @@ public final class Link extends Gfa1Record {
      * Return true if the tags for this link contain
      * the reserved key <code>KC</code>.
      *
-     * @return if the tags for this link contain
+     * @return true if the tags for this link contain
      *    the reserved key <code>KC</code>
      */
     public boolean containsKc() {
@@ -436,7 +436,7 @@ public final class Link extends Gfa1Record {
      * Return true if the tags for this link contain
      * the reserved key <code>KC</code>, for k-mer count.
      *
-     * @return if the tags for this link contain
+     * @return true if the tags for this link contain
      *    the reserved key <code>KC</code>, for k-mer count
      */
     public boolean containsKmerCount() {
@@ -471,7 +471,7 @@ public final class Link extends Gfa1Record {
      * Return true if the tags for this segment contain
      * the reserved key <code>ID</code>.
      *
-     * @return if the tags for this segment contain
+     * @return true if the tags for this segment contain
      *    the reserved key <code>ID</code>
      */
     public boolean containsId() {

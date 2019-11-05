@@ -63,7 +63,7 @@ public final class Header extends Gfa1Record {
      * Return true if the tags for this segment contain
      * the reserved key <code>VN</code>.
      *
-     * @return if the tags for this segment contain
+     * @return true if the tags for this segment contain
      *    the reserved key <code>VN</code>
      */
     public boolean containsVn() {

@@ -114,7 +114,7 @@ public final class Segment extends Gfa1Record {
      * Return true if the tags for this segment contain
      * the reserved key <code>LN</code>.
      *
-     * @return if the tags for this segment contain
+     * @return true if the tags for this segment contain
      *    the reserved key <code>LN</code>
      */
     public boolean containsLn() {
@@ -147,7 +147,7 @@ public final class Segment extends Gfa1Record {
      * Return true if the tags for this segment contain
      * the reserved key <code>LN</code>, for length
      *
-     * @return if the tags for this segment contain
+     * @return true if the tags for this segment contain
      *    the reserved key <code>LN</code>, for length
      */
     public boolean containsLength() {
@@ -182,7 +182,7 @@ public final class Segment extends Gfa1Record {
      * Return true if the tags for this segment contain
      * the reserved key <code>RC</code>.
      *
-     * @return if the tags for this segment contain
+     * @return true if the tags for this segment contain
      *    the reserved key <code>RC</code>
      */
     public boolean containsRc() {
@@ -215,7 +215,7 @@ public final class Segment extends Gfa1Record {
      * Return true if the tags for this segment contain
      * the reserved key <code>RC</code>, for read count.
      *
-     * @return if the tags for this segment contain
+     * @return true if the tags for this segment contain
      *    the reserved key <code>RC</code>, for read count
      */
     public boolean containsReadCount() {
@@ -250,7 +250,7 @@ public final class Segment extends Gfa1Record {
      * Return true if the tags for this segment contain
      * the reserved key <code>FC</code>.
      *
-     * @return if the tags for this segment contain
+     * @return true if the tags for this segment contain
      *    the reserved key <code>FC</code>
      */
     public boolean containsFc() {
@@ -283,7 +283,7 @@ public final class Segment extends Gfa1Record {
      * Return true if the tags for this segment contain
      * the reserved key <code>FC</code>, for fragment count.
      *
-     * @return if the tags for this segment contain
+     * @return true if the tags for this segment contain
      *    the reserved key <code>FC</code>, for fragment count
      */
     public boolean containsFragmentCount() {
@@ -318,7 +318,7 @@ public final class Segment extends Gfa1Record {
      * Return true if the tags for this segment contain
      * the reserved key <code>KC</code>.
      *
-     * @return if the tags for this segment contain
+     * @return true if the tags for this segment contain
      *    the reserved key <code>KC</code>
      */
     public boolean containsKc() {
@@ -351,7 +351,7 @@ public final class Segment extends Gfa1Record {
      * Return true if the tags for this segment contain
      * the reserved key <code>KC</code>, for k-mer count.
      *
-     * @return if the tags for this segment contain
+     * @return true if the tags for this segment contain
      *    the reserved key <code>KC</code>, for k-mer count
      */
     public boolean containsKmerCount() {
@@ -386,7 +386,7 @@ public final class Segment extends Gfa1Record {
      * Return true if the tags for this segment contain
      * the reserved key <code>SH</code>.
      *
-     * @return if the tags for this segment contain
+     * @return true if the tags for this segment contain
      *    the reserved key <code>SH</code>
      */
     public boolean containsSh() {
@@ -420,7 +420,7 @@ public final class Segment extends Gfa1Record {
      * the reserved key <code>SH</code>, for SHA-256 checksum of the
      * sequence.
      *
-     * @return if the tags for this segment contain
+     * @return true if the tags for this segment contain
      *    the reserved key <code>SH</code>, for SHA-256 checksum of the
      *    sequence
      */
@@ -458,7 +458,7 @@ public final class Segment extends Gfa1Record {
      * Return true if the tags for this segment contain
      * the reserved key <code>UR</code>.
      *
-     * @return if the tags for this segment contain
+     * @return true if the tags for this segment contain
      *    the reserved key <code>UR</code>
      */
     public boolean containsUr() {
@@ -491,7 +491,7 @@ public final class Segment extends Gfa1Record {
      * Return true if the tags for this segment contain
      * the reserved key <code>UR</code>.
      *
-     * @return if the tags for this segment contain
+     * @return true if the tags for this segment contain
      *    the reserved key <code>UR</code>
      */
     public boolean containsSequenceUri() {
