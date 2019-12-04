@@ -216,6 +216,14 @@
               <mainClass>org.dishevelled.bio.tools.CompressFastq</mainClass>
             </program>
             <program>
+              <id>dsh-compress-gfa1</id>
+              <mainClass>org.dishevelled.bio.tools.CompressGfa1</mainClass>
+            </program>
+            <program>
+              <id>dsh-compress-gfa2</id>
+              <mainClass>org.dishevelled.bio.tools.CompressGfa2</mainClass>
+            </program>
+            <program>
               <id>dsh-compress-gff3</id>
               <mainClass>org.dishevelled.bio.tools.CompressGff3</mainClass>
             </program>
@@ -270,6 +278,14 @@
             <program>
               <id>dsh-filter-bed</id>
               <mainClass>org.dishevelled.bio.tools.FilterBed</mainClass>
+            </program>
+            <program>
+              <id>dsh-filter-gfa1</id>
+              <mainClass>org.dishevelled.bio.tools.FilterGfa1</mainClass>
+            </program>
+            <program>
+              <id>dsh-filter-gfa2</id>
+              <mainClass>org.dishevelled.bio.tools.FilterGfa2</mainClass>
             </program>
             <program>
               <id>dsh-filter-gff3</id>

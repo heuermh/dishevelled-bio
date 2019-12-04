@@ -26,6 +26,7 @@ package org.dishevelled.bio.assembly.gfa1;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -35,6 +36,9 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
+
+import com.google.common.collect.ImmutableMap;
 
 import org.dishevelled.bio.assembly.gfa.Reference;
 import org.dishevelled.bio.assembly.gfa.Tag;
@@ -46,8 +50,8 @@ import org.dishevelled.bio.assembly.gfa.Tag;
  */
 @Immutable
 public final class Traversal extends Gfa1Record {
-    /** Path identifier for this traversal. */
-    private final String pathId;
+    /** Path name for this traversal. */
+    private final String pathName;
 
     /** Ordinal for this traversal. */
     private final int ordinal;
@@ -58,7 +62,7 @@ public final class Traversal extends Gfa1Record {
     /** Target reference for this traversal. */
     private final Reference target;
 
-    /** Overlap for this traversal. */
+    /** Overlap in cigar format for this traversal. */
     private final String overlap;
 
     /** Cached hash code. */
@@ -68,14 +72,14 @@ public final class Traversal extends Gfa1Record {
     /**
      * Create a new traversal GFA 1.0 record.
      *
-     * @param pathId path identifier, must not be null
+     * @param pathName path name, must not be null
      * @param ordinal ordinal, must be at least zero
      * @param source source reference, must not be null
      * @param target target reference, must not be null
      * @param overlap overlap, if any
      * @param tags tags, must not be null
      */
-    public Traversal(final String pathId,
+    public Traversal(final String pathName,
                      final int ordinal,
                      final Reference source,
                      final Reference target,
@@ -83,40 +87,80 @@ public final class Traversal extends Gfa1Record {
                      final Map<String, Tag> tags) {
 
         super(tags);
-        checkNotNull(pathId);
+        checkNotNull(pathName);
         checkNotNull(source);
         checkNotNull(target);
         checkArgument(ordinal >= 0, "ordinal must be at least zero");
 
-        this.pathId = pathId;
+        this.pathName = pathName;
         this.ordinal = ordinal;
         this.source = source;
         this.target = target;
         this.overlap = overlap;
 
-        hashCode = Objects.hash(this.pathId, this.ordinal, this.source, this.target, this.overlap, getTags());
+        hashCode = Objects.hash(this.pathName, this.ordinal, this.source, this.target, this.overlap, getTags());
     }
 
-    public String getPathId() {
-        return pathId;
+
+    /**
+     * Return the path name for this traversal.
+     *
+     * @return the path name for ths traversal
+     */
+    public String getPathName() {
+        return pathName;
     }
 
+    /**
+     * Return the ordinal for this traversal.
+     *
+     * @return the ordinal for this traversal
+     */
     public int getOrdinal() {
         return ordinal;
     }
 
+    /**
+     * Return the source reference for this traversal.
+     *
+     * @return the source reference for this traversal
+     */
     public Reference getSource() {
         return source;
     }
 
+    /**
+     * Return the target reference for this traversal.
+     *
+     * @return the target reference for this traversal
+     */
     public Reference getTarget() {
         return target;
     }
 
+    /**
+     * Return true if this traversal has an overlap in cigar format.
+     *
+     * @return true if this traversal has an overlap in cigar format.
+     */
+    public boolean hasOverlap() {
+        return overlap != null;
+    }
+
+    /**
+     * Return the overlap in cigar format for this traversal, if any.
+     *
+     * @return the overlap in cigar format for this traversal, if any
+     */
     public String getOverlap() {
         return overlap;
     }
 
+    /**
+     * Return an optional wrapping the overlap for this traversal.
+     *
+     * @return an optional wrapping the overlap for this traversal
+     */
     public Optional<String> getOverlapOpt() {
         return Optional.ofNullable(overlap);
     }
@@ -136,7 +180,7 @@ public final class Traversal extends Gfa1Record {
         }
         Traversal t = (Traversal) o;
 
-        return Objects.equals(pathId, t.getPathId())
+        return Objects.equals(pathName, t.getPathName())
             && Objects.equals(ordinal, t.getOrdinal())
             && Objects.equals(source, t.getSource())
             && Objects.equals(target, t.getTarget())
@@ -148,11 +192,39 @@ public final class Traversal extends Gfa1Record {
     public String toString() {
         Joiner joiner = Joiner.on("\t");
         StringBuilder sb = new StringBuilder();
-        joiner.appendTo(sb, "T", pathId, ordinal, source.splitToString(), target.splitToString(), getOverlapOpt().orElse("*"));
+        joiner.appendTo(sb, "T", pathName, ordinal, source.splitToString(), target.splitToString(), getOverlapOpt().orElse("*"));
         if (!getTags().isEmpty()) {
             sb.append("\t");
             joiner.appendTo(sb, getTags().values());
         }
         return sb.toString();
+    }
+
+    /**
+     * Parse a traversal GFA 1.0 record from the specified value.
+     *
+     * @param value value, must not be null
+     * @return a traversal GFA 1.0 record parsed from the specified value
+     */
+    public static Traversal valueOf(final String value) {
+        checkNotNull(value);
+        checkArgument(value.startsWith("T"), "value must start with T");
+        List<String> tokens = Splitter.on("\t").splitToList(value);
+        if (tokens.size() < 7) {
+            throw new IllegalArgumentException("value must have at least seven tokens, was " + tokens.size());
+        }
+        String name = tokens.get(1);
+        int ordinal = Integer.parseInt(tokens.get(2));
+        Reference source = Reference.splitValueOf(tokens.get(3), tokens.get(4));
+        Reference target = Reference.splitValueOf(tokens.get(5), tokens.get(6));
+        String overlap = "*".equals(tokens.get(7)) ? null : tokens.get(7);
+
+        ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
+        for (int i = 7; i < tokens.size(); i++) {
+            Tag tag = Tag.valueOf(tokens.get(i));
+            tags.put(tag.getName(), tag);
+        }
+
+        return new Traversal(name, ordinal, source, target, overlap, tags.build());
     }
 }

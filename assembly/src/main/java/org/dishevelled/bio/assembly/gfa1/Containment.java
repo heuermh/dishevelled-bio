@@ -59,7 +59,7 @@ public final class Containment extends Gfa1Record {
     /** Position for this containment. */
     private final int position;
 
-    /** Overlap for this containment. */
+    /** Overlap in cigar format for this containment. */
     private final String overlap;
 
     /** Cached hash code. */
@@ -72,7 +72,7 @@ public final class Containment extends Gfa1Record {
      * @param container container reference, must not be null
      * @param contained contained reference, must not be null
      * @param position position, must be at least zero
-     * @param overlap overlap, if any
+     * @param overlap overlap in cigar format, if any
      * @param tags tags, must not be null
      */
     public Containment(final Reference container,
@@ -122,6 +122,15 @@ public final class Containment extends Gfa1Record {
      */
     public int getPosition() {
         return position;
+    }
+
+    /**
+     * Return true if this containment has an overlap in cigar format.
+     *
+     * @return true if this containment has an overlap in cigar format.
+     */
+    public boolean hasOverlap() {
+        return overlap != null;
     }
 
     /**

@@ -47,6 +47,9 @@ public abstract class Gfa1Adapter implements Gfa1Listener {
         else if (record instanceof Segment) {
             return segment((Segment) record);
         }
+        else if (record instanceof Traversal) {
+            return traversal((Traversal) record);
+        }
         throw new IllegalStateException("unrecognized subclass of Gfa1Record, " + record.getClass());
     }
 
@@ -97,6 +100,16 @@ public abstract class Gfa1Adapter implements Gfa1Listener {
      * @return true to continue processing, false to stop
      */
     protected boolean segment(final Segment segment) {
+        return true;
+    }
+
+    /**
+     * Notify this abstract GFA 1.0 listener of a GFA 1.0 traversal.
+     *
+     * @param traversal GFA 1.0 traversal
+     * @return true to continue processing, false to stop
+     */
+    protected boolean traversal(final Traversal traversal) {
         return true;
     }
 }

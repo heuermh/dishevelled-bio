@@ -67,8 +67,8 @@ public final class Gfa1Reader {
 
     /**
      * Read zero or more GFA 1.0 header records from the specified readable. Only header
-     * records at the head of the readable (i.e. those before any containment, link, path, or
-     * segment records) will be returned.
+     * records at the head of the readable (i.e. those before any containment, link, path,
+     * segment, or traversal records) will be returned.
      *
      * @param readable readable to read from, must not be null
      * @return zero or more GFA 1.0 header records read from the specified readable
@@ -83,8 +83,8 @@ public final class Gfa1Reader {
 
     /**
      * Read zero or more GFA 1.0 segment records from the specified readable. Only segment
-     * records at the head of the readable (i.e. those before any containment, link, or path
-     * records) will be returned.
+     * records at the head of the readable (i.e. those before any containment, link, path,
+     * or traversal records) will be returned.
      *
      * @param readable readable to read from, must not be null
      * @return zero or more GFA 1.0 segment records read from the specified readable
@@ -162,6 +162,9 @@ public final class Gfa1Reader {
                     else if ('S' == c) {
                         return listener.record(Segment.valueOf(line));
                     }
+                    else if ('T' == c) {
+                        return listener.record(Traversal.valueOf(line));
+                    }
                 }
                 // continue processing blank or unrecognized lines
                 return true;
@@ -230,6 +233,11 @@ public final class Gfa1Reader {
             return false;
         }
 
+        @Override
+        protected boolean traversal(final Traversal traversal) {
+            return false;
+        }
+
         /**
          * Return zero or more collected GFA 1.0 header records.
          *
@@ -266,6 +274,11 @@ public final class Gfa1Reader {
         protected boolean segment(final Segment segment) {
             segments.add(segment);
             return true;
+        }
+
+        @Override
+        protected boolean traversal(final Traversal traversal) {
+            return false;
         }
 
         /**

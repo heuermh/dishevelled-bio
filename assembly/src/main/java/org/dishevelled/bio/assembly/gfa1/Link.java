@@ -107,6 +107,15 @@ public final class Link extends Gfa1Record {
     }
 
     /**
+     * Return true if this link has an overlap in cigar format.
+     *
+     * @return true if this link has an overlap in cigar format.
+     */
+    public boolean hasOverlap() {
+        return overlap != null;
+    }
+
+    /**
      * Return the overlap in cigar format for this link, if any.
      *
      * @return the overlap in cigar format for this link, if any
