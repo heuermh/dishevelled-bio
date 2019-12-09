@@ -348,6 +348,10 @@
               <mainClass>org.dishevelled.bio.tools.SplitVcf</mainClass>
             </program>
             <program>
+              <id>dsh-traverse-paths</id>
+              <mainClass>org.dishevelled.bio.tools.TraversePaths</mainClass>
+            </program>
+            <program>
               <id>dsh-truncate-fasta</id>
               <mainClass>org.dishevelled.bio.tools.TruncateFasta</mainClass>
             </program>

@@ -75,6 +75,7 @@ public final class CompressGfa2 implements Callable<Integer> {
         try {
             reader = reader(inputGfa2File);
             writer = writer(outputGfa2File);
+
             final PrintWriter w = writer;
             Gfa2Reader.stream(reader, new Gfa2Listener() {
                     @Override

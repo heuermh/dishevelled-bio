@@ -166,6 +166,7 @@ public final class Tools implements Callable<Integer> {
         .put("split-interleaved-fastq", new Command("split-interleaved-fastq", "split files in interleaved FASTQ format", SplitInterleavedFastq.class))
         .put("split-sam", new Command("split-sam", "split files in SAM format", SplitSam.class))
         .put("split-vcf", new Command("split-vcf", "split files in VCF format", SplitVcf.class))
+        .put("traverse-paths", new Command("traverse-paths", "traverse paths in GFA 1.0 format", TraversePaths.class))
         .put("truncate-fasta", new Command("truncate-fasta", "truncate sequences in FASTA format", TruncateFasta.class))
         .put("variant-table-to-vcf", new Command("variant-table-to-vcf", "convert Ensembl variant table to VCF format", EnsemblVariantTableToVcf.class))
         .put("vcf-pedigree", new Command("vcf-pedigree", "extract a pedigree from VCF format", VcfPedigree.class))

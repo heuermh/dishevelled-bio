@@ -83,6 +83,11 @@
       </dependency>
       <dependency>
         <groupId>org.dishevelled</groupId>
+        <artifactId>dsh-bio-assembly</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.dishevelled</groupId>
         <artifactId>dsh-bio-feature</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -107,6 +112,11 @@
     <dependency>
       <groupId>org.dishevelled</groupId>
       <artifactId>dsh-bio-alignment</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.dishevelled</groupId>
+      <artifactId>dsh-bio-assembly</artifactId>
       <scope>compile</scope>
     </dependency>
     <dependency>

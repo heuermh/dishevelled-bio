@@ -30,12 +30,20 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.util.Collections;
+import java.util.Map;
+
 import java.util.concurrent.Callable;
+
+import org.dishevelled.bio.assembly.gfa.Reference;
+import org.dishevelled.bio.assembly.gfa.Tag;
 
 import org.dishevelled.bio.assembly.gfa1.Gfa1Listener;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Reader;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Record;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Writer;
+import org.dishevelled.bio.assembly.gfa1.Path;
+import org.dishevelled.bio.assembly.gfa1.Traversal;
 
 import org.dishevelled.commandline.ArgumentList;
 import org.dishevelled.commandline.CommandLine;
@@ -47,23 +55,24 @@ import org.dishevelled.commandline.Usage;
 import org.dishevelled.commandline.argument.FileArgument;
 
 /**
- * Compress features in GFA 1.0 format to splittable bgzf or bzip2 compression codecs.
+ * Traverse paths in GFA 1.0 format, creating new traversal records.
  *
  * @since 1.3
  * @author  Michael Heuer
  */
-public final class CompressGfa1 implements Callable<Integer> {
+public final class TraversePaths implements Callable<Integer> {
     private final File inputGfa1File;
     private final File outputGfa1File;
-    private static final String USAGE = "dsh-compress-gfa1 [args]";
+    private static final Map<String, Tag> EMPTY_TAGS = Collections.emptyMap();
+    private static final String USAGE = "dsh-traverse-paths [args]";
 
     /**
-     * Compress features in GFA 1.0 format to splittable bgzf or bzip2 compression codecs.
+     * Traverse paths in GFA 1.0 format, creating new traversal records.
      *
      * @param inputGfa1File input GFA 1.0 file, if any
      * @param outputGfa1File output GFA 1.0 file, if any
      */
-    public CompressGfa1(final File inputGfa1File, final File outputGfa1File) {
+    public TraversePaths(final File inputGfa1File, final File outputGfa1File) {
         this.inputGfa1File = inputGfa1File;
         this.outputGfa1File = outputGfa1File;
     }
@@ -81,6 +90,27 @@ public final class CompressGfa1 implements Callable<Integer> {
                     @Override
                     public boolean record(final Gfa1Record gfa1Record) {
                         Gfa1Writer.write(gfa1Record, w);
+
+                        if (gfa1Record instanceof Path) {
+                            Path path = (Path) gfa1Record;
+                            int size = path.getSegments().size();
+
+                            Reference source = null;
+                            Reference target = null;
+                            String overlap = null;
+
+                            for (int i = 0; i < size; i++) {
+                                target = path.getSegments().get(i);
+                                if (i > 0) {
+                                    overlap = (path.getOverlaps() != null && path.getOverlaps().size() > i) ? path.getOverlaps().get(i - 1) : null;
+                                }
+                                if (source != null) {
+                                    Traversal traversal = new Traversal(path.getName(), i - 1, source, target, overlap, EMPTY_TAGS);
+                                    Gfa1Writer.write(traversal, w);
+                                }
+                                source = target;
+                            }
+                        }
                         return true;
                     }
                 });
@@ -118,7 +148,7 @@ public final class CompressGfa1 implements Callable<Integer> {
         ArgumentList arguments = new ArgumentList(about, help, inputGfa1File, outputGfa1File);
         CommandLine commandLine = new CommandLine(args);
 
-        CompressGfa1 compressGfa1 = null;
+        TraversePaths traversePaths = null;
         try
         {
             CommandLineParser.parse(commandLine, arguments);
@@ -130,14 +160,14 @@ public final class CompressGfa1 implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            compressGfa1 = new CompressGfa1(inputGfa1File.getValue(), outputGfa1File.getValue());
+            traversePaths = new TraversePaths(inputGfa1File.getValue(), outputGfa1File.getValue());
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);
             System.exit(-1);
         }
         try {
-            System.exit(compressGfa1.call());
+            System.exit(traversePaths.call());
         }
         catch (Exception e) {
             e.printStackTrace();
