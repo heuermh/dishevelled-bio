@@ -90,6 +90,15 @@ public final class Segment extends Gfa1Record {
     }
 
     /**
+     * Return true if this segment has a sequence.
+     *
+     * @return true if this segment has a sequence
+     */
+    public boolean hasSequence() {
+        return sequence != null;
+    }
+
+    /**
      * Return the sequence for this segment, if any.
      *
      * @return the sequence for this segment, if any
