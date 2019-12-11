@@ -101,6 +101,12 @@
         <groupId>com.github.samtools</groupId>
         <artifactId>htsjdk</artifactId>
         <version>${htsjdk.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-jexl</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>commons-io</groupId>

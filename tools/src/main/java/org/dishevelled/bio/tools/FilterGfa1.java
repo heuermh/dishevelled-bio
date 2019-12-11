@@ -39,12 +39,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import java.util.concurrent.Callable;
-
 import javax.script.Compilable;
 import javax.script.CompiledScript;
 import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import com.google.common.collect.ImmutableList;
@@ -78,7 +75,7 @@ import org.dishevelled.commandline.argument.StringArgument;
  * @since 1.3
  * @author  Michael Heuer
  */
-public final class FilterGfa1 implements Callable<Integer> {
+public final class FilterGfa1 extends AbstractFilter {
     private final List<Filter> filters;
     private final File inputGfa1File;
     private final File outputGfa1File;
@@ -386,8 +383,7 @@ public final class FilterGfa1 implements Callable<Integer> {
          * @param script script
          */
         public ScriptFilter(final String script) {
-            ScriptEngineManager factory = new ScriptEngineManager();
-            ScriptEngine engine = factory.getEngineByName("JavaScript");
+            ScriptEngine engine = createScriptEngine();
             try {
                 Compilable compilable = (Compilable) engine;
                 compiledScript = compilable.compile("function test(r) { return (" + script + ") }\nvar result = test(r)");
