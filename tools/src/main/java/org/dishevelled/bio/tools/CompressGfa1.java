@@ -47,7 +47,7 @@ import org.dishevelled.commandline.Usage;
 import org.dishevelled.commandline.argument.FileArgument;
 
 /**
- * Compress features in GFA 1.0 format to splittable bgzf or bzip2 compression codecs.
+ * Compress assembly in GFA 1.0 format to splittable bgzf or bzip2 compression codecs.
  *
  * @since 1.3
  * @author  Michael Heuer
@@ -58,7 +58,7 @@ public final class CompressGfa1 implements Callable<Integer> {
     private static final String USAGE = "dsh-compress-gfa1 [args]";
 
     /**
-     * Compress features in GFA 1.0 format to splittable bgzf or bzip2 compression codecs.
+     * Compress assembly in GFA 1.0 format to splittable bgzf or bzip2 compression codecs.
      *
      * @param inputGfa1File input GFA 1.0 file, if any
      * @param outputGfa1File output GFA 1.0 file, if any

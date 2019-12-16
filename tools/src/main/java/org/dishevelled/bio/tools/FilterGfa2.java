@@ -64,7 +64,7 @@ import org.dishevelled.commandline.argument.IntegerArgument;
 import org.dishevelled.commandline.argument.StringArgument;
 
 /**
- * Filter records in GFA 2.0 format.
+ * Filter assembly in GFA 2.0 format.
  *
  * @since 1.3
  * @author  Michael Heuer
@@ -77,7 +77,7 @@ public final class FilterGfa2 implements Callable<Integer> {
 
 
     /**
-     * Filter records in GFA2 format.
+     * Filter assembly in GFA2 format.
      *
      * @param filters list of filters, must not be null
      * @param inputGfa2File input GFA2 file, if any
