@@ -51,6 +51,7 @@ public final class SamWriter {
     /**
      * Write SAM with the specified print writer.
      *
+     * @param header SAM header, must not be null
      * @param records zero or more SAM records, must not be null
      * @param writer print writer to write SAM with, must not be null
      */

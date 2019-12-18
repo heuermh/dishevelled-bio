@@ -70,6 +70,7 @@ public final class runFilterVcfHtsjdkOnce {
      * Main.
      *
      * @param args command line arguments, ignored
+     * @throws Exception if an error occurs
      */
     public static void main(final String args[]) throws Exception {
         long t = System.nanoTime();

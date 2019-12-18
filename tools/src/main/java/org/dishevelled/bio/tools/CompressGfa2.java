@@ -60,8 +60,8 @@ public final class CompressGfa2 implements Callable<Integer> {
     /**
      * Compress assembly in GFA 2.0 format to splittable bgzf or bzip2 compression codecs.
      *
-     * @param inputGfa1File input GFA 2.0 file, if any
-     * @param outputGfa1File output GFA 2.0 file, if any
+     * @param inputGfa2File input GFA 2.0 file, if any
+     * @param outputGfa2File output GFA 2.0 file, if any
      */
     public CompressGfa2(final File inputGfa2File, final File outputGfa2File) {
         this.inputGfa2File = inputGfa2File;

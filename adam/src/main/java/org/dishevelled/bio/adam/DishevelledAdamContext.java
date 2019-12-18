@@ -168,6 +168,7 @@ public class DishevelledAdamContext extends ADAMContext {
      * Load the specified path in BED format as features.
      *
      * @param path path in BED format
+     * @return a dataset of features
      * @throws IOException if an I/O error occurs
      */
     public FeatureDataset dshLoadBed(final String path) throws IOException {
@@ -183,6 +184,7 @@ public class DishevelledAdamContext extends ADAMContext {
      * Load the specified path in GFF3 format as features.
      *
      * @param path path in GFF3 format
+     * @return a dataset of features
      * @throws IOException if an I/O error occurs
      */
     public FeatureDataset dshLoadGff3(final String path) throws IOException {
@@ -198,6 +200,7 @@ public class DishevelledAdamContext extends ADAMContext {
      * Load the specified path in VCF/BCF format as variants.
      *
      * @param path path in VCF/BCF format
+     * @return a dataset of variants
      * @throws IOException if an I/O error occurs
      */
     public VariantDataset dshLoadVariants(final String path) throws IOException {
@@ -221,6 +224,7 @@ public class DishevelledAdamContext extends ADAMContext {
      * Load the specified path in VCF/BCF format as genotypes.
      *
      * @param path path in VCF/BCF format
+     * @return a dataset of genotypes
      * @throws IOException if an I/O error occurs
      */
     public GenotypeDataset dshLoadGenotypes(final String path) throws IOException {
