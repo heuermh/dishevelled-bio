@@ -44,7 +44,8 @@ the results are rather disappointing; `dsh-bio-native` is consisently slower.
 ```
 $ wget ftp://ftp-trace.ncbi.nlm.nih.gov/giab/ftp/data/AshkenazimTrio/analysis/NIST_v4beta_SmallVariantDraftBenchmark_07192019/GIAB_SmallVariant_Benchmark_v4beta_GRCh37_HG002.bed
 
-$ gzip gzip GIAB_SmallVariant_Benchmark_v4beta_GRCh37_HG002.bed
+$ gzip GIAB_SmallVariant_Benchmark_v4beta_GRCh37_HG002.bed
+
 
 $ time dsh-bio-native filter-bed --range "22:51212500-51220778" -i GIAB_SmallVariant_Benchmark_v4beta_GRCh37_HG002.bed.gz
 ...
