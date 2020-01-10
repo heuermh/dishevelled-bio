@@ -220,7 +220,7 @@ public final class Traversal extends Gfa1Record {
         String overlap = "*".equals(tokens.get(7)) ? null : tokens.get(7);
 
         ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
-        for (int i = 7; i < tokens.size(); i++) {
+        for (int i = 8; i < tokens.size(); i++) {
             Tag tag = Tag.valueOf(tokens.get(i));
             tags.put(tag.getName(), tag);
         }
