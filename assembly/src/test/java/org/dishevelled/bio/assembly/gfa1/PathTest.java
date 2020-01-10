@@ -54,7 +54,7 @@ public class PathTest {
     public void setUp() {
         name = "name";
         segments = ImmutableList.of(Reference.valueOf("source+"), Reference.valueOf("target+"));
-        overlaps = ImmutableList.of("10M", "20M");
+        overlaps = ImmutableList.of("10M");
         tags = ImmutableMap.<String, Tag>builder().put("aa", new Tag("aa", "i", "42")).build();
     }
 
@@ -73,6 +73,11 @@ public class PathTest {
         new Path(name, segments, overlaps, null);
     }
 
+    @Test(expected=IllegalArgumentException.class)
+    public void testCtrIncorrectOverlapSize() {
+        new Path(name, segments, ImmutableList.of("10M", "20M"), tags);
+    }
+
     @Test
     public void testCtr() {
         Path path = new Path(name, segments, overlaps, tags);
@@ -80,7 +85,7 @@ public class PathTest {
         assertEquals(segments, path.getSegments());
         assertEquals(overlaps, path.getOverlaps());
         assertEquals(tags, path.getTags());
-        assertEquals("P\tname\tsource+,target+\t10M,20M\taa:i:42", path.toString());
+        assertEquals("P\tname\tsource+,target+\t10M\taa:i:42", path.toString());
     }
 
     @Test(expected=NullPointerException.class)
@@ -100,7 +105,7 @@ public class PathTest {
 
     @Test
     public void testValueOf() {
-        Path path = Path.valueOf("P\tname\tsource+,target+\t10M,20M\taa:i:42");
+        Path path = Path.valueOf("P\tname\tsource+,target+\t10M\taa:i:42");
         assertEquals(name, path.getName());
         assertEquals(segments, path.getSegments());
         assertEquals(overlaps, path.getOverlaps());
@@ -108,10 +113,18 @@ public class PathTest {
     }
 
     @Test
+    public void testValueOfMultipleOverlaps() {
+        Path path = Path.valueOf("P\tname\tsource+,target+,additional+\t10M,20M\taa:i:42");
+        assertEquals(name, path.getName());
+        assertEquals(ImmutableList.of("10M", "20M"), path.getOverlaps());
+        assertEquals(tags, path.getTags());
+    }
+
+    @Test
     public void testEquals() {
-        Path path1 = Path.valueOf("P\tname\tsource+,target+\t10M,20M\taa:i:42");
-        Path path2 = Path.valueOf("P\tname\tsource+,target+\t10M,20M\taa:i:42");
-        Path path3 = Path.valueOf("P\tname\tsource+,target+\t10M,20M\taa:i:43");
+        Path path1 = Path.valueOf("P\tname\tsource+,target+\t10M\taa:i:42");
+        Path path2 = Path.valueOf("P\tname\tsource+,target+\t10M\taa:i:42");
+        Path path3 = Path.valueOf("P\tname\tsource+,target+\t10M\taa:i:43");
         assertFalse(path1.equals(null));
         assertFalse(path1.equals(new Object()));
         assertTrue(path1.equals(path2));

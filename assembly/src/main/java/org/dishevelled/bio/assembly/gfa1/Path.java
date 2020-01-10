@@ -82,7 +82,9 @@ public final class Path extends Gfa1Record {
         super(tags);
         checkNotNull(name);
         checkNotNull(segments);
-        // if overlaps is non null, does its size need to equal segments.size() - 1?
+        if (overlaps != null) {
+            checkArgument(overlaps.size() == (segments.size() - 1), "if specified, overlaps must have one fewer values than segments");
+        }
 
         this.name = name;
         this.segments = ImmutableList.copyOf(segments);
