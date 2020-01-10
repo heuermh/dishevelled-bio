@@ -210,8 +210,8 @@ public final class Traversal extends Gfa1Record {
         checkNotNull(value);
         checkArgument(value.startsWith("T"), "value must start with T");
         List<String> tokens = Splitter.on("\t").splitToList(value);
-        if (tokens.size() < 7) {
-            throw new IllegalArgumentException("value must have at least seven tokens, was " + tokens.size());
+        if (tokens.size() < 8) {
+            throw new IllegalArgumentException("value must have at least eight tokens, was " + tokens.size());
         }
         String name = tokens.get(1);
         int ordinal = Integer.parseInt(tokens.get(2));

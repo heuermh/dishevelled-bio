@@ -27,6 +27,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -88,6 +89,15 @@ public class PathTest {
         assertEquals("P\tname\tsource+,target+\t10M\taa:i:42", path.toString());
     }
 
+    @Test
+    public void testCtrEmptySegments() {
+        Path path = new Path(name, Collections.<Reference>emptyList(), null, tags);
+        assertEquals(name, path.getName());
+        assertTrue(path.getSegments().isEmpty());
+        assertFalse(path.hasOverlaps());
+        assertEquals(tags, path.getTags());
+    }
+
     @Test(expected=NullPointerException.class)
     public void testValueOfNull() {
         Path.valueOf(null);
@@ -118,6 +128,24 @@ public class PathTest {
         assertEquals(name, path.getName());
         assertEquals(ImmutableList.of("10M", "20M"), path.getOverlaps());
         assertEquals(tags, path.getTags());
+    }
+
+    @Test
+    public void testValueOfEmptySegments() {
+        Path path = Path.valueOf("P\tname\t*\t*\taa:i:42");
+        assertEquals(name, path.getName());
+        assertTrue(path.getSegments().isEmpty());
+        assertFalse(path.hasOverlaps());
+        assertEquals(tags, path.getTags());
+    }
+
+    @Test
+    public void testValueOfEmptySegmentsNoTags() {
+        Path path = Path.valueOf("P\tname\t*\t*");
+        assertEquals(name, path.getName());
+        assertTrue(path.getSegments().isEmpty());
+        assertFalse(path.hasOverlaps());
+        assertTrue(path.getTags().isEmpty());
     }
 
     @Test

@@ -26,6 +26,7 @@ package org.dishevelled.bio.assembly.gfa1;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -61,6 +62,9 @@ public final class Path extends Gfa1Record {
 
     /** List of overlaps for this path. */
     private final List<String> overlaps;
+
+    /** Empty segments. */
+    private static final List<Reference> EMPTY_SEGMENTS = Collections.emptyList();
 
     /** Cached hash code. */
     private final int hashCode;
@@ -164,12 +168,33 @@ public final class Path extends Gfa1Record {
 
     @Override
     public String toString() {
-        Joiner joiner = Joiner.on("\t");
         StringBuilder sb = new StringBuilder();
-        joiner.appendTo(sb, "P", name, Joiner.on(",").join(segments), Joiner.on(",").join(overlaps));
+        sb.append("P");
+        sb.append("\t");
+        sb.append(name);
+        sb.append("\t");
+
+        // append segments, if any
+        if (segments.isEmpty()) {
+            sb.append("*");
+        }
+        else {
+            sb.append(Joiner.on(",").join(segments));;
+        }
+        sb.append("\t");
+
+        // append overlaps, if any
+        if (overlaps == null || overlaps.isEmpty()) {
+            sb.append("*");
+        }
+        else {
+            sb.append(Joiner.on(",").join(overlaps));
+        }
+
+        // append tags, if any
         if (!getTags().isEmpty()) {
             sb.append("\t");
-            joiner.appendTo(sb, getTags().values());
+            sb.append(Joiner.on("\t").join(getTags().values()));
         }
         return sb.toString();
     }
@@ -190,7 +215,7 @@ public final class Path extends Gfa1Record {
         }
         String name = tokens.get(1);
 
-        List<Reference> segments = Splitter
+        List<Reference> segments = "*".equals(tokens.get(2)) ? EMPTY_SEGMENTS : Splitter
             .on(",")
             .splitToList(tokens.get(2))
             .stream()
