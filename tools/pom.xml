@@ -356,6 +356,10 @@
               <mainClass>org.dishevelled.bio.tools.TruncateFasta</mainClass>
             </program>
             <program>
+              <id>dsh-truncate-paths</id>
+              <mainClass>org.dishevelled.bio.tools.TruncatePaths</mainClass>
+            </program>
+            <program>
               <id>dsh-variant-table-to-vcf</id>
               <mainClass>org.dishevelled.bio.tools.EnsemblVariantTableToVcf</mainClass>
             </program>

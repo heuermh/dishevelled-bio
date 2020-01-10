@@ -168,6 +168,7 @@ public final class Tools implements Callable<Integer> {
         .put("split-vcf", new Command("split-vcf", "split files in VCF format", SplitVcf.class))
         .put("traverse-paths", new Command("traverse-paths", "traverse paths in GFA 1.0 format", TraversePaths.class))
         .put("truncate-fasta", new Command("truncate-fasta", "truncate sequences in FASTA format", TruncateFasta.class))
+        .put("truncate-paths", new Command("truncate-paths", "truncate paths in GFA 1.0 format", TruncatePaths.class))
         .put("variant-table-to-vcf", new Command("variant-table-to-vcf", "convert Ensembl variant table to VCF format", EnsemblVariantTableToVcf.class))
         .put("vcf-pedigree", new Command("vcf-pedigree", "extract a pedigree from VCF format", VcfPedigree.class))
         .put("vcf-samples", new Command("vcf-samples", "extract samples from VCF format", VcfSamples.class))
