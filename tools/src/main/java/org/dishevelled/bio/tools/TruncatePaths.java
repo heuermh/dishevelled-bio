@@ -56,7 +56,7 @@ import org.dishevelled.commandline.Usage;
 import org.dishevelled.commandline.argument.FileArgument;
 
 /**
- * Truncate paths in GFA 1.0 format, removing segments and overlaps.
+ * Truncate paths in GFA 1.0 format, removing segments and overlaps fields.
  *
  * @since 1.3.1
  * @author  Michael Heuer
@@ -68,7 +68,7 @@ public final class TruncatePaths implements Callable<Integer> {
     private static final String USAGE = "dsh-truncate-paths [args]";
 
     /**
-     * Truncate paths in GFA 1.0 format, removing segments and overlaps.
+     * Truncate paths in GFA 1.0 format, removing segments and overlaps fields.
      *
      * @param inputGfa1File input GFA 1.0 file, if any
      * @param outputGfa1File output GFA 1.0 file, if any
