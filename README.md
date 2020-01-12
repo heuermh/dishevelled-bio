@@ -65,6 +65,7 @@ commands:
   split-vcf    split files in VCF format
   traverse-paths    traverse paths in GFA 1.0 format
   truncate-fasta    truncate sequences in FASTA format
+  truncate-paths    truncate paths in GFA 1.0 format
   variant-table-to-vcf    convert Ensembl variant table to VCF format
   vcf-pedigree    extract a pedigree from VCF format
   vcf-samples    extract samples from VCF format
