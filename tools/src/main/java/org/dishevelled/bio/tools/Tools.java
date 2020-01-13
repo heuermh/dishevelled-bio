@@ -73,7 +73,7 @@ public final class Tools implements Callable<Integer> {
         }
         Command command = commands.get(args[0]);
         if (command == null) {
-            throw new IllegalArgumentException("invalid command " + command);
+            throw new IllegalArgumentException("invalid command " + args[0]);
         }
         Method main = command.getCommandClass().getMethod("main", String[].class);
         main.invoke(null, new Object[] { dropFirst(args) });
@@ -158,6 +158,7 @@ public final class Tools implements Callable<Integer> {
         .put("gfa1-to-gfa2", new Command("gfa1-to-gfa2", "convert GFA 1.0 format to GFA 2.0 format", Gfa1ToGfa2.class))
         .put("interleave-fastq", new Command("interleave-fastq", "convert first and second sequence files in FASTQ format to interleaved FASTQ format", InterleaveFastq.class))
         //.put("intersect-bed", new Command("intersect-bed", "similar to bedtools2 intersect -v", IntersectBed.class))
+        .put("reassemble-paths", new Command("reassemble-paths", "reassemble paths in GFA 1.0 format from traversal records", ReassemblePaths.class))
         .put("remap-phase-set", new Command("remap-phase-set", "remap Type=String PS phase set ids in VCF format to Type=Integer", RemapPhaseSet.class))
         .put("split-bed", new Command("split-bed", "split files in BED format", SplitBed.class))
         .put("split-fasta", new Command("split-fasta", "split files in FASTA format", SplitFasta.class))
