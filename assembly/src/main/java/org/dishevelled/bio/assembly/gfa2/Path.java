@@ -86,6 +86,16 @@ public final class Path extends Gfa2Record {
 
 
     /**
+     * Return true if this path has an identifier.
+     *
+     * @since 1.3.2
+     * @return true if this path has an identifier
+     */
+    public boolean hasId() {
+        return id != null;
+    }
+
+    /**
      * Return the identifier for this path, if any.
      *
      * @return the identifier for this path, if any

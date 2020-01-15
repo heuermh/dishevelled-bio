@@ -103,6 +103,15 @@ public final class Gap extends Gfa2Record {
 
 
     /**
+     * Return true if this gap has an identifier.
+     *
+     * @return true if this gap has an identifier
+     */
+    public boolean hasId() {
+        return id != null;
+    }
+
+    /**
      * Return the identifier for this gap, if any.
      *
      * @return the identifier for this gap, if any
@@ -145,6 +154,15 @@ public final class Gap extends Gfa2Record {
      */
     public int getDistance() {
         return distance;
+    }
+
+    /**
+     * Return true if this gap has a variance.
+     *
+     * @return true if this gap has a variance
+     */
+    public boolean hasVariance() {
+        return variance != null;
     }
 
     /**

@@ -82,6 +82,16 @@ public final class Set extends Gfa2Record {
 
 
     /**
+     * Return true if this set has an identifier.
+     *
+     * @since 1.3.2
+     * @return true if this set has an identifier
+     */
+    public boolean hasId() {
+        return id != null;
+    }
+
+    /**
      * Return the identifier for this set, if any.
      *
      * @return the identifier for this set, if any

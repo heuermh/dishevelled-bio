@@ -99,6 +99,7 @@ public final class Segment extends Gfa2Record {
     /**
      * Return an optional wrapping the identifier for this segment.
      *
+     * @deprecated will be removed in 2.0, identifier is always non-null
      * @return an optional wrapping the identifier for this segment
      */
     public Optional<String> getIdOpt() {
@@ -112,6 +113,16 @@ public final class Segment extends Gfa2Record {
      */
     public int getLength() {
         return length;
+    }
+
+    /**
+     * Return true if this segment has a sequence.
+     *
+     * @since 1.3.2
+     * @return true if this segment has a sequence
+     */
+    public boolean hasSequence() {
+        return sequence != null;
     }
 
     /**
@@ -180,12 +191,16 @@ public final class Segment extends Gfa2Record {
             throw new IllegalArgumentException("value must have at least four tokens, was " + tokens.size());
         }
 
+        String id = tokens.get(1);
+        int length = Integer.parseInt(tokens.get(2));
+        String sequence = "*".equals(tokens.get(3)) ? null : tokens.get(3);
+
         ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
         for (int i = 4; i < tokens.size(); i++) {
             Tag tag = Tag.valueOf(tokens.get(i));
             tags.put(tag.getName(), tag);
         }
 
-        return new Segment(tokens.get(1), Integer.parseInt(tokens.get(2)), tokens.get(3), tags.build());
+        return new Segment(id, length, sequence, tags.build());
     }
 }

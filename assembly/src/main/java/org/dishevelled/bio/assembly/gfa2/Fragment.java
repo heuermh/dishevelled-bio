@@ -173,6 +173,16 @@ public final class Fragment extends Gfa2Record {
     }
 
     /**
+     * Return true if this fragment has an alignment.
+     *
+     * @since 1.3.2
+     * @return true if this fragment has an alignment
+     */
+    public boolean hasAlignment() {
+        return alignment != null;
+    }
+
+    /**
      * Return the alignment for this fragment, if any.
      *
      * @return the alignment for this fragment, if any

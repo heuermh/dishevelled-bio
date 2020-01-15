@@ -125,12 +125,32 @@ public final class Edge extends Gfa2Record {
 
 
     /**
+     * Return true if this edge has an identifier.
+     *
+     * @since 1.3.2
+     * @return true if this edge has an identifier
+     */
+    public boolean hasId() {
+        return id != null;
+    }
+
+    /**
      * Return the identifier for this edge, if any.
      *
      * @return the identifier for this edge, if any
      */
     public String getId() {
         return id;
+    }
+
+    /**
+     * Return an optional wrapping the identifier for this edge.
+     *
+     * @since 1.3.2
+     * @return an optional wrapping the identifier for this edge
+     */
+    public Optional<String> getIdOpt() {
+        return Optional.ofNullable(id);
     }
 
     /**
@@ -185,6 +205,16 @@ public final class Edge extends Gfa2Record {
      */
     public Position getTargetEnd() {
         return targetEnd;
+    }
+
+    /**
+     * Return true if this edge has an alignment.
+     *
+     * @since 1.3.2
+     * @return true if this edge has an alignment
+     */
+    public boolean hasAlignment() {
+        return alignment != null;
     }
 
     /**
