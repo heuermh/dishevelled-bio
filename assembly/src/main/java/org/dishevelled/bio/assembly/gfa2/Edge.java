@@ -235,6 +235,452 @@ public final class Edge extends Gfa2Record {
         return Optional.ofNullable(alignment);
     }
 
+
+    // optional fields
+
+    /**
+     * Return true if the tags for this edge contain
+     * the reserved key <code>MQ</code>.
+     *
+     * @since 1.3.2
+     * @return true if the tags for this edge contain
+     *    the reserved key <code>MQ</code>
+     */
+    public boolean containsMq() {
+        return containsTagKey("MQ");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>MQ</code>
+     * as an integer.
+     *
+     * @since 1.3.2
+     * @return the Type=i value for the reserved key <code>MQ</code>
+     *    as an integer
+     */
+    public int getMq() {
+        return getTagInteger("MQ");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>MQ</code>
+     * as an integer.
+     *
+     * @since 1.3.2
+     * @return an optional Type=i value for the reserved key <code>MQ</code>
+     *   as an integer
+     */
+    public Optional<Integer> getMqOpt() {
+        return getTagIntegerOpt("MQ");
+    }
+
+    /**
+     * Return true if the tags for this edge contain
+     * the reserved key <code>MQ</code>, for mapping quality.
+     *
+     * @since 1.3.2
+     * @return true if the tags for this edge contain
+     *    the reserved key <code>MQ</code>, for mapping quality
+     */
+    public boolean containsMappingQuality() {
+        return containsMq();
+    }
+
+    /**
+     * Return the mapping quality for this edge (Type=i value for
+     * the reserved key <code>MQ</code> as an integer).
+     *
+     * @since 1.3.2
+     * @return the mapping quality for this edge (Type=i value for
+     *    the reserved key <code>MQ</code> as an integer)
+     */
+    public int getMappingQuality() {
+        return getMq();
+    }
+
+    /**
+     * Return an optional wrapping the mapping quality for this edge
+     * (Type=i value for the reserved key <code>MQ</code> as an integer).
+     *
+     * @since 1.3.2
+     * @return an optional wrapping the mapping quality for this edge
+     *    (Type=i value for the reserved key <code>MQ</code> as an integer)
+     */
+    public Optional<Integer> getMappingQualityOpt() {
+        return getMqOpt();
+    }
+
+    //
+
+    /**
+     * Return true if the tags for this edge contain
+     * the reserved key <code>NM</code>.
+     *
+     * @since 1.3.2
+     * @return true if the tags for this edge contain
+     *    the reserved key <code>NM</code>
+     */
+    public boolean containsNm() {
+        return containsTagKey("NM");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>NM</code>
+     * as an integer.
+     *
+     * @since 1.3.2
+     * @return the Type=i value for the reserved key <code>NM</code>
+     *    as an integer
+     */
+    public int getNm() {
+        return getTagInteger("NM");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>NM</code>
+     * as an integer.
+     *
+     * @since 1.3.2
+     * @return an optional Type=i value for the reserved key <code>NM</code>
+     *   as an integer
+     */
+    public Optional<Integer> getNmOpt() {
+        return getTagIntegerOpt("NM");
+    }
+
+    /**
+     * Return true if the tags for this edge contain
+     * the reserved key <code>NM</code>, for mismatch count.
+     *
+     * @since 1.3.2
+     * @return true if the tags for this edge contain
+     *    the reserved key <code>NM</code>, for mismatch count
+     */
+    public boolean containsMismatchCount() {
+        return containsNm();
+    }
+
+    /**
+     * Return the mismatch count for this edge (Type=i value for
+     * the reserved key <code>NM</code> as an integer).
+     *
+     * @since 1.3.2
+     * @return the mismatch count for this edge (Type=i value for
+     *    the reserved key <code>NM</code> as an integer)
+     */
+    public int getMismatchCount() {
+        return getNm();
+    }
+
+    /**
+     * Return an optional wrapping the mismatch count for this edge
+     * (Type=i value for the reserved key <code>NM</code> as an integer).
+     *
+     * @since 1.3.2
+     * @return an optional wrapping the mismatch count for this edge
+     *    (Type=i value for the reserved key <code>NM</code> as an integer)
+     */
+    public Optional<Integer> getMismatchCountOpt() {
+        return getNmOpt();
+    }
+
+    //
+
+    /**
+     * Return true if the tags for this edge contain
+     * the reserved key <code>RC</code>.
+     *
+     * @since 1.3.2
+     * @return true if the tags for this edge contain
+     *    the reserved key <code>RC</code>
+     */
+    public boolean containsRc() {
+        return containsTagKey("RC");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>RC</code>
+     * as an integer.
+     *
+     * @since 1.3.2
+     * @return the Type=i value for the reserved key <code>RC</code>
+     *    as an integer
+     */
+    public int getRc() {
+        return getTagInteger("RC");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>RC</code>
+     * as an integer.
+     *
+     * @since 1.3.2
+     * @return an optional Type=i value for the reserved key <code>RC</code>
+     *   as an integer
+     */
+    public Optional<Integer> getRcOpt() {
+        return getTagIntegerOpt("RC");
+    }
+
+    /**
+     * Return true if the tags for this edge contain
+     * the reserved key <code>RC</code>, for read count.
+     *
+     * @since 1.3.2
+     * @return true if the tags for this edge contain
+     *    the reserved key <code>RC</code>, for read count
+     */
+    public boolean containsReadCount() {
+        return containsRc();
+    }
+
+    /**
+     * Return the read count for this edge (Type=i value for
+     * the reserved key <code>RC</code> as an integer).
+     *
+     * @since 1.3.2
+     * @return the read count for this edge (Type=i value for
+     *    the reserved key <code>RC</code> as an integer)
+     */
+    public int getReadCount() {
+        return getRc();
+    }
+
+    /**
+     * Return an optional wrapping the read count for this edge
+     * (Type=i value for the reserved key <code>RC</code> as an integer).
+     *
+     * @since 1.3.2
+     * @return an optional wrapping the read count for this edge
+     *    (Type=i value for the reserved key <code>RC</code> as an integer)
+     */
+    public Optional<Integer> getReadCountOpt() {
+        return getRcOpt();
+    }
+
+    //
+
+    /**
+     * Return true if the tags for this edge contain
+     * the reserved key <code>FC</code>.
+     *
+     * @since 1.3.2
+     * @return true if the tags for this edge contain
+     *    the reserved key <code>FC</code>
+     */
+    public boolean containsFc() {
+        return containsTagKey("FC");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>FC</code>
+     * as an integer.
+     *
+     * @since 1.3.2
+     * @return the Type=i value for the reserved key <code>FC</code>
+     *    as an integer
+     */
+    public int getFc() {
+        return getTagInteger("FC");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>FC</code>
+     * as an integer.
+     *
+     * @since 1.3.2
+     * @return an optional Type=i value for the reserved key <code>FC</code>
+     *   as an integer
+     */
+    public Optional<Integer> getFcOpt() {
+        return getTagIntegerOpt("FC");
+    }
+
+    /**
+     * Return true if the tags for this edge contain
+     * the reserved key <code>FC</code>, for fragment count.
+     *
+     * @since 1.3.2
+     * @return true if the tags for this edge contain
+     *    the reserved key <code>FC</code>, for fragment count
+     */
+    public boolean containsFragmentCount() {
+        return containsFc();
+    }
+
+    /**
+     * Return the fragment count for this edge (Type=i value for
+     * the reserved key <code>FC</code> as an integer).
+     *
+     * @since 1.3.2
+     * @return the fragment count for this edge (Type=i value for
+     *    the reserved key <code>FC</code> as an integer)
+     */
+    public int getFragmentCount() {
+        return getFc();
+    }
+
+    /**
+     * Return an optional wrapping the fragment count for this edge
+     * (Type=i value for the reserved key <code>FC</code> as an integer).
+     *
+     * @since 1.3.2
+     * @return an optional wrapping the fragment count for this edge
+     *    (Type=i value for the reserved key <code>FC</code> as an integer)
+     */
+    public Optional<Integer> getFragmentCountOpt() {
+        return getFcOpt();
+    }
+
+    //
+
+    /**
+     * Return true if the tags for this edge contain
+     * the reserved key <code>KC</code>.
+     *
+     * @since 1.3.2
+     * @return true if the tags for this edge contain
+     *    the reserved key <code>KC</code>
+     */
+    public boolean containsKc() {
+        return containsTagKey("KC");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>KC</code>
+     * as an integer.
+     *
+     * @since 1.3.2
+     * @return the Type=i value for the reserved key <code>KC</code>
+     *    as an integer
+     */
+    public int getKc() {
+        return getTagInteger("KC");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>KC</code>
+     * as an integer.
+     *
+     * @since 1.3.2
+     * @return an optional Type=i value for the reserved key <code>KC</code>
+     *   as an integer
+     */
+    public Optional<Integer> getKcOpt() {
+        return getTagIntegerOpt("KC");
+    }
+
+    /**
+     * Return true if the tags for this edge contain
+     * the reserved key <code>KC</code>, for k-mer count.
+     *
+     * @since 1.3.2
+     * @return true if the tags for this edge contain
+     *    the reserved key <code>KC</code>, for k-mer count
+     */
+    public boolean containsKmerCount() {
+        return containsKc();
+    }
+
+    /**
+     * Return the k-mer count for this edge (Type=i value for
+     * the reserved key <code>KC</code> as an integer).
+     *
+     * @since 1.3.2
+     * @return the k-mer count for this edge (Type=i value for
+     *    the reserved key <code>KC</code> as an integer)
+     */
+    public int getKmerCount() {
+        return getKc();
+    }
+
+    /**
+     * Return an optional wrapping the k-mer count for this edge
+     * (Type=i value for the reserved key <code>KC</code> as an integer).
+     *
+     * @since 1.3.2
+     * @return an optional wrapping the k-mer count for this edge
+     *    (Type=i value for the reserved key <code>KC</code> as an integer)
+     */
+    public Optional<Integer> getKmerCountOpt() {
+        return getKcOpt();
+    }
+
+    //
+
+    /**
+     * Return true if the tags for this edge contain
+     * the reserved key <code>TS</code>.
+     *
+     * @since 1.3.2
+     * @return true if the tags for this edge contain
+     *    the reserved key <code>TS</code>
+     */
+    public boolean containsTs() {
+        return containsTagKey("TS");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>TS</code>
+     * as an integer.
+     *
+     * @since 1.3.2
+     * @return the Type=i value for the reserved key <code>TS</code>
+     *    as an integer
+     */
+    public int getTs() {
+        return getTagInteger("TS");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>TS</code>
+     * as an integer.
+     *
+     * @since 1.3.2
+     * @return an optional Type=i value for the reserved key <code>TS</code>
+     *   as an integer
+     */
+    public Optional<Integer> getTsOpt() {
+        return getTagIntegerOpt("TS");
+    }
+
+    /**
+     * Return true if the tags for this edge contain
+     * the reserved key <code>TS</code>, for trace spacing.
+     *
+     * @since 1.3.2
+     * @return true if the tags for this edge contain
+     *    the reserved key <code>TS</code>, for trace spacing
+     */
+    public boolean containsTraceSpacing() {
+        return containsTs();
+    }
+
+    /**
+     * Return the trace spacing for this edge (Type=i value for
+     * the reserved key <code>TS</code> as an integer).
+     *
+     * @since 1.3.2
+     * @return the trace spacing for this edge (Type=i value for
+     *    the reserved key <code>TS</code> as an integer)
+     */
+    public int getTraceSpacing() {
+        return getTs();
+    }
+
+    /**
+     * Return an optional wrapping the trace spacing for this edge
+     * (Type=i value for the reserved key <code>TS</code> as an integer).
+     *
+     * @since 1.3.2
+     * @return an optional wrapping the trace spacing for this edge
+     *    (Type=i value for the reserved key <code>TS</code> as an integer)
+     */
+    public Optional<Integer> getTraceSpacingOpt() {
+        return getTsOpt();
+    }
+
+
     @Override
     public int hashCode() {
         return hashCode;

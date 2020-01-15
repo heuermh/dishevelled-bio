@@ -28,6 +28,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.annotation.concurrent.Immutable;
 
@@ -53,6 +54,155 @@ public final class Header extends Gfa2Record {
      */
     public Header(final Map<String, Tag> tags) {
         super(tags);
+    }
+
+
+    // optional fields
+
+    /**
+     * Return true if the tags for this header contain
+     * the reserved key <code>TS</code>.
+     *
+     * @since 1.3.2
+     * @return true if the tags for this header contain
+     *    the reserved key <code>TS</code>
+     */
+    public boolean containsTs() {
+        return containsTagKey("TS");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>TS</code>
+     * as an integer.
+     *
+     * @since 1.3.2
+     * @return the Type=i value for the reserved key <code>TS</code>
+     *    as an integer
+     */
+    public int getTs() {
+        return getTagInteger("TS");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>TS</code>
+     * as an integer.
+     *
+     * @since 1.3.2
+     * @return an optional Type=i value for the reserved key <code>TS</code>
+     *   as an integer
+     */
+    public Optional<Integer> getTsOpt() {
+        return getTagIntegerOpt("TS");
+    }
+
+    /**
+     * Return true if the tags for this header contain
+     * the reserved key <code>TS</code>, for trace spacing.
+     *
+     * @since 1.3.2
+     * @return true if the tags for this header contain
+     *    the reserved key <code>TS</code>, for trace spacing
+     */
+    public boolean containsTraceSpacing() {
+        return containsTs();
+    }
+
+    /**
+     * Return the trace spacing for this header (Type=i value for
+     * the reserved key <code>TS</code> as an integer).
+     *
+     * @since 1.3.2
+     * @return the trace spacing for this header (Type=i value for
+     *    the reserved key <code>TS</code> as an integer)
+     */
+    public int getTraceSpacing() {
+        return getTs();
+    }
+
+    /**
+     * Return an optional wrapping the trace spacing for this header
+     * (Type=i value for the reserved key <code>TS</code> as an integer).
+     *
+     * @since 1.3.2
+     * @return an optional wrapping the trace spacing for this header
+     *    (Type=i value for the reserved key <code>TS</code> as an integer)
+     */
+    public Optional<Integer> getTraceSpacingOpt() {
+        return getTsOpt();
+    }
+
+    //
+
+    /**
+     * Return true if the tags for this header contain
+     * the reserved key <code>VN</code>.
+     *
+     * @since 1.3.2
+     * @return true if the tags for this header contain
+     *    the reserved key <code>VN</code>
+     */
+    public boolean containsVn() {
+        return containsTagKey("VN");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>VN</code>
+     * as a string.
+     *
+     * @since 1.3.2
+     * @return the Type=Z value for the reserved key <code>VN</code>
+     *    as a string
+     */
+    public String getVn() {
+        return getTagString("VN");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>VN</code>
+     * as a string.
+     *
+     * @since 1.3.2
+     * @return an optional Type=Z value for the reserved key <code>VN</code>
+     *   as a string
+     */
+    public Optional<String> getVnOpt() {
+        return getTagStringOpt("Vn");
+    }
+
+    /**
+     * Return true if the tags for this header contain
+     * the reserved key <code>VN</code>, for version number.
+     *
+     * @since 1.3.2
+     * @return true if the tags for this header contain
+     *    the reserved key <code>VN</code>, for version number
+     */
+    public boolean containsVersionNumber() {
+        return containsVn();
+    }
+
+    /**
+     * Return the version number for this header (Type=Z value for the
+     * reserved key <code>VN</code> as a string).
+     *
+     * @since 1.3.2
+     * @return the version number for this header (Type=Z value for the
+     *    reserved key <code>VN</code> as a string)
+     */
+    public String getVersionNumber() {
+        return getVn();
+    }
+
+    /**
+     * Return an optional wrapping the version number for this header
+     * (Type Z value for the reserved key <code>VN</code> as a string).
+     *
+     * @since 1.3.2
+     * @return an optional wrapping the version number for this header
+     *    (Type Z value for the reserved key <code>VN</code> as a string)
+     */
+    public Optional<String> getVersionNumberOpt() {
+        return getVnOpt();
     }
 
 

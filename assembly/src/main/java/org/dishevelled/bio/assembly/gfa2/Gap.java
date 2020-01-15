@@ -183,6 +183,82 @@ public final class Gap extends Gfa2Record {
         return Optional.ofNullable(variance);
     }
 
+
+    // optional fields
+
+    /**
+     * Return true if the tags for this gap contain
+     * the reserved key <code>TS</code>.
+     *
+     * @since 1.3.2
+     * @return true if the tags for this gap contain
+     *    the reserved key <code>TS</code>
+     */
+    public boolean containsTs() {
+        return containsTagKey("TS");
+    }
+
+    /**
+     * Return the Type=i value for the reserved key <code>TS</code>
+     * as an integer.
+     *
+     * @since 1.3.2
+     * @return the Type=i value for the reserved key <code>TS</code>
+     *    as an integer
+     */
+    public int getTs() {
+        return getTagInteger("TS");
+    }
+
+    /**
+     * Return an optional Type=i value for the reserved key <code>TS</code>
+     * as an integer.
+     *
+     * @since 1.3.2
+     * @return an optional Type=i value for the reserved key <code>TS</code>
+     *   as an integer
+     */
+    public Optional<Integer> getTsOpt() {
+        return getTagIntegerOpt("TS");
+    }
+
+    /**
+     * Return true if the tags for this gap contain
+     * the reserved key <code>TS</code>, for trace spacing.
+     *
+     * @since 1.3.2
+     * @return true if the tags for this gap contain
+     *    the reserved key <code>TS</code>, for trace spacing
+     */
+    public boolean containsTraceSpacing() {
+        return containsTs();
+    }
+
+    /**
+     * Return the trace spacing for this gap (Type=i value for
+     * the reserved key <code>TS</code> as an integer).
+     *
+     * @since 1.3.2
+     * @return the trace spacing for this gap (Type=i value for
+     *    the reserved key <code>TS</code> as an integer)
+     */
+    public int getTraceSpacing() {
+        return getTs();
+    }
+
+    /**
+     * Return an optional wrapping the trace spacing for this gap
+     * (Type=i value for the reserved key <code>TS</code> as an integer).
+     *
+     * @since 1.3.2
+     * @return an optional wrapping the trace spacing for this gap
+     *    (Type=i value for the reserved key <code>TS</code> as an integer)
+     */
+    public Optional<Integer> getTraceSpacingOpt() {
+        return getTsOpt();
+    }
+
+
     @Override
     public int hashCode() {
         return hashCode;

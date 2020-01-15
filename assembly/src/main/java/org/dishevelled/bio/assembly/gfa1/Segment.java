@@ -154,7 +154,7 @@ public final class Segment extends Gfa1Record {
 
     /**
      * Return true if the tags for this segment contain
-     * the reserved key <code>LN</code>, for length
+     * the reserved key <code>LN</code>, for length.
      *
      * @return true if the tags for this segment contain
      *    the reserved key <code>LN</code>, for length

@@ -60,10 +60,10 @@ public final class Header extends Gfa1Record {
     // optional fields
 
     /**
-     * Return true if the tags for this segment contain
+     * Return true if the tags for this header contain
      * the reserved key <code>VN</code>.
      *
-     * @return true if the tags for this segment contain
+     * @return true if the tags for this header contain
      *    the reserved key <code>VN</code>
      */
     public boolean containsVn() {
@@ -93,10 +93,10 @@ public final class Header extends Gfa1Record {
     }
 
     /**
-     * Return true if the tags for this segment contain
+     * Return true if the tags for this header contain
      * the reserved key <code>VN</code>, for version number.
      *
-     * @return true if the tags for this segment contain
+     * @return true if the tags for this header contain
      *    the reserved key <code>VN</code>, for version number
      */
     public boolean containsVersionNumber() {
