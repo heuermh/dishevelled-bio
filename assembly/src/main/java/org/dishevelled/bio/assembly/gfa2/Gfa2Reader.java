@@ -27,6 +27,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -87,6 +88,9 @@ public final class Gfa2Reader {
         /** Line number. */
         private long lineNumber = 0;
 
+        /** Identifier cache. */
+        private final java.util.Set<String> identifiers = new HashSet<String>();
+
         /** GFA 2.0 listener. */
         private final Gfa2Listener listener;
 
@@ -115,25 +119,45 @@ public final class Gfa2Reader {
                 if (line != null && !line.isEmpty()) {
                     char c = line.charAt(0);
                     if ('E' == c) {
-                        return listener.record(Edge.valueOf(line));
+                        Edge edge = Edge.valueOf(line);
+                        if (edge.hasId() && !identifiers.add(edge.getId())) {
+                            throw new IllegalArgumentException("duplicate identifier " + edge.getId());
+                        }
+                        return listener.record(edge);
                     }
                     else if ('F' == c) {
                         return listener.record(Fragment.valueOf(line));
                     }
                     else if ('G' == c) {
-                        return listener.record(Gap.valueOf(line));
+                        Gap gap = Gap.valueOf(line);
+                        if (gap.hasId() && !identifiers.add(gap.getId())) {
+                            throw new IllegalArgumentException("duplicate identifier " + gap.getId());
+                        }
+                        return listener.record(gap);
                     }
                     else if ('H' == c) {
                         return listener.record(Header.valueOf(line));
                     }
                     else if ('O' == c) {
-                        return listener.record(Path.valueOf(line));
+                        Path path = Path.valueOf(line);
+                        if (path.hasId() && !identifiers.add(path.getId())) {
+                            throw new IllegalArgumentException("duplicate identifier " + path.getId());
+                        }
+                        return listener.record(path);
                     }
                     else if ('S' == c) {
-                        return listener.record(Segment.valueOf(line));
+                        Segment segment = Segment.valueOf(line);
+                        if (!identifiers.add(segment.getId())) {
+                            throw new IllegalArgumentException("duplicate identifier " + segment.getId());
+                        }
+                        return listener.record(segment);
                     }
                     else if ('U' == c) {
-                        return listener.record(Set.valueOf(line));
+                        Set set = Set.valueOf(line);
+                        if (set.hasId() && !identifiers.add(set.getId())) {
+                            throw new IllegalArgumentException("duplicate identifier " + set.getId());
+                        }
+                        return listener.record(set);
                     }
                 }
                 // continue processing blank or unrecognized lines

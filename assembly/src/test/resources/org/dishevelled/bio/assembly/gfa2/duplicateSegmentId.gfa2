@@ -1,0 +1,5 @@
+# https://github.com/ggonnella/gfapy/blob/master/tests/testdata/example1.gfa2
+H	VN:Z:2.0
+S	1	6871	*	RC:i:2200067
+S	10	251	*	RC:i:82006
+S	1	208	*	RC:i:39533

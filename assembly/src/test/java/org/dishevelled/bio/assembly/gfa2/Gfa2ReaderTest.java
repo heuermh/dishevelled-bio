@@ -91,4 +91,52 @@ public class Gfa2ReaderTest {
                 }
             });
     }
+
+    @Test(expected=IOException.class)
+    public void testStreamDuplicateGapIdentifier() throws Exception {
+        readable = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("duplicateGapId.gfa2")));
+        stream(readable, new Gfa2Listener() {
+                @Override
+                public boolean record(final Gfa2Record record) {
+                    assertNotNull(record);
+                    return true;
+                }
+            });
+    }
+
+    @Test(expected=IOException.class)
+    public void testStreamDuplicatePathIdentifier() throws Exception {
+        readable = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("duplicatePathId.gfa2")));
+        stream(readable, new Gfa2Listener() {
+                @Override
+                public boolean record(final Gfa2Record record) {
+                    assertNotNull(record);
+                    return true;
+                }
+            });
+    }
+
+    @Test(expected=IOException.class)
+    public void testStreamDuplicateSegmentIdentifier() throws Exception {
+        readable = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("duplicateSegmentId.gfa2")));
+        stream(readable, new Gfa2Listener() {
+                @Override
+                public boolean record(final Gfa2Record record) {
+                    assertNotNull(record);
+                    return true;
+                }
+            });
+    }
+
+    @Test(expected=IOException.class)
+    public void testStreamDuplicateSetIdentifier() throws Exception {
+        readable = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("duplicateSetId.gfa2")));
+        stream(readable, new Gfa2Listener() {
+                @Override
+                public boolean record(final Gfa2Record record) {
+                    assertNotNull(record);
+                    return true;
+                }
+            });
+    }
 }
