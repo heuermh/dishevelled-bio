@@ -111,8 +111,8 @@ arguments:
 #### Compression
 
 Across the dishevelled.org bio command line tools, stdin and stdout should behave as expected,
-and files and streams compressed with GZIP, BZip2, and block-compressed GZIP (BGZF) are
-handled transparently. Use file extensions `.gz`, `.bz2`, and `.bgz` respectively
+and files and streams compressed with Zstandard (zstd), GZIP, BZip2, and block-compressed GZIP (BGZF) are
+handled transparently. Use file extensions `.zst`, `.gz`, `.bz2`, and `.bgz` respectively
 to force the issue, if necessary.
 
 
