@@ -552,10 +552,10 @@ public final class Link extends Gfa1Record {
      */
     public static Link valueOf(final String value) {
         checkNotNull(value);
-        checkArgument(value.startsWith("L"), "value must start with L");
+        checkArgument(value.startsWith("L"), "link value must start with L");
         List<String> tokens = Splitter.on("\t").splitToList(value);
         if (tokens.size() < 6) {
-            throw new IllegalArgumentException("value must have at least six tokens, was " + tokens.size());
+            throw new IllegalArgumentException("link value must have at least six tokens, was " + tokens.size());
         }
         Reference source = Reference.splitValueOf(tokens.get(1), tokens.get(2));
         Reference target = Reference.splitValueOf(tokens.get(3), tokens.get(4));
@@ -563,8 +563,11 @@ public final class Link extends Gfa1Record {
 
         ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
         for (int i = 6; i < tokens.size(); i++) {
-            Tag tag = Tag.valueOf(tokens.get(i));
-            tags.put(tag.getName(), tag);
+            String token = tokens.get(i);
+            if (!token.isEmpty()) {
+                Tag tag = Tag.valueOf(token);
+                tags.put(tag.getName(), tag);
+            }
         }
 
         return new Link(source, target, overlap, tags.build());

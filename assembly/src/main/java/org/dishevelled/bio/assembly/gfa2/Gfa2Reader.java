@@ -164,7 +164,7 @@ public final class Gfa2Reader {
                 return true;
             }
             catch (IllegalArgumentException e) {
-                throw new IOException("could not read GFA 2.0 record at line " + lineNumber + ", caught " + e.getMessage(), e);
+                throw new IOException("could not read GFA 2.0 record at line " + lineNumber + ", caught exception: " + e.getMessage(), e);
             }
         }
     }

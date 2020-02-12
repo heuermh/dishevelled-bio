@@ -322,10 +322,10 @@ public final class Fragment extends Gfa2Record {
      */
     public static Fragment valueOf(final String value) {
         checkNotNull(value);
-        checkArgument(value.startsWith("F"), "value must start with F");
+        checkArgument(value.startsWith("F"), "fragment value must start with F");
         List<String> tokens = Splitter.on("\t").splitToList(value);
         if (tokens.size() < 8) {
-            throw new IllegalArgumentException("value must have at least eight tokens, was " + tokens.size());
+            throw new IllegalArgumentException("fragment value must have at least eight tokens, was " + tokens.size());
         }
         String segmentId = tokens.get(1);
         Reference external = Reference.valueOf(tokens.get(2));
@@ -337,8 +337,11 @@ public final class Fragment extends Gfa2Record {
 
         ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
         for (int i = 8; i < tokens.size(); i++) {
-            Tag tag = Tag.valueOf(tokens.get(i));
-            tags.put(tag.getName(), tag);
+            String token = tokens.get(i);
+            if (!token.isEmpty()) {
+                Tag tag = Tag.valueOf(token);
+                tags.put(tag.getName(), tag);
+            }
         }
 
         return new Fragment(segmentId, external, segmentStart, segmentEnd, fragmentStart, fragmentEnd, alignment, tags.build());

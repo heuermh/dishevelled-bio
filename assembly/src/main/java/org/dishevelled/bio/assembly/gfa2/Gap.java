@@ -303,10 +303,10 @@ public final class Gap extends Gfa2Record {
      */
     public static Gap valueOf(final String value) {
         checkNotNull(value);
-        checkArgument(value.startsWith("G"), "value must start with G");
+        checkArgument(value.startsWith("G"), "gap value must start with G");
         List<String> tokens = Splitter.on("\t").splitToList(value);
         if (tokens.size() < 6) {
-            throw new IllegalArgumentException("value must have at least six tokens, was " + tokens.size());
+            throw new IllegalArgumentException("gap value must have at least six tokens, was " + tokens.size());
         }
         String id = "*".equals(tokens.get(1)) ? null : tokens.get(1);
         Reference source = Reference.valueOf(tokens.get(2));
@@ -316,8 +316,11 @@ public final class Gap extends Gfa2Record {
 
         ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
         for (int i = 6; i < tokens.size(); i++) {
-            Tag tag = Tag.valueOf(tokens.get(i));
-            tags.put(tag.getName(), tag);
+            String token = tokens.get(i);
+            if (!token.isEmpty()) {
+                Tag tag = Tag.valueOf(token);
+                tags.put(tag.getName(), tag);
+            }
         }
 
         return new Gap(id, source, target, distance, variance, tags.build());

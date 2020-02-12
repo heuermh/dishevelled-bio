@@ -131,7 +131,7 @@ public final class Tag {
         checkNotNull(value);
         List<String> tokens = Splitter.on(":").splitToList(value);
         if (tokens.size() < 3) {
-            throw new IllegalArgumentException("value must have at least three tokens, was " + tokens.size());
+            throw new IllegalArgumentException("tag value '" + value + "' must have at least three tokens, was " + tokens.size());
         }
         return new Tag(tokens.get(0), tokens.get(1), tokens.get(2));
     }

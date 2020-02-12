@@ -138,7 +138,7 @@ public final class Reference {
      */
     public static Reference valueOf(final String value) {
         checkNotNull(value);
-        checkArgument(!value.isEmpty(), "value must not be empty");
+        checkArgument(!value.isEmpty(), "reference value must not be empty");
 
         String id = value.substring(0, value.length() - 1);
         if (value.endsWith("-")) {
@@ -147,7 +147,7 @@ public final class Reference {
         else if (value.endsWith("+")) {
             return new Reference(id, Orientation.FORWARD);
         }
-        throw new IllegalArgumentException("value must have an orientation");
+        throw new IllegalArgumentException("reference value '" + value + "' must have an orientation");
     }
 
     /**
@@ -160,7 +160,7 @@ public final class Reference {
     public static Reference splitValueOf(final String id, final String orientation) {
         checkNotNull(id);
         checkNotNull(orientation);
-        checkNotNull(!id.isEmpty(), "id must not be empty");
+        checkNotNull(!id.isEmpty(), "reference id must not be empty");
 
         if ("-".equals(orientation)) {
             return new Reference(id, Orientation.REVERSE);
@@ -168,6 +168,6 @@ public final class Reference {
         else if ("+".equals(orientation)) {
             return new Reference(id, Orientation.FORWARD);
         }
-        throw new IllegalArgumentException("orientation must be one of {+,-}, was " + orientation);
+        throw new IllegalArgumentException("reference orientation must be one of {+,-}, was " + orientation);
     }
 }

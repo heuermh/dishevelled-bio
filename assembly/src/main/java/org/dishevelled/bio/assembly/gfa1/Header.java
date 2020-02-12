@@ -169,8 +169,11 @@ public final class Header extends Gfa1Record {
         List<String> tokens = Splitter.on("\t").splitToList(value);
         ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
         for (int i = 1; i < tokens.size(); i++) {
-            Tag tag = Tag.valueOf(tokens.get(i));
-            tags.put(tag.getName(), tag);
+            String token = tokens.get(i);
+            if (!token.isEmpty()) {
+                Tag tag = Tag.valueOf(tokens.get(i));
+                tags.put(tag.getName(), tag);
+            }
         }
 
         return new Header(tags.build());

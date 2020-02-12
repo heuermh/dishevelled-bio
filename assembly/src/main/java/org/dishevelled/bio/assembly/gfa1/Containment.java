@@ -367,10 +367,10 @@ public final class Containment extends Gfa1Record {
      */
     public static Containment valueOf(final String value) {
         checkNotNull(value);
-        checkArgument(value.startsWith("C"), "value must start with C");
+        checkArgument(value.startsWith("C"), "containment value must start with C");
         List<String> tokens = Splitter.on("\t").splitToList(value);
         if (tokens.size() < 7) {
-            throw new IllegalArgumentException("value must have at least seven tokens, was " + tokens.size());
+            throw new IllegalArgumentException("containment value must have at least seven tokens, was " + tokens.size());
         }
         Reference container = Reference.splitValueOf(tokens.get(1), tokens.get(2));
         Reference contained = Reference.splitValueOf(tokens.get(3), tokens.get(4));
@@ -379,8 +379,11 @@ public final class Containment extends Gfa1Record {
 
         ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
         for (int i = 7; i < tokens.size(); i++) {
-            Tag tag = Tag.valueOf(tokens.get(i));
-            tags.put(tag.getName(), tag);
+            String token = tokens.get(i);
+            if (!token.isEmpty()) {
+                Tag tag = Tag.valueOf(token);
+                tags.put(tag.getName(), tag);
+            }
         }
 
         return new Containment(container, contained, position, overlap, tags.build());

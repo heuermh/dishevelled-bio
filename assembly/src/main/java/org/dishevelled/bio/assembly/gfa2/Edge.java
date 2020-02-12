@@ -728,10 +728,10 @@ public final class Edge extends Gfa2Record {
      */
     public static Edge valueOf(final String value) {
         checkNotNull(value);
-        checkArgument(value.startsWith("E"), "value must start with E");
+        checkArgument(value.startsWith("E"), "edge value must start with E");
         List<String> tokens = Splitter.on("\t").splitToList(value);
         if (tokens.size() < 9) {
-            throw new IllegalArgumentException("value must have at least nine tokens, was " + tokens.size());
+            throw new IllegalArgumentException("edge value must have at least nine tokens, was " + tokens.size());
         }
         String id = "*".equals(tokens.get(1)) ? null : tokens.get(1);
         Reference source = Reference.valueOf(tokens.get(2));
@@ -744,8 +744,11 @@ public final class Edge extends Gfa2Record {
 
         ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
         for (int i = 9; i < tokens.size(); i++) {
-            Tag tag = Tag.valueOf(tokens.get(i));
-            tags.put(tag.getName(), tag);
+            String token = tokens.get(i);
+            if (!token.isEmpty()) {
+                Tag tag = Tag.valueOf(token);
+                tags.put(tag.getName(), tag);
+            }
         }
 
         return new Edge(id, source, target, sourceStart, sourceEnd, targetStart, targetEnd, alignment, tags.build());

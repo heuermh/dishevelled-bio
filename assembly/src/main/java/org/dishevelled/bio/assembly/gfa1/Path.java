@@ -208,10 +208,10 @@ public final class Path extends Gfa1Record {
      */
     public static Path valueOf(final String value) {
         checkNotNull(value);
-        checkArgument(value.startsWith("P"), "value must start with P");
+        checkArgument(value.startsWith("P"), "path value must start with P");
         List<String> tokens = Splitter.on("\t").splitToList(value);
         if (tokens.size() < 4) {
-            throw new IllegalArgumentException("value must have at least four tokens, was " + tokens.size());
+            throw new IllegalArgumentException("path value must have at least four tokens, was " + tokens.size());
         }
         String name = tokens.get(1);
 
@@ -226,8 +226,11 @@ public final class Path extends Gfa1Record {
 
         ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
         for (int i = 4; i < tokens.size(); i++) {
-            Tag tag = Tag.valueOf(tokens.get(i));
-            tags.put(tag.getName(), tag);
+            String token = tokens.get(i);
+            if (!token.isEmpty()) {
+                Tag tag = Tag.valueOf(token);
+                tags.put(tag.getName(), tag);
+            }
         }
 
         return new Path(name, segments, overlaps, tags.build());

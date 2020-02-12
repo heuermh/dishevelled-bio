@@ -125,8 +125,9 @@ public class TraversalTest {
         assertTrue(traversal.getTags().isEmpty());
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void testValueOfNoTagsTrailingTab() {
-        Traversal.valueOf("T\tpathName\t0\t1\t+\t2\t-\t*\t");
+        Traversal traversal = Traversal.valueOf("T\tpathName\t0\t1\t+\t2\t-\t*\t");
+        assertTrue(traversal.getTags().isEmpty());
     }
 }

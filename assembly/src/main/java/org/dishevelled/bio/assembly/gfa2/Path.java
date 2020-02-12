@@ -163,10 +163,10 @@ public final class Path extends Gfa2Record {
      */
     public static Path valueOf(final String value) {
         checkNotNull(value);
-        checkArgument(value.startsWith("O"), "value must start with O");
+        checkArgument(value.startsWith("O"), "path value must start with O");
         List<String> tokens = Splitter.on("\t").splitToList(value);
         if (tokens.size() < 3) {
-            throw new IllegalArgumentException("value must have at least three tokens, was " + tokens.size());
+            throw new IllegalArgumentException("path value must have at least three tokens, was " + tokens.size());
         }
         String id = "*".equals(tokens.get(1)) ? null : tokens.get(1);
         List<Reference> references = Splitter
@@ -178,8 +178,11 @@ public final class Path extends Gfa2Record {
 
         ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
         for (int i = 3; i < tokens.size(); i++) {
-            Tag tag = Tag.valueOf(tokens.get(i));
-            tags.put(tag.getName(), tag);
+            String token = tokens.get(i);
+            if (!token.isEmpty()) {
+                Tag tag = Tag.valueOf(token);
+                tags.put(tag.getName(), tag);
+            }
         }
 
         return new Path(id, references, tags.build());
