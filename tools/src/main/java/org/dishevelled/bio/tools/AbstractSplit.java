@@ -43,6 +43,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.common.base.Strings;
+
 import org.apache.commons.io.output.ProxyWriter;
 
 /**
@@ -63,6 +65,9 @@ abstract class AbstractSplit implements Callable<Integer> {
     /** Output file prefix. */
     private final String prefix;
 
+    /** Left pad split index in output file name by zeros. */
+    private final int leftPad;
+
     /** Output file suffix. */
     private final String suffix;
 
@@ -80,15 +85,22 @@ abstract class AbstractSplit implements Callable<Integer> {
      * @param bytes split the input file at next record after each n bytes, if any
      * @param records split the input file after each n records, if any
      * @param prefix output file prefix, must not be null
+     * @param leftPad left pad split index in output file name
      * @param suffix output file suffix, must not be null
      */
-    protected AbstractSplit(final File inputFile, final Long bytes, final Long records, final String prefix, final String suffix) {
+    protected AbstractSplit(final File inputFile,
+                            final Long bytes,
+                            final Long records,
+                            final String prefix,
+                            final int leftPad,
+                            final String suffix) {
         checkNotNull(prefix);
         checkNotNull(suffix);
         this.inputFile = inputFile;
         this.bytes = bytes == null ? Long.MAX_VALUE : bytes;
         this.records = records == null ? Long.MAX_VALUE : records;
         this.prefix = prefix;
+        this.leftPad = leftPad;
         this.suffix = suffix;
     }
 
@@ -107,6 +119,15 @@ abstract class AbstractSplit implements Callable<Integer> {
     }
 
     /**
+     * Left pad the specified split index.
+     *
+     * @param n split index to left pad
+     */
+    protected final String leftPad(final int n) {
+        return leftPad > 0 ? Strings.padStart(String.valueOf(n), leftPad, '0') : String.valueOf(n);
+    }
+
+    /**
      * Create and return a new CountingWriter for a file name consisting
      * of <code>prefix + n + suffix</code>.
      *
@@ -115,13 +136,14 @@ abstract class AbstractSplit implements Callable<Integer> {
      *    of <code>prefix + n + suffix</code>
      */
     protected final CountingWriter createCountingWriter(final int n) {
+        String outputFileName = prefix + leftPad(n) + suffix;
         try {
-            CountingWriter writer = new CountingWriter(writer(new File(prefix + n + suffix)));
+            CountingWriter writer = new CountingWriter(writer(new File(outputFileName)));
             writers.add(writer);
             return writer;
         }
         catch (IOException e) {
-            throw new RuntimeException("could not create writer for file " + prefix + n + suffix, e);
+            throw new RuntimeException("could not create writer for file " + outputFileName, e);
         }
     }
 

@@ -46,6 +46,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.IntegerArgument;
 import org.dishevelled.commandline.argument.LongArgument;
 import org.dishevelled.commandline.argument.StringArgument;
 
@@ -70,7 +71,22 @@ public final class SplitInterleavedFastq extends AbstractSplit {
      * @param suffix output file suffix, must not be null
      */
     public SplitInterleavedFastq(final File inputFile, final Long bytes, final Long records, final String prefix, final String suffix) {
-        super(inputFile, bytes, records, prefix, suffix);
+        this(inputFile, bytes, records, prefix, -1, suffix);
+    }
+
+    /**
+     * Split interleaved FASTQ files.
+     *
+     * @since 1.4
+     * @param inputFile input file, if any
+     * @param bytes split the input file at next pair of records after each n bytes, if any
+     * @param records split the input file after each n records, respecting pairs, if any
+     * @param prefix output file prefix, must not be null
+     * @param leftPad left pad split index in output file name
+     * @param suffix output file suffix, must not be null
+     */
+    public SplitInterleavedFastq(final File inputFile, final Long bytes, final Long records, final String prefix, final int leftPad, final String suffix) {
+        super(inputFile, bytes, records, prefix, leftPad, suffix);
     }
 
 
@@ -154,8 +170,9 @@ public final class SplitInterleavedFastq extends AbstractSplit {
         StringArgument bytes = new StringArgument("b", "bytes", "split input file at next pair of records after each n bytes", false);
         LongArgument records = new LongArgument("r", "records", "split input file after each n records, respecting pairs", false);
         StringArgument prefix = new StringArgument("p", "prefix", "output file prefix", false);
+        IntegerArgument leftPad = new IntegerArgument("d", "left-pad", "left pad split index in output file name", false);
         StringArgument suffix = new StringArgument("s", "suffix", "output file suffix, e.g. .ifq.gz", false);
-        ArgumentList arguments = new ArgumentList(about, help, inputFile, bytes, records, prefix, suffix);
+        ArgumentList arguments = new ArgumentList(about, help, inputFile, bytes, records, prefix, leftPad, suffix);
         CommandLine commandLine = new CommandLine(args);
 
         SplitInterleavedFastq splitInterleavedFastq = null;
@@ -204,7 +221,7 @@ public final class SplitInterleavedFastq extends AbstractSplit {
                 }
             }
 
-            splitInterleavedFastq = new SplitInterleavedFastq(inputFile.getValue(), b, records.getValue(), p, s);
+            splitInterleavedFastq = new SplitInterleavedFastq(inputFile.getValue(), b, records.getValue(), p, leftPad.getValue(-1), s);
         }
         catch (CommandLineParseException | NullPointerException e) {
             if (about.wasFound()) {

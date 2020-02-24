@@ -48,6 +48,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.IntegerArgument;
 import org.dishevelled.commandline.argument.LongArgument;
 import org.dishevelled.commandline.argument.StringArgument;
 
@@ -72,7 +73,22 @@ public final class SplitSam extends AbstractSplit {
      * @param suffix output file suffix, must not be null
      */
     public SplitSam(final File inputFile, final Long bytes, final Long records, final String prefix, final String suffix) {
-        super(inputFile, bytes, records, prefix, suffix);
+        this(inputFile, bytes, records, prefix, -1, suffix);
+    }
+
+    /**
+     * Split SAM files.
+     *
+     * @since 1.4
+     * @param inputFile input file, if any
+     * @param bytes split the input file at next record after each n bytes, if any
+     * @param records split the input file after each n records, if any
+     * @param prefix output file prefix, must not be null
+     * @param leftPad left pad split index in output file name
+     * @param suffix output file suffix, must not be null
+     */
+    public SplitSam(final File inputFile, final Long bytes, final Long records, final String prefix, final int leftPad, final String suffix) {
+        super(inputFile, bytes, records, prefix, leftPad, suffix);
     }
 
 
@@ -162,8 +178,9 @@ public final class SplitSam extends AbstractSplit {
         StringArgument bytes = new StringArgument("b", "bytes", "split input file at next record after each n bytes", false);
         LongArgument records = new LongArgument("r", "records", "split input file after each n records", false);
         StringArgument prefix = new StringArgument("p", "prefix", "output file prefix", false);
+        IntegerArgument leftPad = new IntegerArgument("d", "left-pad", "left pad split index in output file name", false);
         StringArgument suffix = new StringArgument("s", "suffix", "output file suffix, e.g. .sam.bgz", false);
-        ArgumentList arguments = new ArgumentList(about, help, inputFile, bytes, records, prefix, suffix);
+        ArgumentList arguments = new ArgumentList(about, help, inputFile, bytes, records, prefix, leftPad, suffix);
         CommandLine commandLine = new CommandLine(args);
 
         SplitSam splitSam = null;
@@ -212,7 +229,7 @@ public final class SplitSam extends AbstractSplit {
                 }
             }
 
-            splitSam = new SplitSam(inputFile.getValue(), b, records.getValue(), p, s);
+            splitSam = new SplitSam(inputFile.getValue(), b, records.getValue(), p, leftPad.getValue(-1), s);
         }
         catch (CommandLineParseException | NullPointerException e) {
             if (about.wasFound()) {
