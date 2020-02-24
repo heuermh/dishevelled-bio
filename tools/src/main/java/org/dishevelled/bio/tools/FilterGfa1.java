@@ -222,7 +222,14 @@ public final class FilterGfa1 extends AbstractFilter {
         public boolean accept(final Gfa1Record record) {
             if (record instanceof Segment) {
                 Segment segment = (Segment) record;
-                return segment.containsLength() ? false : segment.getLength() >= length;
+                if (segment.containsLength()) {
+                    return segment.getLength() >= length;
+                }
+                // fall back to sequence length
+                if (segment.hasSequence()) {
+                    return segment.getSequence().length() >= length;
+                }
+                return false;
             }
             return true;
         }
