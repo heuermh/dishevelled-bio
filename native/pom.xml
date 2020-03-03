@@ -47,6 +47,13 @@
       <groupId>org.dishevelled</groupId>
       <artifactId>dsh-bio-tools</artifactId>
     </dependency>
+
+    <!-- apparently necessary for jni-config -->
+    <dependency>
+      <groupId>org.brotli</groupId>
+      <artifactId>dec</artifactId>
+      <version>0.1.2</version>
+    </dependency>
   </dependencies>
   <build>
     <pluginManagement>
