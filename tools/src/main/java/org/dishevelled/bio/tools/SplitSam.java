@@ -79,7 +79,7 @@ public final class SplitSam extends AbstractSplit {
     /**
      * Split SAM files.
      *
-     * @since 1.4
+     * @since 1.3.2
      * @param inputFile input file, if any
      * @param bytes split the input file at next record after each n bytes, if any
      * @param records split the input file after each n records, if any
