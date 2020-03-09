@@ -1,3 +1,10 @@
 [
-    { "name" : "com.github.luben.zstd.util.Native", "allPublicMethods" : true }
+    {
+        "name" : "com.github.luben.zstd.util.Native",
+        "allPublicMethods" : true
+    },
+    {
+        "name":"org.dishevelled.bio.tools.Tools",
+        "methods":[{"name":"main","parameterTypes":["java.lang.String[]"] }]
+    }
 ]
