@@ -142,7 +142,7 @@ public final class FilterFastq extends AbstractFilter {
         /**
          * Return true if the specified FASTQ record should be accepted by this filter.
          *
-         * @param record FASTQ record
+         * @param fastq FASTQ record
          * @return true if the specified FASTQ record should be accepted by this filter
          */
         boolean accept(Fastq fastq);

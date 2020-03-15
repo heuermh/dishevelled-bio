@@ -280,6 +280,10 @@
               <mainClass>org.dishevelled.bio.tools.FilterBed</mainClass>
             </program>
             <program>
+              <id>dsh-filter-fasta</id>
+              <mainClass>org.dishevelled.bio.tools.FilterFasta</mainClass>
+            </program>
+            <program>
               <id>dsh-filter-fastq</id>
               <mainClass>org.dishevelled.bio.tools.FilterFastq</mainClass>
             </program>

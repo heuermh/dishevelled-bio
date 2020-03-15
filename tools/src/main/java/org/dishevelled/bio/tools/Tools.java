@@ -150,6 +150,7 @@ public final class Tools implements Callable<Integer> {
         .put("fastq-sequence-length", new Command("fastq-sequence-length", "output sequence lengths from sequences in FASTQ format", FastqSequenceLength.class))
         .put("fastq-to-fasta", new Command("fastq-to-fasta", "convert sequences in FASTQ format to FASTA format", FastqToFasta.class))
         .put("filter-bed", new Command("filter-bed", "filter features in BED format", FilterBed.class))
+        .put("filter-fasta", new Command("filter-fasta", "filter sequences in FASTA format", FilterFasta.class))
         .put("filter-fastq", new Command("filter-fastq", "filter sequences in FASTQ format", FilterFastq.class))
         .put("filter-gfa1", new Command("filter-gfa1", "filter assembly in GFA 1.0 format", FilterGfa1.class))
         .put("filter-gfa2", new Command("filter-gfa2", "filter assembly in GFA 2.0 format", FilterGfa2.class))

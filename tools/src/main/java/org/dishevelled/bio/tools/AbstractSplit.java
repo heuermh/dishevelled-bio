@@ -122,6 +122,7 @@ abstract class AbstractSplit implements Callable<Integer> {
      * Left pad the specified split index.
      *
      * @param n split index to left pad
+     * @return the specified index left padded by zeros
      */
     protected final String leftPad(final int n) {
         return leftPad > 0 ? Strings.padStart(String.valueOf(n), leftPad, '0') : String.valueOf(n);
