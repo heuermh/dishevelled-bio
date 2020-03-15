@@ -48,6 +48,8 @@ commands:
   fastq-sequence-length    output sequence lengths from sequences in FASTQ format
   fastq-to-fasta    convert sequences in FASTQ format to FASTA format
   filter-bed    filter features in BED format
+  filter-fasta    filter sequences in FASTA format
+  filter-fastq    filter sequences in FASTQ format
   filter-gfa1    filter assembly in GFA 1.0 format
   filter-gfa2    filter assembly in GFA 2.0 format
   filter-gff3    filter features in GFF3 format
@@ -55,6 +57,7 @@ commands:
   filter-vcf    filter variants in VCF format
   gfa1-to-gfa2    convert GFA 1.0 format to GFA 2.0 format
   interleave-fastq    convert first and second sequence files in FASTQ format to interleaved FASTQ format
+  reassemble-paths    reassemble paths in GFA 1.0 format from traversal records
   remap-phase-set    remap Type=String PS phase set ids in VCF format to Type=Integer
   split-bed    split files in BED format
   split-fasta    split files in FASTA format
