@@ -66,7 +66,7 @@
   <properties>
     <adam.version>0.31.0</adam.version>
     <avro.version>1.8.2</avro.version>
-    <bdg-convert.version>0.10.0-SNAPSHOT</bdg-convert.version>
+    <bdg-convert.version>0.10.0</bdg-convert.version>
     <bdg-formats.version>0.15.0</bdg-formats.version>
     <biojava.version>1.9.3</biojava.version>
     <commons-csv.version>1.8</commons-csv.version>
