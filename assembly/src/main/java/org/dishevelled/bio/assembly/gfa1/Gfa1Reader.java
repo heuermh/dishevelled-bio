@@ -162,7 +162,7 @@ public final class Gfa1Reader {
                     else if ('S' == c) {
                         return listener.record(Segment.valueOf(line));
                     }
-                    else if ('T' == c) {
+                    else if ('t' == c) {
                         return listener.record(Traversal.valueOf(line));
                     }
                 }

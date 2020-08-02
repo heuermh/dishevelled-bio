@@ -192,7 +192,7 @@ public final class Traversal extends Gfa1Record {
     public String toString() {
         Joiner joiner = Joiner.on("\t");
         StringBuilder sb = new StringBuilder();
-        joiner.appendTo(sb, "T", pathName, ordinal, source.splitToString(), target.splitToString(), getOverlapOpt().orElse("*"));
+        joiner.appendTo(sb, "t", pathName, ordinal, source.splitToString(), target.splitToString(), getOverlapOpt().orElse("*"));
         if (!getTags().isEmpty()) {
             sb.append("\t");
             joiner.appendTo(sb, getTags().values());
@@ -208,7 +208,7 @@ public final class Traversal extends Gfa1Record {
      */
     public static Traversal valueOf(final String value) {
         checkNotNull(value);
-        checkArgument(value.startsWith("T"), "traversal value must start with T");
+        checkArgument(value.startsWith("t"), "traversal value must start with t");
         List<String> tokens = Splitter.on("\t").splitToList(value);
         if (tokens.size() < 8) {
             throw new IllegalArgumentException("traversal value must have at least eight tokens, was " + tokens.size());

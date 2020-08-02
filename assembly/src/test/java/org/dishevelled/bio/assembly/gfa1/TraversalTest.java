@@ -94,7 +94,7 @@ public class TraversalTest {
         assertEquals(target, traversal.getTarget());
         assertEquals(overlap, traversal.getOverlap());
         assertEquals(tags, traversal.getTags());
-        assertEquals("T\tpathName\t0\t1\t+\t2\t-\t0M\taa:i:42", traversal.toString());
+        assertEquals("t\tpathName\t0\t1\t+\t2\t-\t0M\taa:i:42", traversal.toString());
     }
 
     @Test(expected=NullPointerException.class)
@@ -104,30 +104,30 @@ public class TraversalTest {
 
     @Test(expected=IllegalArgumentException.class)
     public void testValueOfInvalidTokens() {
-        Segment.valueOf("T\tpathName");
+        Segment.valueOf("t\tpathName");
     }
 
     @Test
     public void testValueOf() {
-        Traversal traversal = Traversal.valueOf("T\tpathName\t0\t1\t+\t2\t-\t0M\taa:i:42");
+        Traversal traversal = Traversal.valueOf("t\tpathName\t0\t1\t+\t2\t-\t0M\taa:i:42");
         assertEquals(pathName, traversal.getPathName());
         assertEquals(ordinal, traversal.getOrdinal());
         assertEquals(source, traversal.getSource());
         assertEquals(target, traversal.getTarget());
         assertEquals(overlap, traversal.getOverlap());
         assertEquals(tags, traversal.getTags());
-        assertEquals("T\tpathName\t0\t1\t+\t2\t-\t0M\taa:i:42", traversal.toString());
+        assertEquals("t\tpathName\t0\t1\t+\t2\t-\t0M\taa:i:42", traversal.toString());
     }
 
     @Test
     public void testValueOfNoTags() {
-        Traversal traversal = Traversal.valueOf("T\tpathName\t0\t1\t+\t2\t-\t*");
+        Traversal traversal = Traversal.valueOf("t\tpathName\t0\t1\t+\t2\t-\t*");
         assertTrue(traversal.getTags().isEmpty());
     }
 
     @Test
     public void testValueOfNoTagsTrailingTab() {
-        Traversal traversal = Traversal.valueOf("T\tpathName\t0\t1\t+\t2\t-\t*\t");
+        Traversal traversal = Traversal.valueOf("t\tpathName\t0\t1\t+\t2\t-\t*\t");
         assertTrue(traversal.getTags().isEmpty());
     }
 }
