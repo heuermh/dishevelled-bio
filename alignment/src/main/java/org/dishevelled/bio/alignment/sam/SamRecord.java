@@ -169,7 +169,7 @@ public final class SamRecord {
     /**
      * Return the QNAME mandatory field for this SAM record. May be null.
      *
-     * @return the QNAME mandatory field for this SAM record.
+     * @return the QNAME mandatory field for this SAM record
      */
     public String getQname() {
         return qname;
@@ -187,7 +187,7 @@ public final class SamRecord {
     /**
      * Return the FLAG mandatory field for this SAM record.
      *
-     * @return the FLAG mandatory field for this SAM record.
+     * @return the FLAG mandatory field for this SAM record
      */
     public int getFlag() {
         return flag;
@@ -196,7 +196,7 @@ public final class SamRecord {
     /**
      * Return the RNAME mandatory field for this SAM record. May be null.
      *
-     * @return the RNAME mandatory field for this SAM record.
+     * @return the RNAME mandatory field for this SAM record
      */
     public String getRname() {
         return rname;
@@ -214,7 +214,7 @@ public final class SamRecord {
     /**
      * Return the POS mandatory field for this SAM record.
      *
-     * @return the POS mandatory field for this SAM record.
+     * @return the POS mandatory field for this SAM record
      */
     public int getPos() {
         return pos;
@@ -223,7 +223,7 @@ public final class SamRecord {
     /**
      * Return the MAPQ mandatory field for this SAM record.
      *
-     * @return the MAPQ mandatory field for this SAM record.
+     * @return the MAPQ mandatory field for this SAM record
      */
     public int getMapq() {
         return mapq;
@@ -232,7 +232,7 @@ public final class SamRecord {
     /**
      * Return the CIGAR mandatory field for this SAM record. May be null.
      *
-     * @return the CIGAR mandatory field for this SAM record.
+     * @return the CIGAR mandatory field for this SAM record
      */
     public String getCigar() {
         return cigar;
@@ -250,7 +250,7 @@ public final class SamRecord {
     /**
      * Return the RNEXT mandatory field for this SAM record. May be null.
      *
-     * @return the RNEXT mandatory field for this SAM record.
+     * @return the RNEXT mandatory field for this SAM record
      */
     public String getRnext() {
         return rnext;
@@ -268,7 +268,7 @@ public final class SamRecord {
     /**
      * Return the PNEXT mandatory field for this SAM record.
      *
-     * @return the PNEXT mandatory field for this SAM record.
+     * @return the PNEXT mandatory field for this SAM record
      */
     public int getPnext() {
         return pnext;
@@ -277,7 +277,7 @@ public final class SamRecord {
     /**
      * Return the TLEN mandatory field for this SAM record.
      *
-     * @return the TLEN mandatory field for this SAM record.
+     * @return the TLEN mandatory field for this SAM record
      */
     public int getTlen() {
         return tlen;
@@ -286,7 +286,7 @@ public final class SamRecord {
     /**
      * Return the SEQ mandatory field for this SAM record. May be null.
      *
-     * @return the SEQ mandatory field for this SAM record.
+     * @return the SEQ mandatory field for this SAM record
      */
     public String getSeq() {
         return seq;
@@ -304,7 +304,7 @@ public final class SamRecord {
     /**
      * Return the QUAL mandatory field for this SAM record. May be null.
      *
-     * @return the QUAL mandatory field for this SAM record.
+     * @return the QUAL mandatory field for this SAM record
      */
     public String getQual() {
         return qual;
