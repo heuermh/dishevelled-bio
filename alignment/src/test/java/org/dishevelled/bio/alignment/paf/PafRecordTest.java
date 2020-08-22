@@ -154,4 +154,11 @@ public final class PafRecordTest {
         assertEquals(record.getAlignmentBlockLength(), copy.getAlignmentBlockLength());
         assertEquals(record.getMappingQuality(), copy.getMappingQuality());
     }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBuilderIllegalStrand() {
+        PafRecord.builder()
+            .withStrand('0')
+            .build();
+    }
 }

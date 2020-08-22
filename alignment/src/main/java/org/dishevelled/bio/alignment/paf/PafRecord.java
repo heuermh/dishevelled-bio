@@ -23,6 +23,7 @@
 */
 package org.dishevelled.bio.alignment.paf;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import static org.dishevelled.bio.alignment.paf.PafFields.parseByteArray;
@@ -107,17 +108,29 @@ public final class PafRecord {
      * Create a new PAF record.
      *
      * @param lineNumber line number
+     * @param queryName query name
+     * @param queryLength query length
+     * @param queryStart query start
+     * @param queryEnd query end
+     * @param strand relative strand, must be '+' or '-'
+     * @param targetName target name
+     * @param targetLength target length
+     * @param targetStart target start
+     * @param targetEnd target end
+     * @param matches number of residue matches
+     * @param alignmentBlockLength alignment block length
+     * @param mappingQuality mapping quality
      * @param fields optional field values keyed by tag, must not be null
      * @param fieldTypes optional field types keyed by tag, must not be null
      * @param fieldArrayTypes optional field array types keyed by tag, must not be null
      */
     private PafRecord(final long lineNumber,
-                      final String queryName,
+                      @Nullable final String queryName,
                       final long queryLength,
                       final long queryStart,
                       final long queryEnd,
                       final char strand,
-                      final String targetName,
+                      @Nullable final String targetName,
                       final long targetLength,
                       final long targetStart,
                       final long targetEnd,
@@ -128,10 +141,10 @@ public final class PafRecord {
                       final Map<String, String> fieldTypes,
                       final Map<String, String> fieldArrayTypes) {
 
+        checkArgument('+' == strand || '-' == strand, "strand must be one of { '+', '-' }");
         checkNotNull(fields);
         checkNotNull(fieldTypes);
         checkNotNull(fieldArrayTypes);
-        // todo: check strand
 
         this.lineNumber = lineNumber;
         this.queryName = queryName;
