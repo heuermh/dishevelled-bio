@@ -34,6 +34,7 @@ commands:
   compress-gfa1    compress assembly in GFA 1.0 format to splittable bgzf or bzip2 compression codecs
   compress-gfa2    compress assembly in GFA 2.0 format to splittable bgzf or bzip2 compression codecs
   compress-gff3    compress features in GFF3 format to splittable bgzf or bzip2 compression codecs
+  compress-paf    compress alignments in PAF format to splittable bgzf or bzip2 compression codecs
   compress-sam    compress alignments in SAM format to splittable bgzf or bzip2 compression codecs
   compress-vcf    compress variants and genotypes in VCF format to splittable bgzf or bzip2 compression codecs
   create-sequence-dictionary    create a SequenceDictionary from sequences in FASTA format
@@ -53,6 +54,7 @@ commands:
   filter-gfa1    filter assembly in GFA 1.0 format
   filter-gfa2    filter assembly in GFA 2.0 format
   filter-gff3    filter features in GFF3 format
+  filter-paf    filter alignments in PAF format
   filter-sam    filter alignments in SAM format
   filter-vcf    filter variants in VCF format
   gfa1-to-gfa2    convert GFA 1.0 format to GFA 2.0 format
@@ -64,6 +66,7 @@ commands:
   split-fastq    split files in FASTQ format
   split-gff3    split files in GFF3 format
   split-interleaved-fastq    split files in interleaved FASTQ format
+  split-paf    split files in PAF format
   split-sam    split files in SAM format
   split-vcf    split files in VCF format
   traverse-paths    traverse paths in GFA 1.0 format
