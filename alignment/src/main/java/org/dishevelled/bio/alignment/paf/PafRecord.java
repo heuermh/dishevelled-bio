@@ -48,7 +48,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ListMultimap;
 
 /**
- * PAF record.
+ * PAF (a Pairwise mApping Format) record.
  *
  * @since 1.4
  * @author  Michael Heuer

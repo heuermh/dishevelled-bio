@@ -24,7 +24,7 @@
 package org.dishevelled.bio.alignment.paf;
 
 /**
- * PAF stream listener.
+ * PAF (a Pairwise mApping Format) stream listener.
  *
  * @since 1.4
  * @author  Michael Heuer

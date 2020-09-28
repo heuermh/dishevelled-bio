@@ -32,7 +32,7 @@ import javax.annotation.concurrent.Immutable;
 import com.google.common.base.Joiner;
 
 /**
- * PAF writer.
+ * PAF (a Pairwise mApping Format) writer.
  *
  * @since 1.4
  * @author  Michael Heuer
@@ -49,7 +49,7 @@ public final class PafWriter {
 
 
     /**
-     * Write PAF with the specified print writer.
+     * Write PAF (a Pairwise mApping Format) with the specified print writer.
      *
      * @param records zero or more PAF records, must not be null
      * @param writer print writer to write PAF with, must not be null
@@ -64,7 +64,8 @@ public final class PafWriter {
     }
 
     /**
-     * Write PAF records with the specified print writer.
+     * Write PAF (a Pairwise mApping Format) records with the specified print
+     * writer.
      *
      * @param records zero or more PAF records, must not be null
      * @param writer print writer to write PAF with, must not be null
@@ -80,7 +81,8 @@ public final class PafWriter {
     }
 
     /**
-     * Write a PAF record with the specified print writer.
+     * Write a PAF (a Pairwise mApping Format) record with the specified print
+     * writer.
      *
      * @param record PAF record, must not be null
      * @param writer print writer to write PAF with, must not be null

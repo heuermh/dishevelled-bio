@@ -30,7 +30,7 @@ import java.io.IOException;
 import javax.annotation.concurrent.Immutable;
 
 /**
- * Streaming PAF parser.
+ * Streaming PAF (a Pairwise mApping Format) parser.
  *
  * @since 1.4
  * @author  Michael Heuer

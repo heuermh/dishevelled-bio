@@ -23,6 +23,6 @@
 */
 
 /**
- * PAF format alignments.
+ * PAF (a Pairwise mApping Format) alignments.
  */
 package org.dishevelled.bio.alignment.paf;

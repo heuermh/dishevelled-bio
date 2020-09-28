@@ -26,7 +26,7 @@ package org.dishevelled.bio.alignment.paf;
 import java.io.IOException;
 
 /**
- * PAF parse listener.
+ * PAF (a Pairwise mApping Format) parse listener.
  *
  * @since 1.4
  * @author  Michael Heuer

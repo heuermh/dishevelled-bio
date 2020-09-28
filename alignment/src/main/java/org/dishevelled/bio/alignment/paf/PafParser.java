@@ -37,7 +37,7 @@ import com.google.common.io.CharStreams;
 import com.google.common.io.LineProcessor;
 
 /**
- * Low-level PAF parser.
+ * Low-level PAF (a Pairwise mApping Format) parser.
  *
  * @since 1.4
  * @author  Michael Heuer

@@ -44,7 +44,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
 /**
- * PAF reader.
+ * PAF (a Pairwise mApping Format) reader.
  *
  * @since 1.4
  * @author  Michael Heuer

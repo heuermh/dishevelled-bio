@@ -40,7 +40,7 @@ import com.google.common.primitives.Bytes;
 import org.apache.commons.codec.DecoderException;
 
 /**
- * Utility methods on PAF fields.
+ * Utility methods on PAF (a Pairwise mApping Format) fields.
  *
  * @since 1.4
  * @author  Michael Heuer
