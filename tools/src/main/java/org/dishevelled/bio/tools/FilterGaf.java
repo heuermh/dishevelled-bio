@@ -47,10 +47,10 @@ import com.google.common.collect.Range;
 
 import org.dishevelled.bio.range.Ranges;
 
-import org.dishevelled.bio.alignment.paf.PafReader;
-import org.dishevelled.bio.alignment.paf.PafRecord;
-import org.dishevelled.bio.alignment.paf.PafWriter;
-import org.dishevelled.bio.alignment.paf.PafStreamAdapter;
+import org.dishevelled.bio.alignment.gaf.GafReader;
+import org.dishevelled.bio.alignment.gaf.GafRecord;
+import org.dishevelled.bio.alignment.gaf.GafWriter;
+import org.dishevelled.bio.alignment.gaf.GafStreamAdapter;
 
 import org.dishevelled.commandline.ArgumentList;
 import org.dishevelled.commandline.CommandLine;
@@ -64,30 +64,30 @@ import org.dishevelled.commandline.argument.IntegerArgument;
 import org.dishevelled.commandline.argument.StringArgument;
 
 /**
- * Filter alignments in PAF format.
+ * Filter alignments in GAF format.
  *
  * @since 1.4
  * @author  Michael Heuer
  */
-public final class FilterPaf extends AbstractFilter {
+public final class FilterGaf extends AbstractFilter {
     private final List<Filter> filters;
-    private final File inputPafFile;
-    private final File outputPafFile;
-    private static final String USAGE = "dsh-filter-paf --mapq 30 -i input.paf.bgz -o output.paf.bgz";
+    private final File inputGafFile;
+    private final File outputGafFile;
+    private static final String USAGE = "dsh-filter-gaf --mapq 30 -i input.gaf.bgz -o output.gaf.bgz";
 
 
     /**
-     * Filter alignments in PAF format.
+     * Filter alignments in GAF format.
      *
      * @param filters list of filters, must not be null
-     * @param inputPafFile input PAF file, if any
-     * @param outputPafFile output PAF file, if any
+     * @param inputGafFile input GAF file, if any
+     * @param outputGafFile output GAF file, if any
      */
-    public FilterPaf(final List<Filter> filters, final File inputPafFile, final File outputPafFile) {
+    public FilterGaf(final List<Filter> filters, final File inputGafFile, final File outputGafFile) {
         checkNotNull(filters);
         this.filters = ImmutableList.copyOf(filters);
-        this.inputPafFile = inputPafFile;
-        this.outputPafFile = outputPafFile;
+        this.inputGafFile = inputGafFile;
+        this.outputGafFile = outputGafFile;
     }
 
 
@@ -95,19 +95,19 @@ public final class FilterPaf extends AbstractFilter {
     public Integer call() throws Exception {
         PrintWriter writer = null;
         try {
-            writer = writer(outputPafFile);
+            writer = writer(outputGafFile);
 
             final PrintWriter w = writer;
-            PafReader.stream(reader(inputPafFile), new PafStreamAdapter() {
+            GafReader.stream(reader(inputGafFile), new GafStreamAdapter() {
                     @Override
-                    public void record(final PafRecord record) {
+                    public void record(final GafRecord record) {
                         // write out record
                         boolean pass = true;
                         for (Filter filter : filters) {
                             pass &= filter.accept(record);
                         }
                         if (pass) {
-                            PafWriter.writeRecord(record, w);
+                            GafWriter.writeRecord(record, w);
                         }
                     }
                 });
@@ -130,12 +130,12 @@ public final class FilterPaf extends AbstractFilter {
     interface Filter {
 
         /**
-         * Return true if the specified PAF record should be accepted by this filter.
+         * Return true if the specified GAF record should be accepted by this filter.
          *
-         * @param record PAF record
-         * @return true if the specified PAF record should be accepted by this filter
+         * @param record GAF record
+         * @return true if the specified GAF record should be accepted by this filter
          */
-        boolean accept(PafRecord record);
+        boolean accept(GafRecord record);
     }
 
     /**
@@ -152,7 +152,7 @@ public final class FilterPaf extends AbstractFilter {
         private final Pattern RANGE = Pattern.compile("^(.*):([0-9]+)-([0-9]+)$");
 
         /**
-         * Create a new query range filter with the specified range format.
+         * Create a new range filter with the specified range format.
          *
          * @param value range format, must not be null
          */
@@ -169,44 +169,8 @@ public final class FilterPaf extends AbstractFilter {
         }
 
         @Override
-        public boolean accept(final PafRecord record) {
+        public boolean accept(final GafRecord record) {
             return queryName.equals(record.getQueryName()) && Ranges.intersect(range, Range.closedOpen(record.getQueryStart(), record.getQueryEnd()));
-        }
-    }
-
-    /**
-     * Target range filter.
-     */
-    public static final class TargetRangeFilter implements Filter {
-        /** Target name. */
-        private final String targetName;
-
-        /** Range. */
-        private final Range<Long> range;
-
-        /** Range format regular expression. */
-        private final Pattern RANGE = Pattern.compile("^(.*):([0-9]+)-([0-9]+)$");
-
-        /**
-         * Create a new target range filter with the specified range format.
-         *
-         * @param value range format, must not be null
-         */
-        public TargetRangeFilter(final String value) {
-            checkNotNull(value);
-            Matcher m = RANGE.matcher(value);
-            if (!m.matches()) {
-                throw new IllegalArgumentException("invalid range format, expected targetName:start-end in 0-based coordinates");
-            }
-            this.targetName = m.group(1);
-            long start = Long.parseLong(m.group(2));
-            long end = Long.parseLong(m.group(3));
-            this.range = Range.closedOpen(start, end);
-        }
-
-        @Override
-        public boolean accept(final PafRecord record) {
-            return targetName.equals(record.getTargetName()) && Ranges.intersect(range, Range.closedOpen(record.getTargetStart(), record.getTargetEnd()));
         }
     }
 
@@ -227,7 +191,7 @@ public final class FilterPaf extends AbstractFilter {
         }
 
         @Override
-        public boolean accept(final PafRecord record) {
+        public boolean accept(final GafRecord record) {
             return record.getMappingQuality() >= mappingQuality;
         }
     }
@@ -256,7 +220,7 @@ public final class FilterPaf extends AbstractFilter {
          }
 
         @Override
-        public boolean accept(final PafRecord record) {
+        public boolean accept(final GafRecord record) {
             try {
                 compiledScript.getEngine().put("r", record);
                 compiledScript.eval();
@@ -277,16 +241,15 @@ public final class FilterPaf extends AbstractFilter {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
         StringArgument queryRangeFilter = new StringArgument("r", "query", "filter by query range, specify as queryName:start-end in 0-based coordindates", false);
-        StringArgument targetRangeFilter = new StringArgument("t", "target", "filter by target range, specify as targetName:start-end in 0-based coordindates", false);
         IntegerArgument mappingQualityFilter = new IntegerArgument("q", "mapping-quality", "filter by mapping quality", false);
         StringArgument scriptFilter = new StringArgument("e", "script", "filter by script, eval against r", false);
-        FileArgument inputPafFile = new FileArgument("i", "input-paf-file", "input PAF file, default stdin", false);
-        FileArgument outputPafFile = new FileArgument("o", "output-paf-file", "output PAF file, default stdout", false);
+        FileArgument inputGafFile = new FileArgument("i", "input-gaf-file", "input GAF file, default stdin", false);
+        FileArgument outputGafFile = new FileArgument("o", "output-gaf-file", "output GAF file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, queryRangeFilter, targetRangeFilter, mappingQualityFilter, scriptFilter, inputPafFile, outputPafFile);
+        ArgumentList arguments = new ArgumentList(about, help, queryRangeFilter, mappingQualityFilter, scriptFilter, inputGafFile, outputGafFile);
         CommandLine commandLine = new CommandLine(args);
 
-        FilterPaf filterPaf = null;
+        FilterGaf filterGaf = null;
         try {
             CommandLineParser.parse(commandLine, arguments);
             if (about.wasFound()) {
@@ -301,16 +264,13 @@ public final class FilterPaf extends AbstractFilter {
             if (queryRangeFilter.wasFound()) {
                 filters.add(new QueryRangeFilter(queryRangeFilter.getValue()));
             }
-            if (targetRangeFilter.wasFound()) {
-                filters.add(new TargetRangeFilter(targetRangeFilter.getValue()));
-            }
             if (mappingQualityFilter.wasFound()) {
                 filters.add(new MappingQualityFilter(mappingQualityFilter.getValue()));
             }
             if (scriptFilter.wasFound()) {
                 filters.add(new ScriptFilter(scriptFilter.getValue()));
             }
-            filterPaf = new FilterPaf(filters, inputPafFile.getValue(), outputPafFile.getValue());
+            filterGaf = new FilterGaf(filters, inputGafFile.getValue(), outputGafFile.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {
@@ -329,7 +289,7 @@ public final class FilterPaf extends AbstractFilter {
             System.exit(-1);
         }
         try {
-            System.exit(filterPaf.call());
+            System.exit(filterGaf.call());
         }
         catch (Exception e) {
             e.printStackTrace();

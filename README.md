@@ -31,6 +31,7 @@ commands:
   compress-bed    compress features in BED format to splittable bgzf or bzip2 compression codecs
   compress-fasta    compress sequences in FASTA format to splittable bgzf or bzip2 compression codecs
   compress-fastq    compress sequences in FASTQ format to splittable bgzf or bzip2 compression codecs
+  compress-gaf    compress alignments in GAF format to splittable bgzf or bzip2 compression codecs
   compress-gfa1    compress assembly in GFA 1.0 format to splittable bgzf or bzip2 compression codecs
   compress-gfa2    compress assembly in GFA 2.0 format to splittable bgzf or bzip2 compression codecs
   compress-gff3    compress features in GFF3 format to splittable bgzf or bzip2 compression codecs
@@ -51,6 +52,7 @@ commands:
   filter-bed    filter features in BED format
   filter-fasta    filter sequences in FASTA format
   filter-fastq    filter sequences in FASTQ format
+  filter-gaf    filter alignments in GAF format
   filter-gfa1    filter assembly in GFA 1.0 format
   filter-gfa2    filter assembly in GFA 2.0 format
   filter-gff3    filter features in GFF3 format
@@ -64,6 +66,7 @@ commands:
   split-bed    split files in BED format
   split-fasta    split files in FASTA format
   split-fastq    split files in FASTQ format
+  split-gaf    split files in GAF format
   split-gff3    split files in GFF3 format
   split-interleaved-fastq    split files in interleaved FASTQ format
   split-paf    split files in PAF format

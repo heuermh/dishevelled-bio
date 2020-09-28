@@ -216,6 +216,10 @@
               <mainClass>org.dishevelled.bio.tools.CompressFastq</mainClass>
             </program>
             <program>
+              <id>dsh-compress-gaf</id>
+              <mainClass>org.dishevelled.bio.tools.CompressGaf</mainClass>
+            </program>
+            <program>
               <id>dsh-compress-gfa1</id>
               <mainClass>org.dishevelled.bio.tools.CompressGfa1</mainClass>
             </program>
@@ -292,6 +296,10 @@
               <mainClass>org.dishevelled.bio.tools.FilterFastq</mainClass>
             </program>
             <program>
+              <id>dsh-filter-gaf</id>
+              <mainClass>org.dishevelled.bio.tools.FilterGaf</mainClass>
+            </program>
+            <program>
               <id>dsh-filter-gfa1</id>
               <mainClass>org.dishevelled.bio.tools.FilterGfa1</mainClass>
             </program>
@@ -350,6 +358,10 @@
             <program>
               <id>dsh-split-fastq</id>
               <mainClass>org.dishevelled.bio.tools.SplitFastq</mainClass>
+            </program>
+            <program>
+              <id>dsh-split-gaf</id>
+              <mainClass>org.dishevelled.bio.tools.SplitGaf</mainClass>
             </program>
             <program>
               <id>dsh-split-gff3</id>

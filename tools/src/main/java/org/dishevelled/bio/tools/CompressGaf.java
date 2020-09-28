@@ -35,10 +35,10 @@ import java.util.List;
 
 import java.util.concurrent.Callable;
 
-import org.dishevelled.bio.alignment.paf.PafReader;
-import org.dishevelled.bio.alignment.paf.PafRecord;
-import org.dishevelled.bio.alignment.paf.PafWriter;
-import org.dishevelled.bio.alignment.paf.PafStreamAdapter;
+import org.dishevelled.bio.alignment.gaf.GafReader;
+import org.dishevelled.bio.alignment.gaf.GafRecord;
+import org.dishevelled.bio.alignment.gaf.GafWriter;
+import org.dishevelled.bio.alignment.gaf.GafStreamAdapter;
 
 import org.dishevelled.commandline.ArgumentList;
 import org.dishevelled.commandline.CommandLine;
@@ -50,27 +50,27 @@ import org.dishevelled.commandline.Usage;
 import org.dishevelled.commandline.argument.FileArgument;
 
 /**
- * Compress alignments in PAF format to splittable bgzf or bzip2 compression
+ * Compress alignments in GAF format to splittable bgzf or bzip2 compression
  * codecs.
  *
  * @since 1.4
  * @author  Michael Heuer
  */
-public final class CompressPaf implements Callable<Integer> {
-    private final File inputPafFile;
-    private final File outputPafFile;
-    private static final String USAGE = "dsh-compress-paf [args]";
+public final class CompressGaf implements Callable<Integer> {
+    private final File inputGafFile;
+    private final File outputGafFile;
+    private static final String USAGE = "dsh-compress-gaf [args]";
 
     /**
-     * Compress alignments in PAF format to splittable bgzf or bzip2 compression
+     * Compress alignments in GAF format to splittable bgzf or bzip2 compression
      * codecs.
      *
-     * @param inputPafFile input PAF file, if any
-     * @param outputPafFile output PAF file, if any
+     * @param inputGafFile input GAF file, if any
+     * @param outputGafFile output GAF file, if any
      */
-    public CompressPaf(final File inputPafFile, final File outputPafFile) {
-        this.inputPafFile = inputPafFile;
-        this.outputPafFile = outputPafFile;
+    public CompressGaf(final File inputGafFile, final File outputGafFile) {
+        this.inputGafFile = inputGafFile;
+        this.outputGafFile = outputGafFile;
     }
 
     @Override
@@ -78,14 +78,14 @@ public final class CompressPaf implements Callable<Integer> {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(inputPafFile);
-            writer = writer(outputPafFile);
+            reader = reader(inputGafFile);
+            writer = writer(outputGafFile);
             
             final PrintWriter w = writer;
-            PafReader.stream(reader, new PafStreamAdapter() {
+            GafReader.stream(reader, new GafStreamAdapter() {
                     @Override
-                    public void record(final PafRecord record) {
-                        PafWriter.writeRecord(record, w);
+                    public void record(final GafRecord record) {
+                        GafWriter.writeRecord(record, w);
                     }
                 });
 
@@ -116,13 +116,13 @@ public final class CompressPaf implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputPafFile = new FileArgument("i", "input-paf-file", "input PAF file, default stdin", false);
-        FileArgument outputPafFile = new FileArgument("o", "output-paf-file", "output PAF file, default stdout", false);
+        FileArgument inputGafFile = new FileArgument("i", "input-gaf-file", "input GAF file, default stdin", false);
+        FileArgument outputGafFile = new FileArgument("o", "output-gaf-file", "output GAF file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputPafFile, outputPafFile);
+        ArgumentList arguments = new ArgumentList(about, help, inputGafFile, outputGafFile);
         CommandLine commandLine = new CommandLine(args);
 
-        CompressPaf compressPaf = null;
+        CompressGaf compressGaf = null;
         try
         {
             CommandLineParser.parse(commandLine, arguments);
@@ -134,14 +134,14 @@ public final class CompressPaf implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            compressPaf = new CompressPaf(inputPafFile.getValue(), outputPafFile.getValue());
+            compressGaf = new CompressGaf(inputGafFile.getValue(), outputGafFile.getValue());
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);
             System.exit(-1);
         }
         try {
-            System.exit(compressPaf.call());
+            System.exit(compressGaf.call());
         }
         catch (Exception e) {
             e.printStackTrace();
