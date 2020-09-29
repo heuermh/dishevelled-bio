@@ -357,14 +357,6 @@ from rGFA.
     public Map<String, String> getFieldArrayTypes() {
         return fieldArrayTypes;
     }
-    
-    /*
-
-      Tag Type Description
-      --------------------
-      todo
-
-    */
 
     /**
      * Return true if this GAF record contains the specified optional field key.

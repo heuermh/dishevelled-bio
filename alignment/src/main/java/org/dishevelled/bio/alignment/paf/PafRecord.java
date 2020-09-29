@@ -326,14 +326,6 @@ public final class PafRecord {
     public Map<String, String> getFieldArrayTypes() {
         return fieldArrayTypes;
     }
-    
-    /*
-
-      Tag Type Description
-      --------------------
-      todo
-
-    */
 
     /**
      * Return true if this PAF record contains the specified optional field key.
