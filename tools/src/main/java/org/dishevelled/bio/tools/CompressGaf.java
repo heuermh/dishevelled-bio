@@ -35,10 +35,7 @@ import java.util.List;
 
 import java.util.concurrent.Callable;
 
-import org.dishevelled.bio.alignment.gaf.GafReader;
 import org.dishevelled.bio.alignment.gaf.GafRecord;
-import org.dishevelled.bio.alignment.gaf.GafWriter;
-import org.dishevelled.bio.alignment.gaf.GafStreamAdapter;
 
 import org.dishevelled.commandline.ArgumentList;
 import org.dishevelled.commandline.CommandLine;
@@ -75,21 +72,24 @@ public final class CompressGaf implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
+        int lineNumber = 0;
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
             reader = reader(inputGafFile);
             writer = writer(outputGafFile);
-            
-            final PrintWriter w = writer;
-            GafReader.stream(reader, new GafStreamAdapter() {
-                    @Override
-                    public void record(final GafRecord record) {
-                        GafWriter.writeRecord(record, w);
-                    }
-                });
 
+            while (reader.ready()) {
+                String line = reader.readLine();
+                GafRecord record = GafRecord.valueOf(line);
+                lineNumber++;
+                writer.println(record.toString());
+            }
             return 0;
+        }
+        catch (Exception e) {
+            throw new Exception("could not read record at line number "
+                                + lineNumber + ", caught" + e.getMessage(), e);
         }
         finally {
             try {

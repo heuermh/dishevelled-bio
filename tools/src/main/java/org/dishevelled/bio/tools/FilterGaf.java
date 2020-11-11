@@ -28,6 +28,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static org.dishevelled.compress.Readers.reader;
 import static org.dishevelled.compress.Writers.writer;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
@@ -47,10 +48,7 @@ import com.google.common.collect.Range;
 
 import org.dishevelled.bio.range.Ranges;
 
-import org.dishevelled.bio.alignment.gaf.GafReader;
 import org.dishevelled.bio.alignment.gaf.GafRecord;
-import org.dishevelled.bio.alignment.gaf.GafWriter;
-import org.dishevelled.bio.alignment.gaf.GafStreamAdapter;
 
 import org.dishevelled.commandline.ArgumentList;
 import org.dishevelled.commandline.CommandLine;
@@ -73,7 +71,7 @@ public final class FilterGaf extends AbstractFilter {
     private final List<Filter> filters;
     private final File inputGafFile;
     private final File outputGafFile;
-    private static final String USAGE = "dsh-filter-gaf --mapq 30 -i input.gaf.bgz -o output.gaf.bgz";
+    private static final String USAGE = "dsh-filter-gaf --mapping-quality 30 -i input.gaf.bgz -o output.gaf.bgz";
 
 
     /**
@@ -93,28 +91,40 @@ public final class FilterGaf extends AbstractFilter {
 
     @Override
     public Integer call() throws Exception {
+        int lineNumber = 0;
+        BufferedReader reader = null;
         PrintWriter writer = null;
         try {
+            reader = reader(inputGafFile);
             writer = writer(outputGafFile);
 
-            final PrintWriter w = writer;
-            GafReader.stream(reader(inputGafFile), new GafStreamAdapter() {
-                    @Override
-                    public void record(final GafRecord record) {
-                        // write out record
-                        boolean pass = true;
-                        for (Filter filter : filters) {
-                            pass &= filter.accept(record);
-                        }
-                        if (pass) {
-                            GafWriter.writeRecord(record, w);
-                        }
-                    }
-                });
+            while (reader.ready()) {
+                String line = reader.readLine();
+                GafRecord record = GafRecord.valueOf(line);
+                lineNumber++;
 
+                // write out record
+                boolean pass = true;
+                for (Filter filter : filters) {
+                    pass &= filter.accept(record);
+                }
+                if (pass) {
+                    writer.println(record.toString());
+                }
+            }
             return 0;
         }
+        catch (Exception e) {
+            throw new Exception("could not read record at line number "
+                                + lineNumber + ", caught" + e.getMessage(), e);
+        }
         finally {
+            try {
+                reader.close();
+            }
+            catch (Exception e) {
+                // empty
+            }
             try {
                 writer.close();
             }

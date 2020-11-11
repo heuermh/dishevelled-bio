@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    dsh-bio-alignment  Aligments.
+    dsh-bio-annotation  Support for SAM-style annotation fields.
     Copyright (c) 2013-2020 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
@@ -30,18 +30,9 @@
     <artifactId>dsh-bio</artifactId>
     <version>1.4-SNAPSHOT</version>
   </parent>
-  <artifactId>dsh-bio-alignment</artifactId>
-  <name>dsh-bio-alignment</name>
-  <description>Alignments.</description>
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.dishevelled</groupId>
-        <artifactId>dsh-bio-annotation</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+  <artifactId>dsh-bio-annotation</artifactId>
+  <name>dsh-bio-annotation</name>
+  <description>Support for SAM-style annotation fields.</description>
   <dependencies>
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -67,11 +58,6 @@
       <groupId>org.dishevelled</groupId>
       <artifactId>dsh-compress</artifactId>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.dishevelled</groupId>
-      <artifactId>dsh-bio-annotation</artifactId>
-      <scope>compile</scope>
     </dependency>
   </dependencies>
 </project>

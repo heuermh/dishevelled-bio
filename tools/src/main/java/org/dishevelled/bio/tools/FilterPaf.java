@@ -73,7 +73,7 @@ public final class FilterPaf extends AbstractFilter {
     private final List<Filter> filters;
     private final File inputPafFile;
     private final File outputPafFile;
-    private static final String USAGE = "dsh-filter-paf --mapq 30 -i input.paf.bgz -o output.paf.bgz";
+    private static final String USAGE = "dsh-filter-paf --mapping-quality 30 -i input.paf.bgz -o output.paf.bgz";
 
 
     /**

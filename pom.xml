@@ -50,6 +50,7 @@
     <module>adam</module>
     <module>align</module>
     <module>alignment</module>
+    <module>annotation</module>
     <module>assembly</module>
     <module>convert</module>
     <module>convert-htsjdk</module>

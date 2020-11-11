@@ -29,13 +29,11 @@ import java.io.PrintWriter;
 
 import javax.annotation.concurrent.Immutable;
 
-import com.google.common.base.Joiner;
-
 /**
  * GAF (graph alignment format) writer.
  *
  * @since 1.4
- * @author  Michael Heuer
+ * @author  Michal Heuer
  */
 @Immutable
 public final class GafWriter {
@@ -49,100 +47,29 @@ public final class GafWriter {
 
 
     /**
-     * Write GAF (graph alignment format) with the specified print
-     * writer.
+     * Write the specified GAF record with the specified print writer.
      *
-     * @param records zero or more GAF (graph alignment format) records,
-     *    must not be null
-     * @param writer print writer to write GAF (graph alignment format) with,
-     *    must not be null
+     * @param record GAF record to write, must not be null
+     * @param writer print writer to write GAF record with, must not be null
      */
-    public static void write(final Iterable<GafRecord> records,
-                             final PrintWriter writer) {
-
-        checkNotNull(records);
-        checkNotNull(writer);
-
-        writeRecords(records, writer);
-    }
-
-    /**
-     * Write GAF (graph alignment format) records with the specified print
-     * writer.
-     *
-     * @param records zero or more GAF (graph alignment format) records,
-     *    must not be null
-     * @param writer print writer to write GAF (graph alignment format) with,
-     *    must not be null
-     */
-    public static void writeRecords(final Iterable<GafRecord> records,
-                                    final PrintWriter writer) {
-        checkNotNull(records);
-        checkNotNull(writer);
-
-        for (GafRecord record : records) {
-            writeRecord(record, writer);
-        }
-    }
-
-    /**
-     * Write a GAF (graph alignment format) record with the specified print
-     * writer.
-     *
-     * @param record GAF (graph alignment format) record, must not be null
-     * @param writer print writer to write GAF (graph alignment format) with,
-     *    must not be null
-     */
-    public static void writeRecord(final GafRecord record, final PrintWriter writer) {
+    public static void write(final GafRecord record, final PrintWriter writer) {
         checkNotNull(record);
         checkNotNull(writer);
+        writer.println(record.toString());
+    }
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(record.getQueryNameOpt().orElse("*"));
-        sb.append("\t");
-        sb.append(record.getQueryLength());
-        sb.append("\t");
-        sb.append(record.getQueryStart());
-        sb.append("\t");
-        sb.append(record.getQueryEnd());
-        sb.append("\t");
-        sb.append(record.getStrand());
-        sb.append("\t");
-        sb.append(record.getPathNameOpt().orElse("*"));
-        sb.append("\t");
-        sb.append(record.getPathLength());
-        sb.append("\t");
-        sb.append(record.getPathStart());
-        sb.append("\t");
-        sb.append(record.getPathEnd());
-        sb.append("\t");
-        sb.append(record.getMatches());
-        sb.append("\t");
-        sb.append(record.getAlignmentBlockLength());
-        sb.append("\t");
-        sb.append(record.getMappingQuality());
-
-        for (String tag : record.getFields().keySet()) {
-            String type = record.getFieldTypes().get(tag);
-            String arrayType = record.getFieldArrayTypes().get(tag);
-
-            if (type == null) {
-                throw new IllegalArgumentException("missing type for tag " + tag + ", fieldTypes = " + record.getFieldTypes());
-            }
-            if ("B".equals(type) && arrayType == null) {
-                throw new IllegalArgumentException("missing array type for tag " + tag + " type " + type + ", fieldArrayTypes = " + record.getFieldArrayTypes());
-            }
-            sb.append("\t");
-            sb.append(tag);
-            sb.append(":");
-            sb.append(type);
-            sb.append(":");
-            if (arrayType != null) {
-                sb.append(arrayType);
-                sb.append(",");
-            }
-            sb.append(Joiner.on(",").join(record.getFields().get(tag)));
+    /**
+     * Write zero or more GAF records with the specified print writer.
+     *
+     * @param records zero or more GAF records to write, must not be null
+     * @param writer print writer to write GAF records with, must not be null
+     */
+    public static void write(final Iterable<GafRecord> records, final PrintWriter writer) {
+        checkNotNull(records);
+        checkNotNull(writer);
+        for (GafRecord record : records) {
+            writer.println(record.toString());
         }
-        writer.println(sb.toString());
     }
 }
+

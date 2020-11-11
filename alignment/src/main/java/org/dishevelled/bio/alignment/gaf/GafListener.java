@@ -24,15 +24,18 @@
 package org.dishevelled.bio.alignment.gaf;
 
 /**
- * Abstract implementation of GafStreamListener.
+ * GAF (graph alignment format) listener.
  *
  * @since 1.4
  * @author  Michael Heuer
  */
-public class GafStreamAdapter implements GafStreamListener {
+public interface GafListener {
 
-    @Override
-    public void record(final GafRecord record) {
-        // empty
-    }
+    /**
+     * Notify this GAF listener of a GAF record.
+     *
+     * @param record GAF record
+     * @return true to continue processing, false to stop
+     */
+    boolean record(GafRecord record);
 }

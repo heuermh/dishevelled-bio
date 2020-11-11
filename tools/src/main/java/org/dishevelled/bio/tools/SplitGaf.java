@@ -34,9 +34,9 @@ import java.util.List;
 
 import com.google.common.io.Files;
 
+import org.dishevelled.bio.alignment.gaf.GafListener;
 import org.dishevelled.bio.alignment.gaf.GafReader;
 import org.dishevelled.bio.alignment.gaf.GafRecord;
-import org.dishevelled.bio.alignment.gaf.GafStreamListener;
 import org.dishevelled.bio.alignment.gaf.GafWriter;
 
 import org.dishevelled.commandline.ArgumentList;
@@ -96,17 +96,17 @@ public final class SplitGaf extends AbstractSplit {
         try {
             reader = reader(inputFile);
 
-            GafReader.stream(reader, new GafStreamListener() {
+            GafReader.stream(reader, new GafListener() {
                     private long r = 0L;
                     private int files = 0;
                     private CountingWriter writer;
 
                     @Override
-                    public void record(final GafRecord record) {
+                    public boolean record(final GafRecord record) {
                         if (writer == null) {
                             writer = createCountingWriter(files);
                         }
-                        GafWriter.writeRecord(record, writer.asPrintWriter());
+                        GafWriter.write(record, writer.asPrintWriter());
                         try {
                             writer.flush();
                         }
@@ -129,6 +129,7 @@ public final class SplitGaf extends AbstractSplit {
                                 writer = null;
                             }
                         }
+                        return true;
                     }
                 });
             return 0;

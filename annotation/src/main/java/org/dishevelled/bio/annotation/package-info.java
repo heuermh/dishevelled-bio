@@ -1,6 +1,6 @@
 /*
 
-    dsh-bio-alignment  Aligments.
+    dsh-bio-annotation  Support for SAM-style annotation fields.
     Copyright (c) 2013-2020 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
@@ -21,20 +21,8 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.alignment.gaf;
 
 /**
- * GAF (graph alignment format) stream listener.
- *
- * @since 1.4
- * @author  Michael Heuer
+ * Support for SAM-style annotation fields.
  */
-public interface GafStreamListener {
-
-    /**
-     * Notify this listener of a GAF (graph alignment format) record.
-     *
-     * @param record GAF (graph alignment format) record
-     */
-    void record(GafRecord record);
-}
+package org.dishevelled.bio.annotation;

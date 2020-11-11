@@ -1,6 +1,6 @@
 /*
 
-    dsh-bio-alignment  Aligments.
+    dsh-bio-annotation  Support for SAM-style annotation fields.
     Copyright (c) 2013-2020 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
@@ -21,7 +21,7 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.alignment.gaf;
+package org.dishevelled.bio.annotation;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -29,30 +29,31 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static org.apache.commons.codec.binary.Hex.decodeHex;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.concurrent.Immutable;
 
+import com.google.common.base.Splitter;
+
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ListMultimap;
 
 import com.google.common.primitives.Bytes;
 
 import org.apache.commons.codec.DecoderException;
 
 /**
- * Utility methods on GAF (graph alignment format) fields.
+ * Utility methods on annotations.
  *
  * @since 1.4
  * @author  Michael Heuer
  */
-// todo: make SamFields public?
 @Immutable
-final class GafFields {
+final class Annotations {
 
     /**
      * Private no-arg constructor.
      */
-    private GafFields() {
+    private Annotations() {
         // empty
     }
 
@@ -74,106 +75,91 @@ final class GafFields {
      * Parse the Type=A field value for the specified key into a character.
      *
      * @param key key, must not be null
-     * @param fields fields, must not be null
+     * @param annotations annotations, must not be null
      * @return the Type=A field value for the specified key parsed into a character
      */
-    static char parseCharacter(final String key, final ListMultimap<String, String> fields) {
+    static char parseCharacter(final String key, final Map<String, Annotation> annotations) {
         checkNotNull(key);
-        checkNotNull(fields);
+        checkNotNull(annotations);
 
-        List<String> values = fields.get(key);
-        if (values.isEmpty()) {
+        Annotation annotation = annotations.get(key);
+        if (annotation == null) {
             throw new IllegalArgumentException("Type=A value missing for key " + key);
         }
-        if (values.size() > 1) {
-            throw new IllegalArgumentException("more than one Type=A value for key " + key);
-        }
-        return toChar(values.get(0));
+        return toChar(annotation.getValue());
     }
 
     /**
      * Parse the Type=i field value for the specified key into an integer.
      *
      * @param key key, must not be null
-     * @param fields fields, must not be null
+     * @param annotations annotations, must not be null
      * @return the Type=i field value for the specified key parsed into an integer
      */
-    static int parseInteger(final String key, final ListMultimap<String, String> fields) {
+    static int parseInteger(final String key, final Map<String, Annotation> annotations) {
         checkNotNull(key);
-        checkNotNull(fields);
+        checkNotNull(annotations);
 
-        List<String> values = fields.get(key);
-        if (values.isEmpty()) {
+        Annotation annotation = annotations.get(key);
+        if (annotation == null) {
             throw new IllegalArgumentException("Type=i value missing for key " + key);
         }
-        if (values.size() > 1) {
-            throw new IllegalArgumentException("more than one Type=i value for key " + key);
-        }
-        return Integer.valueOf(values.get(0));
+        return Integer.valueOf(annotation.getValue());
     }
 
     /**
      * Parse the Type=f field value for the specified key into a float.
      *
      * @param key key, must not be null
-     * @param fields fields, must not be null
+     * @param annotations annotations, must not be null
      * @return the Type=f field value for the specified key parsed into a float
      */
-    static float parseFloat(final String key, final ListMultimap<String, String> fields) {
+    static float parseFloat(final String key, final Map<String, Annotation> annotations) {
         checkNotNull(key);
-        checkNotNull(fields);
+        checkNotNull(annotations);
 
-        List<String> values = fields.get(key);
-        if (values.isEmpty()) {
+        Annotation annotation = annotations.get(key);
+        if (annotation == null) {
             throw new IllegalArgumentException("Type=f value missing for key " + key);
         }
-        if (values.size() > 1) {
-            throw new IllegalArgumentException("more than one Type=f value for key " + key);
-        }
-        return Float.valueOf(values.get(0));
+        return Float.valueOf(annotation.getValue());
     }
 
     /**
      * Return the Type=Z field value for the specified key as a string.
      *
      * @param key key, must not be null
-     * @param fields fields, must not be null
+     * @param annotations annotations, must not be null
      * @return the Type=Z field value for the specified key as a string
      */
-    static String parseString(final String key, final ListMultimap<String, String> fields) {
+    static String parseString(final String key, final Map<String, Annotation> annotations) {
         checkNotNull(key);
-        checkNotNull(fields);
+        checkNotNull(annotations);
 
-        List<String> values = fields.get(key);
-        if (values.isEmpty()) {
+        Annotation annotation = annotations.get(key);
+        if (annotation == null) {
             throw new IllegalArgumentException("Type=Z value missing for key " + key);
         }
-        if (values.size() > 1) {
-            throw new IllegalArgumentException("more than one Type=Z value for key " + key);
-        }
-        return values.get(0);
+        return annotation.getValue();
     }
 
     /**
      * Return the Type=H field value for the specified key as a byte array.
      *
      * @param key key, must not be null
-     * @param fields fields, must not be null
+     * @param annotations annotations, must not be null
      * @return the Type=H field value for the specified key as a byte array
      */
-    static byte[] parseByteArray(final String key, final ListMultimap<String, String> fields) {
+    static byte[] parseByteArray(final String key, final Map<String, Annotation> annotations) {
         checkNotNull(key);
-        checkNotNull(fields);
+        checkNotNull(annotations);
 
-        List<String> values = fields.get(key);
-        if (values.isEmpty()) {
+        Annotation annotation = annotations.get(key);
+        if (annotation == null) {
             throw new IllegalArgumentException("Type=H value missing for key " + key);
         }
-        if (values.size() > 1) {
-            throw new IllegalArgumentException("more than one Type=H value for key " + key);
-        }
         try {
-            return decodeHex(values.get(0));
+            return decodeHex(annotation.getValue());
         }
         catch (DecoderException e) {
             throw new IllegalArgumentException("could not decode hex value for key " + key, e);
@@ -184,41 +170,41 @@ final class GafFields {
      * Return the Type=H field value for the specified key as a list of bytes.
      *
      * @param key key, must not be null
-     * @param fields fields, must not be null
+     * @param annotations annotations, must not be null
      * @return the Type=H field value for the specified key as a list of bytes
      */
-    static List<Byte> parseBytes(final String key, final ListMultimap<String, String> fields) {
-        return Bytes.asList(parseByteArray(key, fields));
+    static List<Byte> parseBytes(final String key, final Map<String, Annotation> annotations) {
+        return Bytes.asList(parseByteArray(key, annotations));
     }
 
     /**
-     * Convert the specified list of strings into an immutable list of Integers.
+     * Split and convert the specified string by commas into an immutable list of Integers.
      *
-     * @param values list of Strings to convert, must not be null
-     * @return the specified list of strings converted into an immutable list of Integers
+     * @param value string to split and convert, must not be null
+     * @return the specified string split and converted into an immutable list of Integers
      */
-    private static List<Integer> parseIntegers(final List<String> values) {
-        checkNotNull(values);
-
+    private static List<Integer> parseIntegers(final String value) {
+        checkNotNull(value);
+        List<String> values = Splitter.on(",").splitToList(value);
         ImmutableList.Builder<Integer> builder = ImmutableList.builder();
-        for (String value : values) {
-            builder.add(Integer.valueOf(value));
+        for (String s : values) {
+            builder.add(Integer.valueOf(s));
         }
         return builder.build();
     }
 
     /**
-     * Convert the specified list of strings into an immutable list of floats.
+     * Split and convert the specified string by commas into an immutable list of floats.
      *
-     * @param values list of Strings to convert, must not be null
-     * @return the specified list of strings converted into an immutable list of floats
+     * @param values string to split and convert, must not be null
+     * @return the specified string split and converted into an immutable list of floats
      */
-    private static List<Float> parseFloats(final List<String> values) {
-        checkNotNull(values);
-
+    private static List<Float> parseFloats(final String value) {
+        checkNotNull(value);
+        List<String> values = Splitter.on(",").splitToList(value);
         ImmutableList.Builder<Float> builder = ImmutableList.builder();
-        for (String value : values) {
-            builder.add(Float.valueOf(value));
+        for (String s : values) {
+            builder.add(Float.valueOf(s));
         }
         return builder.build();
     }
@@ -227,26 +213,36 @@ final class GafFields {
      * Parse the Type=B first letter [cCsSiI] field value for the specified key into an immutable list of integers.
      *
      * @param key key, must not be null
-     * @param fields fields, must not be null
+     * @param annotations annotations, must not be null
      * @return the Type=B first letter [cCsSiI] field value for the specified key parsed into an immutable list of integers
      */
-    static List<Integer> parseIntegers(final String key, final ListMultimap<String, String> fields) {
+    static List<Integer> parseIntegers(final String key, final Map<String, Annotation> annotations) {
         checkNotNull(key);
-        checkNotNull(fields);
-        return parseIntegers(fields.get(key));
+        checkNotNull(annotations);
+
+        Annotation annotation = annotations.get(key);
+        if (annotation == null) {
+            throw new IllegalArgumentException("Type=B value missing for key " + key);
+        }
+        return parseIntegers(annotation.getValue());
     }
 
     /**
      * Parse the Type=B first letter f field value for the specified key into an immutable list of floats.
      *
      * @param key key, must not be null
-     * @param fields fields, must not be null
+     * @param annotations annotations, must not be null
      * @return the Type=f first letter f field value for the specified key parsed into an immutable list of floats
      */
-    static List<Float> parseFloats(final String key, final ListMultimap<String, String> fields) {
+    static List<Float> parseFloats(final String key, final Map<String, Annotation> annotations) {
         checkNotNull(key);
-        checkNotNull(fields);
-        return parseFloats(fields.get(key));
+        checkNotNull(annotations);
+
+        Annotation annotation = annotations.get(key);
+        if (annotation == null) {
+            throw new IllegalArgumentException("Type=B value missing for key " + key);
+        }
+        return parseFloats(annotation.getValue());
     }
 
     /**
@@ -255,20 +251,28 @@ final class GafFields {
      *
      * @param key key, must not be null
      * @param length length, must be greater than zero
-     * @param fields fields, must not be null
+     * @param annotations annotations, must not be null
      * @return the Type=B first letter [cCsSiI] field value for the specified key parsed into an immutable list of integers
      *    of size equal to the specified length
      */
-    static List<Integer> parseIntegers(final String key, final int length, final ListMultimap<String, String> fields) {
+    static List<Integer> parseIntegers(final String key, final int length, final Map<String, Annotation> annotations) {
         checkNotNull(key);
-        checkNotNull(fields);
+        checkNotNull(annotations);
         checkArgument(length > 0, "length must be at least one");
 
-        List<String> values = fields.get(key);
+        Annotation annotation = annotations.get(key);
+        if (annotation == null) {
+            throw new IllegalArgumentException("Type=B value missing for key " + key);
+        }
+        List<String> values = Splitter.on(",").splitToList(annotation.getValue());
         if (values.size() != length) {
             throw new IllegalArgumentException("expected " + length + " Type=B first letter [cCsSiI] values, found " + values.size());
         }
-        return parseIntegers(values);
+        ImmutableList.Builder<Integer> builder = ImmutableList.builder();
+        for (String value : values) {
+            builder.add(Integer.valueOf(value));
+        }
+        return builder.build();
     }
 
     /**
@@ -277,19 +281,27 @@ final class GafFields {
      *
      * @param key key, must not be null
      * @param length length, must be greater than zero
-     * @param fields fields, must not be null
+     * @param annotations annotations, must not be null
      * @return the Type=B first letter f field value for the specified key parsed into an immutable list of floats
      *    of size equal to the specified length
      */
-    static List<Float> parseFloats(final String key, final int length, final ListMultimap<String, String> fields) {
+    static List<Float> parseFloats(final String key, final int length, final Map<String, Annotation> annotations) {
         checkNotNull(key);
-        checkNotNull(fields);
+        checkNotNull(annotations);
         checkArgument(length > 0, "length must be at least one");
 
-        List<String> values = fields.get(key);
+        Annotation annotation = annotations.get(key);
+        if (annotation == null) {
+            throw new IllegalArgumentException("Type=B value missing for key " + key);
+        }
+        List<String> values = Splitter.on(",").splitToList(annotation.getValue());
         if (values.size() != length) {
             throw new IllegalArgumentException("expected " + length + " Type=B first letter f values, found " + values.size());
         }
-        return parseFloats(values);
+        ImmutableList.Builder<Float> builder = ImmutableList.builder();
+        for (String value : values) {
+            builder.add(Float.valueOf(value));
+        }
+        return builder.build();
     }
 }
