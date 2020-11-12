@@ -34,21 +34,21 @@ import java.io.PrintWriter;
 
 import org.apache.hadoop.conf.Configuration;
 
-import org.dishevelled.bio.assembly.gfa2.Gfa2Listener;
-import org.dishevelled.bio.assembly.gfa2.Gfa2Reader;
-import org.dishevelled.bio.assembly.gfa2.Gfa2Record;
-import org.dishevelled.bio.assembly.gfa2.Gfa2Writer;
+import org.dishevelled.bio.alignment.paf.PafListener;
+import org.dishevelled.bio.alignment.paf.PafReader;
+import org.dishevelled.bio.alignment.paf.PafRecord;
+import org.dishevelled.bio.alignment.paf.PafWriter;
 
 /**
- * Compress assembly in GFA 2.0 format on HDFS to splittable bgzf or bzip2 compression codecs.
+ * Compress alignments in PAF format on HDFS to splittable bgzf or bzip2 compression codecs.
  *
- * @since 1.3
+ * @since 1.4
  * @author  Michael Heuer
  */
-public final class CompressGfa2 {
+public final class CompressPaf {
 
     /**
-     * Compress assembly in GFA 2.0 format on HDFS to splittable bgzf or bzip2 compression codecs.
+     * Compress alignments in PAF format on HDFS to splittable bgzf or bzip2 compression codecs.
      *
      * @param inputPath input path, must not be null
      * @param outputPath output path, must not be null
@@ -67,13 +67,13 @@ public final class CompressGfa2 {
             writer = writer(outputPath, conf);
 
             final PrintWriter w = writer;
-            Gfa2Reader.stream(reader, new Gfa2Listener() {
-                    @Override
-                    public boolean record(final Gfa2Record gfa2Record) {
-                        Gfa2Writer.write(gfa2Record, w);
-                        return true;
-                    }
-                });
+            PafReader.stream(reader, new PafListener() {
+                @Override
+                public boolean record(final PafRecord pafRecord) {
+                    PafWriter.write(pafRecord, w);
+                    return true;
+                }
+            });
         }
         finally {
             try {

@@ -145,7 +145,7 @@ public final class Gfa1Reader {
         {
             try {
                 lineNumber++;
-                if (line != null && !line.isEmpty()) {
+                if (!line.isEmpty()) {
                     char c = line.charAt(0);
                     if ('C' == c) {
                         return listener.record(Containment.valueOf(line));

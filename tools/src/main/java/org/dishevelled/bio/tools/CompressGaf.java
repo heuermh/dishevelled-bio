@@ -30,9 +30,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import java.util.concurrent.Callable;
 
 import org.dishevelled.bio.alignment.gaf.GafRecord;

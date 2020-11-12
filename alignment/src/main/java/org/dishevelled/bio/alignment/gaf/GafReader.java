@@ -174,7 +174,7 @@ public final class GafReader {
         checkNotNull(inputStream);
         checkNotNull(listener);
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-            stream(inputStream, listener);
+            stream(reader, listener);
         }
     }
 
@@ -211,7 +211,7 @@ public final class GafReader {
         {
             try {
                 lineNumber++;
-                if (line != null && !line.isEmpty()) {
+                if (!line.isEmpty()) {
                     return listener.record(GafRecord.valueOf(line));
                 }
                 // continue processing blank lines

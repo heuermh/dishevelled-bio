@@ -25,8 +25,6 @@ package org.dishevelled.bio.tools;
 
 import java.util.concurrent.Callable;
 
-import java.util.function.Predicate;
-
 import javax.script.Bindings;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;

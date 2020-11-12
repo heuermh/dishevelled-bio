@@ -116,7 +116,7 @@ public final class Gfa2Reader {
         {
             try {
                 lineNumber++;
-                if (line != null && !line.isEmpty()) {
+                if (!line.isEmpty()) {
                     char c = line.charAt(0);
                     if ('E' == c) {
                         Edge edge = Edge.valueOf(line);

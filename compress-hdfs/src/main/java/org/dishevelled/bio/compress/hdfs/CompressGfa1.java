@@ -40,7 +40,7 @@ import org.dishevelled.bio.assembly.gfa1.Gfa1Record;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Writer;
 
 /**
- * Compress features in GFA 1.0 format on HDFS to splittable bgzf or bzip2 compression codecs.
+ * Compress assembly in GFA 1.0 format on HDFS to splittable bgzf or bzip2 compression codecs.
  *
  * @since 1.3
  * @author  Michael Heuer
@@ -48,7 +48,7 @@ import org.dishevelled.bio.assembly.gfa1.Gfa1Writer;
 public final class CompressGfa1 {
 
     /**
-     * Compress features in GFA 1.0 format on HDFS to splittable bgzf or bzip2 compression codecs.
+     * Compress assembly in GFA 1.0 format on HDFS to splittable bgzf or bzip2 compression codecs.
      *
      * @param inputPath input path, must not be null
      * @param outputPath output path, must not be null

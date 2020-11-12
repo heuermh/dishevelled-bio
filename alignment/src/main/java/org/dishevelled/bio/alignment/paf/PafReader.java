@@ -173,7 +173,7 @@ public final class PafReader {
         checkNotNull(inputStream);
         checkNotNull(listener);
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-            stream(inputStream, listener);
+            stream(reader, listener);
         }
     }
 
@@ -210,7 +210,7 @@ public final class PafReader {
         {
             try {
                 lineNumber++;
-                if (line != null && !line.isEmpty()) {
+                if (!line.isEmpty()) {
                     return listener.record(PafRecord.valueOf(line));
                 }
                 // continue processing blank lines
