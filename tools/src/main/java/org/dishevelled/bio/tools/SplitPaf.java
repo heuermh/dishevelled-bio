@@ -34,9 +34,9 @@ import java.util.List;
 
 import com.google.common.io.Files;
 
+import org.dishevelled.bio.alignment.paf.PafListener;
 import org.dishevelled.bio.alignment.paf.PafReader;
 import org.dishevelled.bio.alignment.paf.PafRecord;
-import org.dishevelled.bio.alignment.paf.PafStreamListener;
 import org.dishevelled.bio.alignment.paf.PafWriter;
 
 import org.dishevelled.commandline.ArgumentList;
@@ -96,17 +96,17 @@ public final class SplitPaf extends AbstractSplit {
         try {
             reader = reader(inputFile);
 
-            PafReader.stream(reader, new PafStreamListener() {
+            PafReader.stream(reader, new PafListener() {
                     private long r = 0L;
                     private int files = 0;
                     private CountingWriter writer;
 
                     @Override
-                    public void record(final PafRecord record) {
+                    public boolean record(final PafRecord record) {
                         if (writer == null) {
                             writer = createCountingWriter(files);
                         }
-                        PafWriter.writeRecord(record, writer.asPrintWriter());
+                        PafWriter.write(record, writer.asPrintWriter());
                         try {
                             writer.flush();
                         }
@@ -129,6 +129,7 @@ public final class SplitPaf extends AbstractSplit {
                                 writer = null;
                             }
                         }
+                        return true;
                     }
                 });
             return 0;

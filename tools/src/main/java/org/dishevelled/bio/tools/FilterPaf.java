@@ -28,6 +28,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static org.dishevelled.compress.Readers.reader;
 import static org.dishevelled.compress.Writers.writer;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
@@ -47,10 +48,7 @@ import com.google.common.collect.Range;
 
 import org.dishevelled.bio.range.Ranges;
 
-import org.dishevelled.bio.alignment.paf.PafReader;
 import org.dishevelled.bio.alignment.paf.PafRecord;
-import org.dishevelled.bio.alignment.paf.PafWriter;
-import org.dishevelled.bio.alignment.paf.PafStreamAdapter;
 
 import org.dishevelled.commandline.ArgumentList;
 import org.dishevelled.commandline.CommandLine;
@@ -93,26 +91,32 @@ public final class FilterPaf extends AbstractFilter {
 
     @Override
     public Integer call() throws Exception {
+        int lineNumber = 0;
+        BufferedReader reader = null;
         PrintWriter writer = null;
         try {
+            reader = reader(inputPafFile);
             writer = writer(outputPafFile);
 
-            final PrintWriter w = writer;
-            PafReader.stream(reader(inputPafFile), new PafStreamAdapter() {
-                    @Override
-                    public void record(final PafRecord record) {
-                        // write out record
-                        boolean pass = true;
-                        for (Filter filter : filters) {
-                            pass &= filter.accept(record);
-                        }
-                        if (pass) {
-                            PafWriter.writeRecord(record, w);
-                        }
-                    }
-                });
+            while (reader.ready()) {
+                String line = reader.readLine();
+                PafRecord record = PafRecord.valueOf(line);
+                lineNumber++;
 
+                // write out record
+                boolean pass = true;
+                for (Filter filter : filters) {
+                    pass &= filter.accept(record);
+                }
+                if (pass) {
+                    writer.println(record.toString());
+                }
+            }
             return 0;
+        }
+        catch (Exception e) {
+            throw new Exception("could not read record at line number "
+                                + lineNumber + ", caught" + e.getMessage(), e);
         }
         finally {
             try {

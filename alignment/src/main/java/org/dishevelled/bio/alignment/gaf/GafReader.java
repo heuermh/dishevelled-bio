@@ -25,6 +25,13 @@ package org.dishevelled.bio.alignment.gaf;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.net.URL;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
 
 import java.util.ArrayList;
@@ -32,8 +39,11 @@ import java.util.List;
 
 import javax.annotation.concurrent.Immutable;
 
+import com.google.common.base.Charsets;
+
 import com.google.common.io.CharStreams;
 import com.google.common.io.LineProcessor;
+import com.google.common.io.Resources;
 
 /**
  * GAF (graph alignment format) reader.
@@ -67,6 +77,48 @@ public final class GafReader {
     }
 
     /**
+     * Read zero or more GAF records from the specified file.
+     *
+     * @param file file to read from, must not be null
+     * @return zero or more GAF records read from the specified file
+     * @throws IOException if an I/O error occurs
+     */
+    public static Iterable<GafRecord> read(final File file) throws IOException {
+        checkNotNull(file);
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            return read(reader);
+        }
+    }
+
+    /**
+     * Read zero or more GAF records from the specified URL.
+     *
+     * @param url URL to read from, must not be null
+     * @return zero or more GAF records read from the specified URL
+     * @throws IOException if an I/O error occurs
+     */
+    public static Iterable<GafRecord> read(final URL url) throws IOException {
+        checkNotNull(url);
+        try (BufferedReader reader = Resources.asCharSource(url, Charsets.UTF_8).openBufferedStream()) {
+            return read(reader);
+        }
+    }
+
+    /**
+     * Read zero or more GAF records from the specified input stream.
+     *
+     * @param inputStream input stream to read from, must not be null
+     * @return zero or more GAF records read from the specified input stream
+     * @throws IOException if an I/O error occurs
+     */
+    public static Iterable<GafRecord> read(final InputStream inputStream) throws IOException {
+        checkNotNull(inputStream);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            return read(reader);
+        }
+    }
+
+    /**
      * Stream zero or more GAF records from the specified readable.
      *
      * @param readable readable to stream from, must not be null
@@ -79,6 +131,51 @@ public final class GafReader {
 
         GafLineProcessor lineProcessor = new GafLineProcessor(listener);
         CharStreams.readLines(readable, lineProcessor);
+    }
+
+    /**
+     * Stream zero or more GAF records from the specified file.
+     *
+     * @param file file to stream from, must not be null
+     * @param listener event based listener callback, must not be null
+     * @throws IOException if an I/O error occurs
+     */
+    public static void stream(final File file, final GafListener listener) throws IOException {
+        checkNotNull(file);
+        checkNotNull(listener);
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            stream(reader, listener);
+        }
+    }
+
+    /**
+     * Stream zero or more GAF records from the specified URL.
+     *
+     * @param url URL to stream from, must not be null
+     * @param listener event based listener callback, must not be null
+     * @throws IOException if an I/O error occurs
+     */
+    public static void stream(final URL url, final GafListener listener) throws IOException {
+        checkNotNull(url);
+        checkNotNull(listener);
+        try (BufferedReader reader = Resources.asCharSource(url, Charsets.UTF_8).openBufferedStream()) {
+            stream(reader, listener);
+        }
+    }
+
+    /**
+     * Stream zero or more GAF records from the specified input stream.
+     *
+     * @param inputStream input stream to stream from, must not be null
+     * @param listener event based listener callback, must not be null
+     * @throws IOException if an I/O error occurs
+     */
+    public static void stream(final InputStream inputStream, final GafListener listener) throws IOException {
+        checkNotNull(inputStream);
+        checkNotNull(listener);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            stream(inputStream, listener);
+        }
     }
 
 

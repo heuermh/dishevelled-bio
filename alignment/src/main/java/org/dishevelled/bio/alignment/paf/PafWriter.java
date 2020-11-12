@@ -29,8 +29,6 @@ import java.io.PrintWriter;
 
 import javax.annotation.concurrent.Immutable;
 
-import com.google.common.base.Joiner;
-
 /**
  * PAF (a Pairwise mApping Format) writer.
  *
@@ -49,94 +47,28 @@ public final class PafWriter {
 
 
     /**
-     * Write PAF (a Pairwise mApping Format) with the specified print writer.
+     * Write the specified PAF record with the specified print writer.
      *
-     * @param records zero or more PAF records, must not be null
-     * @param writer print writer to write PAF with, must not be null
+     * @param record PAF record to write, must not be null
+     * @param writer print writer to write PAF record with, must not be null
      */
-    public static void write(final Iterable<PafRecord> records,
-                             final PrintWriter writer) {
-
-        checkNotNull(records);
-        checkNotNull(writer);
-
-        writeRecords(records, writer);
-    }
-
-    /**
-     * Write PAF (a Pairwise mApping Format) records with the specified print
-     * writer.
-     *
-     * @param records zero or more PAF records, must not be null
-     * @param writer print writer to write PAF with, must not be null
-     */
-    public static void writeRecords(final Iterable<PafRecord> records,
-                                    final PrintWriter writer) {
-        checkNotNull(records);
-        checkNotNull(writer);
-
-        for (PafRecord record : records) {
-            writeRecord(record, writer);
-        }
-    }
-
-    /**
-     * Write a PAF (a Pairwise mApping Format) record with the specified print
-     * writer.
-     *
-     * @param record PAF record, must not be null
-     * @param writer print writer to write PAF with, must not be null
-     */
-    public static void writeRecord(final PafRecord record, final PrintWriter writer) {
+    public static void write(final PafRecord record, final PrintWriter writer) {
         checkNotNull(record);
         checkNotNull(writer);
+        writer.println(record.toString());
+    }
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(record.getQueryNameOpt().orElse("*"));
-        sb.append("\t");
-        sb.append(record.getQueryLength());
-        sb.append("\t");
-        sb.append(record.getQueryStart());
-        sb.append("\t");
-        sb.append(record.getQueryEnd());
-        sb.append("\t");
-        sb.append(record.getStrand());
-        sb.append("\t");
-        sb.append(record.getTargetNameOpt().orElse("*"));
-        sb.append("\t");
-        sb.append(record.getTargetLength());
-        sb.append("\t");
-        sb.append(record.getTargetStart());
-        sb.append("\t");
-        sb.append(record.getTargetEnd());
-        sb.append("\t");
-        sb.append(record.getMatches());
-        sb.append("\t");
-        sb.append(record.getAlignmentBlockLength());
-        sb.append("\t");
-        sb.append(record.getMappingQuality());
-
-        for (String tag : record.getFields().keySet()) {
-            String type = record.getFieldTypes().get(tag);
-            String arrayType = record.getFieldArrayTypes().get(tag);
-
-            if (type == null) {
-                throw new IllegalArgumentException("missing type for tag " + tag + ", fieldTypes = " + record.getFieldTypes());
-            }
-            if ("B".equals(type) && arrayType == null) {
-                throw new IllegalArgumentException("missing array type for tag " + tag + " type " + type + ", fieldArrayTypes = " + record.getFieldArrayTypes());
-            }
-            sb.append("\t");
-            sb.append(tag);
-            sb.append(":");
-            sb.append(type);
-            sb.append(":");
-            if (arrayType != null) {
-                sb.append(arrayType);
-                sb.append(",");
-            }
-            sb.append(Joiner.on(",").join(record.getFields().get(tag)));
+    /**
+     * Write zero or more PAF records with the specified print writer.
+     *
+     * @param records zero or more PAF records to write, must not be null
+     * @param writer print writer to write PAF records with, must not be null
+     */
+    public static void write(final Iterable<PafRecord> records, final PrintWriter writer) {
+        checkNotNull(records);
+        checkNotNull(writer);
+        for (PafRecord record : records) {
+            writer.println(record.toString());
         }
-        writer.println(sb.toString());
     }
 }

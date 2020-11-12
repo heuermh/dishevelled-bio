@@ -35,10 +35,7 @@ import java.util.List;
 
 import java.util.concurrent.Callable;
 
-import org.dishevelled.bio.alignment.paf.PafReader;
 import org.dishevelled.bio.alignment.paf.PafRecord;
-import org.dishevelled.bio.alignment.paf.PafWriter;
-import org.dishevelled.bio.alignment.paf.PafStreamAdapter;
 
 import org.dishevelled.commandline.ArgumentList;
 import org.dishevelled.commandline.CommandLine;
@@ -75,21 +72,24 @@ public final class CompressPaf implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
+        int lineNumber = 0;
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
             reader = reader(inputPafFile);
             writer = writer(outputPafFile);
-            
-            final PrintWriter w = writer;
-            PafReader.stream(reader, new PafStreamAdapter() {
-                    @Override
-                    public void record(final PafRecord record) {
-                        PafWriter.writeRecord(record, w);
-                    }
-                });
 
+            while (reader.ready()) {
+                String line = reader.readLine();
+                PafRecord record = PafRecord.valueOf(line);
+                lineNumber++;
+                writer.println(record.toString());
+            }
             return 0;
+        }
+        catch (Exception e) {
+            throw new Exception("could not read record at line number "
+                                + lineNumber + ", caught" + e.getMessage(), e);
         }
         finally {
             try {

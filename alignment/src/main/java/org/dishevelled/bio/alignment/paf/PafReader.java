@@ -41,6 +41,8 @@ import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Charsets;
 
+import com.google.common.io.CharStreams;
+import com.google.common.io.LineProcessor;
 import com.google.common.io.Resources;
 
 /**
@@ -60,30 +62,6 @@ public final class PafReader {
     }
 
 
-    // callback methods
-
-    /**
-     * Parse the specified readable.
-     *
-     * @param readable readable to parse, must not be null
-     * @param listener low-level event based parser callback, must not be null
-     * @throws IOException if an I/O error occurs
-     */
-    public static void parse(final Readable readable, final PafParseListener listener) throws IOException {
-        PafParser.parse(readable, listener);
-    }
-
-    /**
-     * Stream the specified readable.
-     *
-     * @param readable readable to stream, must not be null
-     * @param listener event based reader callback, must not be null
-     * @throws IOException if an I/O error occurs
-     */
-    public static void stream(final Readable readable, final PafStreamListener listener) throws IOException {
-        StreamingPafParser.stream(readable, listener);
-    }
-
     /**
      * Read zero or more PAF records from the specified readable.
      *
@@ -91,35 +69,10 @@ public final class PafReader {
      * @return zero or more PAF records read from the specified readable
      * @throws IOException if an I/O error occurs
      */
-    public static Iterable<PafRecord> records(final Readable readable) throws IOException {
+    public static Iterable<PafRecord> read(final Readable readable) throws IOException {
         Collect collect = new Collect();
-        StreamingPafParser.stream(readable, collect);
-        return collect.getRecords();
-    }
-
-    /**
-     * Collect.
-     */
-    private static final class Collect extends PafStreamAdapter {
-        /** Arbitrary large capacity for list of PAF records. */
-        private static final int CAPACITY = 10000000;
-
-        /** List of PAF records. */
-        private final List<PafRecord> records = new ArrayList<PafRecord>(CAPACITY);
-
-        @Override
-        public void record(final PafRecord record) {
-            records.add(record);
-        }
-
-        /**
-         * Return the list of PAF records.
-         *
-         * @return the list of PAF records
-         */
-        List<PafRecord> getRecords() {
-            return records;
-        }
+        stream(readable, collect);
+        return collect.records();
     }
 
     /**
@@ -129,10 +82,10 @@ public final class PafReader {
      * @return zero or more PAF records read from the specified file
      * @throws IOException if an I/O error occurs
      */
-    public static Iterable<PafRecord> records(final File file) throws IOException {
+    public static Iterable<PafRecord> read(final File file) throws IOException {
         checkNotNull(file);
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            return records(reader);
+            return read(reader);
         }
     }
 
@@ -143,10 +96,10 @@ public final class PafReader {
      * @return zero or more PAF records read from the specified URL
      * @throws IOException if an I/O error occurs
      */
-    public static Iterable<PafRecord> records(final URL url) throws IOException {
+    public static Iterable<PafRecord> read(final URL url) throws IOException {
         checkNotNull(url);
         try (BufferedReader reader = Resources.asCharSource(url, Charsets.UTF_8).openBufferedStream()) {
-            return records(reader);
+            return read(reader);
         }
     }
 
@@ -157,10 +110,139 @@ public final class PafReader {
      * @return zero or more PAF records read from the specified input stream
      * @throws IOException if an I/O error occurs
      */
-    public static Iterable<PafRecord> records(final InputStream inputStream) throws IOException {
+    public static Iterable<PafRecord> read(final InputStream inputStream) throws IOException {
         checkNotNull(inputStream);
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-            return records(reader);
+            return read(reader);
+        }
+    }
+
+    /**
+     * Stream zero or more PAF records from the specified readable.
+     *
+     * @param readable readable to stream from, must not be null
+     * @param listener event based listener callback, must not be null
+     * @throws IOException if an I/O error occurs
+     */
+    public static void stream(final Readable readable, final PafListener listener) throws IOException {
+        checkNotNull(readable);
+        checkNotNull(listener);
+
+        PafLineProcessor lineProcessor = new PafLineProcessor(listener);
+        CharStreams.readLines(readable, lineProcessor);
+    }
+
+    /**
+     * Stream zero or more PAF records from the specified file.
+     *
+     * @param file file to stream from, must not be null
+     * @param listener event based listener callback, must not be null
+     * @throws IOException if an I/O error occurs
+     */
+    public static void stream(final File file, final PafListener listener) throws IOException {
+        checkNotNull(file);
+        checkNotNull(listener);
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            stream(reader, listener);
+        }
+    }
+
+    /**
+     * Stream zero or more PAF records from the specified URL.
+     *
+     * @param url URL to stream from, must not be null
+     * @param listener event based listener callback, must not be null
+     * @throws IOException if an I/O error occurs
+     */
+    public static void stream(final URL url, final PafListener listener) throws IOException {
+        checkNotNull(url);
+        checkNotNull(listener);
+        try (BufferedReader reader = Resources.asCharSource(url, Charsets.UTF_8).openBufferedStream()) {
+            stream(reader, listener);
+        }
+    }
+
+    /**
+     * Stream zero or more PAF records from the specified input stream.
+     *
+     * @param inputStream input stream to stream from, must not be null
+     * @param listener event based listener callback, must not be null
+     * @throws IOException if an I/O error occurs
+     */
+    public static void stream(final InputStream inputStream, final PafListener listener) throws IOException {
+        checkNotNull(inputStream);
+        checkNotNull(listener);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            stream(inputStream, listener);
+        }
+    }
+
+
+    /**
+     * PAF line processor.
+     */
+    private static final class PafLineProcessor implements LineProcessor<Object> {
+        /** Line number. */
+        private long lineNumber = 0;
+
+        /** PAF listener. */
+        private final PafListener listener;
+
+
+        /**
+         * Create a new PAF line processor with the specified PAF listener.
+         *
+         * @param listener PAF listener, must not be null
+         */
+        private PafLineProcessor(final PafListener listener) {
+            checkNotNull(listener);
+            this.listener = listener;
+        }
+
+
+        @Override
+        public Object getResult() {
+            return null;
+        }
+
+        @Override
+        public boolean processLine(final String line) throws IOException
+        {
+            try {
+                lineNumber++;
+                if (line != null && !line.isEmpty()) {
+                    return listener.record(PafRecord.valueOf(line));
+                }
+                // continue processing blank lines
+                return true;
+            }
+            catch (IllegalArgumentException e) {
+                throw new IOException("could not read PAF record at line " + lineNumber + ", caught exception: " + e.getMessage(), e);
+            }
+        }
+    }
+
+    /**
+     * Collect.
+     */
+    private static class Collect implements PafListener {
+        /** List of collected PAF records. */
+        private final List<PafRecord> records = new ArrayList<PafRecord>(100000);
+
+
+        @Override
+        public boolean record(final PafRecord record) {
+            records.add(record);
+            return true;
+        }
+
+        /**
+         * Return zero or more collected PAF records.
+         *
+         * @return zero or more collected PAF records
+         */
+        Iterable<PafRecord> records() {
+            return records;
         }
     }
 }

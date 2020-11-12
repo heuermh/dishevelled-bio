@@ -24,16 +24,19 @@
 package org.dishevelled.bio.alignment.paf;
 
 import static org.dishevelled.bio.alignment.paf.PafWriter.write;
-import static org.dishevelled.bio.alignment.paf.PafWriter.writeRecord;
 
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
+
+import org.dishevelled.bio.annotation.Annotation;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -52,32 +55,33 @@ public final class PafWriterTest {
 
     @Before
     public void setUp() {
-        record = PafRecord.builder()
-            .withLineNumber(1)
-            .withQueryName("query")
-            .withQueryLength(100L)
-            .withQueryStart(10L)
-            .withQueryEnd(20L)
-            .withStrand('-')
-            .withTargetName("target")
-            .withTargetLength(200L)
-            .withTargetStart(20L)
-            .withTargetEnd(30L)
-            .withMatches(42L)
-            .withAlignmentBlockLength(10L)
-            .withMappingQuality(32)
-            .withField("NM", "i", "0")
-            .withField("MD", "Z", "101")
-            .withField("AS", "i", "101")
-            .withField("XS", "i", "55")
-            .withField("RG", "Z", "NA12878-1")
-            .withField("MQ", "i", "60")
-            .withField("ms", "i", "3614")
-            .withField("mc", "i", "60612")
-            .withField("MC", "Z", "101M")
-            .withArrayField("ZB", "B", "i", "1", "2")
-            .withArrayField("ZT", "B", "f", "3.4", "4.5")
-            .build();
+
+        Map<String, Annotation> annotations = new HashMap<String, Annotation>();
+        annotations.put("NM", Annotation.valueOf("NM:i:0"));
+        annotations.put("MD", Annotation.valueOf("MD:Z:101"));
+        annotations.put("AS", Annotation.valueOf("AS:i:101"));
+        annotations.put("XS", Annotation.valueOf("XS:i:55"));
+        annotations.put("RG", Annotation.valueOf("RG:Z:NA12878-1"));
+        annotations.put("MQ", Annotation.valueOf("MQ:i:60"));
+        annotations.put("ms", Annotation.valueOf("ms:i:3614"));
+        annotations.put("mc", Annotation.valueOf("mc:i:60612"));
+        annotations.put("MC", Annotation.valueOf("MC:Z:101M"));
+        annotations.put("ZB", Annotation.valueOf("ZB:B:i,1,2"));
+        annotations.put("ZT", Annotation.valueOf("ZT:B:f,3.4,4.5"));
+
+        record = new PafRecord("query",
+                               100L,
+                               10L,
+                               20L,
+                               '-',
+                               "target",
+                               200L,
+                               20L,
+                               30L,
+                               42L,
+                               10L,
+                               32,
+                               annotations);
 
         records = ImmutableList.of(record);
         outputStream = new ByteArrayOutputStream();
@@ -86,7 +90,7 @@ public final class PafWriterTest {
 
     @Test(expected=NullPointerException.class)
     public void testWriteNullRecords() {
-        write(null, writer);
+        write((Iterable<PafRecord>) null, writer);
     }
 
     @Test(expected=NullPointerException.class)
@@ -115,17 +119,17 @@ public final class PafWriterTest {
 
     @Test(expected=NullPointerException.class)
     public void testWriteRecordNullRecord() {
-        writeRecord(null, writer);
+        write((PafRecord) null, writer);
     }
 
     @Test(expected=NullPointerException.class)
     public void testWriteRecordNullPrintWriter() {
-        writeRecord(record, null);
+        write(record, null);
     }
 
     @Test
     public void testWriteRecord() {
-        writeRecord(record, writer);
+        write(record, writer);
         writer.close();
         String paf = outputStream.toString();
         assertTrue(paf.startsWith(PAF_RECORD));
