@@ -34,8 +34,7 @@ import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.dishevelled.bio.assembly.gfa.Reference;
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.Annotation;
 
 /**
  * Unit test for Link.
@@ -46,38 +45,38 @@ public class LinkTest {
     private Reference source;
     private Reference target;
     private String overlap;
-    private Map<String, Tag> tags;
+    private Map<String, Annotation> annotations;
 
     @Before
     public void setUp() {
         source = Reference.valueOf("source+");
         target = Reference.valueOf("target+");
         overlap = "10M";
-        tags = ImmutableMap.<String, Tag>builder().put("aa", new Tag("aa", "i", "42")).build();
+        annotations = ImmutableMap.<String, Annotation>builder().put("aa", new Annotation("aa", "i", "42")).build();
     }
 
     @Test(expected=NullPointerException.class)
     public void testCtrNullSource() {
-        new Link(null, target, overlap, tags);
+        new Link(null, target, overlap, annotations);
     }
 
     @Test(expected=NullPointerException.class)
     public void testCtrNullTarget() {
-        new Link(source, null, overlap, tags);
+        new Link(source, null, overlap, annotations);
     }
 
     @Test(expected=NullPointerException.class)
-    public void testCtrNullTags() {
+    public void testCtrNullAnnotations() {
         new Link(source, target, overlap, null);
     }
 
     @Test
     public void testCtr() {
-        Link link = new Link(source, target, overlap, tags);
+        Link link = new Link(source, target, overlap, annotations);
         assertEquals(source, link.getSource());
         assertEquals(target, link.getTarget());
         assertEquals(overlap, link.getOverlap());
-        assertEquals(tags, link.getTags());
+        assertEquals(annotations, link.getAnnotations());
         assertEquals("L\tsource\t+\ttarget\t+\t10M\taa:i:42", link.toString());
     }
 
@@ -102,7 +101,7 @@ public class LinkTest {
         assertEquals(source, link.getSource());
         assertEquals(target, link.getTarget());
         assertEquals(overlap, link.getOverlap());
-        assertEquals(tags, link.getTags());
+        assertEquals(annotations, link.getAnnotations());
     }
 
     @Test

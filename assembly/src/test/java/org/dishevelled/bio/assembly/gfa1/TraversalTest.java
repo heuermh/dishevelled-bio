@@ -34,8 +34,7 @@ import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.dishevelled.bio.assembly.gfa.Reference;
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.Annotation;
 
 /**
  * Unit test for Traversal.
@@ -48,7 +47,7 @@ public class TraversalTest {
     private Reference source;
     private Reference target;
     private String overlap;
-    private Map<String, Tag> tags;
+    private Map<String, Annotation> annotations;
 
     @Before
     public void setUp() {
@@ -57,43 +56,43 @@ public class TraversalTest {
         source = Reference.valueOf("1+");
         target = Reference.valueOf("2-");
         overlap = "0M";
-        tags = ImmutableMap.<String, Tag>builder().put("aa", new Tag("aa", "i", "42")).build();
+        annotations = ImmutableMap.<String, Annotation>builder().put("aa", new Annotation("aa", "i", "42")).build();
     }
 
     @Test(expected=NullPointerException.class)
     public void testCtrNullPathName() {
-        new Traversal(null, ordinal, source, target, overlap, tags);
+        new Traversal(null, ordinal, source, target, overlap, annotations);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testCtrInvalidOrdinal() {
-        new Traversal(pathName, -1, source, target, overlap, tags);
+        new Traversal(pathName, -1, source, target, overlap, annotations);
     }
 
     @Test(expected=NullPointerException.class)
     public void testCtrNullSource() {
-        new Traversal(pathName, ordinal, null, target, overlap, tags);
+        new Traversal(pathName, ordinal, null, target, overlap, annotations);
     }
 
     @Test(expected=NullPointerException.class)
     public void testCtrNullTarget() {
-        new Traversal(pathName, ordinal, source, null, overlap, tags);
+        new Traversal(pathName, ordinal, source, null, overlap, annotations);
     }
 
     @Test(expected=NullPointerException.class)
-    public void testCtrNullTags() {
+    public void testCtrNullAnnotations() {
         new Traversal(pathName, ordinal, source, target, overlap, null);
     }
 
     @Test
     public void testCtr() {
-        Traversal traversal = new Traversal(pathName, ordinal, source, target, overlap, tags);
+        Traversal traversal = new Traversal(pathName, ordinal, source, target, overlap, annotations);
         assertEquals(pathName, traversal.getPathName());
         assertEquals(ordinal, traversal.getOrdinal());
         assertEquals(source, traversal.getSource());
         assertEquals(target, traversal.getTarget());
         assertEquals(overlap, traversal.getOverlap());
-        assertEquals(tags, traversal.getTags());
+        assertEquals(annotations, traversal.getAnnotations());
         assertEquals("t\tpathName\t0\t1\t+\t2\t-\t0M\taa:i:42", traversal.toString());
     }
 
@@ -115,19 +114,19 @@ public class TraversalTest {
         assertEquals(source, traversal.getSource());
         assertEquals(target, traversal.getTarget());
         assertEquals(overlap, traversal.getOverlap());
-        assertEquals(tags, traversal.getTags());
+        assertEquals(annotations, traversal.getAnnotations());
         assertEquals("t\tpathName\t0\t1\t+\t2\t-\t0M\taa:i:42", traversal.toString());
     }
 
     @Test
-    public void testValueOfNoTags() {
+    public void testValueOfNoAnnotations() {
         Traversal traversal = Traversal.valueOf("t\tpathName\t0\t1\t+\t2\t-\t*");
-        assertTrue(traversal.getTags().isEmpty());
+        assertTrue(traversal.getAnnotations().isEmpty());
     }
 
     @Test
-    public void testValueOfNoTagsTrailingTab() {
+    public void testValueOfNoAnnotationsTrailingTab() {
         Traversal traversal = Traversal.valueOf("t\tpathName\t0\t1\t+\t2\t-\t*\t");
-        assertTrue(traversal.getTags().isEmpty());
+        assertTrue(traversal.getAnnotations().isEmpty());
     }
 }

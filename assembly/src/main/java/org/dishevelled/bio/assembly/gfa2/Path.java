@@ -43,8 +43,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
-import org.dishevelled.bio.assembly.gfa.Reference;
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.Annotation;
 
 /**
  * Path GFA 2.0 record.
@@ -68,20 +67,20 @@ public final class Path extends Gfa2Record {
      *
      * @param id identifier, if any
      * @param references list of reference, must not be null
-     * @param tags tags, must not be null
+     * @param annotations annotations, must not be null
      */
     public Path(@Nullable final String id,
                 final List<Reference> references,
-                final Map<String, Tag> tags) {
+                final Map<String, Annotation> annotations) {
 
-        super(tags);
+        super(annotations);
         checkNotNull(references);
-        checkNotNull(tags);
+        checkNotNull(annotations);
 
         this.id = id;
         this.references = ImmutableList.copyOf(references);
 
-        hashCode = Objects.hash(this.id, this.references, getTags());
+        hashCode = Objects.hash(this.id, this.references, getAnnotations());
     }
 
 
@@ -139,7 +138,7 @@ public final class Path extends Gfa2Record {
 
         return Objects.equals(id, p.getId())
             && Objects.equals(references, p.getReferences())
-            && Objects.equals(getTags(), p.getTags());
+            && Objects.equals(getAnnotations(), p.getAnnotations());
     }
 
     @Override
@@ -147,9 +146,9 @@ public final class Path extends Gfa2Record {
         Joiner joiner = Joiner.on("\t");
         StringBuilder sb = new StringBuilder();
         joiner.appendTo(sb, "O", id == null ? "*" : id, Joiner.on(" ").join(references));
-        if (!getTags().isEmpty()) {
+        if (!getAnnotations().isEmpty()) {
             sb.append("\t");
-            joiner.appendTo(sb, getTags().values());
+            joiner.appendTo(sb, getAnnotations().values());
         }
         return sb.toString();
     }
@@ -176,15 +175,15 @@ public final class Path extends Gfa2Record {
             .map(Reference::valueOf)
             .collect(Collectors.toList());
 
-        ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
+        ImmutableMap.Builder<String, Annotation> annotations = ImmutableMap.builder();
         for (int i = 3; i < tokens.size(); i++) {
             String token = tokens.get(i);
             if (!token.isEmpty()) {
-                Tag tag = Tag.valueOf(token);
-                tags.put(tag.getName(), tag);
+                Annotation annotation = Annotation.valueOf(token);
+                annotations.put(annotation.getName(), annotation);
             }
         }
 
-        return new Path(id, references, tags.build());
+        return new Path(id, references, annotations.build());
     }
 }

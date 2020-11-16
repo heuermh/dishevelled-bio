@@ -25,22 +25,22 @@ package org.dishevelled.bio.assembly.gfa1;
 
 import java.util.Map;
 
-import org.dishevelled.bio.assembly.gfa.GfaRecord;
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.AnnotatedRecord;
+import org.dishevelled.bio.annotation.Annotation;
 
 /**
  * Graphical Fragment Assembly (GFA) 1.0 record.
  *
  * @author  Michael Heuer
  */
-public abstract class Gfa1Record extends GfaRecord {
+public abstract class Gfa1Record extends AnnotatedRecord {
 
     /**
      * Create a new GFA 1.0 record with the specified tags.
      *
-     * @param tags tags, must not be null
+     * @param annotations annotations, must not be null
      */
-    protected Gfa1Record(final Map<String, Tag> tags) {
-        super(tags);
+    protected Gfa1Record(final Map<String, Annotation> annotations) {
+        super(annotations);
     }
 }

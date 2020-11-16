@@ -29,12 +29,14 @@ import static org.dishevelled.compress.Writers.writer;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import java.util.concurrent.Callable;
 
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.Annotation;
 
 import org.dishevelled.bio.assembly.gfa1.Containment;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Adapter;
@@ -90,22 +92,22 @@ public final class Gfa1ToGfa2 implements Callable<Integer> {
             Gfa1Reader.stream(reader(inputGfa1File), new Gfa1Adapter() {
                     @Override
                     public boolean header(final Header header) {
-                        // convert VN:Z:1.0 to VN:Z:2.0 tag if present
-                        if (header.getTags().containsKey("VN")) {
-                            if (!"1.0".equals(header.getTags().get("VN").getValue())) {
-                                throw new RuntimeException("cannot convert input as GFA 1.0, was " + header.getTags().get("VN").getValue());
+                        // convert VN:Z:1.0 to VN:Z:2.0 annotation if present
+                        if (header.getAnnotations().containsKey("VN")) {
+                            if (!"1.0".equals(header.getAnnotations().get("VN").getValue())) {
+                                throw new RuntimeException("cannot convert input as GFA 1.0, was " + header.getAnnotations().get("VN").getValue());
                             }
-                            Map<String, Tag> tags = new HashMap<String, Tag>();
-                            tags.put("VN", new Tag("VN", "Z", "2.0"));
-                            for (Tag tag : header.getTags().values()) {
-                                if (!"VN".equals(tag.getName())) {
-                                    tags.put(tag.getName(), tag);
+                            Map<String, Annotation> annotations = new HashMap<String, Annotation>();
+                            annotations.put("VN", new Annotation("VN", "Z", "2.0"));
+                            for (Annotation annotation : header.getAnnotations().values()) {
+                                if (!"VN".equals(annotation.getName())) {
+                                    annotations.put(annotation.getName(), annotation);
                                 }
                             }
-                            Gfa2Writer.write(new org.dishevelled.bio.assembly.gfa2.Header(tags), w);
+                            Gfa2Writer.write(new org.dishevelled.bio.assembly.gfa2.Header(annotations), w);
                         }
                         else {
-                            Gfa2Writer.write(new org.dishevelled.bio.assembly.gfa2.Header(header.getTags()), w);
+                            Gfa2Writer.write(new org.dishevelled.bio.assembly.gfa2.Header(header.getAnnotations()), w);
                         }
                         return true;
                     }
@@ -113,13 +115,13 @@ public final class Gfa1ToGfa2 implements Callable<Integer> {
                     @Override
                     public boolean segment(final Segment segment) {
                         if (segment.getSequence() != null) {
-                            Gfa2Writer.write(new org.dishevelled.bio.assembly.gfa2.Segment(segment.getId(), segment.getSequence().length(), segment.getSequence(), segment.getTags()), w);
+                            Gfa2Writer.write(new org.dishevelled.bio.assembly.gfa2.Segment(segment.getId(), segment.getSequence().length(), segment.getSequence(), segment.getAnnotations()), w);
                         }
-                        else if (segment.getTags().containsKey("LN")) {
-                            Gfa2Writer.write(new org.dishevelled.bio.assembly.gfa2.Segment(segment.getId(), Integer.valueOf(segment.getTags().get("LN").getValue()), segment.getSequence(), segment.getTags()), w);
+                        else if (segment.getAnnotations().containsKey("LN")) {
+                            Gfa2Writer.write(new org.dishevelled.bio.assembly.gfa2.Segment(segment.getId(), Integer.valueOf(segment.getAnnotations().get("LN").getValue()), segment.getSequence(), segment.getAnnotations()), w);
                         }
                         else {
-                            Gfa2Writer.write(new org.dishevelled.bio.assembly.gfa2.Segment(segment.getId(), 0, segment.getSequence(), segment.getTags()), w);
+                            Gfa2Writer.write(new org.dishevelled.bio.assembly.gfa2.Segment(segment.getId(), 0, segment.getSequence(), segment.getAnnotations()), w);
                         }
                         return true;
                     }
@@ -128,7 +130,7 @@ public final class Gfa1ToGfa2 implements Callable<Integer> {
                     public boolean link(final Link link) {
                         Position unknown = new Position(0, false);
                         Alignment alignment = link.getOverlap() == null ? null : Alignment.valueOf(link.getOverlap());
-                        Gfa2Writer.write(new org.dishevelled.bio.assembly.gfa2.Edge(null, link.getSource(), link.getTarget(), unknown, unknown, unknown, unknown, alignment, link.getTags()), w);
+                        Gfa2Writer.write(new org.dishevelled.bio.assembly.gfa2.Edge(null, toGfa2Reference(link.getSource()), toGfa2Reference(link.getTarget()), unknown, unknown, unknown, unknown, alignment, link.getAnnotations()), w);
                         return true;
                     }
 
@@ -137,13 +139,13 @@ public final class Gfa1ToGfa2 implements Callable<Integer> {
                         Position unknown = new Position(0, false);
                         Position targetStart = new Position(containment.getPosition(), false);
                         Alignment alignment = containment.getOverlap() == null ? null : Alignment.valueOf(containment.getOverlap());
-                        Gfa2Writer.write(new org.dishevelled.bio.assembly.gfa2.Edge(null, containment.getContainer(), containment.getContained(), unknown, unknown, targetStart, unknown, alignment, containment.getTags()), w);
+                        Gfa2Writer.write(new org.dishevelled.bio.assembly.gfa2.Edge(null, toGfa2Reference(containment.getContainer()), toGfa2Reference(containment.getContained()), unknown, unknown, targetStart, unknown, alignment, containment.getAnnotations()), w);
                         return true;
                     }
 
                     @Override
                     public boolean path(final Path path) {
-                        Gfa2Writer.write(new org.dishevelled.bio.assembly.gfa2.Path(path.getName(), path.getSegments(), path.getTags()), w);
+                        Gfa2Writer.write(new org.dishevelled.bio.assembly.gfa2.Path(path.getName(), toGfa2References(path.getSegments()), path.getAnnotations()), w);
                         return true;
                     }
                 });
@@ -158,6 +160,22 @@ public final class Gfa1ToGfa2 implements Callable<Integer> {
                 // empty
             }
         }
+    }
+
+    static List<org.dishevelled.bio.assembly.gfa2.Reference> toGfa2References(List<org.dishevelled.bio.assembly.gfa1.Reference> references) {
+        List<org.dishevelled.bio.assembly.gfa2.Reference> gfa2References = new ArrayList<org.dishevelled.bio.assembly.gfa2.Reference>(references.size());
+        for (org.dishevelled.bio.assembly.gfa1.Reference reference : references) {
+            gfa2References.add(toGfa2Reference(reference));
+        }
+        return gfa2References;
+    }
+
+    static org.dishevelled.bio.assembly.gfa2.Reference toGfa2Reference(org.dishevelled.bio.assembly.gfa1.Reference reference) {
+        return new org.dishevelled.bio.assembly.gfa2.Reference(reference.getId(), toGfa2Orientation(reference.getOrientation()));
+    }
+
+    static org.dishevelled.bio.assembly.gfa2.Orientation toGfa2Orientation(org.dishevelled.bio.assembly.gfa1.Orientation orientation) {
+        return orientation.isForward() ? org.dishevelled.bio.assembly.gfa2.Orientation.FORWARD : org.dishevelled.bio.assembly.gfa2.Orientation.REVERSE;
     }
 
     /**

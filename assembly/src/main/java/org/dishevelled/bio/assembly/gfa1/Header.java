@@ -37,7 +37,7 @@ import com.google.common.base.Splitter;
 
 import com.google.common.collect.ImmutableMap;
 
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.Annotation;
 
 /**
  * Header GFA 1.0 record.
@@ -50,24 +50,24 @@ public final class Header extends Gfa1Record {
     /**
      * Create a new header GFA 1.0 record.
      *
-     * @param tags tags, must not be null
+     * @param annotations annotations, must not be null
      */
-    public Header(final Map<String, Tag> tags) {
-        super(tags);
+    public Header(final Map<String, Annotation> annotations) {
+        super(annotations);
     }
 
 
     // optional fields
 
     /**
-     * Return true if the tags for this header contain
+     * Return true if the annotations for this header contain
      * the reserved key <code>VN</code>.
      *
-     * @return true if the tags for this header contain
+     * @return true if the annotations for this header contain
      *    the reserved key <code>VN</code>
      */
     public boolean containsVn() {
-        return containsTagKey("VN");
+        return containsAnnotationKey("VN");
     }
 
     /**
@@ -78,7 +78,7 @@ public final class Header extends Gfa1Record {
      *    as a string
      */
     public String getVn() {
-        return getTagString("VN");
+        return getAnnotationString("VN");
     }
 
     /**
@@ -89,14 +89,14 @@ public final class Header extends Gfa1Record {
      *   as a string
      */
     public Optional<String> getVnOpt() {
-        return getTagStringOpt("Vn");
+        return getAnnotationStringOpt("Vn");
     }
 
     /**
-     * Return true if the tags for this header contain
+     * Return true if the annotations for this header contain
      * the reserved key <code>VN</code>, for version number.
      *
-     * @return true if the tags for this header contain
+     * @return true if the annotations for this header contain
      *    the reserved key <code>VN</code>, for version number
      */
     public boolean containsVersionNumber() {
@@ -128,7 +128,7 @@ public final class Header extends Gfa1Record {
 
     @Override
     public int hashCode() {
-        return getTags().hashCode();
+        return getAnnotations().hashCode();
     }
 
     @Override
@@ -141,7 +141,7 @@ public final class Header extends Gfa1Record {
         }
         Header h = (Header) o;
 
-        return getTags().equals(h.getTags());
+        return getAnnotations().equals(h.getAnnotations());
     }
 
     @Override
@@ -149,9 +149,9 @@ public final class Header extends Gfa1Record {
         Joiner joiner = Joiner.on("\t");
         StringBuilder sb = new StringBuilder();
         sb.append("H");
-        if (!getTags().isEmpty()) {
+        if (!getAnnotations().isEmpty()) {
             sb.append("\t");
-            joiner.appendTo(sb, getTags().values());
+            joiner.appendTo(sb, getAnnotations().values());
         }
         return sb.toString();
     }
@@ -167,15 +167,15 @@ public final class Header extends Gfa1Record {
         checkNotNull(value);
         checkArgument(value.startsWith("H"), "header value must start with H");
         List<String> tokens = Splitter.on("\t").splitToList(value);
-        ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
+        ImmutableMap.Builder<String, Annotation> annotations = ImmutableMap.builder();
         for (int i = 1; i < tokens.size(); i++) {
             String token = tokens.get(i);
             if (!token.isEmpty()) {
-                Tag tag = Tag.valueOf(tokens.get(i));
-                tags.put(tag.getName(), tag);
+                Annotation annotation = Annotation.valueOf(tokens.get(i));
+                annotations.put(annotation.getName(), annotation);
             }
         }
 
-        return new Header(tags.build());
+        return new Header(annotations.build());
     }
 }

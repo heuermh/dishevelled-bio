@@ -41,14 +41,14 @@ import java.util.concurrent.Callable;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 
-import org.dishevelled.bio.assembly.gfa.Reference;
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.Annotation;
 
 import org.dishevelled.bio.assembly.gfa1.Gfa1Listener;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Reader;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Record;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Writer;
 import org.dishevelled.bio.assembly.gfa1.Path;
+import org.dishevelled.bio.assembly.gfa1.Reference;
 import org.dishevelled.bio.assembly.gfa1.Traversal;
 
 import org.dishevelled.commandline.ArgumentList;
@@ -131,7 +131,7 @@ public final class ReassemblePaths implements Callable<Integer> {
                         overlaps.add(traversal.getOverlap());
                     }
                 }
-                Gfa1Writer.write(new Path(path.getName(), segments, overlaps.isEmpty() ? null : overlaps, path.getTags()), w);
+                Gfa1Writer.write(new Path(path.getName(), segments, overlaps.isEmpty() ? null : overlaps, path.getAnnotations()), w);
             }
 
             return 0;

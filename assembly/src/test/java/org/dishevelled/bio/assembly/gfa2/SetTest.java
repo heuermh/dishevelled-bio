@@ -35,7 +35,7 @@ import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.Annotation;
 
 /**
  * Unit test for Set.
@@ -45,31 +45,31 @@ import org.dishevelled.bio.assembly.gfa.Tag;
 public class SetTest {
     private String id;
     private java.util.Set<String> ids;
-    private Map<String, Tag> tags;
+    private Map<String, Annotation> annotations;
 
     @Before
     public void setUp() {
         id = "id";
         ids = ImmutableSet.of("source", "target");
-        tags = ImmutableMap.<String, Tag>builder().put("aa", new Tag("aa", "i", "42")).build();
+        annotations = ImmutableMap.<String, Annotation>builder().put("aa", new Annotation("aa", "i", "42")).build();
     }
 
     @Test(expected=NullPointerException.class)
     public void testCtrNullIds() {
-        new Set(id, null, tags);
+        new Set(id, null, annotations);
     }
 
     @Test(expected=NullPointerException.class)
-    public void testCtrNullTags() {
+    public void testCtrNullAnnotations() {
         new Set(id, ids, null);
     }
 
     @Test
     public void testCtr() {
-        Set set = new Set(id, ids, tags);
+        Set set = new Set(id, ids, annotations);
         assertEquals(id, set.getId());
         assertEquals(ids, set.getIds());
-        assertEquals(tags, set.getTags());
+        assertEquals(annotations, set.getAnnotations());
         assertTrue("U\tid\tsource target\taa:i:42".equals(set.toString())
                    || "U\tid\ttarget source\taa:i:42".equals(set.toString()));
     }
@@ -94,7 +94,7 @@ public class SetTest {
         Set set = Set.valueOf("U\tid\tsource target\taa:i:42");
         assertEquals(id, set.getId());
         assertEquals(ids, set.getIds());
-        assertEquals(tags, set.getTags());
+        assertEquals(annotations, set.getAnnotations());
     }
 
     @Test

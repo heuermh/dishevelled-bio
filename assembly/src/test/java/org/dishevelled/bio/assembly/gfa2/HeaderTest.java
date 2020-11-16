@@ -34,7 +34,7 @@ import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.Annotation;
 
 /**
  * Unit test for Header.
@@ -42,22 +42,22 @@ import org.dishevelled.bio.assembly.gfa.Tag;
  * @author  Michael Heuer
  */
 public class HeaderTest {
-    private Map<String, Tag> tags;
+    private Map<String, Annotation> annotations;
 
     @Before
     public void setUp() {
-        tags = ImmutableMap.<String, Tag>builder().put("aa", new Tag("aa", "i", "42")).build();
+        annotations = ImmutableMap.<String, Annotation>builder().put("aa", new Annotation("aa", "i", "42")).build();
     }
 
     @Test(expected=NullPointerException.class)
-    public void testCtrNullTags() {
+    public void testCtrNullAnnotations() {
         new Header(null);
     }
 
     @Test
     public void testCtr() {
-        Header header = new Header(tags);
-        assertEquals(tags, header.getTags());
+        Header header = new Header(annotations);
+        assertEquals(annotations, header.getAnnotations());
         assertEquals("H\taa:i:42", header.toString());
     }
 
@@ -74,7 +74,7 @@ public class HeaderTest {
     @Test
     public void testValueOf() {
         Header header = Header.valueOf("H\taa:i:42");
-        assertEquals(tags, header.getTags());
+        assertEquals(annotations, header.getAnnotations());
     }
 
     @Test

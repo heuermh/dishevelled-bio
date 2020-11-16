@@ -35,14 +35,14 @@ import java.util.Map;
 
 import java.util.concurrent.Callable;
 
-import org.dishevelled.bio.assembly.gfa.Reference;
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.Annotation;
 
 import org.dishevelled.bio.assembly.gfa1.Gfa1Listener;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Reader;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Record;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Writer;
 import org.dishevelled.bio.assembly.gfa1.Path;
+import org.dishevelled.bio.assembly.gfa1.Reference;
 import org.dishevelled.bio.assembly.gfa1.Traversal;
 
 import org.dishevelled.commandline.ArgumentList;
@@ -63,7 +63,7 @@ import org.dishevelled.commandline.argument.FileArgument;
 public final class TraversePaths implements Callable<Integer> {
     private final File inputGfa1File;
     private final File outputGfa1File;
-    private static final Map<String, Tag> EMPTY_TAGS = Collections.emptyMap();
+    private static final Map<String, Annotation> EMPTY_ANNOTATIONS = Collections.emptyMap();
     private static final String USAGE = "dsh-traverse-paths [args]";
 
     /**
@@ -105,7 +105,7 @@ public final class TraversePaths implements Callable<Integer> {
                                     overlap = (path.getOverlaps() != null && path.getOverlaps().size() > i) ? path.getOverlaps().get(i - 1) : null;
                                 }
                                 if (source != null) {
-                                    Traversal traversal = new Traversal(path.getName(), i - 1, source, target, overlap, EMPTY_TAGS);
+                                    Traversal traversal = new Traversal(path.getName(), i - 1, source, target, overlap, EMPTY_ANNOTATIONS);
                                     Gfa1Writer.write(traversal, w);
                                 }
                                 source = target;

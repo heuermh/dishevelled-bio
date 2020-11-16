@@ -46,8 +46,6 @@ import javax.script.ScriptException;
 
 import com.google.common.collect.ImmutableList;
 
-import org.dishevelled.bio.assembly.gfa.Reference;
-
 import org.dishevelled.bio.assembly.gfa1.Containment;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Listener;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Reader;
@@ -55,6 +53,7 @@ import org.dishevelled.bio.assembly.gfa1.Gfa1Record;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Writer;
 import org.dishevelled.bio.assembly.gfa1.Link;
 import org.dishevelled.bio.assembly.gfa1.Path;
+import org.dishevelled.bio.assembly.gfa1.Reference;
 import org.dishevelled.bio.assembly.gfa1.Segment;
 import org.dishevelled.bio.assembly.gfa1.Traversal;
 

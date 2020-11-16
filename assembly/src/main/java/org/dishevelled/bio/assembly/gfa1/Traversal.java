@@ -40,8 +40,7 @@ import com.google.common.base.Splitter;
 
 import com.google.common.collect.ImmutableMap;
 
-import org.dishevelled.bio.assembly.gfa.Reference;
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.Annotation;
 
 /**
  * Traversal.
@@ -77,16 +76,16 @@ public final class Traversal extends Gfa1Record {
      * @param source source reference, must not be null
      * @param target target reference, must not be null
      * @param overlap overlap, if any
-     * @param tags tags, must not be null
+     * @param annotations annotations, must not be null
      */
     public Traversal(final String pathName,
                      final int ordinal,
                      final Reference source,
                      final Reference target,
                      @Nullable final String overlap,
-                     final Map<String, Tag> tags) {
+                     final Map<String, Annotation> annotations) {
 
-        super(tags);
+        super(annotations);
         checkNotNull(pathName);
         checkNotNull(source);
         checkNotNull(target);
@@ -98,7 +97,7 @@ public final class Traversal extends Gfa1Record {
         this.target = target;
         this.overlap = overlap;
 
-        hashCode = Objects.hash(this.pathName, this.ordinal, this.source, this.target, this.overlap, getTags());
+        hashCode = Objects.hash(this.pathName, this.ordinal, this.source, this.target, this.overlap, getAnnotations());
     }
 
 
@@ -185,7 +184,7 @@ public final class Traversal extends Gfa1Record {
             && Objects.equals(source, t.getSource())
             && Objects.equals(target, t.getTarget())
             && Objects.equals(overlap, t.getOverlap())
-            && Objects.equals(getTags(), t.getTags());
+            && Objects.equals(getAnnotations(), t.getAnnotations());
     }
 
     @Override
@@ -193,9 +192,9 @@ public final class Traversal extends Gfa1Record {
         Joiner joiner = Joiner.on("\t");
         StringBuilder sb = new StringBuilder();
         joiner.appendTo(sb, "t", pathName, ordinal, source.splitToString(), target.splitToString(), getOverlapOpt().orElse("*"));
-        if (!getTags().isEmpty()) {
+        if (!getAnnotations().isEmpty()) {
             sb.append("\t");
-            joiner.appendTo(sb, getTags().values());
+            joiner.appendTo(sb, getAnnotations().values());
         }
         return sb.toString();
     }
@@ -219,15 +218,15 @@ public final class Traversal extends Gfa1Record {
         Reference target = Reference.splitValueOf(tokens.get(5), tokens.get(6));
         String overlap = "*".equals(tokens.get(7)) ? null : tokens.get(7);
 
-        ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
+        ImmutableMap.Builder<String, Annotation> annotations = ImmutableMap.builder();
         for (int i = 8; i < tokens.size(); i++) {
             String token = tokens.get(i);
             if (!token.isEmpty()) {
-                Tag tag = Tag.valueOf(tokens.get(i));
-                tags.put(tag.getName(), tag);
+                Annotation annotation = Annotation.valueOf(tokens.get(i));
+                annotations.put(annotation.getName(), annotation);
             }
         }
 
-        return new Traversal(name, ordinal, source, target, overlap, tags.build());
+        return new Traversal(name, ordinal, source, target, overlap, annotations.build());
     }
 }
