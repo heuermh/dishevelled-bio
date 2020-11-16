@@ -40,8 +40,7 @@ import com.google.common.base.Splitter;
 
 import com.google.common.collect.ImmutableMap;
 
-import org.dishevelled.bio.assembly.gfa.Reference;
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.Annotation;
 
 /**
  * Fragment GFA 2.0 record.
@@ -85,7 +84,7 @@ public final class Fragment extends Gfa2Record {
      * @param fragmentStart fragment start position, must not be null
      * @param fragmentEnd fragment end position, must not be null
      * @param alignment alignment, if any
-     * @param tags tags, must not be null
+     * @param annotations annotations, must not be null
      */
     public Fragment(final String segmentId,
                     final Reference external,
@@ -94,9 +93,9 @@ public final class Fragment extends Gfa2Record {
                     final Position fragmentStart,
                     final Position fragmentEnd,
                     @Nullable final Alignment alignment,
-                    final Map<String, Tag> tags) {
+                    final Map<String, Annotation> annotations) {
 
-        super(tags);
+        super(annotations);
         checkNotNull(segmentId);
         checkNotNull(external);
         checkNotNull(segmentStart);
@@ -114,7 +113,7 @@ public final class Fragment extends Gfa2Record {
 
         hashCode = Objects.hash(this.segmentId, this.external, this.segmentStart,
                                 this.segmentEnd, this.fragmentStart, this.fragmentEnd,
-                                this.alignment, getTags());
+                                this.alignment, getAnnotations());
     }
 
 
@@ -204,15 +203,15 @@ public final class Fragment extends Gfa2Record {
     // optional fields
 
     /**
-     * Return true if the tags for this fragment contain
+     * Return true if the annotations for this fragment contain
      * the reserved key <code>TS</code>.
      *
      * @since 1.3.2
-     * @return true if the tags for this fragment contain
+     * @return true if the annotations for this fragment contain
      *    the reserved key <code>TS</code>
      */
     public boolean containsTs() {
-        return containsTagKey("TS");
+        return containsAnnotationKey("TS");
     }
 
     /**
@@ -224,7 +223,7 @@ public final class Fragment extends Gfa2Record {
      *    as an integer
      */
     public int getTs() {
-        return getTagInteger("TS");
+        return getAnnotationInteger("TS");
     }
 
     /**
@@ -236,15 +235,15 @@ public final class Fragment extends Gfa2Record {
      *   as an integer
      */
     public Optional<Integer> getTsOpt() {
-        return getTagIntegerOpt("TS");
+        return getAnnotationIntegerOpt("TS");
     }
 
     /**
-     * Return true if the tags for this fragment contain
+     * Return true if the annotations for this fragment contain
      * the reserved key <code>TS</code>, for trace spacing.
      *
      * @since 1.3.2
-     * @return true if the tags for this fragment contain
+     * @return true if the annotations for this fragment contain
      *    the reserved key <code>TS</code>, for trace spacing
      */
     public boolean containsTraceSpacing() {
@@ -298,7 +297,7 @@ public final class Fragment extends Gfa2Record {
             && Objects.equals(fragmentStart, f.getFragmentStart())
             && Objects.equals(fragmentEnd, f.getFragmentEnd())
             && Objects.equals(alignment, f.getAlignment())
-            && Objects.equals(getTags(), f.getTags());
+            && Objects.equals(getAnnotations(), f.getAnnotations());
     }
 
     @Override
@@ -306,9 +305,9 @@ public final class Fragment extends Gfa2Record {
         Joiner joiner = Joiner.on("\t");
         StringBuilder sb = new StringBuilder();
         joiner.appendTo(sb, "F", segmentId, external, segmentStart, segmentEnd, fragmentStart, fragmentEnd, alignment == null ? "*" : alignment);
-        if (!getTags().isEmpty()) {
+        if (!getAnnotations().isEmpty()) {
             sb.append("\t");
-            joiner.appendTo(sb, getTags().values());
+            joiner.appendTo(sb, getAnnotations().values());
         }
         return sb.toString();
     }
@@ -335,15 +334,15 @@ public final class Fragment extends Gfa2Record {
         Position fragmentEnd = Position.valueOf(tokens.get(6));
         Alignment alignment = Alignment.valueOf(tokens.get(7));
 
-        ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
+        ImmutableMap.Builder<String, Annotation> annotations = ImmutableMap.builder();
         for (int i = 8; i < tokens.size(); i++) {
             String token = tokens.get(i);
             if (!token.isEmpty()) {
-                Tag tag = Tag.valueOf(token);
-                tags.put(tag.getName(), tag);
+                Annotation annotation = Annotation.valueOf(token);
+                annotations.put(annotation.getName(), annotation);
             }
         }
 
-        return new Fragment(segmentId, external, segmentStart, segmentEnd, fragmentStart, fragmentEnd, alignment, tags.build());
+        return new Fragment(segmentId, external, segmentStart, segmentEnd, fragmentStart, fragmentEnd, alignment, annotations.build());
     }
 }

@@ -40,8 +40,7 @@ import com.google.common.base.Splitter;
 
 import com.google.common.collect.ImmutableMap;
 
-import org.dishevelled.bio.assembly.gfa.Reference;
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.Annotation;
 
 /**
  * Edge GFA 2.0 record.
@@ -89,7 +88,7 @@ public final class Edge extends Gfa2Record {
      * @param targetStart target start position, must not be null
      * @param targetEnd target end position, must not be null
      * @param alignment alignment, if any
-     * @param tags tags, must not be null
+     * @param annotations annotations, must not be null
      */
     public Edge(@Nullable final String id,
                 final Reference source,
@@ -99,9 +98,9 @@ public final class Edge extends Gfa2Record {
                 final Position targetStart,
                 final Position targetEnd,
                 @Nullable final Alignment alignment,
-                final Map<String, Tag> tags) {
+                final Map<String, Annotation> annotations) {
 
-        super(tags);
+        super(annotations);
         checkNotNull(source);
         checkNotNull(target);
         checkNotNull(sourceStart);
@@ -120,7 +119,7 @@ public final class Edge extends Gfa2Record {
 
         hashCode = Objects.hash(this.id, this.source, this.target, this.sourceStart,
                                 this.sourceEnd, this.targetStart, this.targetEnd, this.alignment,
-                                getTags());
+                                getAnnotations());
     }
 
 
@@ -239,15 +238,15 @@ public final class Edge extends Gfa2Record {
     // optional fields
 
     /**
-     * Return true if the tags for this edge contain
+     * Return true if the annotations for this edge contain
      * the reserved key <code>MQ</code>.
      *
      * @since 1.3.2
-     * @return true if the tags for this edge contain
+     * @return true if the annotations for this edge contain
      *    the reserved key <code>MQ</code>
      */
     public boolean containsMq() {
-        return containsTagKey("MQ");
+        return containsAnnotationKey("MQ");
     }
 
     /**
@@ -259,7 +258,7 @@ public final class Edge extends Gfa2Record {
      *    as an integer
      */
     public int getMq() {
-        return getTagInteger("MQ");
+        return getAnnotationInteger("MQ");
     }
 
     /**
@@ -271,15 +270,15 @@ public final class Edge extends Gfa2Record {
      *   as an integer
      */
     public Optional<Integer> getMqOpt() {
-        return getTagIntegerOpt("MQ");
+        return getAnnotationIntegerOpt("MQ");
     }
 
     /**
-     * Return true if the tags for this edge contain
+     * Return true if the annotations for this edge contain
      * the reserved key <code>MQ</code>, for mapping quality.
      *
      * @since 1.3.2
-     * @return true if the tags for this edge contain
+     * @return true if the annotations for this edge contain
      *    the reserved key <code>MQ</code>, for mapping quality
      */
     public boolean containsMappingQuality() {
@@ -313,15 +312,15 @@ public final class Edge extends Gfa2Record {
     //
 
     /**
-     * Return true if the tags for this edge contain
+     * Return true if the annotations for this edge contain
      * the reserved key <code>NM</code>.
      *
      * @since 1.3.2
-     * @return true if the tags for this edge contain
+     * @return true if the annotations for this edge contain
      *    the reserved key <code>NM</code>
      */
     public boolean containsNm() {
-        return containsTagKey("NM");
+        return containsAnnotationKey("NM");
     }
 
     /**
@@ -333,7 +332,7 @@ public final class Edge extends Gfa2Record {
      *    as an integer
      */
     public int getNm() {
-        return getTagInteger("NM");
+        return getAnnotationInteger("NM");
     }
 
     /**
@@ -345,15 +344,15 @@ public final class Edge extends Gfa2Record {
      *   as an integer
      */
     public Optional<Integer> getNmOpt() {
-        return getTagIntegerOpt("NM");
+        return getAnnotationIntegerOpt("NM");
     }
 
     /**
-     * Return true if the tags for this edge contain
+     * Return true if the annotations for this edge contain
      * the reserved key <code>NM</code>, for mismatch count.
      *
      * @since 1.3.2
-     * @return true if the tags for this edge contain
+     * @return true if the annotations for this edge contain
      *    the reserved key <code>NM</code>, for mismatch count
      */
     public boolean containsMismatchCount() {
@@ -387,15 +386,15 @@ public final class Edge extends Gfa2Record {
     //
 
     /**
-     * Return true if the tags for this edge contain
+     * Return true if the annotations for this edge contain
      * the reserved key <code>RC</code>.
      *
      * @since 1.3.2
-     * @return true if the tags for this edge contain
+     * @return true if the annotations for this edge contain
      *    the reserved key <code>RC</code>
      */
     public boolean containsRc() {
-        return containsTagKey("RC");
+        return containsAnnotationKey("RC");
     }
 
     /**
@@ -407,7 +406,7 @@ public final class Edge extends Gfa2Record {
      *    as an integer
      */
     public int getRc() {
-        return getTagInteger("RC");
+        return getAnnotationInteger("RC");
     }
 
     /**
@@ -419,15 +418,15 @@ public final class Edge extends Gfa2Record {
      *   as an integer
      */
     public Optional<Integer> getRcOpt() {
-        return getTagIntegerOpt("RC");
+        return getAnnotationIntegerOpt("RC");
     }
 
     /**
-     * Return true if the tags for this edge contain
+     * Return true if the annotations for this edge contain
      * the reserved key <code>RC</code>, for read count.
      *
      * @since 1.3.2
-     * @return true if the tags for this edge contain
+     * @return true if the annotations for this edge contain
      *    the reserved key <code>RC</code>, for read count
      */
     public boolean containsReadCount() {
@@ -461,15 +460,15 @@ public final class Edge extends Gfa2Record {
     //
 
     /**
-     * Return true if the tags for this edge contain
+     * Return true if the annotations for this edge contain
      * the reserved key <code>FC</code>.
      *
      * @since 1.3.2
-     * @return true if the tags for this edge contain
+     * @return true if the annotations for this edge contain
      *    the reserved key <code>FC</code>
      */
     public boolean containsFc() {
-        return containsTagKey("FC");
+        return containsAnnotationKey("FC");
     }
 
     /**
@@ -481,7 +480,7 @@ public final class Edge extends Gfa2Record {
      *    as an integer
      */
     public int getFc() {
-        return getTagInteger("FC");
+        return getAnnotationInteger("FC");
     }
 
     /**
@@ -493,15 +492,15 @@ public final class Edge extends Gfa2Record {
      *   as an integer
      */
     public Optional<Integer> getFcOpt() {
-        return getTagIntegerOpt("FC");
+        return getAnnotationIntegerOpt("FC");
     }
 
     /**
-     * Return true if the tags for this edge contain
+     * Return true if the annotations for this edge contain
      * the reserved key <code>FC</code>, for fragment count.
      *
      * @since 1.3.2
-     * @return true if the tags for this edge contain
+     * @return true if the annotations for this edge contain
      *    the reserved key <code>FC</code>, for fragment count
      */
     public boolean containsFragmentCount() {
@@ -535,15 +534,15 @@ public final class Edge extends Gfa2Record {
     //
 
     /**
-     * Return true if the tags for this edge contain
+     * Return true if the annotations for this edge contain
      * the reserved key <code>KC</code>.
      *
      * @since 1.3.2
-     * @return true if the tags for this edge contain
+     * @return true if the annotations for this edge contain
      *    the reserved key <code>KC</code>
      */
     public boolean containsKc() {
-        return containsTagKey("KC");
+        return containsAnnotationKey("KC");
     }
 
     /**
@@ -555,7 +554,7 @@ public final class Edge extends Gfa2Record {
      *    as an integer
      */
     public int getKc() {
-        return getTagInteger("KC");
+        return getAnnotationInteger("KC");
     }
 
     /**
@@ -567,15 +566,15 @@ public final class Edge extends Gfa2Record {
      *   as an integer
      */
     public Optional<Integer> getKcOpt() {
-        return getTagIntegerOpt("KC");
+        return getAnnotationIntegerOpt("KC");
     }
 
     /**
-     * Return true if the tags for this edge contain
+     * Return true if the annotations for this edge contain
      * the reserved key <code>KC</code>, for k-mer count.
      *
      * @since 1.3.2
-     * @return true if the tags for this edge contain
+     * @return true if the annotations for this edge contain
      *    the reserved key <code>KC</code>, for k-mer count
      */
     public boolean containsKmerCount() {
@@ -609,15 +608,15 @@ public final class Edge extends Gfa2Record {
     //
 
     /**
-     * Return true if the tags for this edge contain
+     * Return true if the annotations for this edge contain
      * the reserved key <code>TS</code>.
      *
      * @since 1.3.2
-     * @return true if the tags for this edge contain
+     * @return true if the annotations for this edge contain
      *    the reserved key <code>TS</code>
      */
     public boolean containsTs() {
-        return containsTagKey("TS");
+        return containsAnnotationKey("TS");
     }
 
     /**
@@ -629,7 +628,7 @@ public final class Edge extends Gfa2Record {
      *    as an integer
      */
     public int getTs() {
-        return getTagInteger("TS");
+        return getAnnotationInteger("TS");
     }
 
     /**
@@ -641,15 +640,15 @@ public final class Edge extends Gfa2Record {
      *   as an integer
      */
     public Optional<Integer> getTsOpt() {
-        return getTagIntegerOpt("TS");
+        return getAnnotationIntegerOpt("TS");
     }
 
     /**
-     * Return true if the tags for this edge contain
+     * Return true if the annotations for this edge contain
      * the reserved key <code>TS</code>, for trace spacing.
      *
      * @since 1.3.2
-     * @return true if the tags for this edge contain
+     * @return true if the annotations for this edge contain
      *    the reserved key <code>TS</code>, for trace spacing
      */
     public boolean containsTraceSpacing() {
@@ -704,7 +703,7 @@ public final class Edge extends Gfa2Record {
             && Objects.equals(targetStart, e.getTargetStart())
             && Objects.equals(targetEnd, e.getTargetEnd())
             && Objects.equals(alignment, e.getAlignment())
-            && Objects.equals(getTags(), e.getTags());
+            && Objects.equals(getAnnotations(), e.getAnnotations());
     }
 
     @Override
@@ -712,9 +711,9 @@ public final class Edge extends Gfa2Record {
         Joiner joiner = Joiner.on("\t");
         StringBuilder sb = new StringBuilder();
         joiner.appendTo(sb, "E", id == null ? "*" : id, source, target, sourceStart, sourceEnd, targetStart, targetEnd, alignment == null ? "*" : alignment);
-        if (!getTags().isEmpty()) {
+        if (!getAnnotations().isEmpty()) {
             sb.append("\t");
-            joiner.appendTo(sb, getTags().values());
+            joiner.appendTo(sb, getAnnotations().values());
         }
         return sb.toString();
     }
@@ -742,15 +741,15 @@ public final class Edge extends Gfa2Record {
         Position targetEnd = Position.valueOf(tokens.get(7));
         Alignment alignment = Alignment.valueOf(tokens.get(8));
 
-        ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
+        ImmutableMap.Builder<String, Annotation> annotations = ImmutableMap.builder();
         for (int i = 9; i < tokens.size(); i++) {
             String token = tokens.get(i);
             if (!token.isEmpty()) {
-                Tag tag = Tag.valueOf(token);
-                tags.put(tag.getName(), tag);
+                Annotation annotation = Annotation.valueOf(token);
+                annotations.put(annotation.getName(), annotation);
             }
         }
 
-        return new Edge(id, source, target, sourceStart, sourceEnd, targetStart, targetEnd, alignment, tags.build());
+        return new Edge(id, source, target, sourceStart, sourceEnd, targetStart, targetEnd, alignment, annotations.build());
     }
 }

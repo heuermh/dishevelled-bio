@@ -40,8 +40,7 @@ import com.google.common.base.Splitter;
 
 import com.google.common.collect.ImmutableMap;
 
-import org.dishevelled.bio.assembly.gfa.Reference;
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.Annotation;
 
 /**
  * Containment GFA 1.0 record.
@@ -73,15 +72,15 @@ public final class Containment extends Gfa1Record {
      * @param contained contained reference, must not be null
      * @param position position, must be at least zero
      * @param overlap overlap in cigar format, if any
-     * @param tags tags, must not be null
+     * @param annotations annotations, must not be null
      */
     public Containment(final Reference container,
                        final Reference contained,
                        final int position,
                        @Nullable final String overlap,
-                       final Map<String, Tag> tags) {
+                       final Map<String, Annotation> annotations) {
 
-        super(tags);
+        super(annotations);
         checkNotNull(container);
         checkNotNull(contained);
         checkArgument(position >= 0, "position must be at least zero, was " + position);
@@ -91,7 +90,7 @@ public final class Containment extends Gfa1Record {
         this.position = position;
         this.overlap = overlap;
 
-        hashCode = Objects.hash(this.container, this.contained, this.position, this.overlap, getTags());
+        hashCode = Objects.hash(this.container, this.contained, this.position, this.overlap, getAnnotations());
     }
 
 
@@ -155,14 +154,14 @@ public final class Containment extends Gfa1Record {
     // optional fields
 
     /**
-     * Return true if the tags for this containment contain
+     * Return true if the annotations for this containment contain
      * the reserved key <code>RC</code>.
      *
-     * @return true if the tags for this containment contain
+     * @return true if the annotations for this containment contain
      *    the reserved key <code>RC</code>
      */
     public boolean containsRc() {
-        return containsTagKey("RC");
+        return containsAnnotationKey("RC");
     }
 
     /**
@@ -173,7 +172,7 @@ public final class Containment extends Gfa1Record {
      *    as an integer
      */
     public int getRc() {
-        return getTagInteger("RC");
+        return getAnnotationInteger("RC");
     }
 
     /**
@@ -184,14 +183,14 @@ public final class Containment extends Gfa1Record {
      *   as an integer
      */
     public Optional<Integer> getRcOpt() {
-        return getTagIntegerOpt("RC");
+        return getAnnotationIntegerOpt("RC");
     }
 
     /**
-     * Return true if the tags for this containment contain
+     * Return true if the annotations for this containment contain
      * the reserved key <code>RC</code>, for read count.
      *
-     * @return true if the tags for this containment contain
+     * @return true if the annotations for this containment contain
      *    the reserved key <code>RC</code>, for read count
      */
     public boolean containsReadCount() {
@@ -223,14 +222,14 @@ public final class Containment extends Gfa1Record {
     //
 
     /**
-     * Return true if the tags for this containment contain
+     * Return true if the annotations for this containment contain
      * the reserved key <code>NM</code>.
      *
-     * @return true if the tags for this containment contain
+     * @return true if the annotations for this containment contain
      *    the reserved key <code>NM</code>
      */
     public boolean containsNm() {
-        return containsTagKey("NM");
+        return containsAnnotationKey("NM");
     }
 
     /**
@@ -241,7 +240,7 @@ public final class Containment extends Gfa1Record {
      *    as an integer
      */
     public int getNm() {
-        return getTagInteger("NM");
+        return getAnnotationInteger("NM");
     }
 
     /**
@@ -252,14 +251,14 @@ public final class Containment extends Gfa1Record {
      *   as an integer
      */
     public Optional<Integer> getNmOpt() {
-        return getTagIntegerOpt("NM");
+        return getAnnotationIntegerOpt("NM");
     }
 
     /**
-     * Return true if the tags for this containment contain
+     * Return true if the annotations for this containment contain
      * the reserved key <code>NM</code>, for mismatch count.
      *
-     * @return true if the tags for this containment contain
+     * @return true if the annotations for this containment contain
      *    the reserved key <code>NM</code>, for mismatch count
      */
     public boolean containsMismatchCount() {
@@ -291,14 +290,14 @@ public final class Containment extends Gfa1Record {
     //
 
     /**
-     * Return true if the tags for this segment contain
+     * Return true if the annotations for this segment contain
      * the reserved key <code>ID</code>.
      *
-     * @return true if the tags for this segment contain
+     * @return true if the annotations for this segment contain
      *    the reserved key <code>ID</code>
      */
     public boolean containsId() {
-        return containsTagKey("ID");
+        return containsAnnotationKey("ID");
     }
 
     /**
@@ -309,7 +308,7 @@ public final class Containment extends Gfa1Record {
      *    as a string
      */
     public String getId() {
-        return getTagString("ID");
+        return getAnnotationString("ID");
     }
 
     /**
@@ -320,7 +319,7 @@ public final class Containment extends Gfa1Record {
      *   as a string
      */
     public Optional<String> getIdOpt() {
-        return getTagStringOpt("ID");
+        return getAnnotationStringOpt("ID");
     }
 
 
@@ -343,7 +342,7 @@ public final class Containment extends Gfa1Record {
             && Objects.equals(contained, c.getContained())
             && Objects.equals(position, c.getPosition())
             && Objects.equals(overlap, c.getOverlap())
-            && Objects.equals(getTags(), c.getTags());
+            && Objects.equals(getAnnotations(), c.getAnnotations());
     }
 
     @Override
@@ -351,9 +350,9 @@ public final class Containment extends Gfa1Record {
         Joiner joiner = Joiner.on("\t");
         StringBuilder sb = new StringBuilder();
         joiner.appendTo(sb, "C", container.splitToString(), contained.splitToString(), position, overlap == null ? "*" : overlap);
-        if (!getTags().isEmpty()) {
+        if (!getAnnotations().isEmpty()) {
             sb.append("\t");
-            joiner.appendTo(sb, getTags().values());
+            joiner.appendTo(sb, getAnnotations().values());
         }
         return sb.toString();
     }
@@ -377,15 +376,15 @@ public final class Containment extends Gfa1Record {
         int position = Integer.parseInt(tokens.get(5));
         String overlap = "*".equals(tokens.get(6)) ? null : tokens.get(6);
 
-        ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
+        ImmutableMap.Builder<String, Annotation> annotations = ImmutableMap.builder();
         for (int i = 7; i < tokens.size(); i++) {
             String token = tokens.get(i);
             if (!token.isEmpty()) {
-                Tag tag = Tag.valueOf(token);
-                tags.put(tag.getName(), tag);
+                Annotation annotation = Annotation.valueOf(token);
+                annotations.put(annotation.getName(), annotation);
             }
         }
 
-        return new Containment(container, contained, position, overlap, tags.build());
+        return new Containment(container, contained, position, overlap, annotations.build());
     }
 }

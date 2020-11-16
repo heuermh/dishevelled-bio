@@ -36,14 +36,14 @@ import java.util.Map;
 
 import java.util.concurrent.Callable;
 
-import org.dishevelled.bio.assembly.gfa.Reference;
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.Annotation;
 
 import org.dishevelled.bio.assembly.gfa1.Gfa1Listener;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Reader;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Record;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Writer;
 import org.dishevelled.bio.assembly.gfa1.Path;
+import org.dishevelled.bio.assembly.gfa1.Reference;
 import org.dishevelled.bio.assembly.gfa1.Traversal;
 
 import org.dishevelled.commandline.ArgumentList;
@@ -92,7 +92,7 @@ public final class TruncatePaths implements Callable<Integer> {
                     public boolean record(final Gfa1Record gfa1Record) {
                         if (gfa1Record instanceof Path) {
                             Path path = (Path) gfa1Record;
-                            Gfa1Writer.write(new Path(path.getName(), EMPTY_SEGMENTS, null, path.getTags()), w);
+                            Gfa1Writer.write(new Path(path.getName(), EMPTY_SEGMENTS, null, path.getAnnotations()), w);
                         }
                         else {
                             Gfa1Writer.write(gfa1Record, w);

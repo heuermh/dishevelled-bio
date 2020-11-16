@@ -34,7 +34,7 @@ import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.Annotation;
 
 /**
  * Unit test for Segment.
@@ -45,38 +45,38 @@ public class SegmentTest {
     private String id;
     private int length;
     private String sequence;
-    private Map<String, Tag> tags;
+    private Map<String, Annotation> annotations;
 
     @Before
     public void setUp() {
         id = "id";
         length = 42;
         sequence = "actg";
-        tags = ImmutableMap.<String, Tag>builder().put("aa", new Tag("aa", "i", "42")).build();
+        annotations = ImmutableMap.<String, Annotation>builder().put("aa", new Annotation("aa", "i", "42")).build();
     }
 
     @Test(expected=NullPointerException.class)
     public void testCtrNullId() {
-        new Segment(null, length, sequence, tags);
+        new Segment(null, length, sequence, annotations);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testCtrInvalidLength() {
-        new Segment(id, -1, sequence, tags);
+        new Segment(id, -1, sequence, annotations);
     }
 
     @Test(expected=NullPointerException.class)
-    public void testCtrNullTags() {
+    public void testCtrNullAnnotations() {
         new Segment(id, length, sequence, null);
     }
 
     @Test
     public void testCtr() {
-        Segment segment = new Segment(id, length, sequence, tags);
+        Segment segment = new Segment(id, length, sequence, annotations);
         assertEquals(id, segment.getId());
         assertEquals(length, segment.getLength());
         assertEquals(sequence, segment.getSequence());
-        assertEquals(tags, segment.getTags());
+        assertEquals(annotations, segment.getAnnotations());
         assertEquals("S\tid\t42\tactg\taa:i:42", segment.toString());
     }
 
@@ -101,7 +101,7 @@ public class SegmentTest {
         assertEquals(id, segment.getId());
         assertEquals(length, segment.getLength());
         assertEquals(sequence, segment.getSequence());
-        assertEquals(tags, segment.getTags());
+        assertEquals(annotations, segment.getAnnotations());
     }
 
     @Test

@@ -40,8 +40,7 @@ import com.google.common.base.Splitter;
 
 import com.google.common.collect.ImmutableMap;
 
-import org.dishevelled.bio.assembly.gfa.Reference;
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.Annotation;
 
 /**
  * Gap GFA 2.0 record.
@@ -77,16 +76,16 @@ public final class Gap extends Gfa2Record {
      * @param target target reference, must not be null
      * @param distance distance, must be at least zero
      * @param variance variance, if any
-     * @param tags tags, must not be null
+     * @param annotations annotations, must not be null
      */
     public Gap(@Nullable final String id,
                final Reference source,
                final Reference target,
                final int distance,
                @Nullable final Integer variance,
-               final Map<String, Tag> tags) {
+               final Map<String, Annotation> annotations) {
 
-        super(tags);
+        super(annotations);
         checkNotNull(source);
         checkNotNull(target);
         checkArgument(distance >= 0, "distance must be at least zero");
@@ -98,7 +97,7 @@ public final class Gap extends Gfa2Record {
         this.variance = variance;
 
         hashCode = Objects.hash(this.id, this.source, this.target, this.distance,
-                                this.variance, getTags());
+                                this.variance, getAnnotations());
     }
 
 
@@ -187,15 +186,15 @@ public final class Gap extends Gfa2Record {
     // optional fields
 
     /**
-     * Return true if the tags for this gap contain
+     * Return true if the annotations for this gap contain
      * the reserved key <code>TS</code>.
      *
      * @since 1.3.2
-     * @return true if the tags for this gap contain
+     * @return true if the annotations for this gap contain
      *    the reserved key <code>TS</code>
      */
     public boolean containsTs() {
-        return containsTagKey("TS");
+        return containsAnnotationKey("TS");
     }
 
     /**
@@ -207,7 +206,7 @@ public final class Gap extends Gfa2Record {
      *    as an integer
      */
     public int getTs() {
-        return getTagInteger("TS");
+        return getAnnotationInteger("TS");
     }
 
     /**
@@ -219,15 +218,15 @@ public final class Gap extends Gfa2Record {
      *   as an integer
      */
     public Optional<Integer> getTsOpt() {
-        return getTagIntegerOpt("TS");
+        return getAnnotationIntegerOpt("TS");
     }
 
     /**
-     * Return true if the tags for this gap contain
+     * Return true if the annotations for this gap contain
      * the reserved key <code>TS</code>, for trace spacing.
      *
      * @since 1.3.2
-     * @return true if the tags for this gap contain
+     * @return true if the annotations for this gap contain
      *    the reserved key <code>TS</code>, for trace spacing
      */
     public boolean containsTraceSpacing() {
@@ -279,7 +278,7 @@ public final class Gap extends Gfa2Record {
             && Objects.equals(target, g.getTarget())
             && Objects.equals(distance, g.getDistance())
             && Objects.equals(variance, g.getVariance())
-            && Objects.equals(getTags(), g.getTags());
+            && Objects.equals(getAnnotations(), g.getAnnotations());
     }
 
     @Override
@@ -287,9 +286,9 @@ public final class Gap extends Gfa2Record {
         Joiner joiner = Joiner.on("\t");
         StringBuilder sb = new StringBuilder();
         joiner.appendTo(sb, "G", id == null ? "*" : id, source, target, distance, variance == null ? "*" : variance);
-        if (!getTags().isEmpty()) {
+        if (!getAnnotations().isEmpty()) {
             sb.append("\t");
-            joiner.appendTo(sb, getTags().values());
+            joiner.appendTo(sb, getAnnotations().values());
         }
         return sb.toString();
     }
@@ -314,15 +313,15 @@ public final class Gap extends Gfa2Record {
         int distance = Integer.parseInt(tokens.get(4));
         Integer variance = "*".equals(tokens.get(5)) ? null : Integer.parseInt(tokens.get(5));
 
-        ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
+        ImmutableMap.Builder<String, Annotation> annotations = ImmutableMap.builder();
         for (int i = 6; i < tokens.size(); i++) {
             String token = tokens.get(i);
             if (!token.isEmpty()) {
-                Tag tag = Tag.valueOf(token);
-                tags.put(tag.getName(), tag);
+                Annotation annotation = Annotation.valueOf(token);
+                annotations.put(annotation.getName(), annotation);
             }
         }
 
-        return new Gap(id, source, target, distance, variance, tags.build());
+        return new Gap(id, source, target, distance, variance, annotations.build());
     }
 }

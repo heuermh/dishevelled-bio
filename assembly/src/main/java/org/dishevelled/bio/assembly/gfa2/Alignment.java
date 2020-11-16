@@ -42,6 +42,8 @@ import com.google.common.base.Splitter;
 
 import com.google.common.collect.ImmutableList;
 
+import org.dishevelled.bio.annotation.Annotation;
+
 /**
  * Alignment.
  *

@@ -34,8 +34,7 @@ import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.dishevelled.bio.assembly.gfa.Reference;
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.Annotation;
 
 /**
  * Unit test for Edge.
@@ -51,7 +50,7 @@ public class EdgeTest {
     private Position targetStart;
     private Position targetEnd;
     private Alignment alignment;
-    private Map<String, Tag> tags;
+    private Map<String, Annotation> annotations;
 
     @Before
     public void setUp() {
@@ -63,47 +62,47 @@ public class EdgeTest {
         targetStart = Position.valueOf("101");
         targetEnd = Position.valueOf("110");
         alignment = Alignment.valueOf("10M");
-        tags = ImmutableMap.<String, Tag>builder().put("aa", new Tag("aa", "i", "42")).build();
+        annotations = ImmutableMap.<String, Annotation>builder().put("aa", new Annotation("aa", "i", "42")).build();
     }
 
     @Test(expected=NullPointerException.class)
     public void testCtrNullSource() {
-        new Edge(id, null, target, sourceStart, sourceEnd, targetStart, targetEnd, alignment, tags);
+        new Edge(id, null, target, sourceStart, sourceEnd, targetStart, targetEnd, alignment, annotations);
     }
 
     @Test(expected=NullPointerException.class)
     public void testCtrNullTarget() {
-        new Edge(id, source, null, sourceStart, sourceEnd, targetStart, targetEnd, alignment, tags);
+        new Edge(id, source, null, sourceStart, sourceEnd, targetStart, targetEnd, alignment, annotations);
     }
 
     @Test(expected=NullPointerException.class)
     public void testCtrNullSourceStart() {
-        new Edge(id, source, target, null, sourceEnd, targetStart, targetEnd, alignment, tags);
+        new Edge(id, source, target, null, sourceEnd, targetStart, targetEnd, alignment, annotations);
     }
 
     @Test(expected=NullPointerException.class)
     public void testCtrNullSourceEnd() {
-        new Edge(id, source, target, sourceStart, null, targetStart, targetEnd, alignment, tags);
+        new Edge(id, source, target, sourceStart, null, targetStart, targetEnd, alignment, annotations);
     }
 
     @Test(expected=NullPointerException.class)
     public void testCtrNullTargetStart() {
-        new Edge(id, source, target, sourceStart, sourceEnd, null, targetEnd, alignment, tags);
+        new Edge(id, source, target, sourceStart, sourceEnd, null, targetEnd, alignment, annotations);
     }
 
     @Test(expected=NullPointerException.class)
     public void testCtrNullTargetEnd() {
-        new Edge(id, source, target, sourceStart, sourceEnd, targetStart, null, alignment, tags);
+        new Edge(id, source, target, sourceStart, sourceEnd, targetStart, null, alignment, annotations);
     }
 
     @Test(expected=NullPointerException.class)
-    public void testCtrNullTags() {
+    public void testCtrNullAnnotations() {
         new Edge(id, source, target, sourceStart, sourceEnd, targetStart, targetEnd, alignment, null);
     }
 
     @Test
     public void testCtr() {
-        Edge edge = new Edge(id, source, target, sourceStart, sourceEnd, targetStart, targetEnd, alignment, tags);
+        Edge edge = new Edge(id, source, target, sourceStart, sourceEnd, targetStart, targetEnd, alignment, annotations);
         assertEquals(id, edge.getId());
         assertEquals(source, edge.getSource());
         assertEquals(target, edge.getTarget());
@@ -112,7 +111,7 @@ public class EdgeTest {
         assertEquals(targetStart, edge.getTargetStart());
         assertEquals(targetEnd, edge.getTargetEnd());
         assertEquals(alignment, edge.getAlignment());
-        assertEquals(tags, edge.getTags());
+        assertEquals(annotations, edge.getAnnotations());
         assertEquals("E\tid\tsource+\ttarget+\t1\t10\t101\t110\t10M\taa:i:42", edge.toString());
     }
 
@@ -142,7 +141,7 @@ public class EdgeTest {
         assertEquals(targetStart, edge.getTargetStart());
         assertEquals(targetEnd, edge.getTargetEnd());
         assertEquals(alignment, edge.getAlignment());
-        assertEquals(tags, edge.getTags());
+        assertEquals(annotations, edge.getAnnotations());
     }
 
     @Test

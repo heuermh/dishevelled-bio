@@ -34,6 +34,15 @@
   <artifactId>dsh-bio-assembly</artifactId>
   <name>dsh-bio-assembly</name>
   <description>Assemblies.</description>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.dishevelled</groupId>
+        <artifactId>dsh-bio-annotation</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <dependencies>
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -54,6 +63,11 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.dishevelled</groupId>
+      <artifactId>dsh-bio-annotation</artifactId>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.dishevelled</groupId>

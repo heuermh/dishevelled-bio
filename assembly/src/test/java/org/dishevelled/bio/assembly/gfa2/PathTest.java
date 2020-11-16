@@ -36,8 +36,7 @@ import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.dishevelled.bio.assembly.gfa.Reference;
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.Annotation;
 
 /**
  * Unit test for Path.
@@ -47,31 +46,31 @@ import org.dishevelled.bio.assembly.gfa.Tag;
 public class PathTest {
     private String id;
     private List<Reference> references;
-    private Map<String, Tag> tags;
+    private Map<String, Annotation> annotations;
 
     @Before
     public void setUp() {
         id = "id";
         references = ImmutableList.of(Reference.valueOf("source+"), Reference.valueOf("target+"));
-        tags = ImmutableMap.<String, Tag>builder().put("aa", new Tag("aa", "i", "42")).build();
+        annotations = ImmutableMap.<String, Annotation>builder().put("aa", new Annotation("aa", "i", "42")).build();
     }
 
     @Test(expected=NullPointerException.class)
     public void testCtrNullReferences() {
-        new Path(id, null, tags);
+        new Path(id, null, annotations);
     }
 
     @Test(expected=NullPointerException.class)
-    public void testCtrNullTags() {
+    public void testCtrNullAnnotations() {
         new Path(id, references, null);
     }
 
     @Test
     public void testCtr() {
-        Path path = new Path(id, references, tags);
+        Path path = new Path(id, references, annotations);
         assertEquals(id, path.getId());
         assertEquals(references, path.getReferences());
-        assertEquals(tags, path.getTags());
+        assertEquals(annotations, path.getAnnotations());
         assertEquals("O\tid\tsource+ target+\taa:i:42", path.toString());
     }
 
@@ -95,7 +94,7 @@ public class PathTest {
         Path path = Path.valueOf("O\tid\tsource+ target+\taa:i:42");
         assertEquals(id, path.getId());
         assertEquals(references, path.getReferences());
-        assertEquals(tags, path.getTags());
+        assertEquals(annotations, path.getAnnotations());
     }
 
     @Test

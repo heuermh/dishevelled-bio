@@ -34,8 +34,7 @@ import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.dishevelled.bio.assembly.gfa.Reference;
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.Annotation;
 
 /**
  * Unit test for Gap.
@@ -48,7 +47,7 @@ public class GapTest {
     private Reference target;
     private int distance;
     private Integer variance;
-    private Map<String, Tag> tags;
+    private Map<String, Annotation> annotations;
 
     @Before
     public void setUp() {
@@ -57,38 +56,38 @@ public class GapTest {
         target = Reference.valueOf("target+");
         distance = 42;
         variance = Integer.valueOf(2);
-        tags = ImmutableMap.<String, Tag>builder().put("aa", new Tag("aa", "i", "42")).build();
+        annotations = ImmutableMap.<String, Annotation>builder().put("aa", new Annotation("aa", "i", "42")).build();
     }
 
     @Test(expected=NullPointerException.class)
     public void testCtrNullSource() {
-        new Gap(id, null, target, distance, variance, tags);
+        new Gap(id, null, target, distance, variance, annotations);
     }
 
     @Test(expected=NullPointerException.class)
     public void testCtrNullTarget() {
-        new Gap(id, source, null, distance, variance, tags);
+        new Gap(id, source, null, distance, variance, annotations);
     }
 
     @Test(expected=NullPointerException.class)
-    public void testCtrNullTags() {
+    public void testCtrNullAnnotations() {
         new Gap(id, source, target, distance, variance, null);
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testCtrInvalidDistance() {
-        new Gap(id, source, target, -1, variance, tags);
+        new Gap(id, source, target, -1, variance, annotations);
     }
 
     @Test
     public void testCtr() {
-        Gap gap = new Gap(id, source, target, distance, variance, tags);
+        Gap gap = new Gap(id, source, target, distance, variance, annotations);
         assertEquals(id, gap.getId());
         assertEquals(source, gap.getSource());
         assertEquals(target, gap.getTarget());
         assertEquals(distance, gap.getDistance());
         assertEquals(variance, gap.getVariance());
-        assertEquals(tags, gap.getTags());
+        assertEquals(annotations, gap.getAnnotations());
         assertEquals("G\tid\tsource+\ttarget+\t42\t2\taa:i:42", gap.toString());
     }
 
@@ -115,7 +114,7 @@ public class GapTest {
         assertEquals(target, gap.getTarget());
         assertEquals(distance, gap.getDistance());
         assertEquals(variance, gap.getVariance());
-        assertEquals(tags, gap.getTags());
+        assertEquals(annotations, gap.getAnnotations());
     }
 
     @Test

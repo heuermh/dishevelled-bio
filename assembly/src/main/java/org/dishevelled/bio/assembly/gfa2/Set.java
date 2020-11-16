@@ -41,7 +41,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.Annotation;
 
 /**
  * Set GFA 2.0 record.
@@ -65,19 +65,19 @@ public final class Set extends Gfa2Record {
      *
      * @param id identifier, if any
      * @param ids unordered set of identifiers, must not be null
-     * @param tags tags, must not be null
+     * @param annotations annotations, must not be null
      */
     public Set(@Nullable final String id,
                final java.util.Set<String> ids,
-               final Map<String, Tag> tags) {
+               final Map<String, Annotation> annotations) {
 
-        super(tags);
+        super(annotations);
         checkNotNull(ids);
 
         this.id = id;
         this.ids = ImmutableSet.copyOf(ids);
 
-        hashCode = Objects.hash(this.id, this.ids, getTags());
+        hashCode = Objects.hash(this.id, this.ids, getAnnotations());
     }
 
 
@@ -135,7 +135,7 @@ public final class Set extends Gfa2Record {
 
         return Objects.equals(id, s.getId())
             && Objects.equals(ids, s.getIds())
-            && Objects.equals(getTags(), s.getTags());
+            && Objects.equals(getAnnotations(), s.getAnnotations());
     }
 
     @Override
@@ -143,9 +143,9 @@ public final class Set extends Gfa2Record {
         Joiner joiner = Joiner.on("\t");
         StringBuilder sb = new StringBuilder();
         joiner.appendTo(sb, "U", id == null ? "*" : id, Joiner.on(" ").join(ids));
-        if (!getTags().isEmpty()) {
+        if (!getAnnotations().isEmpty()) {
             sb.append("\t");
-            joiner.appendTo(sb, getTags().values());
+            joiner.appendTo(sb, getAnnotations().values());
         }
         return sb.toString();
     }
@@ -167,15 +167,15 @@ public final class Set extends Gfa2Record {
         String id = "*".equals(tokens.get(1)) ? null : tokens.get(1);
         java.util.Set<String> ids = ImmutableSet.copyOf(Splitter.on(" ").split(tokens.get(2)));
 
-        ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
+        ImmutableMap.Builder<String, Annotation> annotations = ImmutableMap.builder();
         for (int i = 3; i < tokens.size(); i++) {
             String token = tokens.get(i);
             if (!token.isEmpty()) {
-                Tag tag = Tag.valueOf(token);
-                tags.put(tag.getName(), tag);
+                Annotation annotation = Annotation.valueOf(token);
+                annotations.put(annotation.getName(), annotation);
             }
         }
 
-        return new Set(id, ids, tags.build());
+        return new Set(id, ids, annotations.build());
     }
 }

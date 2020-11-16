@@ -34,8 +34,7 @@ import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.dishevelled.bio.assembly.gfa.Reference;
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.Annotation;
 
 /**
  * Unit test for Fragment.
@@ -50,7 +49,7 @@ public class FragmentTest {
     private Position fragmentStart;
     private Position fragmentEnd;
     private Alignment alignment;
-    private Map<String, Tag> tags;
+    private Map<String, Annotation> annotations;
 
     @Before
     public void setUp() {
@@ -61,47 +60,47 @@ public class FragmentTest {
         fragmentStart = Position.valueOf("101");
         fragmentEnd = Position.valueOf("110");
         alignment = Alignment.valueOf("10M");
-        tags = ImmutableMap.<String, Tag>builder().put("aa", new Tag("aa", "i", "42")).build();
+        annotations = ImmutableMap.<String, Annotation>builder().put("aa", new Annotation("aa", "i", "42")).build();
     }
 
     @Test(expected=NullPointerException.class)
     public void testCtrNullSegmentId() {
-        new Fragment(null, external, segmentStart, segmentEnd, fragmentStart, fragmentEnd, alignment, tags);
+        new Fragment(null, external, segmentStart, segmentEnd, fragmentStart, fragmentEnd, alignment, annotations);
     }
 
     @Test(expected=NullPointerException.class)
     public void testCtrNullExternal() {
-        new Fragment(segmentId, null, segmentStart, segmentEnd, fragmentStart, fragmentEnd, alignment, tags);
+        new Fragment(segmentId, null, segmentStart, segmentEnd, fragmentStart, fragmentEnd, alignment, annotations);
     }
 
     @Test(expected=NullPointerException.class)
     public void testCtrNullSegmentStart() {
-        new Fragment(segmentId, external, null, segmentEnd, fragmentStart, fragmentEnd, alignment, tags);
+        new Fragment(segmentId, external, null, segmentEnd, fragmentStart, fragmentEnd, alignment, annotations);
     }
 
     @Test(expected=NullPointerException.class)
     public void testCtrNullSegmentEnd() {
-        new Fragment(segmentId, external, segmentStart, null, fragmentStart, fragmentEnd, alignment, tags);
+        new Fragment(segmentId, external, segmentStart, null, fragmentStart, fragmentEnd, alignment, annotations);
     }
 
     @Test(expected=NullPointerException.class)
     public void testCtrNullFragmentStart() {
-        new Fragment(segmentId, external, segmentStart, segmentEnd, null, fragmentEnd, alignment, tags);
+        new Fragment(segmentId, external, segmentStart, segmentEnd, null, fragmentEnd, alignment, annotations);
     }
 
     @Test(expected=NullPointerException.class)
     public void testCtrNullFragmentEnd() {
-        new Fragment(segmentId, external, segmentStart, segmentEnd, fragmentStart, null, alignment, tags);
+        new Fragment(segmentId, external, segmentStart, segmentEnd, fragmentStart, null, alignment, annotations);
     }
 
     @Test(expected=NullPointerException.class)
-    public void testCtrNullTags() {
+    public void testCtrNullAnnotations() {
         new Fragment(segmentId, external, segmentStart, segmentEnd, fragmentStart, fragmentEnd, alignment, null);
     }
 
     @Test
     public void testCtr() {
-        Fragment fragment = new Fragment(segmentId, external, segmentStart, segmentEnd, fragmentStart, fragmentEnd, alignment, tags);
+        Fragment fragment = new Fragment(segmentId, external, segmentStart, segmentEnd, fragmentStart, fragmentEnd, alignment, annotations);
         assertEquals(segmentId, fragment.getSegmentId());
         assertEquals(external, fragment.getExternal());
         assertEquals(segmentStart, fragment.getSegmentStart());
@@ -109,7 +108,7 @@ public class FragmentTest {
         assertEquals(fragmentStart, fragment.getFragmentStart());
         assertEquals(fragmentEnd, fragment.getFragmentEnd());
         assertEquals(alignment, fragment.getAlignment());
-        assertEquals(tags, fragment.getTags());
+        assertEquals(annotations, fragment.getAnnotations());
         assertEquals("F\tsegmentId\texternal+\t1\t10\t101\t110\t10M\taa:i:42", fragment.toString());
     }
 
@@ -138,7 +137,7 @@ public class FragmentTest {
         assertEquals(fragmentStart, fragment.getFragmentStart());
         assertEquals(fragmentEnd, fragment.getFragmentEnd());
         assertEquals(alignment, fragment.getAlignment());
-        assertEquals(tags, fragment.getTags());
+        assertEquals(annotations, fragment.getAnnotations());
     }
 
     @Test

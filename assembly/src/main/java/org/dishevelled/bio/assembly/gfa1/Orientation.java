@@ -21,8 +21,45 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
+package org.dishevelled.bio.assembly.gfa1;
 
 /**
- * Graphical Fragment Assembly (GFA) support common to 1.0 and 2.0 versions.
+ * Orientation.
+ *
+ * @author  Michael Heuer
  */
-package org.dishevelled.bio.assembly.gfa;
+public enum Orientation {
+
+    /** Forward orientation. */
+    FORWARD,
+
+    /** Reverse orientation. */
+    REVERSE;
+
+    /**
+     * Return true if this orientation is <code>Orientation.FORWARD</code>.
+     *
+     * @return true if this orientation is <code>Orientation.FORWARD</code>
+     */
+    public boolean isForward() {
+        return FORWARD.equals(this);
+    }
+
+    /**
+     * Return true if this orientation is <code>Orientation.REVERSE</code>.
+     *
+     * @return true if this orientation is <code>Orientation.REVERSE</code>
+     */
+    public boolean isReverse() {
+        return REVERSE.equals(this);
+    }
+
+    /**
+     * Return the orientation opposite of this orientation.
+     *
+     * @return the orientation opposite of this orientation
+     */
+    public Orientation flip() {
+        return isForward() ? REVERSE : FORWARD;
+    }
+}

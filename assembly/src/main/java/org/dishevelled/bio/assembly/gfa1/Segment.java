@@ -40,7 +40,7 @@ import com.google.common.base.Splitter;
 
 import com.google.common.collect.ImmutableMap;
 
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.Annotation;
 
 /**
  * Segment GFA 1.0 record.
@@ -64,19 +64,19 @@ public final class Segment extends Gfa1Record {
      *
      * @param id identifier, must not be null
      * @param sequence sequence, if any
-     * @param tags tags, must not be null
+     * @param annotations annotations, must not be null
      */
     public Segment(final String id,
                    @Nullable final String sequence,
-                   final Map<String, Tag> tags) {
+                   final Map<String, Annotation> annotations) {
 
-        super(tags);
+        super(annotations);
         checkNotNull(id);
 
         this.id = id;
         this.sequence = sequence;
 
-        hashCode = Objects.hash(this.id, this.sequence, getTags());
+        hashCode = Objects.hash(this.id, this.sequence, getAnnotations());
     }
 
 
@@ -120,14 +120,14 @@ public final class Segment extends Gfa1Record {
     // optional fields
 
     /**
-     * Return true if the tags for this segment contain
+     * Return true if the annotations for this segment contain
      * the reserved key <code>LN</code>.
      *
-     * @return true if the tags for this segment contain
+     * @return true if the annotations for this segment contain
      *    the reserved key <code>LN</code>
      */
     public boolean containsLn() {
-        return containsTagKey("LN");
+        return containsAnnotationKey("LN");
     }
 
     /**
@@ -138,7 +138,7 @@ public final class Segment extends Gfa1Record {
      *    as an integer
      */
     public int getLn() {
-        return getTagInteger("LN");
+        return getAnnotationInteger("LN");
     }
 
     /**
@@ -149,14 +149,14 @@ public final class Segment extends Gfa1Record {
      *   as an integer
      */
     public Optional<Integer> getLnOpt() {
-        return getTagIntegerOpt("LN");
+        return getAnnotationIntegerOpt("LN");
     }
 
     /**
-     * Return true if the tags for this segment contain
+     * Return true if the annotations for this segment contain
      * the reserved key <code>LN</code>, for length.
      *
-     * @return true if the tags for this segment contain
+     * @return true if the annotations for this segment contain
      *    the reserved key <code>LN</code>, for length
      */
     public boolean containsLength() {
@@ -188,14 +188,14 @@ public final class Segment extends Gfa1Record {
     //
 
     /**
-     * Return true if the tags for this segment contain
+     * Return true if the annotations for this segment contain
      * the reserved key <code>RC</code>.
      *
-     * @return true if the tags for this segment contain
+     * @return true if the annotations for this segment contain
      *    the reserved key <code>RC</code>
      */
     public boolean containsRc() {
-        return containsTagKey("RC");
+        return containsAnnotationKey("RC");
     }
 
     /**
@@ -206,7 +206,7 @@ public final class Segment extends Gfa1Record {
      *    as an integer
      */
     public int getRc() {
-        return getTagInteger("RC");
+        return getAnnotationInteger("RC");
     }
 
     /**
@@ -217,14 +217,14 @@ public final class Segment extends Gfa1Record {
      *   as an integer
      */
     public Optional<Integer> getRcOpt() {
-        return getTagIntegerOpt("RC");
+        return getAnnotationIntegerOpt("RC");
     }
 
     /**
-     * Return true if the tags for this segment contain
+     * Return true if the annotations for this segment contain
      * the reserved key <code>RC</code>, for read count.
      *
-     * @return true if the tags for this segment contain
+     * @return true if the annotations for this segment contain
      *    the reserved key <code>RC</code>, for read count
      */
     public boolean containsReadCount() {
@@ -256,14 +256,14 @@ public final class Segment extends Gfa1Record {
     //
 
     /**
-     * Return true if the tags for this segment contain
+     * Return true if the annotations for this segment contain
      * the reserved key <code>FC</code>.
      *
-     * @return true if the tags for this segment contain
+     * @return true if the annotations for this segment contain
      *    the reserved key <code>FC</code>
      */
     public boolean containsFc() {
-        return containsTagKey("FC");
+        return containsAnnotationKey("FC");
     }
 
     /**
@@ -274,7 +274,7 @@ public final class Segment extends Gfa1Record {
      *    as an integer
      */
     public int getFc() {
-        return getTagInteger("FC");
+        return getAnnotationInteger("FC");
     }
 
     /**
@@ -285,14 +285,14 @@ public final class Segment extends Gfa1Record {
      *   as an integer
      */
     public Optional<Integer> getFcOpt() {
-        return getTagIntegerOpt("FC");
+        return getAnnotationIntegerOpt("FC");
     }
 
     /**
-     * Return true if the tags for this segment contain
+     * Return true if the annotations for this segment contain
      * the reserved key <code>FC</code>, for fragment count.
      *
-     * @return true if the tags for this segment contain
+     * @return true if the annotations for this segment contain
      *    the reserved key <code>FC</code>, for fragment count
      */
     public boolean containsFragmentCount() {
@@ -300,10 +300,10 @@ public final class Segment extends Gfa1Record {
     }
 
     /**
-     * Return true if the tags for this segment contain
+     * Return true if the annotations for this segment contain
      * the reserved key <code>FC</code>, for fragment count.
      *
-     * @return if the tags for this segment contain
+     * @return if the annotations for this segment contain
      *    the reserved key <code>FC</code>, for fragment count
      */
     public int getFragmentCount() {
@@ -324,14 +324,14 @@ public final class Segment extends Gfa1Record {
     //
 
     /**
-     * Return true if the tags for this segment contain
+     * Return true if the annotations for this segment contain
      * the reserved key <code>KC</code>.
      *
-     * @return true if the tags for this segment contain
+     * @return true if the annotations for this segment contain
      *    the reserved key <code>KC</code>
      */
     public boolean containsKc() {
-        return containsTagKey("KC");
+        return containsAnnotationKey("KC");
     }
 
     /**
@@ -342,7 +342,7 @@ public final class Segment extends Gfa1Record {
      *    as an integer
      */
     public int getKc() {
-        return getTagInteger("KC");
+        return getAnnotationInteger("KC");
     }
 
     /**
@@ -353,14 +353,14 @@ public final class Segment extends Gfa1Record {
      *   as an integer
      */
     public Optional<Integer> getKcOpt() {
-        return getTagIntegerOpt("KC");
+        return getAnnotationIntegerOpt("KC");
     }
 
     /**
-     * Return true if the tags for this segment contain
+     * Return true if the annotations for this segment contain
      * the reserved key <code>KC</code>, for k-mer count.
      *
-     * @return true if the tags for this segment contain
+     * @return true if the annotations for this segment contain
      *    the reserved key <code>KC</code>, for k-mer count
      */
     public boolean containsKmerCount() {
@@ -392,14 +392,14 @@ public final class Segment extends Gfa1Record {
     //
 
     /**
-     * Return true if the tags for this segment contain
+     * Return true if the annotations for this segment contain
      * the reserved key <code>SH</code>.
      *
-     * @return true if the tags for this segment contain
+     * @return true if the annotations for this segment contain
      *    the reserved key <code>SH</code>
      */
     public boolean containsSh() {
-        return containsTagKey("SH");
+        return containsAnnotationKey("SH");
     }
 
     /**
@@ -410,7 +410,7 @@ public final class Segment extends Gfa1Record {
      *    as a byte array
      */
     public byte[] getSh() {
-        return getTagByteArray("SH");
+        return getAnnotationByteArray("SH");
     }
 
     /**
@@ -421,15 +421,15 @@ public final class Segment extends Gfa1Record {
      *   as a byte array
      */
     public Optional<byte[]> getShOpt() {
-        return getTagByteArrayOpt("SH");
+        return getAnnotationByteArrayOpt("SH");
     }
 
     /**
-     * Return true if the tags for this segment contain
+     * Return true if the annotations for this segment contain
      * the reserved key <code>SH</code>, for SHA-256 checksum of the
      * sequence.
      *
-     * @return true if the tags for this segment contain
+     * @return true if the annotations for this segment contain
      *    the reserved key <code>SH</code>, for SHA-256 checksum of the
      *    sequence
      */
@@ -464,14 +464,14 @@ public final class Segment extends Gfa1Record {
     //
 
     /**
-     * Return true if the tags for this segment contain
+     * Return true if the annotations for this segment contain
      * the reserved key <code>UR</code>.
      *
-     * @return true if the tags for this segment contain
+     * @return true if the annotations for this segment contain
      *    the reserved key <code>UR</code>
      */
     public boolean containsUr() {
-        return containsTagKey("UR");
+        return containsAnnotationKey("UR");
     }
 
     /**
@@ -482,7 +482,7 @@ public final class Segment extends Gfa1Record {
      *    as a string
      */
     public String getUr() {
-        return getTagString("UR");
+        return getAnnotationString("UR");
     }
 
     /**
@@ -493,14 +493,14 @@ public final class Segment extends Gfa1Record {
      *   as a string
      */
     public Optional<String> getUrOpt() {
-        return getTagStringOpt("UR");
+        return getAnnotationStringOpt("UR");
     }
 
     /**
-     * Return true if the tags for this segment contain
+     * Return true if the annotations for this segment contain
      * the reserved key <code>UR</code>.
      *
-     * @return true if the tags for this segment contain
+     * @return true if the annotations for this segment contain
      *    the reserved key <code>UR</code>
      */
     public boolean containsSequenceUri() {
@@ -553,7 +553,7 @@ public final class Segment extends Gfa1Record {
 
         return Objects.equals(id, s.getId())
             && Objects.equals(sequence, s.getSequence())
-            && Objects.equals(getTags(), s.getTags());
+            && Objects.equals(getAnnotations(), s.getAnnotations());
     }
 
     @Override
@@ -561,9 +561,9 @@ public final class Segment extends Gfa1Record {
         Joiner joiner = Joiner.on("\t");
         StringBuilder sb = new StringBuilder();
         joiner.appendTo(sb, "S", id, sequence == null ? "*" : sequence);
-        if (!getTags().isEmpty()) {
+        if (!getAnnotations().isEmpty()) {
             sb.append("\t");
-            joiner.appendTo(sb, getTags().values());
+            joiner.appendTo(sb, getAnnotations().values());
         }
         return sb.toString();
     }
@@ -585,15 +585,15 @@ public final class Segment extends Gfa1Record {
         String id = tokens.get(1);
         String sequence = "*".equals(tokens.get(2)) ? null : tokens.get(2);
 
-        ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
+        ImmutableMap.Builder<String, Annotation> annotations = ImmutableMap.builder();
         for (int i = 3; i < tokens.size(); i++) {
             String token = tokens.get(i);
             if (!token.isEmpty()) {
-                Tag tag = Tag.valueOf(token);
-                tags.put(tag.getName(), tag);
+                Annotation annotation = Annotation.valueOf(token);
+                annotations.put(annotation.getName(), annotation);
             }
         }
 
-        return new Segment(id, sequence, tags.build());
+        return new Segment(id, sequence, annotations.build());
     }
 }

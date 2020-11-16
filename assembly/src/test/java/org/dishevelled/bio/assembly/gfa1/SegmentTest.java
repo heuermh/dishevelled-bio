@@ -34,7 +34,7 @@ import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.Annotation;
 
 /**
  * Unit test for Segment.
@@ -44,31 +44,31 @@ import org.dishevelled.bio.assembly.gfa.Tag;
 public class SegmentTest {
     private String id;
     private String sequence;
-    private Map<String, Tag> tags;
+    private Map<String, Annotation> annotations;
 
     @Before
     public void setUp() {
         id = "id";
         sequence = "actg";
-        tags = ImmutableMap.<String, Tag>builder().put("aa", new Tag("aa", "i", "42")).build();
+        annotations = ImmutableMap.<String, Annotation>builder().put("aa", new Annotation("aa", "i", "42")).build();
     }
 
     @Test(expected=NullPointerException.class)
     public void testCtrNullId() {
-        new Segment(null, sequence, tags);
+        new Segment(null, sequence, annotations);
     }
 
     @Test(expected=NullPointerException.class)
-    public void testCtrNullTags() {
+    public void testCtrNullAnnotations() {
         new Segment(id, sequence, null);
     }
 
     @Test
     public void testCtr() {
-        Segment segment = new Segment(id, sequence, tags);
+        Segment segment = new Segment(id, sequence, annotations);
         assertEquals(id, segment.getId());
         assertEquals(sequence, segment.getSequence());
-        assertEquals(tags, segment.getTags());
+        assertEquals(annotations, segment.getAnnotations());
         assertEquals("S\tid\tactg\taa:i:42", segment.toString());
     }
 
@@ -92,7 +92,7 @@ public class SegmentTest {
         Segment segment = Segment.valueOf("S\tid\tactg\taa:i:42");
         assertEquals(id, segment.getId());
         assertEquals(sequence, segment.getSequence());
-        assertEquals(tags, segment.getTags());
+        assertEquals(annotations, segment.getAnnotations());
     }
 
     @Test

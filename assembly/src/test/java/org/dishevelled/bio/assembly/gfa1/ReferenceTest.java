@@ -21,58 +21,53 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.assembly.gfa;
+package org.dishevelled.bio.assembly.gfa1;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 /**
- * Unit test for Tag.
+ * Unit test for Reference.
  *
  * @author  Michael Heuer
  */
-public class TagTest {
+public class ReferenceTest {
 
     @Test(expected=NullPointerException.class)
-    public void testCtrNullName() {
-        new Tag(null, "i", "42");
+    public void testCtrNullId() {
+        new Reference(null, Orientation.FORWARD);
     }
 
     @Test(expected=NullPointerException.class)
-    public void testCtrNullType() {
-        new Tag("aa", null, "42");
-    }
-
-    @Test(expected=NullPointerException.class)
-    public void testCtrNullValue() {
-        new Tag("aa", "i", null);
+    public void testCtrNullOrientation() {
+        new Reference("id", null);
     }
 
     @Test
     public void testCtr() {
-        Tag tag = new Tag("aa", "i", "42");
-        assertEquals("aa", tag.getName());
-        assertEquals("i", tag.getType());
-        assertEquals("42", tag.getValue());
-        assertEquals("aa:i:42", tag.toString());
+        Reference reference = new Reference("id", Orientation.FORWARD);
+        assertEquals("id", reference.getId());
+        assertEquals(Orientation.FORWARD, reference.getOrientation());
+        assertEquals("id+", reference.toString());
     }
 
     @Test(expected=NullPointerException.class)
     public void testValueOfNull() {
-        Tag.valueOf(null);
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testValueOfInvalidTokens() {
-        Tag.valueOf("aa:i");
+        Reference.valueOf(null);
     }
 
     @Test
-    public void testValueOf() {
-        Tag tag = Tag.valueOf("aa:i:42");
-        assertEquals("aa", tag.getName());
-        assertEquals("i", tag.getType());
-        assertEquals("42", tag.getValue());
+    public void testValueOfForward() {
+        Reference reference = Reference.valueOf("id+");
+        assertEquals("id", reference.getId());
+        assertEquals(Orientation.FORWARD, reference.getOrientation());
+    }
+
+    @Test
+    public void testValueOfReverse() {
+        Reference reference = Reference.valueOf("id-");
+        assertEquals("id", reference.getId());
+        assertEquals(Orientation.REVERSE, reference.getOrientation());
     }
 }

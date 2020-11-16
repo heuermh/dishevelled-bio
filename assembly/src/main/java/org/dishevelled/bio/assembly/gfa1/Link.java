@@ -40,8 +40,7 @@ import com.google.common.base.Splitter;
 
 import com.google.common.collect.ImmutableMap;
 
-import org.dishevelled.bio.assembly.gfa.Reference;
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.Annotation;
 
 /**
  * Link GFA 1.0 record.
@@ -69,14 +68,14 @@ public final class Link extends Gfa1Record {
      * @param source source reference, must not be null
      * @param target target reference, must not be null
      * @param overlap overlap, if any
-     * @param tags tags, must not be null
+     * @param annotations annotations, must not be null
      */
     public Link(final Reference source,
                 final Reference target,
                 @Nullable final String overlap,
-                final Map<String, Tag> tags) {
+                final Map<String, Annotation> annotations) {
 
-        super(tags);
+        super(annotations);
         checkNotNull(source);
         checkNotNull(target);
 
@@ -84,7 +83,7 @@ public final class Link extends Gfa1Record {
         this.target = target;
         this.overlap = overlap;
 
-        hashCode = Objects.hash(this.source, this.target, this.overlap, getTags());
+        hashCode = Objects.hash(this.source, this.target, this.overlap, getAnnotations());
     }
 
 
@@ -137,14 +136,14 @@ public final class Link extends Gfa1Record {
     // optional fields
 
     /**
-     * Return true if the tags for this link contain
+     * Return true if the annotations for this link contain
      * the reserved key <code>MQ</code>.
      *
-     * @return true if the tags for this link contain
+     * @return true if the annotations for this link contain
      *    the reserved key <code>MQ</code>
      */
     public boolean containsMq() {
-        return containsTagKey("MQ");
+        return containsAnnotationKey("MQ");
     }
 
     /**
@@ -155,7 +154,7 @@ public final class Link extends Gfa1Record {
      *    as an integer
      */
     public int getMq() {
-        return getTagInteger("MQ");
+        return getAnnotationInteger("MQ");
     }
 
     /**
@@ -166,14 +165,14 @@ public final class Link extends Gfa1Record {
      *   as an integer
      */
     public Optional<Integer> getMqOpt() {
-        return getTagIntegerOpt("MQ");
+        return getAnnotationIntegerOpt("MQ");
     }
 
     /**
-     * Return true if the tags for this link contain
+     * Return true if the annotations for this link contain
      * the reserved key <code>MQ</code>, for mapping quality.
      *
-     * @return true if the tags for this link contain
+     * @return true if the annotations for this link contain
      *    the reserved key <code>MQ</code>, for mapping quality
      */
     public boolean containsMappingQuality() {
@@ -205,14 +204,14 @@ public final class Link extends Gfa1Record {
     //
 
     /**
-     * Return true if the tags for this link contain
+     * Return true if the annotations for this link contain
      * the reserved key <code>NM</code>.
      *
-     * @return true if the tags for this link contain
+     * @return true if the annotations for this link contain
      *    the reserved key <code>NM</code>
      */
     public boolean containsNm() {
-        return containsTagKey("NM");
+        return containsAnnotationKey("NM");
     }
 
     /**
@@ -223,7 +222,7 @@ public final class Link extends Gfa1Record {
      *    as an integer
      */
     public int getNm() {
-        return getTagInteger("NM");
+        return getAnnotationInteger("NM");
     }
 
     /**
@@ -234,14 +233,14 @@ public final class Link extends Gfa1Record {
      *   as an integer
      */
     public Optional<Integer> getNmOpt() {
-        return getTagIntegerOpt("NM");
+        return getAnnotationIntegerOpt("NM");
     }
 
     /**
-     * Return true if the tags for this link contain
+     * Return true if the annotations for this link contain
      * the reserved key <code>NM</code>, for mismatch count.
      *
-     * @return true if the tags for this link contain
+     * @return true if the annotations for this link contain
      *    the reserved key <code>NM</code>, for mismatch count
      */
     public boolean containsMismatchCount() {
@@ -273,14 +272,14 @@ public final class Link extends Gfa1Record {
     //
 
     /**
-     * Return true if the tags for this link contain
+     * Return true if the annotations for this link contain
      * the reserved key <code>RC</code>.
      *
-     * @return true if the tags for this link contain
+     * @return true if the annotations for this link contain
      *    the reserved key <code>RC</code>
      */
     public boolean containsRc() {
-        return containsTagKey("RC");
+        return containsAnnotationKey("RC");
     }
 
     /**
@@ -291,7 +290,7 @@ public final class Link extends Gfa1Record {
      *    as an integer
      */
     public int getRc() {
-        return getTagInteger("RC");
+        return getAnnotationInteger("RC");
     }
 
     /**
@@ -302,14 +301,14 @@ public final class Link extends Gfa1Record {
      *   as an integer
      */
     public Optional<Integer> getRcOpt() {
-        return getTagIntegerOpt("RC");
+        return getAnnotationIntegerOpt("RC");
     }
 
     /**
-     * Return true if the tags for this link contain
+     * Return true if the annotations for this link contain
      * the reserved key <code>RC</code>, for read count.
      *
-     * @return true if the tags for this link contain
+     * @return true if the annotations for this link contain
      *    the reserved key <code>RC</code>, for read count
      */
     public boolean containsReadCount() {
@@ -341,14 +340,14 @@ public final class Link extends Gfa1Record {
     //
 
     /**
-     * Return true if the tags for this link contain
+     * Return true if the annotations for this link contain
      * the reserved key <code>FC</code>.
      *
-     * @return true if the tags for this link contain
+     * @return true if the annotations for this link contain
      *    the reserved key <code>FC</code>
      */
     public boolean containsFc() {
-        return containsTagKey("FC");
+        return containsAnnotationKey("FC");
     }
 
     /**
@@ -359,7 +358,7 @@ public final class Link extends Gfa1Record {
      *    as an integer
      */
     public int getFc() {
-        return getTagInteger("FC");
+        return getAnnotationInteger("FC");
     }
 
     /**
@@ -370,14 +369,14 @@ public final class Link extends Gfa1Record {
      *   as an integer
      */
     public Optional<Integer> getFcOpt() {
-        return getTagIntegerOpt("FC");
+        return getAnnotationIntegerOpt("FC");
     }
 
     /**
-     * Return true if the tags for this link contain
+     * Return true if the annotations for this link contain
      * the reserved key <code>FC</code>, for fragment count.
      *
-     * @return true if the tags for this link contain
+     * @return true if the annotations for this link contain
      *    the reserved key <code>FC</code>, for fragment count
      */
     public boolean containsFragmentCount() {
@@ -409,14 +408,14 @@ public final class Link extends Gfa1Record {
     //
 
     /**
-     * Return true if the tags for this link contain
+     * Return true if the annotations for this link contain
      * the reserved key <code>KC</code>.
      *
-     * @return true if the tags for this link contain
+     * @return true if the annotations for this link contain
      *    the reserved key <code>KC</code>
      */
     public boolean containsKc() {
-        return containsTagKey("KC");
+        return containsAnnotationKey("KC");
     }
 
     /**
@@ -427,7 +426,7 @@ public final class Link extends Gfa1Record {
      *    as an integer
      */
     public int getKc() {
-        return getTagInteger("KC");
+        return getAnnotationInteger("KC");
     }
 
     /**
@@ -438,14 +437,14 @@ public final class Link extends Gfa1Record {
      *   as an integer
      */
     public Optional<Integer> getKcOpt() {
-        return getTagIntegerOpt("KC");
+        return getAnnotationIntegerOpt("KC");
     }
 
     /**
-     * Return true if the tags for this link contain
+     * Return true if the annotations for this link contain
      * the reserved key <code>KC</code>, for k-mer count.
      *
-     * @return true if the tags for this link contain
+     * @return true if the annotations for this link contain
      *    the reserved key <code>KC</code>, for k-mer count
      */
     public boolean containsKmerCount() {
@@ -477,14 +476,14 @@ public final class Link extends Gfa1Record {
     //
 
     /**
-     * Return true if the tags for this segment contain
+     * Return true if the annotations for this segment contain
      * the reserved key <code>ID</code>.
      *
-     * @return true if the tags for this segment contain
+     * @return true if the annotations for this segment contain
      *    the reserved key <code>ID</code>
      */
     public boolean containsId() {
-        return containsTagKey("ID");
+        return containsAnnotationKey("ID");
     }
 
     /**
@@ -495,7 +494,7 @@ public final class Link extends Gfa1Record {
      *    as a string
      */
     public String getId() {
-        return getTagString("ID");
+        return getAnnotationString("ID");
     }
 
     /**
@@ -506,7 +505,7 @@ public final class Link extends Gfa1Record {
      *   as a string
      */
     public Optional<String> getIdOpt() {
-        return getTagStringOpt("ID");
+        return getAnnotationStringOpt("ID");
     }
 
 
@@ -528,7 +527,7 @@ public final class Link extends Gfa1Record {
         return Objects.equals(source, l.getSource())
             && Objects.equals(target, l.getTarget())
             && Objects.equals(overlap, l.getOverlap())
-            && Objects.equals(getTags(), l.getTags());
+            && Objects.equals(getAnnotations(), l.getAnnotations());
     }
 
     @Override
@@ -536,9 +535,9 @@ public final class Link extends Gfa1Record {
         Joiner joiner = Joiner.on("\t");
         StringBuilder sb = new StringBuilder();
         joiner.appendTo(sb, "L", source.splitToString(), target.splitToString(), overlap == null ? "*" : overlap);
-        if (!getTags().isEmpty()) {
+        if (!getAnnotations().isEmpty()) {
             sb.append("\t");
-            joiner.appendTo(sb, getTags().values());
+            joiner.appendTo(sb, getAnnotations().values());
         }
         return sb.toString();
     }
@@ -561,15 +560,15 @@ public final class Link extends Gfa1Record {
         Reference target = Reference.splitValueOf(tokens.get(3), tokens.get(4));
         String overlap = "*".equals(tokens.get(5)) ? null : tokens.get(5);
 
-        ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
+        ImmutableMap.Builder<String, Annotation> annotations = ImmutableMap.builder();
         for (int i = 6; i < tokens.size(); i++) {
             String token = tokens.get(i);
             if (!token.isEmpty()) {
-                Tag tag = Tag.valueOf(token);
-                tags.put(tag.getName(), tag);
+                Annotation annotation = Annotation.valueOf(token);
+                annotations.put(annotation.getName(), annotation);
             }
         }
 
-        return new Link(source, target, overlap, tags.build());
+        return new Link(source, target, overlap, annotations.build());
     }
 }

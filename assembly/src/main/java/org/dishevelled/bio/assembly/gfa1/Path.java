@@ -44,8 +44,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
-import org.dishevelled.bio.assembly.gfa.Reference;
-import org.dishevelled.bio.assembly.gfa.Tag;
+import org.dishevelled.bio.annotation.Annotation;
 
 /**
  * Path GFA 1.0 record.
@@ -76,14 +75,14 @@ public final class Path extends Gfa1Record {
      * @param name name, must not be null
      * @param segments list of segment references, must not be null
      * @param overlaps list of overlaps, if any
-     * @param tags tags, must not be null
+     * @param annotations annotations, must not be null
      */
     public Path(final String name,
                 final List<Reference> segments,
                 @Nullable final List<String> overlaps,
-                final Map<String, Tag> tags) {
+                final Map<String, Annotation> annotations) {
 
-        super(tags);
+        super(annotations);
         checkNotNull(name);
         checkNotNull(segments);
         if (overlaps != null) {
@@ -94,7 +93,7 @@ public final class Path extends Gfa1Record {
         this.segments = ImmutableList.copyOf(segments);
         this.overlaps = overlaps == null ? null : ImmutableList.copyOf(overlaps);
 
-        hashCode = Objects.hash(this.name, this.segments, this.overlaps, getTags());
+        hashCode = Objects.hash(this.name, this.segments, this.overlaps, getAnnotations());
     }
 
 
@@ -163,7 +162,7 @@ public final class Path extends Gfa1Record {
         return Objects.equals(name, p.getName())
             && Objects.equals(segments, p.getSegments())
             && Objects.equals(overlaps, p.getOverlaps())
-            && Objects.equals(getTags(), p.getTags());
+            && Objects.equals(getAnnotations(), p.getAnnotations());
     }
 
     @Override
@@ -191,10 +190,10 @@ public final class Path extends Gfa1Record {
             sb.append(Joiner.on(",").join(overlaps));
         }
 
-        // append tags, if any
-        if (!getTags().isEmpty()) {
+        // append annotations, if any
+        if (!getAnnotations().isEmpty()) {
             sb.append("\t");
-            sb.append(Joiner.on("\t").join(getTags().values()));
+            sb.append(Joiner.on("\t").join(getAnnotations().values()));
         }
         return sb.toString();
     }
@@ -224,15 +223,15 @@ public final class Path extends Gfa1Record {
 
         List<String> overlaps = "*".equals(tokens.get(3)) ? null : ImmutableList.copyOf(Splitter.on(",").split(tokens.get(3)));
 
-        ImmutableMap.Builder<String, Tag> tags = ImmutableMap.builder();
+        ImmutableMap.Builder<String, Annotation> annotations = ImmutableMap.builder();
         for (int i = 4; i < tokens.size(); i++) {
             String token = tokens.get(i);
             if (!token.isEmpty()) {
-                Tag tag = Tag.valueOf(token);
-                tags.put(tag.getName(), tag);
+                Annotation annotation = Annotation.valueOf(token);
+                annotations.put(annotation.getName(), annotation);
             }
         }
 
-        return new Path(name, segments, overlaps, tags.build());
+        return new Path(name, segments, overlaps, annotations.build());
     }
 }
