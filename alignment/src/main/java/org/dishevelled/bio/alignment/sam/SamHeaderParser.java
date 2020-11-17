@@ -67,7 +67,7 @@ public final class SamHeaderParser {
     /**
      * Parse SAM header fields.
      *
-     * @param values value to parse, must not be null
+     * @param value value to parse, must not be null
      * @return map of SAM header fields
      */
     static Map<String, String> parseFields(final String value) {
