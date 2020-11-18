@@ -34,10 +34,10 @@ import java.io.PrintWriter;
 
 import org.apache.hadoop.conf.Configuration;
 
-import org.dishevelled.bio.feature.Gff3Listener;
-import org.dishevelled.bio.feature.Gff3Reader;
-import org.dishevelled.bio.feature.Gff3Record;
-import org.dishevelled.bio.feature.Gff3Writer;
+import org.dishevelled.bio.feature.gff3.Gff3Listener;
+import org.dishevelled.bio.feature.gff3.Gff3Reader;
+import org.dishevelled.bio.feature.gff3.Gff3Record;
+import org.dishevelled.bio.feature.gff3.Gff3Writer;
 
 /**
  * Compress features in GFF3 format on HDFS to splittable bgzf or bzip2 compression codecs.

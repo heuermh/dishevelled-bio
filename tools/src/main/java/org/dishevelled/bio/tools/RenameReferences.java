@@ -34,10 +34,10 @@ import java.util.concurrent.Callable;
 
 import java.util.regex.Pattern;
 
-import org.dishevelled.bio.feature.Gff3Listener;
-import org.dishevelled.bio.feature.Gff3Reader;
-import org.dishevelled.bio.feature.Gff3Record;
-import org.dishevelled.bio.feature.Gff3Writer;
+import org.dishevelled.bio.feature.gff3.Gff3Listener;
+import org.dishevelled.bio.feature.gff3.Gff3Reader;
+import org.dishevelled.bio.feature.gff3.Gff3Record;
+import org.dishevelled.bio.feature.gff3.Gff3Writer;
 
 import org.dishevelled.commandline.ArgumentList;
 import org.dishevelled.commandline.CommandLine;

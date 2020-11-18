@@ -50,7 +50,7 @@ import org.bdgenomics.formats.avro.Feature;
 import org.bdgenomics.formats.avro.OntologyTerm;
 import org.bdgenomics.formats.avro.Strand;
 
-import org.dishevelled.bio.feature.Gff3Record;
+import org.dishevelled.bio.feature.gff3.Gff3Record;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

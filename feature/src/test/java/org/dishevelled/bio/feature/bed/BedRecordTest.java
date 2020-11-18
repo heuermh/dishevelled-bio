@@ -21,13 +21,13 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.feature;
+package org.dishevelled.bio.feature.bed;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import static org.dishevelled.bio.feature.BedRecord.valueOf;
+import static org.dishevelled.bio.feature.bed.BedRecord.valueOf;
 
 import com.google.common.collect.Range;
 

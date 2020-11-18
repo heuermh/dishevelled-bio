@@ -21,12 +21,12 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.feature;
+package org.dishevelled.bio.feature.gff3;
 
 import static org.junit.Assert.assertNotNull;
 
-import static org.dishevelled.bio.feature.Gff3Reader.read;
-import static org.dishevelled.bio.feature.Gff3Reader.stream;
+import static org.dishevelled.bio.feature.gff3.Gff3Reader.read;
+import static org.dishevelled.bio.feature.gff3.Gff3Reader.stream;
 
 import java.io.IOException;
 import java.io.StringReader;

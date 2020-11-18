@@ -37,7 +37,7 @@ import org.bdgenomics.convert.ConversionStringency;
 import org.bdgenomics.formats.avro.Feature;
 import org.bdgenomics.formats.avro.Strand;
 
-import org.dishevelled.bio.feature.BedRecord;
+import org.dishevelled.bio.feature.bed.BedRecord;
 
 import org.slf4j.Logger;
 

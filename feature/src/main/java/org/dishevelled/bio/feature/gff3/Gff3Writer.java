@@ -21,7 +21,7 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.feature;
+package org.dishevelled.bio.feature.gff3;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

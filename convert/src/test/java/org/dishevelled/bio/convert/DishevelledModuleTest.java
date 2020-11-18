@@ -36,7 +36,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.bdgenomics.convert.Converter;
-import org.bdgenomics.convert.ConversionStringency;
 
 import org.bdgenomics.convert.bdgenomics.BdgenomicsModule;
 
@@ -44,8 +43,8 @@ import org.bdgenomics.formats.avro.Feature;
 import org.bdgenomics.formats.avro.Genotype;
 import org.bdgenomics.formats.avro.Variant;
 
-import org.dishevelled.bio.feature.BedRecord;
-import org.dishevelled.bio.feature.Gff3Record;
+import org.dishevelled.bio.feature.bed.BedRecord;
+import org.dishevelled.bio.feature.gff3.Gff3Record;
 
 import org.dishevelled.bio.variant.vcf.VcfRecord;
 
