@@ -41,8 +41,8 @@ import org.bdgenomics.formats.avro.Strand;
 import org.bdgenomics.formats.avro.TranscriptEffect;
 import org.bdgenomics.formats.avro.Variant;
 
-import org.dishevelled.bio.feature.BedRecord;
-import org.dishevelled.bio.feature.Gff3Record;
+import org.dishevelled.bio.feature.bed.BedRecord;
+import org.dishevelled.bio.feature.gff3.Gff3Record;
 
 import org.dishevelled.bio.variant.vcf.VcfRecord;
 

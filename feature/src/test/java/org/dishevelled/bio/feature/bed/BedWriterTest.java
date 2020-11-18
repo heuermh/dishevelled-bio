@@ -21,12 +21,12 @@
     > http://www.opensource.org/licenses/lgpl-license.php
 
 */
-package org.dishevelled.bio.feature;
+package org.dishevelled.bio.feature.bed;
 
 import static org.junit.Assert.assertEquals;
 
-import static org.dishevelled.bio.feature.BedReader.read;
-import static org.dishevelled.bio.feature.BedWriter.write;
+import static org.dishevelled.bio.feature.bed.BedReader.read;
+import static org.dishevelled.bio.feature.bed.BedWriter.write;
 
 import java.io.PrintWriter;
 import java.io.StringReader;

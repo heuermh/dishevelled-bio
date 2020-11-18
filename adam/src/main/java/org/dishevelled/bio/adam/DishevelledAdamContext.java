@@ -79,10 +79,10 @@ import org.dishevelled.bio.convert.DishevelledModule;
 
 import org.dishevelled.bio.convert.htsjdk.HtsjdkModule;
 
-import org.dishevelled.bio.feature.BedReader;
-import org.dishevelled.bio.feature.BedRecord;
-import org.dishevelled.bio.feature.Gff3Reader;
-import org.dishevelled.bio.feature.Gff3Record;
+import org.dishevelled.bio.feature.bed.BedReader;
+import org.dishevelled.bio.feature.bed.BedRecord;
+import org.dishevelled.bio.feature.gff3.Gff3Reader;
+import org.dishevelled.bio.feature.gff3.Gff3Record;
 
 import org.dishevelled.bio.variant.vcf.VcfHeader;
 import org.dishevelled.bio.variant.vcf.VcfReader;

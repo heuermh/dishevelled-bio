@@ -34,10 +34,10 @@ import java.io.PrintWriter;
 
 import org.apache.hadoop.conf.Configuration;
 
-import org.dishevelled.bio.feature.BedListener;
-import org.dishevelled.bio.feature.BedReader;
-import org.dishevelled.bio.feature.BedRecord;
-import org.dishevelled.bio.feature.BedWriter;
+import org.dishevelled.bio.feature.bed.BedListener;
+import org.dishevelled.bio.feature.bed.BedReader;
+import org.dishevelled.bio.feature.bed.BedRecord;
+import org.dishevelled.bio.feature.bed.BedWriter;
 
 /**
  * Compress features in BED format on HDFS to splittable bgzf or bzip2 compression codecs.
