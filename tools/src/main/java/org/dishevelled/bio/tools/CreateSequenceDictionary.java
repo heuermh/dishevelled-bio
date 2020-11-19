@@ -49,7 +49,7 @@ import org.dishevelled.commandline.Usage;
 import org.dishevelled.commandline.argument.FileArgument;
 
 /**
- * Create a SequenceDictionary from sequences in FASTA format.
+ * Create a SequenceDictionary from DNA sequences in FASTA format.
  *
  * @author  Michael Heuer
  */
@@ -60,7 +60,7 @@ public final class CreateSequenceDictionary implements Callable<Integer> {
     private static final String USAGE = "dsh-create-sequence-dictionary [args]";
 
     /**
-     * Extract matching sequences in FASTA format.
+     * Create a SequenceDictionary from DNA sequences in FASTA format.
      *
      * @param inputFastaFile input FASTA file, if any
      * @param outputSequenceDictionaryFile output SequenceDictionary .dict file, if any

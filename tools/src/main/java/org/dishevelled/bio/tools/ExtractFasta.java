@@ -62,9 +62,11 @@ import org.dishevelled.commandline.argument.StringArgument;
 public final class ExtractFasta implements Callable<Integer> {
     private final File inputFastaFile;
     private final File outputFastaFile;
+    private final String alphabet;
     private final String name;
     private final Pattern pattern;
     private final int lineWidth;
+    static final String DEFAULT_ALPHABET = "dna";
     static final int DEFAULT_LINE_WIDTH = 70;
     static final String DESCRIPTION_LINE = "description_line";
     private static final String USAGE = "dsh-extract-fasta [args]";
@@ -79,6 +81,26 @@ public final class ExtractFasta implements Callable<Integer> {
      * @param lineWidth line width
      */
     public ExtractFasta(final File inputFastaFile, final File outputFastaFile, final String name, final String description, final int lineWidth) {
+        this(inputFastaFile, outputFastaFile, name, description, DEFAULT_ALPHABET, lineWidth);
+    }
+
+    /**
+     * Extract matching sequences in FASTA format.
+     *
+     * @since 2.0
+     * @param inputFastaFile input FASTA file, if any
+     * @param outputFastaFile output FASTA file, if any
+     * @param name exact sequence name to match, if any
+     * @param description FASTA description line regex pattern to match, if any
+     * @param alphabet input FASTA file alphabet { dna, protein }, if any
+     * @param lineWidth line width
+     */
+    public ExtractFasta(final File inputFastaFile,
+                        final File outputFastaFile,
+                        final String name,
+                        final String description,
+                        final String alphabet,
+                        final int lineWidth) {
         this.inputFastaFile = inputFastaFile;
         this.outputFastaFile = outputFastaFile;
         this.name = name;
@@ -88,6 +110,7 @@ public final class ExtractFasta implements Callable<Integer> {
         catch (PatternSyntaxException e) {
             throw new IllegalArgumentException("illegal regex pattern, caught " + e.getMessage());
         }
+        this.alphabet = alphabet;
         this.lineWidth = lineWidth;
     }
 
@@ -100,7 +123,7 @@ public final class ExtractFasta implements Callable<Integer> {
             reader = reader(inputFastaFile);
             writer = writer(outputFastaFile);
 
-            for (SequenceIterator sequences = SeqIOTools.readFastaDNA(reader); sequences.hasNext(); ) {
+            for (SequenceIterator sequences = isProteinAlphabet() ? SeqIOTools.readFastaProtein(reader) : SeqIOTools.readFastaDNA(reader); sequences.hasNext(); ) {
                 Sequence sequence = sequences.nextSequence();
                 if (sequence.getName().equals(name)) {
                     writeSequence(sequence, lineWidth, writer);
@@ -131,6 +154,10 @@ public final class ExtractFasta implements Callable<Integer> {
         }
     }
 
+    boolean isProteinAlphabet() {
+        return alphabet != null && (alphabet.equalsIgnoreCase("protein") || alphabet.equalsIgnoreCase("aa"));
+    }
+
     // copied with mods from biojava-legacy FastaFormat, as it uses PrintStream not PrintWriter
     static String describeSequence(final Sequence sequence) {
         return sequence.getAnnotation().containsProperty(DESCRIPTION_LINE) ?
@@ -157,9 +184,10 @@ public final class ExtractFasta implements Callable<Integer> {
         FileArgument outputFastaFile = new FileArgument("o", "output-fasta-file", "output FASTA file, default stdout", false);
         StringArgument name = new StringArgument("n", "name", "exact sequence name to match", false);
         StringArgument description = new StringArgument("d", "description", "FASTA description line regex pattern to match", false);
+        StringArgument alphabet = new StringArgument("e", "alphabet", "input FASTA alphabet { dna, protein }, default dna", false);
         IntegerArgument lineWidth = new IntegerArgument("w", "line-width", "line width, default " + DEFAULT_LINE_WIDTH, false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputFastaFile, outputFastaFile, name, description, lineWidth);
+        ArgumentList arguments = new ArgumentList(about, help, inputFastaFile, outputFastaFile, name, description, alphabet, lineWidth);
         CommandLine commandLine = new CommandLine(args);
 
         ExtractFasta extractFasta = null;
@@ -174,7 +202,7 @@ public final class ExtractFasta implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            extractFasta = new ExtractFasta(inputFastaFile.getValue(), outputFastaFile.getValue(), name.getValue(), description.getValue(), lineWidth.getValue(DEFAULT_LINE_WIDTH));
+            extractFasta = new ExtractFasta(inputFastaFile.getValue(), outputFastaFile.getValue(), name.getValue(), description.getValue(), alphabet.getValue(DEFAULT_ALPHABET), lineWidth.getValue(DEFAULT_LINE_WIDTH));
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);
