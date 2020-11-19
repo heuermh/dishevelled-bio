@@ -72,7 +72,9 @@ public final class FilterFasta extends AbstractFilter {
     private final List<Filter> filters;
     private final File inputFastaFile;
     private final File outputFastaFile;
+    private final String alphabet;
     private final int lineWidth;
+    static final String DEFAULT_ALPHABET = "dna";
     static final int DEFAULT_LINE_WIDTH = 70;
     static final String DESCRIPTION_LINE = "description_line";
     private static final String USAGE = "dsh-filter-fasta --length 2000 -i input.fasta.gz -o output.fasta.gz";
@@ -87,10 +89,29 @@ public final class FilterFasta extends AbstractFilter {
      * @param lineWidth line width
      */
     public FilterFasta(final List<Filter> filters, final File inputFastaFile, final File outputFastaFile, final int lineWidth) {
+        this(filters, inputFastaFile, outputFastaFile, DEFAULT_ALPHABET, lineWidth);
+    }
+
+    /**
+     * Filter sequences in FASTA format.
+     *
+     * @since 2.0
+     * @param filters list of filters, must not be null
+     * @param inputFastaFile input FASTA file, if any
+     * @param outputFastaFile output FASTA file, if any
+     * @param alphabet input FASTA file alphabet { dna, protein }, if any
+     * @param lineWidth line width
+     */
+    public FilterFasta(final List<Filter> filters,
+                       final File inputFastaFile,
+                       final File outputFastaFile,
+                       final String alphabet,
+                       final int lineWidth) {
         checkNotNull(filters);
         this.filters = ImmutableList.copyOf(filters);
         this.inputFastaFile = inputFastaFile;
         this.outputFastaFile = outputFastaFile;
+        this.alphabet = alphabet;
         this.lineWidth = lineWidth;
     }
 
@@ -103,7 +124,7 @@ public final class FilterFasta extends AbstractFilter {
             reader = reader(inputFastaFile);
             writer = writer(outputFastaFile);
 
-            for (SequenceIterator sequences = SeqIOTools.readFastaDNA(reader); sequences.hasNext(); ) {
+            for (SequenceIterator sequences = isProteinAlphabet() ? SeqIOTools.readFastaProtein(reader) : SeqIOTools.readFastaDNA(reader); sequences.hasNext(); ) {
                 Sequence sequence = sequences.nextSequence();
                 // write out record
                 boolean pass = true;
@@ -125,6 +146,10 @@ public final class FilterFasta extends AbstractFilter {
                 // empty
             }
         }
+    }
+
+    boolean isProteinAlphabet() {
+        return alphabet != null && (alphabet.equalsIgnoreCase("protein") || alphabet.equalsIgnoreCase("aa"));
     }
 
     /**
@@ -225,9 +250,10 @@ public final class FilterFasta extends AbstractFilter {
         StringArgument scriptFilter = new StringArgument("e", "script", "filter by script, eval against r", false);
         FileArgument inputFastaFile = new FileArgument("i", "input-fasta-file", "input FASTA file, default stdin", false);
         FileArgument outputFastaFile = new FileArgument("o", "output-fasta-file", "output FASTA file, default stdout", false);
+        StringArgument alphabet = new StringArgument("b", "alphabet", "input FASTA alphabet { dna, protein }, default dna", false);
         IntegerArgument lineWidth = new IntegerArgument("w", "line-width", "line width, default " + DEFAULT_LINE_WIDTH, false);
 
-        ArgumentList arguments = new ArgumentList(about, help, lengthFilter, scriptFilter, inputFastaFile, outputFastaFile, lineWidth);
+        ArgumentList arguments = new ArgumentList(about, help, lengthFilter, scriptFilter, inputFastaFile, outputFastaFile, alphabet, lineWidth);
         CommandLine commandLine = new CommandLine(args);
 
         FilterFasta filterFasta = null;
@@ -248,7 +274,7 @@ public final class FilterFasta extends AbstractFilter {
             if (scriptFilter.wasFound()) {
                 filters.add(new ScriptFilter(scriptFilter.getValue()));
             }
-            filterFasta = new FilterFasta(filters, inputFastaFile.getValue(), outputFastaFile.getValue(), lineWidth.getValue(DEFAULT_LINE_WIDTH));
+            filterFasta = new FilterFasta(filters, inputFastaFile.getValue(), outputFastaFile.getValue(), alphabet.getValue(DEFAULT_ALPHABET), lineWidth.getValue(DEFAULT_LINE_WIDTH));
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {

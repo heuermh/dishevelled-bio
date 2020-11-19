@@ -61,7 +61,7 @@ import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
 
 /**
- * Convert sequences in FASTA format to FASTQ format.
+ * Convert DNA sequences in FASTA format to FASTQ format.
  *
  * @author  Michael Heuer
  */
@@ -75,7 +75,7 @@ public final class FastaToFastq implements Callable<Integer> {
 
 
     /**
-     * Convert sequences in FASTA format to FASTQ format.
+     * Convert DNA sequences in FASTA format to FASTQ format.
      *
      * @param fastaFile input FASTA file, if any
      * @param fastqFile output FASTQ file, if any

@@ -38,14 +38,14 @@ commands:
   compress-paf    compress alignments in PAF format to splittable bgzf or bzip2 compression codecs
   compress-sam    compress alignments in SAM format to splittable bgzf or bzip2 compression codecs
   compress-vcf    compress variants and genotypes in VCF format to splittable bgzf or bzip2 compression codecs
-  create-sequence-dictionary    create a SequenceDictionary from sequences in FASTA format
+  create-sequence-dictionary    create a SequenceDictionary from DNA sequences in FASTA format
   disinterleave-fastq    convert interleaved FASTQ format into first and second sequence files in FASTQ format
   downsample-fastq    downsample sequences from files in FASTQ format
   downsample-interleaved-fastq    downsample sequences from a file in interleaved FASTQ format
   extract-fasta    extract matching sequences in FASTA format
   extract-fastq    extract matching sequences in FASTQ format
   extract-fastq-by-length    extract sequences in FASTQ format with a range of lengths
-  fasta-to-fastq    convert sequences in FASTA format to FASTQ format
+  fasta-to-fastq    convert DNA sequences in FASTA format to FASTQ format
   fastq-description    output description lines from sequences in FASTQ format
   fastq-sequence-length    output sequence lengths from sequences in FASTQ format
   fastq-to-fasta    convert sequences in FASTQ format to FASTA format
