@@ -35,76 +35,97 @@ import com.google.common.collect.ImmutableMap;
 /**
  * Abstract SAM header line.
  *
- * @since 1.1
+ * @since 2.0
  * @author  Michael Heuer
  */
 abstract class AbstractSamHeaderLine {
-    /** Header line tag. */
-    private final String tag;
+    /** Header line key. */
+    private final String key;
 
-    /** Optional field values keyed by tag. */
-    private final Map<String, String> fields;
+    /** Optional annotation values keyed by key. */
+    private final Map<String, String> annotations;
 
 
     /**
-     * Create a new abstract SAM header line with the specified tag and fields.
+     * Create a new abstract SAM header line with the specified key and annotations.
      *
-     * @param tag tag, must not be null
-     * @param fields field values keyed by tag, must not be null
+     * @param key key, must not be null
+     * @param annotations annotation values keyed by key, must not be null
      */
-    protected AbstractSamHeaderLine(final String tag, final Map<String, String> fields) {
-        checkNotNull(tag);
-        checkNotNull(fields);
-        this.tag = tag;
-        this.fields = ImmutableMap.copyOf(fields);
+    protected AbstractSamHeaderLine(final String key, final Map<String, String> annotations) {
+        checkNotNull(key);
+        checkNotNull(annotations);
+        this.key = key;
+        this.annotations = ImmutableMap.copyOf(annotations);
     }
 
 
     /**
-     * Return the tag for this SAM header line.
+     * Return the key for this SAM header line.
      *
-     * @return the tag for this SAM header line
+     * @return the key for this SAM header line
      */
-    public final String getTag() {
-        return tag;
+    public final String getKey() {
+        return key;
     }
 
     /**
-     * Return the field values for this SAM header line keyed by tag.
+     * Return the annotation values for this SAM header line keyed by key.
      *
-     * @return the field values for this SAM header line keyed by tag
+     * @return the annotation values for this SAM header line keyed by key
      */
-    public final Map<String, String> getFields() {
-        return fields;
+    public final Map<String, String> getAnnotations() {
+        return annotations;
     }
 
     /**
-     * Return true if this SAM record contains the specified optional field key.
+     * Return true if this SAM record contains the specified optional annotation key.
      *
      * @param key key
-     * @return true if this SAM record contains the specified optional field key
+     * @return true if this SAM record contains the specified optional annotation key
      */
-    public final boolean containsFieldKey(final String key) {
-        return fields.containsKey(key);
+    public final boolean containsAnnotationKey(final String key) {
+        return annotations.containsKey(key);
     }
 
     /**
-     * Return the field value for the specified key parsed into a string.
+     * Return the annotation value for the specified key parsed into a string.
      *
      * @param key key, must not be null
-     * @return the field value for the specified key parsed into a string
+     * @return the annotation value for the specified key parsed into a string
      */
-    public final String getField(final String key) {
-        return fields.get(key);
+    public final String getAnnotation(final String key) {
+        return annotations.get(key);
     }
 
     /**
-     * Return an optional wrapping the field value for the specified key parsed into a string.
+     * Return an optional wrapping the annotation value for the specified key parsed into a string.
      *
      * @param key key, must not be null
-     * @return an optional wrapping the field value for the specified key parsed into a string
+     * @return an optional wrapping the annotation value for the specified key parsed into a string
      */
-    public final Optional<String> getFieldOpt(final String key) {
-        return Optional.ofNullable(getField(key));
+    public final Optional<String> getAnnotationOpt(final String key) {
+        return Optional.ofNullable(getAnnotation(key));
+    }
+
+    /**
+     * Parse SAM header annotations.
+     *
+     * @param value value to parse, must not be null
+     * @return map of SAM header annotations
+     */
+    protected static final Map<String, String> parseAnnotations(final String value) {
+        checkNotNull(value);
+        ImmutableMap.Builder<String, String> annotations = ImmutableMap.builder();
+        String[] tokens = value.split("\t");
+        for (String token : tokens) {
+            if (token.length() < 4) {
+                throw new IllegalArgumentException("invalid annotation " + token + ", must have at least four characters, e.g. AH:*");
+            }
+            String k = token.substring(0, 2);
+            String v = token.substring(3);
+            annotations.put(k, v);
+        }
+        return annotations.build();
     }
 }

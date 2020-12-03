@@ -24,7 +24,6 @@
 package org.dishevelled.bio.alignment.sam;
 
 import static org.dishevelled.bio.alignment.sam.SamReader.header;
-import static org.dishevelled.bio.alignment.sam.SamReader.parse;
 import static org.dishevelled.bio.alignment.sam.SamReader.stream;
 import static org.dishevelled.bio.alignment.sam.SamReader.records;
 
@@ -49,14 +48,18 @@ import java.nio.CharBuffer;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
 
 import com.google.common.primitives.Bytes;
+
+import org.dishevelled.bio.annotation.Annotation;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -69,55 +72,38 @@ import org.junit.Test;
 public final class SamReaderTest {
     private Readable readable;
     private Readable emptyReadable;
-    private SamParseListener parseListener;
-    private SamStreamListener streamListener;
+    private SamListener listener;
     private static final String SAM = "NA12878-platinum-chr20.1-60250.sam";
 
     @Before
     public void setUp() {
         readable = CharBuffer.wrap("@HD\tVN:1.5\tSO:coordinate");
         emptyReadable = CharBuffer.wrap("");
-        parseListener = new SamParseAdapter();
-        streamListener = new SamStreamAdapter();
-    }
-
-    @Test(expected=NullPointerException.class)
-    public void testParseNullReadable() throws Exception {
-        parse(null, parseListener);
-    }
-
-    @Test(expected=NullPointerException.class)
-    public void testParseNullParseListener() throws Exception {
-        parse(readable, null);
-    }
-
-    @Test
-    public void testParse() throws Exception {
-        parse(readable, parseListener);
+        listener = new SamAdapter() {};
     }
 
     @Test(expected=NullPointerException.class)
     public void testStreamNullReadable() throws Exception {
-        stream(null, streamListener);
+        stream((Readable) null, listener);
     }
 
     @Test(expected=NullPointerException.class)
-    public void testStreamNullStreamListener() throws Exception {
+    public void testStreamNullListener() throws Exception {
         stream(readable, null);
     }
 
     @Test
     public void testStream() throws Exception {
-        stream(readable, streamListener);
+        stream(readable, listener);
     }
 
     @Test
     public void testStreamFile() throws Exception {
         try (BufferedReader reader = new BufferedReader(new FileReader(createFile(SAM)))) {
-            stream(reader, new SamStreamAdapter() {
+            stream(reader, new SamAdapter() {
                     @Override
-                    public void record(final SamRecord record) {
-                        validateRecord(record);
+                    public boolean record(final SamRecord record) {
+                        return validateRecord(record);
                     }
                 });
         }
@@ -144,14 +130,9 @@ public final class SamReaderTest {
         assertTrue(header.getHeaderLineOpt().isPresent());
         SamHeaderLine headerLine = header.getHeaderLineOpt().get();
         assertEquals("1.5", headerLine.getVn());
-        assertEquals("1.5", headerLine.getField("VN"));
-        assertTrue(headerLine.getFieldOpt("VN").isPresent());
-        assertEquals("1.5", headerLine.getFieldOpt("VN").get());
-        assertEquals("1.5", headerLine.getFields().get("VN"));
         assertEquals("coordinate", headerLine.getSo());
-        assertEquals("coordinate", headerLine.getFields().get("SO"));
         assertFalse(headerLine.containsGo());
-        assertFalse(headerLine.getFields().containsKey("GO"));
+        assertFalse(headerLine.getAnnotations().containsKey("GO"));
         assertTrue(header.getSequenceHeaderLines().isEmpty());
         assertTrue(header.getReadGroupHeaderLines().isEmpty());
         assertTrue(header.getProgramHeaderLines().isEmpty());
@@ -240,99 +221,88 @@ public final class SamReaderTest {
         for (SamRecord record : records(createInputStream("tags.sam"))) {
             if ("StandardTags".equals(record.getQname())) {
                 // NM:i:0  MD:Z:10  XS:A:-
-                assertEquals(0, record.getFieldInteger("NM"));
-                assertEquals("10", record.getFieldString("MD"));
-                assertEquals('-', record.getFieldCharacter("XS"));
-                assertEquals("i", record.getFieldTypes().get("NM"));
-                assertEquals("Z", record.getFieldTypes().get("MD"));
-                assertEquals("A", record.getFieldTypes().get("XS"));
+                assertEquals(0, record.getAnnotationInteger("NM"));
+                assertEquals("10", record.getAnnotationString("MD"));
+                assertEquals('-', record.getAnnotationCharacter("XS"));
             }
             else if ("MDTagWithEdits".equals(record.getQname())) {
                 // NM:i:2  MD:Z:3G4T1
-                assertEquals(2, record.getFieldInteger("NM"));
-                assertEquals("3G4T1", record.getFieldString("MD"));
-                assertEquals("i", record.getFieldTypes().get("NM"));
-                assertEquals("Z", record.getFieldTypes().get("MD"));
+                assertEquals(2, record.getAnnotationInteger("NM"));
+                assertEquals("3G4T1", record.getAnnotationString("MD"));
             }
             else if ("HexByteArray".equals(record.getQname())) {
                 // NM:i:0  MD:Z:10  XB:H:010203
-                assertEquals(0, record.getFieldInteger("NM"));
-                assertEquals("10", record.getFieldString("MD"));
-                assertEquals("010203", record.getFieldString("XB"));
-                assertTrue(Arrays.equals(decodeHex("010203"), record.getFieldByteArray("XB")));
-                assertEquals(Bytes.asList(decodeHex("010203")), record.getFieldBytes("XB"));
-                assertEquals("i", record.getFieldTypes().get("NM"));
-                assertEquals("Z", record.getFieldTypes().get("MD"));
-                assertEquals("H", record.getFieldTypes().get("XB"));
+                assertEquals(0, record.getAnnotationInteger("NM"));
+                assertEquals("10", record.getAnnotationString("MD"));
+                assertEquals("010203", record.getAnnotationString("XB"));
+                assertTrue(Arrays.equals(decodeHex("010203"), record.getAnnotationByteArray("XB")));
+                assertEquals(Bytes.asList(decodeHex("010203")), record.getAnnotationBytes("XB"));
             }
             else if ("LengthOneArrays".equals(record.getQname())) {
                 // NM:i:0  MD:Z:10  XB:B:c,1  XI:B:i,1  XS:B:s,1  XF:B:f,1
-                assertEquals(0, record.getFieldInteger("NM"));
-                assertEquals("10", record.getFieldString("MD"));
-                assertEquals(ImmutableList.of(1), record.getFieldIntegers("XB"));
-                assertEquals(ImmutableList.of(1), record.getFieldIntegers("XI"));
-                assertEquals(ImmutableList.of(1), record.getFieldIntegers("XS"));
-                assertEquals(ImmutableList.of(1.0f), record.getFieldFloats("XF"));
-                assertEquals("B", record.getFieldTypes().get("XB"));
-                assertEquals("c", record.getFieldArrayTypes().get("XB"));
-                assertEquals("B", record.getFieldTypes().get("XI"));
-                assertEquals("i", record.getFieldArrayTypes().get("XI"));
-                assertEquals("B", record.getFieldTypes().get("XS"));
-                assertEquals("s", record.getFieldArrayTypes().get("XS"));
-                assertEquals("B", record.getFieldTypes().get("XF"));
-                assertEquals("f", record.getFieldArrayTypes().get("XF"));
+                assertEquals(0, record.getAnnotationInteger("NM"));
+                assertEquals("10", record.getAnnotationString("MD"));
+                assertEquals(ImmutableList.of(1), record.getAnnotationIntegers("XB"));
+                assertEquals(ImmutableList.of(1), record.getAnnotationIntegers("XI"));
+                assertEquals(ImmutableList.of(1), record.getAnnotationIntegers("XS"));
+                assertEquals(ImmutableList.of(1.0f), record.getAnnotationFloats("XF"));
             }
             else if ("LongerArrays".equals(record.getQname())) {
                 // NM:i:0  MD:Z:10  XB:B:c,1,2,3  XI:B:i,1,2,3  XS:B:s,1,2,3  XS:B:f,1,2,3
-                assertEquals(0, record.getFieldInteger("NM"));
-                assertEquals("10", record.getFieldString("MD"));
-                assertEquals(ImmutableList.of(1, 2, 3), record.getFieldIntegers("XB"));
-                assertEquals(ImmutableList.of(1, 2, 3), record.getFieldIntegers("XI"));
-                assertEquals(ImmutableList.of(1, 2, 3), record.getFieldIntegers("XS"));
-                assertEquals(ImmutableList.of(1.0f, 2.0f, 3.0f), record.getFieldFloats("XF"));
-                assertEquals("B", record.getFieldTypes().get("XB"));
-                assertEquals("c", record.getFieldArrayTypes().get("XB"));
-                assertEquals("B", record.getFieldTypes().get("XI"));
-                assertEquals("i", record.getFieldArrayTypes().get("XI"));
-                assertEquals("B", record.getFieldTypes().get("XS"));
-                assertEquals("s", record.getFieldArrayTypes().get("XS"));
-                assertEquals("B", record.getFieldTypes().get("XF"));
-                assertEquals("f", record.getFieldArrayTypes().get("XF"));
+                assertEquals(0, record.getAnnotationInteger("NM"));
+                assertEquals("10", record.getAnnotationString("MD"));
+                assertEquals(ImmutableList.of(1, 2, 3), record.getAnnotationIntegers("XB"));
+                assertEquals(ImmutableList.of(1, 2, 3), record.getAnnotationIntegers("XI"));
+                assertEquals(ImmutableList.of(1, 2, 3), record.getAnnotationIntegers("XS"));
+                assertEquals(ImmutableList.of(1.0f, 2.0f, 3.0f), record.getAnnotationFloats("XF"));
             }
             else if ("SignedArrays".equals(record.getQname())) {
                 // NM:i:0  MD:Z:10  XB:B:c,-1  XI:B:i,-1  XS:B:s,-1
-                assertEquals(0, record.getFieldInteger("NM"));
-                assertEquals("10", record.getFieldString("MD"));
-                assertEquals(ImmutableList.of(-1), record.getFieldIntegers("XB"));
-                assertEquals(ImmutableList.of(-1), record.getFieldIntegers("XI"));
-                assertEquals(ImmutableList.of(-1), record.getFieldIntegers("XS"));
-                assertEquals("B", record.getFieldTypes().get("XB"));
-                assertEquals("c", record.getFieldArrayTypes().get("XB"));
-                assertEquals("B", record.getFieldTypes().get("XI"));
-                assertEquals("i", record.getFieldArrayTypes().get("XI"));
-                assertEquals("B", record.getFieldTypes().get("XS"));
-                assertEquals("s", record.getFieldArrayTypes().get("XS"));
+                assertEquals(0, record.getAnnotationInteger("NM"));
+                assertEquals("10", record.getAnnotationString("MD"));
+                assertEquals(ImmutableList.of(-1), record.getAnnotationIntegers("XB"));
+                assertEquals(ImmutableList.of(-1), record.getAnnotationIntegers("XI"));
+                assertEquals(ImmutableList.of(-1), record.getAnnotationIntegers("XS"));
             }
             else if ("UnsignedArrays".equals(record.getQname())) {
                 // NM:i:0  MD:Z:10  XB:B:C,1,2,3  XI:B:I,1,2,3  XS:B:S,1,2,3
-                assertEquals(0, record.getFieldInteger("NM"));
-                assertEquals("10", record.getFieldString("MD"));
-                assertEquals(ImmutableList.of(1, 2, 3), record.getFieldIntegers("XB"));
-                assertEquals(ImmutableList.of(1, 2, 3), record.getFieldIntegers("XI"));
-                assertEquals(ImmutableList.of(1, 2, 3), record.getFieldIntegers("XS"));
-                assertEquals("B", record.getFieldTypes().get("XB"));
-                assertEquals("C", record.getFieldArrayTypes().get("XB"));
-                assertEquals("B", record.getFieldTypes().get("XI"));
-                assertEquals("I", record.getFieldArrayTypes().get("XI"));
-                assertEquals("B", record.getFieldTypes().get("XS"));
-                assertEquals("S", record.getFieldArrayTypes().get("XS"));
+                assertEquals(0, record.getAnnotationInteger("NM"));
+                assertEquals("10", record.getAnnotationString("MD"));
+                assertEquals(ImmutableList.of(1, 2, 3), record.getAnnotationIntegers("XB"));
+                assertEquals(ImmutableList.of(1, 2, 3), record.getAnnotationIntegers("XI"));
+                assertEquals(ImmutableList.of(1, 2, 3), record.getAnnotationIntegers("XS"));
             }
         }
     }
 
     @Test
-    public void testRoundTripDefaults() throws Exception {
-        SamRecord expected = SamRecord.builder().build();
+    public void testRoundTrip() throws Exception {
+        Map<String, Annotation> annotations = ImmutableMap.<String, Annotation>builder()
+            .put("NM", Annotation.valueOf("NM:i:0"))
+            .put("MD", Annotation.valueOf("MD:Z:101"))
+            .put("AS", Annotation.valueOf("AS:i:101"))
+            .put("XS", Annotation.valueOf("XS:i:55"))
+            .put("RG", Annotation.valueOf("RG:Z:NA12878-1"))
+            .put("MQ", Annotation.valueOf("MQ:i:60"))
+            .put("ms", Annotation.valueOf("ms:i:3614"))
+            .put("mc", Annotation.valueOf("mc:i:60612"))
+            .put("MC", Annotation.valueOf("MC:Z:101M"))
+            .put("ZB", Annotation.valueOf("ZB:B:i,1,2"))
+            .put("ZT", Annotation.valueOf("ZT:B:f,3.4,4.5"))
+            .build();
+
+        SamRecord expected = new SamRecord("ERR194147.765130386",
+                                           99,
+                                           "chr20",
+                                           60250,
+                                           60,
+                                           "101M",
+                                           "=",
+                                           60512,
+                                           363,
+                                           "ACTCCATCCCATTCCATTCCACTCCCTTCATTTCCATTCCAGTCCATTCCATTCCATTCCATTCCATTCCACTCCACTCCATTCCATTCCACTGCACTCCA",
+                                           "CCCFFFFFHHHHHJJJJJJJJJJJJJJJJJJJJJJJJJIJJJJJJIIJJJJJJJJJJJJJHIIJIJGIJJJJJJJJJJJJJIJJJJJJJJJJJGGHHHFF@",
+                                           annotations);
 
         File tmp = File.createTempFile("samReaderTest", ".sam");
         tmp.deleteOnExit();
@@ -352,37 +322,17 @@ public final class SamReaderTest {
         assertEquals(expected.getTlen(), observed.getTlen());
         assertEquals(expected.getSeq(), observed.getSeq());
         assertEquals(expected.getQual(), observed.getQual());
-        assertEquals(expected.getFields(), observed.getFields());
-        assertEquals(expected.getFieldTypes(), observed.getFieldTypes());
-        assertEquals(expected.getFieldArrayTypes(), observed.getFieldArrayTypes());
-    }
+        assertEquals(expected.getAnnotations(), observed.getAnnotations());
 
-    @Test
-    public void testRoundTripOptionalFields() throws Exception {
-        SamRecord expected = SamRecord.builder()
-            .withField("ZA", "A", "c")
-            .withField("ZI", "i", "42")
-            .withField("ZF", "f", "3.14")
-            .withField("ZH", "H", "010203")
-            .withField("ZZ", "Z", "hello world!")
-            .withArrayField("ZB", "B", "i", "1", "2")
-            .withArrayField("ZT", "B", "f", "3.4", "4.5")
-            .build();
+        assertEquals("B", observed.getAnnotations().get("ZB").getType());
+        assertEquals("i", observed.getAnnotations().get("ZB").getArrayType());
+        assertEquals(Integer.valueOf(1), observed.getAnnotationIntegers("ZB").get(0));
+        assertEquals(Integer.valueOf(2), observed.getAnnotationIntegers("ZB").get(1));
 
-        File tmp = File.createTempFile("samReaderTest", ".sam");
-        tmp.deleteOnExit();
-        try (PrintWriter writer = new PrintWriter(new FileWriter(tmp))) {
-            SamWriter.writeRecord(expected, writer);
-        }
-        SamRecord observed = records(tmp).iterator().next();
-
-        assertEquals(expected.getFieldCharacter("ZA"), observed.getFieldCharacter("ZA"));
-        assertEquals(expected.getFieldInteger("ZI"), observed.getFieldInteger("ZI"));
-        assertEquals(expected.getFieldFloat("ZF"), observed.getFieldFloat("ZF"), 0.1f);
-        assertTrue(Arrays.equals(expected.getFieldByteArray("ZH"), observed.getFieldByteArray("ZH")));
-        assertEquals(expected.getFieldString("ZZ"), observed.getFieldString("ZZ"));
-        assertEquals(expected.getFieldIntegers("ZB"), observed.getFieldIntegers("ZB"));
-        assertEquals(expected.getFieldFloats("ZT"), observed.getFieldFloats("ZT"));
+        assertEquals("B", observed.getAnnotations().get("ZT").getType());
+        assertEquals("f", observed.getAnnotations().get("ZT").getArrayType());
+        assertEquals(Float.valueOf(3.4f), observed.getAnnotationFloats("ZT").get(0));
+        assertEquals(Float.valueOf(4.5f), observed.getAnnotationFloats("ZT").get(1));
     }
 
     @Test
@@ -414,20 +364,16 @@ public final class SamReaderTest {
         assertTrue(header.getHeaderLineOpt().isPresent());
         SamHeaderLine headerLine = header.getHeaderLineOpt().get();
         assertEquals("1.5", headerLine.getVn());
-        assertEquals("1.5", headerLine.getFields().get("VN"));
         assertEquals("coordinate", headerLine.getSo());
-        assertEquals("coordinate", headerLine.getFields().get("SO"));
         assertFalse(headerLine.containsGo());
-        assertFalse(headerLine.getFields().containsKey("GO"));
+        assertFalse(headerLine.getAnnotations().containsKey("GO"));
 
         assertFalse(header.getSequenceHeaderLines().isEmpty());
         for (SamSequenceHeaderLine sequenceHeaderLine : header.getSequenceHeaderLines()) {
             if ("chr6".equals(sequenceHeaderLine.getSn())) {
-                assertEquals("chr6", sequenceHeaderLine.getFields().get("SN"));
                 assertEquals("170805979", sequenceHeaderLine.getLn());
-                assertEquals("170805979", sequenceHeaderLine.getFields().get("LN"));
                 assertFalse(sequenceHeaderLine.containsSp());
-                assertFalse(sequenceHeaderLine.getFields().containsKey("SP"));
+                assertFalse(sequenceHeaderLine.getAnnotations().containsKey("SP"));
             }
         }
 
@@ -435,32 +381,28 @@ public final class SamReaderTest {
         assertEquals(1, header.getReadGroupHeaderLines().size());
         SamReadGroupHeaderLine readGroupHeaderLine = header.getReadGroupHeaderLines().get(0);
         assertEquals("NA12878-1", readGroupHeaderLine.getId());
-        assertEquals("NA12878-1", readGroupHeaderLine.getFields().get("ID"));
         assertEquals("NA12878-1", readGroupHeaderLine.getSm());
         assertEquals("NA12878-1", readGroupHeaderLine.getPu());
         assertEquals("illumina", readGroupHeaderLine.getPl());
-        assertEquals("illumina", readGroupHeaderLine.getFields().get("PL"));
 
         assertFalse(header.getProgramHeaderLines().isEmpty());
         for (SamProgramHeaderLine programHeaderLine : header.getProgramHeaderLines()) {
             if ("bwa_3".equals(programHeaderLine.getId())) {
-                assertEquals("bwa_3", programHeaderLine.getFields().get("ID"));
                 assertEquals("bwa", programHeaderLine.getPn());
                 assertEquals("0.7.15-r1140", programHeaderLine.getVn());
-                assertEquals("0.7.15-r1140", programHeaderLine.getFields().get("VN"));
             }
         }
 
         assertFalse(header.getCommentHeaderLines().isEmpty());
         for (SamCommentHeaderLine commentHeaderLine : header.getCommentHeaderLines()) {
-            if ("all".equals(commentHeaderLine.getFields().get("ST")) && "all".equals(commentHeaderLine.getFields().get("PA"))) {
-                assertEquals("checksum", commentHeaderLine.getFields().get("TY"));
-                assertEquals("crc32prod", commentHeaderLine.getFields().get("HA"));
+            if ("all".equals(commentHeaderLine.getAnnotation("ST")) && "all".equals(commentHeaderLine.getAnnotation("PA"))) {
+                assertEquals("checksum", commentHeaderLine.getAnnotation("TY"));
+                assertEquals("crc32prod", commentHeaderLine.getAnnotation("HA"));
             }
         }
     }
 
-    private static void validateRecord(final SamRecord record) {
+    private static boolean validateRecord(final SamRecord record) {
         assertNotNull(record);
 
         if ("ERR194147.765130386".equals(record.getQname())) {
@@ -474,18 +416,17 @@ public final class SamReaderTest {
             assertEquals(363, record.getTlen());
             assertEquals("ACTCCATCCCATTCCATTCCACTCCCTTCATTTCCATTCCAGTCCATTCCATTCCATTCCATTCCATTCCACTCCACTCCATTCCATTCCACTGCACTCCA", record.getSeq());
             assertEquals("CCCFFFFFHHHHHJJJJJJJJJJJJJJJJJJJJJJJJJIJJJJJJIIJJJJJJJJJJJJJHIIJIJGIJJJJJJJJJJJJJIJJJJJJJJJJJGGHHHFF@", record.getQual());
-            assertEquals(0, record.getFieldInteger("NM"));
-            assertEquals("101", record.getFieldString("MD"));
-            assertEquals(101, record.getFieldInteger("AS"));
-            assertEquals(55, record.getFieldInteger("XS"));
-            assertEquals("NA12878-1", record.getFieldString("RG"));
-            assertEquals(60, record.getFieldInteger("MQ"));
-            assertEquals(3614, record.getFieldInteger("ms"));
-            assertEquals(60612, record.getFieldInteger("mc"));
-            assertEquals("101M", record.getFieldString("MC"));
-            assertEquals("i", record.getFieldTypes().get("NM"));
-            assertEquals("Z", record.getFieldTypes().get("MC"));
+            assertEquals(0, record.getAnnotationInteger("NM"));
+            assertEquals("101", record.getAnnotationString("MD"));
+            assertEquals(101, record.getAnnotationInteger("AS"));
+            assertEquals(55, record.getAnnotationInteger("XS"));
+            assertEquals("NA12878-1", record.getAnnotationString("RG"));
+            assertEquals(60, record.getAnnotationInteger("MQ"));
+            assertEquals(3614, record.getAnnotationInteger("ms"));
+            assertEquals(60612, record.getAnnotationInteger("mc"));
+            assertEquals("101M", record.getAnnotationString("MC"));
         }
+        return true;
     }
 
     private static void validateRecords(final Iterable<SamRecord> records) {

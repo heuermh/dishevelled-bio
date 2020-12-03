@@ -26,8 +26,6 @@ package org.dishevelled.bio.alignment.sam;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import static org.dishevelled.bio.alignment.sam.SamHeaderParser.parseFields;
-
 import java.util.Map;
 
 import javax.annotation.concurrent.Immutable;
@@ -35,7 +33,7 @@ import javax.annotation.concurrent.Immutable;
 /**
  * SAM comment header line.
  *
- * @since 1.1
+ * @since 2.0
  * @author  Michael Heuer
  */
 @Immutable
@@ -44,19 +42,19 @@ public final class SamCommentHeaderLine extends AbstractSamHeaderLine {
     /**
      * Create a new SAM comment header line.
      *
-     * @param fields field values keyed by tag, must not be null
+     * @param annotations annotation values keyed by key, must not be null
      */
-    private SamCommentHeaderLine(final Map<String, String> fields) {
-        super("CO", fields);
+    private SamCommentHeaderLine(final Map<String, String> annotations) {
+        super("CO", annotations);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("@");
-        sb.append(getTag());
+        sb.append(getKey());
 
-        for (Map.Entry<String, String> entry : getFields().entrySet()) {
+        for (Map.Entry<String, String> entry : getAnnotations().entrySet()) {
             sb.append("\t");
             sb.append(entry.getKey());
             sb.append(":");
@@ -75,7 +73,7 @@ public final class SamCommentHeaderLine extends AbstractSamHeaderLine {
         checkNotNull(value);
         checkArgument(value.startsWith("@CO"));
 
-        Map<String, String> fields = parseFields(value.replace("@CO", "").trim());
-        return new SamCommentHeaderLine(fields);
+        Map<String, String> annotations = parseAnnotations(value.replace("@CO", "").trim());
+        return new SamCommentHeaderLine(annotations);
     }
 }

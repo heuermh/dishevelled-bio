@@ -51,7 +51,7 @@ import org.dishevelled.bio.alignment.sam.SamHeader;
 import org.dishevelled.bio.alignment.sam.SamReader;
 import org.dishevelled.bio.alignment.sam.SamRecord;
 import org.dishevelled.bio.alignment.sam.SamWriter;
-import org.dishevelled.bio.alignment.sam.SamStreamAdapter;
+import org.dishevelled.bio.alignment.sam.SamListener;
 
 import org.dishevelled.commandline.ArgumentList;
 import org.dishevelled.commandline.CommandLine;
@@ -99,14 +99,15 @@ public final class FilterSam extends AbstractFilter {
             writer = writer(outputSamFile);
 
             final PrintWriter w = writer;
-            SamReader.stream(reader(inputSamFile), new SamStreamAdapter() {
+            SamReader.stream(reader(inputSamFile), new SamListener() {
                     @Override
-                    public void header(final SamHeader header) {
+                    public boolean header(final SamHeader header) {
                         SamWriter.writeHeader(header, w);
+                        return true;
                     }
 
                     @Override
-                    public void record(final SamRecord record) {
+                    public boolean record(final SamRecord record) {
                         // write out record
                         boolean pass = true;
                         for (Filter filter : filters) {
@@ -115,6 +116,7 @@ public final class FilterSam extends AbstractFilter {
                         if (pass) {
                             SamWriter.writeRecord(record, w);
                         }
+                        return true;
                     }
                 });
 

@@ -52,10 +52,10 @@ public class FilterSamBenchmarks {
 
     @Setup(Level.Invocation)
     public void setUp() throws Exception {
-        inputSamFile = File.createTempFile("filterSamBenchmarks", ".sam.gz");
-        outputSamFile = File.createTempFile("filterSamBenchmarks", ".sam.gz");
+        inputSamFile = File.createTempFile("filterSamBenchmarks", ".sam");
+        outputSamFile = File.createTempFile("filterSamBenchmarks", ".sam");
 
-        copyResource("NA12878-platinum-chr20.10k.sam.gz", inputSamFile);
+        copyResource("CEUTrio.HiSeq.WGS.b37.NA12878.20.21.10k.sam", inputSamFile);
     }
 
     @TearDown(Level.Invocation)

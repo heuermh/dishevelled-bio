@@ -118,7 +118,7 @@ public final class PafReader {
     }
 
     /**
-     * Stream zero or more PAF records from the specified readable.
+     * Stream PAF records if any from the specified readable.
      *
      * @param readable readable to stream from, must not be null
      * @param listener event based listener callback, must not be null
@@ -133,7 +133,7 @@ public final class PafReader {
     }
 
     /**
-     * Stream zero or more PAF records from the specified file.
+     * Stream PAF records if any from the specified file.
      *
      * @param file file to stream from, must not be null
      * @param listener event based listener callback, must not be null
@@ -148,7 +148,7 @@ public final class PafReader {
     }
 
     /**
-     * Stream zero or more PAF records from the specified URL.
+     * Stream PAF records if any from the specified URL.
      *
      * @param url URL to stream from, must not be null
      * @param listener event based listener callback, must not be null
@@ -163,7 +163,7 @@ public final class PafReader {
     }
 
     /**
-     * Stream zero or more PAF records from the specified input stream.
+     * Stream PAF records if any from the specified input stream.
      *
      * @param inputStream input stream to stream from, must not be null
      * @param listener event based listener callback, must not be null

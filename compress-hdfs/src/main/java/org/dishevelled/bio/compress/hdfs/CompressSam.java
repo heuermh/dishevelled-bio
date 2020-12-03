@@ -41,7 +41,7 @@ import org.dishevelled.bio.alignment.sam.SamHeader;
 import org.dishevelled.bio.alignment.sam.SamReader;
 import org.dishevelled.bio.alignment.sam.SamRecord;
 import org.dishevelled.bio.alignment.sam.SamWriter;
-import org.dishevelled.bio.alignment.sam.SamStreamAdapter;
+import org.dishevelled.bio.alignment.sam.SamListener;
 
 /**
  * Compress alignments in SAM format on HDFS to splittable bgzf or bzip2 compression codecs.
@@ -71,15 +71,17 @@ public final class CompressSam {
             writer = writer(outputPath, conf);
             
             final PrintWriter w = writer;
-            SamReader.stream(reader, new SamStreamAdapter() {
+            SamReader.stream(reader, new SamListener() {
                     @Override
-                    public void header(final SamHeader header) {
+                    public boolean header(final SamHeader header) {
                         SamWriter.writeHeader(header, w);
+                        return true;
                     }
 
                     @Override
-                    public void record(final SamRecord record) {
+                    public boolean record(final SamRecord record) {
                         SamWriter.writeRecord(record, w);
+                        return true;
                     }
                 });
         }

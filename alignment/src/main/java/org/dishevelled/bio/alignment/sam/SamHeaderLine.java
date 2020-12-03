@@ -26,8 +26,6 @@ package org.dishevelled.bio.alignment.sam;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import static org.dishevelled.bio.alignment.sam.SamHeaderParser.parseFields;
-
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
@@ -38,7 +36,7 @@ import javax.annotation.concurrent.Immutable;
 /**
  * SAM header line.
  *
- * @since 1.1
+ * @since 2.0
  * @author  Michael Heuer
  */
 @Immutable
@@ -47,56 +45,56 @@ public final class SamHeaderLine extends AbstractSamHeaderLine {
     /**
      * Create a new SAM header line.
      *
-     * @param fields field values keyed by tag, must not be null
+     * @param annotations annotation values keyed by key, must not be null
      */
-    private SamHeaderLine(final Map<String, String> fields) {
-        super("HD", fields);
+    private SamHeaderLine(final Map<String, String> annotations) {
+        super("HD", annotations);
     }
 
-    // required fields
+    // required annotations
 
     public String getVn() {
-        return getField("VN");
+        return getAnnotation("VN");
     }
 
-    // optional fields
+    // optional annotations
 
     public boolean containsSo() {
-        return containsFieldKey("SO");
+        return containsAnnotationKey("SO");
     }
 
     public String getSo() {
-        return getField("SO");
+        return getAnnotation("SO");
     }
 
     public Optional<String> getSoOpt() {
-        return getFieldOpt("SO");
+        return getAnnotationOpt("SO");
     }
 
     public boolean containsGo() {
-        return containsFieldKey("GO");
+        return containsAnnotationKey("GO");
     }
 
     public String getGo() {
-        return getField("GO");
+        return getAnnotation("GO");
     }
 
     public Optional<String> getGoOpt() {
-        return getFieldOpt("GO");
+        return getAnnotationOpt("GO");
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("@");
-        sb.append(getTag());
+        sb.append(getKey());
 
-        // required fields
+        // required annotations
         sb.append("\t");
         sb.append("VN:");
         sb.append(getVn());
 
-        // optional fields
+        // optional annotations
         if (containsSo()) {
             sb.append("\t");
             sb.append("SO:");
@@ -108,8 +106,8 @@ public final class SamHeaderLine extends AbstractSamHeaderLine {
             sb.append(getGo());
         }
 
-        // remaining fields
-        Set<String> remainingKeys = new HashSet<String>(getFields().keySet());
+        // remaining annotations
+        Set<String> remainingKeys = new HashSet<String>(getAnnotations().keySet());
         remainingKeys.remove("VN");
         remainingKeys.remove("SO");
         remainingKeys.remove("GO");
@@ -118,7 +116,7 @@ public final class SamHeaderLine extends AbstractSamHeaderLine {
             sb.append("\t");
             sb.append(key);
             sb.append(":");
-            sb.append(getField(key));
+            sb.append(getAnnotation(key));
         }
 
         return sb.toString();
@@ -134,10 +132,10 @@ public final class SamHeaderLine extends AbstractSamHeaderLine {
         checkNotNull(value);
         checkArgument(value.startsWith("@HD"));
 
-        Map<String, String> fields = parseFields(value.replace("@HD", "").trim());
-        if (!fields.containsKey("VN")) {
-            throw new IllegalArgumentException("required field VN missing");
+        Map<String, String> annotations = parseAnnotations(value.replace("@HD", "").trim());
+        if (!annotations.containsKey("VN")) {
+            throw new IllegalArgumentException("required annotation VN missing");
         }
-        return new SamHeaderLine(fields);
+        return new SamHeaderLine(annotations);
     }
 }

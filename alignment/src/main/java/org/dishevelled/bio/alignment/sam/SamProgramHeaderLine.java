@@ -26,8 +26,6 @@ package org.dishevelled.bio.alignment.sam;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import static org.dishevelled.bio.alignment.sam.SamHeaderParser.parseFields;
-
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
@@ -38,7 +36,7 @@ import javax.annotation.concurrent.Immutable;
 /**
  * SAM program header line.
  *
- * @since 1.1
+ * @since 2.0
  * @author  Michael Heuer
  */
 @Immutable
@@ -47,92 +45,92 @@ public final class SamProgramHeaderLine extends AbstractSamHeaderLine {
     /**
      * Create a new SAM program header line.
      *
-     * @param fields field values keyed by tag, must not be null
+     * @param annotations annotation values keyed by key, must not be null
      */
-    private SamProgramHeaderLine(final Map<String, String> fields) {
-        super("PG", fields);
+    private SamProgramHeaderLine(final Map<String, String> annotations) {
+        super("PG", annotations);
     }
 
-    // required fields
+    // required annotations
 
     public String getId() {
-        return getField("ID");
+        return getAnnotation("ID");
     }
 
-    // optional fields
+    // optional annotations
 
     public boolean containsPn() {
-        return containsFieldKey("PN");
+        return containsAnnotationKey("PN");
     }
 
     public String getPn() {
-        return getField("PN");
+        return getAnnotation("PN");
     }
 
     public Optional<String> getPnOpt() {
-        return getFieldOpt("PN");
+        return getAnnotationOpt("PN");
     }
 
     public boolean containsCl() {
-        return containsFieldKey("CL");
+        return containsAnnotationKey("CL");
     }
 
     public String getCl() {
-        return getField("CL");
+        return getAnnotation("CL");
     }
 
     public Optional<String> getClOpt() {
-        return getFieldOpt("CL");
+        return getAnnotationOpt("CL");
     }
 
     public boolean containsPp() {
-        return containsFieldKey("PP");
+        return containsAnnotationKey("PP");
     }
 
     public String getPp() {
-        return getField("PP");
+        return getAnnotation("PP");
     }
 
     public Optional<String> getPpOpt() {
-        return getFieldOpt("PP");
+        return getAnnotationOpt("PP");
     }
 
     public boolean containsDs() {
-        return containsFieldKey("DS");
+        return containsAnnotationKey("DS");
     }
 
     public String getDs() {
-        return getField("DS");
+        return getAnnotation("DS");
     }
 
     public Optional<String> getDsOpt() {
-        return getFieldOpt("DS");
+        return getAnnotationOpt("DS");
     }
 
     public boolean containsVn() {
-        return containsFieldKey("VN");
+        return containsAnnotationKey("VN");
     }
 
     public String getVn() {
-        return getField("VN");
+        return getAnnotation("VN");
     }
 
     public Optional<String> getVnOpt() {
-        return getFieldOpt("VN");
+        return getAnnotationOpt("VN");
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("@");
-        sb.append(getTag());
+        sb.append(getKey());
 
-        // required fields
+        // required annotations
         sb.append("\t");
         sb.append("ID:");
         sb.append(getId());
 
-        // optional fields
+        // optional annotations
         if (containsPn()) {
             sb.append("\t");
             sb.append("PN:");
@@ -159,8 +157,8 @@ public final class SamProgramHeaderLine extends AbstractSamHeaderLine {
             sb.append(getVn());
         }
 
-        // remaining fields
-        Set<String> remainingKeys = new HashSet<String>(getFields().keySet());
+        // remaining annotations
+        Set<String> remainingKeys = new HashSet<String>(getAnnotations().keySet());
         remainingKeys.remove("ID");
         remainingKeys.remove("PN");
         remainingKeys.remove("CL");
@@ -172,7 +170,7 @@ public final class SamProgramHeaderLine extends AbstractSamHeaderLine {
             sb.append("\t");
             sb.append(key);
             sb.append(":");
-            sb.append(getField(key));
+            sb.append(getAnnotation(key));
         }
 
         return sb.toString();
@@ -188,10 +186,10 @@ public final class SamProgramHeaderLine extends AbstractSamHeaderLine {
         checkNotNull(value);
         checkArgument(value.startsWith("@PG"));
 
-        Map<String, String> fields = parseFields(value.replace("@PG", "").trim());
-        if (!fields.containsKey("ID")) {
-            throw new IllegalArgumentException("required field ID missing");
+        Map<String, String> annotations = parseAnnotations(value.replace("@PG", "").trim());
+        if (!annotations.containsKey("ID")) {
+            throw new IllegalArgumentException("required annotation ID missing");
         }
-        return new SamProgramHeaderLine(fields);
+        return new SamProgramHeaderLine(annotations);
     }
 }
