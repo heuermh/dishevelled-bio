@@ -67,6 +67,29 @@ public abstract class AnnotatedRecord {
     }
 
     /**
+     * Return the annotation for the specified key for this record, if any.
+     *
+     * @param key key, must not be null
+     * @return the annotation for the specified key for this record, if any
+     */
+    public final Annotation getAnnotation(final String key) {
+        checkNotNull(key);
+        return annotations.get(key);
+    }
+
+    /**
+     * Return an optional wrapping the annotation for the specified key
+     * for this record.
+     *
+     * @param key key, must not be null
+     * @return an optional wrapping the annotation for the specified key
+     *    for this record
+     */
+    public final Optional<Annotation> getAnnotationOpt(final String key) {
+        return Optional.ofNullable(getAnnotation(key));
+    }
+
+    /**
      * Return true if this record contains the specified annotation key.
      *
      * @param key key

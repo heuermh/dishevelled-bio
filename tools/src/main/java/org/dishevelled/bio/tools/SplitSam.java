@@ -37,7 +37,7 @@ import com.google.common.io.Files;
 import org.dishevelled.bio.alignment.sam.SamHeader;
 import org.dishevelled.bio.alignment.sam.SamReader;
 import org.dishevelled.bio.alignment.sam.SamRecord;
-import org.dishevelled.bio.alignment.sam.SamStreamListener;
+import org.dishevelled.bio.alignment.sam.SamListener;
 import org.dishevelled.bio.alignment.sam.SamWriter;
 
 import org.dishevelled.commandline.ArgumentList;
@@ -98,19 +98,20 @@ public final class SplitSam extends AbstractSplit {
         try {
             reader = reader(inputFile);
 
-            SamReader.stream(reader, new SamStreamListener() {
+            SamReader.stream(reader, new SamListener() {
                     private long r = 0L;
                     private int files = 0;
                     private CountingWriter writer;
                     private SamHeader header;
 
                     @Override
-                    public void header(final SamHeader header) {
+                    public boolean header(final SamHeader header) {
                         this.header = header;
+                        return true;
                     }
 
                     @Override
-                    public void record(final SamRecord record) {
+                    public boolean record(final SamRecord record) {
                         if (writer == null) {
                             writer = createCountingWriter(files);
                             SamWriter.writeHeader(header, writer.asPrintWriter());
@@ -138,6 +139,7 @@ public final class SplitSam extends AbstractSplit {
                                 writer = null;
                             }
                         }
+                        return true;
                     }
                 });
             return 0;

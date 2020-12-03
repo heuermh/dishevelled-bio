@@ -32,8 +32,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+
+import org.dishevelled.bio.annotation.Annotation;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -58,30 +62,32 @@ public final class SamWriterTest {
             .withHeaderLine(SamHeaderLine.valueOf(SAM_HEADER))
             .build();
 
-        record = SamRecord.builder()
-            .withQname("ERR194147.765130386")
-            .withFlag(99)
-            .withRname("chr20")
-            .withPos(60250)
-            .withMapq(60)
-            .withCigar("101M")
-            .withRnext("=")
-            .withPnext(60512)
-            .withTlen(363)
-            .withSeq("ACTCCATCCCATTCCATTCCACTCCCTTCATTTCCATTCCAGTCCATTCCATTCCATTCCATTCCATTCCACTCCACTCCATTCCATTCCACTGCACTCCA")
-            .withQual("CCCFFFFFHHHHHJJJJJJJJJJJJJJJJJJJJJJJJJIJJJJJJIIJJJJJJJJJJJJJHIIJIJGIJJJJJJJJJJJJJIJJJJJJJJJJJGGHHHFF@")
-            .withField("NM", "i", "0")
-            .withField("MD", "Z", "101")
-            .withField("AS", "i", "101")
-            .withField("XS", "i", "55")
-            .withField("RG", "Z", "NA12878-1")
-            .withField("MQ", "i", "60")
-            .withField("ms", "i", "3614")
-            .withField("mc", "i", "60612")
-            .withField("MC", "Z", "101M")
-            .withArrayField("ZB", "B", "i", "1", "2")
-            .withArrayField("ZT", "B", "f", "3.4", "4.5")
+        Map<String, Annotation> annotations = ImmutableMap.<String, Annotation>builder()
+            .put("NM", Annotation.valueOf("NM:i:0"))
+            .put("MD", Annotation.valueOf("MD:Z:101"))
+            .put("AS", Annotation.valueOf("AS:i:101"))
+            .put("XS", Annotation.valueOf("XS:i:55"))
+            .put("RG", Annotation.valueOf("RG:Z:NA12878-1"))
+            .put("MQ", Annotation.valueOf("MQ:i:60"))
+            .put("ms", Annotation.valueOf("ms:i:3614"))
+            .put("mc", Annotation.valueOf("mc:i:60612"))
+            .put("MC", Annotation.valueOf("MC:Z:101M"))
+            .put("ZB", Annotation.valueOf("ZB:B:i,1,2"))
+            .put("ZT", Annotation.valueOf("ZT:B:f,3.4,4.5"))
             .build();
+
+        record = new SamRecord("ERR194147.765130386",
+                               99,
+                               "chr20",
+                               60250,
+                               60,
+                               "101M",
+                               "=",
+                               60512,
+                               363,
+                               "ACTCCATCCCATTCCATTCCACTCCCTTCATTTCCATTCCAGTCCATTCCATTCCATTCCATTCCATTCCACTCCACTCCATTCCATTCCACTGCACTCCA",
+                               "CCCFFFFFHHHHHJJJJJJJJJJJJJJJJJJJJJJJJJIJJJJJJIIJJJJJJJJJJJJJHIIJIJGIJJJJJJJJJJJJJIJJJJJJJJJJJGGHHHFF@",
+                               annotations);
 
         records = ImmutableList.of(record);
         outputStream = new ByteArrayOutputStream();

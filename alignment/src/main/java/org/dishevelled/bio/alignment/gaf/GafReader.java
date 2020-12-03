@@ -119,7 +119,7 @@ public final class GafReader {
     }
 
     /**
-     * Stream zero or more GAF records from the specified readable.
+     * Stream GAF records if any from the specified readable.
      *
      * @param readable readable to stream from, must not be null
      * @param listener event based listener callback, must not be null
@@ -134,7 +134,7 @@ public final class GafReader {
     }
 
     /**
-     * Stream zero or more GAF records from the specified file.
+     * Stream GAF records if any from the specified file.
      *
      * @param file file to stream from, must not be null
      * @param listener event based listener callback, must not be null
@@ -149,7 +149,7 @@ public final class GafReader {
     }
 
     /**
-     * Stream zero or more GAF records from the specified URL.
+     * Stream GAF records if any from the specified URL.
      *
      * @param url URL to stream from, must not be null
      * @param listener event based listener callback, must not be null
@@ -164,7 +164,7 @@ public final class GafReader {
     }
 
     /**
-     * Stream zero or more GAF records from the specified input stream.
+     * Stream GAF records if any from the specified input stream.
      *
      * @param inputStream input stream to stream from, must not be null
      * @param listener event based listener callback, must not be null

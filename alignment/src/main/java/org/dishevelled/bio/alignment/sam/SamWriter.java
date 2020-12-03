@@ -29,12 +29,10 @@ import java.io.PrintWriter;
 
 import javax.annotation.concurrent.Immutable;
 
-import com.google.common.base.Joiner;
-
 /**
  * SAM writer.
  *
- * @since 1.1
+ * @since 2.0
  * @author  Michael Heuer
  */
 @Immutable
@@ -117,51 +115,6 @@ public final class SamWriter {
     public static void writeRecord(final SamRecord record, final PrintWriter writer) {
         checkNotNull(record);
         checkNotNull(writer);
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(record.getQnameOpt().orElse("*"));
-        sb.append("\t");
-        sb.append(record.getFlag());
-        sb.append("\t");
-        sb.append(record.getRnameOpt().orElse("*"));
-        sb.append("\t");
-        sb.append(record.getPos());
-        sb.append("\t");
-        sb.append(record.getMapq());
-        sb.append("\t");
-        sb.append(record.getCigarOpt().orElse("*"));
-        sb.append("\t");
-        sb.append(record.getRnextOpt().orElse("*"));
-        sb.append("\t");
-        sb.append(record.getPnext());
-        sb.append("\t");
-        sb.append(record.getTlen());
-        sb.append("\t");
-        sb.append(record.getSeqOpt().orElse("*"));
-        sb.append("\t");
-        sb.append(record.getQualOpt().orElse("*"));
-
-        for (String tag : record.getFields().keySet()) {
-            String type = record.getFieldTypes().get(tag);
-            String arrayType = record.getFieldArrayTypes().get(tag);
-
-            if (type == null) {
-                throw new IllegalArgumentException("missing type for tag " + tag + ", fieldTypes = " + record.getFieldTypes());
-            }
-            if ("B".equals(type) && arrayType == null) {
-                throw new IllegalArgumentException("missing array type for tag " + tag + " type " + type + ", fieldArrayTypes = " + record.getFieldArrayTypes());
-            }
-            sb.append("\t");
-            sb.append(tag);
-            sb.append(":");
-            sb.append(type);
-            sb.append(":");
-            if (arrayType != null) {
-                sb.append(arrayType);
-                sb.append(",");
-            }
-            sb.append(Joiner.on(",").join(record.getFields().get(tag)));
-        }
-        writer.println(sb.toString());
+        writer.println(record.toString());
     }
 }

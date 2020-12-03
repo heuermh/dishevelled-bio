@@ -41,12 +41,14 @@ import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Charsets;
 
+import com.google.common.io.CharStreams;
+import com.google.common.io.LineProcessor;
 import com.google.common.io.Resources;
 
 /**
  * SAM reader.
  *
- * @since 1.1
+ * @since 2.0
  * @author  Michael Heuer
  */
 @Immutable
@@ -60,32 +62,7 @@ public final class SamReader {
     }
 
 
-    // callback methods
-
-    /**
-     * Parse the specified readable.
-     *
-     * @param readable readable to parse, must not be null
-     * @param listener low-level event based parser callback, must not be null
-     * @throws IOException if an I/O error occurs
-     */
-    public static void parse(final Readable readable, final SamParseListener listener) throws IOException {
-        SamParser.parse(readable, listener);
-    }
-
-    /**
-     * Stream the specified readable.
-     *
-     * @param readable readable to stream, must not be null
-     * @param listener event based reader callback, must not be null
-     * @throws IOException if an I/O error occurs
-     */
-    public static void stream(final Readable readable, final SamStreamListener listener) throws IOException {
-        StreamingSamParser.stream(readable, listener);
-    }
-
-
-    // collect methods
+    // delegate to SamHeaderReader
 
     /**
      * Read the SAM header from the specified readable.
@@ -95,48 +72,8 @@ public final class SamReader {
      * @throws IOException if an I/O error occurs
      */
     public static SamHeader header(final Readable readable) throws IOException {
-        return SamHeaderParser.header(readable);
-    }
-
-    /**
-     * Read zero or more SAM records from the specified readable.
-     *
-     * @param readable readable to read from, must not be null
-     * @return zero or more SAM records read from the specified readable
-     * @throws IOException if an I/O error occurs
-     */
-    public static Iterable<SamRecord> records(final Readable readable) throws IOException {
-        Collect collect = new Collect();
-        StreamingSamParser.stream(readable, collect);
-        return collect.getRecords();
-    }
-
-    /**
-     * Collect.
-     */
-    private static final class Collect extends SamStreamAdapter {
-        /** Arbitrary large capacity for list of SAM records. */
-        private static final int CAPACITY = 10000000;
-
-        /** List of SAM records. */
-        private final List<SamRecord> records = new ArrayList<SamRecord>(CAPACITY);
-
-        @Override
-        public void record(final SamRecord record) {
-            records.add(record);
-        }
-
-        /**
-         * Return the list of SAM records.
-         *
-         * @return the list of SAM records
-         */
-        List<SamRecord> getRecords() {
-            return records;
-        }
-    }
-
-    // convenience methods
+        return SamHeaderReader.header(readable); 
+   }
 
     /**
      * Read the SAM header from the specified file.
@@ -146,11 +83,7 @@ public final class SamReader {
      * @throws IOException if an I/O error occurs
      */
     public static SamHeader header(final File file) throws IOException {
-        checkNotNull(file);
-        // could also use Files.asCharSource(file, Charsets.UTF_8).openBufferedStream()
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            return header(reader);
-        }
+        return SamHeaderReader.header(file);
     }
 
     /**
@@ -161,10 +94,7 @@ public final class SamReader {
      * @throws IOException if an I/O error occurs
      */
     public static SamHeader header(final URL url) throws IOException {
-        checkNotNull(url);
-        try (BufferedReader reader = Resources.asCharSource(url, Charsets.UTF_8).openBufferedStream()) {
-            return header(reader);
-        }
+        return SamHeaderReader.header(url);
     }
 
     /**
@@ -175,10 +105,22 @@ public final class SamReader {
      * @throws IOException if an I/O error occurs
      */
     public static SamHeader header(final InputStream inputStream) throws IOException {
-        checkNotNull(inputStream);
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-            return header(reader);
-        }
+        return SamHeaderReader.header(inputStream);
+    }
+
+    // collect records-only
+
+    /**
+     * Read zero or more SAM records from the specified readable.
+     *
+     * @param readable readable to read from, must not be null
+     * @return zero or more SAM records read from the specified readable
+     * @throws IOException if an I/O error occurs
+     */
+    public static Iterable<SamRecord> records(final Readable readable) throws IOException {
+        Collect collect = new Collect();
+        streamRecords(readable, collect);
+        return collect.records();
     }
 
     /**
@@ -220,6 +162,294 @@ public final class SamReader {
         checkNotNull(inputStream);
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             return records(reader);
+        }
+    }
+
+    // stream callback, header and records
+
+    /**
+     * Stream SAM header and records if any from the specified readable.
+     *
+     * @param readable readable to stream, must not be null
+     * @param listener event based reader callback, must not be null
+     * @throws IOException if an I/O error occurs
+     */
+    public static void stream(final Readable readable, final SamListener listener) throws IOException {
+        checkNotNull(readable);
+        checkNotNull(listener);
+
+        SamLineProcessor lineProcessor = new SamLineProcessor(listener);
+        CharStreams.readLines(readable, lineProcessor);
+    }
+
+    /**
+     * Stream SAM header and records if any from the specified file.
+     *
+     * @param file file to stream from, must not be null
+     * @param listener event based listener callback, must not be null
+     * @throws IOException if an I/O error occurs
+     */
+    public static void stream(final File file, final SamListener listener) throws IOException {
+        checkNotNull(file);
+        checkNotNull(listener);
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            stream(reader, listener);
+        }
+    }
+
+    /**
+     * Stream SAM header and records if any from the specified URL.
+     *
+     * @param url URL to stream from, must not be null
+     * @param listener event based listener callback, must not be null
+     * @throws IOException if an I/O error occurs
+     */
+    public static void stream(final URL url, final SamListener listener) throws IOException {
+        checkNotNull(url);
+        checkNotNull(listener);
+        try (BufferedReader reader = Resources.asCharSource(url, Charsets.UTF_8).openBufferedStream()) {
+            stream(reader, listener);
+        }
+    }
+
+    /**
+     * Stream SAM header and records if any from the specified input stream.
+     *
+     * @param inputStream input stream to stream from, must not be null
+     * @param listener event based listener callback, must not be null
+     * @throws IOException if an I/O error occurs
+     */
+    public static void stream(final InputStream inputStream, final SamListener listener) throws IOException {
+        checkNotNull(inputStream);
+        checkNotNull(listener);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            stream(reader, listener);
+        }
+    }
+
+    // stream records-only
+
+    /**
+     * Stream SAM records if any from the specified readable.
+     *
+     * @param readable readable to stream, must not be null
+     * @param listener event based reader callback, must not be null
+     * @throws IOException if an I/O error occurs
+     */
+    public static void streamRecords(final Readable readable, final SamListener listener) throws IOException {
+        checkNotNull(readable);
+        checkNotNull(listener);
+
+        SamRecordLineProcessor lineProcessor = new SamRecordLineProcessor(listener);
+        CharStreams.readLines(readable, lineProcessor);
+    }
+
+    /**
+     * Stream SAM records if any from the specified file.
+     *
+     * @param file file to stream from, must not be null
+     * @param listener event based listener callback, must not be null
+     * @throws IOException if an I/O error occurs
+     */
+    public static void streamRecords(final File file, final SamListener listener) throws IOException {
+        checkNotNull(file);
+        checkNotNull(listener);
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            streamRecords(reader, listener);
+        }
+    }
+
+    /**
+     * Stream SAM header and records if any from the specified URL.
+     *
+     * @param url URL to stream from, must not be null
+     * @param listener event based listener callback, must not be null
+     * @throws IOException if an I/O error occurs
+     */
+    public static void streamRecords(final URL url, final SamListener listener) throws IOException {
+        checkNotNull(url);
+        checkNotNull(listener);
+        try (BufferedReader reader = Resources.asCharSource(url, Charsets.UTF_8).openBufferedStream()) {
+            streamRecords(reader, listener);
+        }
+    }
+
+    /**
+     * Stream SAM records if any from the specified input stream.
+     *
+     * @param inputStream input stream to stream from, must not be null
+     * @param listener event based listener callback, must not be null
+     * @throws IOException if an I/O error occurs
+     */
+    public static void streamRecords(final InputStream inputStream, final SamListener listener) throws IOException {
+        checkNotNull(inputStream);
+        checkNotNull(listener);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            streamRecords(reader, listener);
+        }
+    }
+
+    /**
+     * SAM record line processor.
+     */
+    private static final class SamRecordLineProcessor implements LineProcessor<Object> {
+        /** Line number. */
+        private long lineNumber = 0;
+
+        /** SAM listener. */
+        private final SamListener listener;
+
+
+        /**
+         * Create a new SAM record line processor with the specified SAM listener.
+         *
+         * @param listener SAM listener, must not be null
+         */
+        private SamRecordLineProcessor(final SamListener listener) {
+            checkNotNull(listener);
+            this.listener = listener;
+        }
+
+
+        @Override
+        public Object getResult() {
+            return null;
+        }
+
+        @Override
+        public boolean processLine(final String line) throws IOException
+        {
+            lineNumber++;
+            // process records only
+            if (!line.startsWith("@")) {
+                try {
+                    return listener.record(SamRecord.valueOf(line));
+                }
+                catch (IllegalArgumentException e) {
+                    throw new IOException("could not read SAM record at line " + lineNumber + ", caught exception: " + e.getMessage(), e);
+                }
+            }
+            return true;
+        }
+    }
+
+    /**
+     * SAM line processor.
+     */
+    private static final class SamLineProcessor implements LineProcessor<Object> {
+        /** Line number. */
+        private long lineNumber = 0;
+
+        /** True if the header is complete. */
+        private boolean headerComplete = false;
+
+        /** SAM listener. */
+        private final SamListener listener;
+
+        /** SAM header builder. */
+        private final SamHeader.Builder headerBuilder = SamHeader.builder();
+
+
+        /**
+         * Create a new SAM line processor with the specified SAM listener.
+         *
+         * @param listener SAM listener, must not be null
+         */
+        private SamLineProcessor(final SamListener listener) {
+            checkNotNull(listener);
+            this.listener = listener;
+        }
+
+
+        @Override
+        public Object getResult() {
+            return null;
+        }
+
+        @Override
+        public boolean processLine(final String line) throws IOException
+        {
+            lineNumber++;
+
+            // continue processing blank lines
+            if (line.isEmpty()) {
+                return true;
+            }
+
+            // process as header line
+            if (line.startsWith("@")) {
+                try {
+                    if (line.startsWith("@HD")) {
+                        headerBuilder.withHeaderLine(SamHeaderLine.valueOf(line));
+                    }
+                    else if (line.startsWith("@SQ")) {
+                        headerBuilder.withSequenceHeaderLine(SamSequenceHeaderLine.valueOf(line));
+                    }
+                    else if (line.startsWith("@RG")) {
+                        headerBuilder.withReadGroupHeaderLine(SamReadGroupHeaderLine.valueOf(line));
+                    }
+                    else if (line.startsWith("@PG")) {
+                        headerBuilder.withProgramHeaderLine(SamProgramHeaderLine.valueOf(line));
+                    }
+                    else if (line.startsWith("@CO")) {
+                        headerBuilder.withCommentHeaderLine(SamCommentHeaderLine.valueOf(line));
+                    }
+                    else {
+                        String key = line.substring(0, Math.min(3, line.length()));
+                        throw new IOException("found invalid SAM header line key " + key + " at line number " + lineNumber);
+                    }
+                    return true;
+                }
+                catch (IllegalArgumentException e) {
+                    throw new IOException("could not parse SAM header line at line number " + lineNumber + ", caught " + e.getMessage(), e);
+                }
+            }
+            // or as record
+            else {
+                if (!headerComplete) {
+                    try {
+                        if (!listener.header(headerBuilder.build())) {
+                            return false;
+                        }
+                    }
+                    catch (IllegalArgumentException e) {
+                        throw new IOException("could not parse SAM header, caught " + e.getMessage(), e);
+                    }
+                    headerComplete = true;
+                }
+                try {
+                    return listener.record(SamRecord.valueOf(line));
+                }
+                catch (IllegalArgumentException e) {
+                    throw new IOException("could not read SAM record at line " + lineNumber + ", caught exception: " + e.getMessage(), e);
+                }
+            }
+        }
+    }
+
+    /**
+     * Collect.
+     */
+    private static final class Collect extends SamAdapter {
+        /** Arbitrary large capacity for list of SAM records. */
+        private static final int CAPACITY = 10_000_000;
+
+        /** List of SAM records. */
+        private final List<SamRecord> records = new ArrayList<SamRecord>(CAPACITY);
+
+        @Override
+        public boolean record(final SamRecord record) {
+            records.add(record);
+            return true;
+        }
+
+        /**
+         * Return the list of SAM records.
+         *
+         * @return the list of SAM records
+         */
+        List<SamRecord> records() {
+            return records;
         }
     }
 }

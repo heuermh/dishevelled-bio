@@ -26,8 +26,6 @@ package org.dishevelled.bio.alignment.sam;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import static org.dishevelled.bio.alignment.sam.SamHeaderParser.parseFields;
-
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
@@ -38,7 +36,7 @@ import javax.annotation.concurrent.Immutable;
 /**
  * SAM read group header line.
  *
- * @since 1.1
+ * @since 2.0
  * @author  Michael Heuer
  */
 @Immutable
@@ -47,176 +45,176 @@ public final class SamReadGroupHeaderLine extends AbstractSamHeaderLine {
     /**
      * Create a new SAM read group header line.
      *
-     * @param fields field values keyed by tag, must not be null
+     * @param annotations annotation values keyed by key, must not be null
      */
-    private SamReadGroupHeaderLine(final Map<String, String> fields) {
-        super("RG", fields);
+    private SamReadGroupHeaderLine(final Map<String, String> annotations) {
+        super("RG", annotations);
     }
 
-    // required fields
+    // required annotations
 
     public String getId() {
-        return getField("ID");
+        return getAnnotation("ID");
     }
 
-    // optional fields
+    // optional annotations
 
     public boolean containsCn() {
-        return containsFieldKey("CN");
+        return containsAnnotationKey("CN");
     }
 
     public String getCn() {
-        return getField("CN");
+        return getAnnotation("CN");
     }
 
     public Optional<String> getCnOpt() {
-        return getFieldOpt("CN");
+        return getAnnotationOpt("CN");
     }
 
     public boolean containsDs() {
-        return containsFieldKey("DS");
+        return containsAnnotationKey("DS");
     }
 
     public String getDs() {
-        return getField("DS");
+        return getAnnotation("DS");
     }
 
     public Optional<String> getDsOpt() {
-        return getFieldOpt("DS");
+        return getAnnotationOpt("DS");
     }
 
     public boolean containsDt() {
-        return containsFieldKey("DT");
+        return containsAnnotationKey("DT");
     }
 
     public String getDt() {
-        return getField("DT");
+        return getAnnotation("DT");
     }
 
     public Optional<String> getDtOpt() {
-        return getFieldOpt("DT");
+        return getAnnotationOpt("DT");
     }
 
     public boolean containsFo() {
-        return containsFieldKey("FO");
+        return containsAnnotationKey("FO");
     }
 
     public String getFo() {
-        return getField("FO");
+        return getAnnotation("FO");
     }
 
     public Optional<String> getFoOpt() {
-        return getFieldOpt("FO");
+        return getAnnotationOpt("FO");
     }
 
     public boolean containsKs() {
-        return containsFieldKey("KS");
+        return containsAnnotationKey("KS");
     }
 
     public String getKs() {
-        return getField("KS");
+        return getAnnotation("KS");
     }
 
     public Optional<String> getKsOpt() {
-        return getFieldOpt("KS");
+        return getAnnotationOpt("KS");
     }
 
     public boolean containsLb() {
-        return containsFieldKey("LB");
+        return containsAnnotationKey("LB");
     }
 
     public String getLb() {
-        return getField("LB");
+        return getAnnotation("LB");
     }
 
     public Optional<String> getLbOpt() {
-        return getFieldOpt("LB");
+        return getAnnotationOpt("LB");
     }
     
     public boolean containsPg() {
-        return containsFieldKey("PG");
+        return containsAnnotationKey("PG");
     }
 
     public String getPg() {
-        return getField("PG");
+        return getAnnotation("PG");
     }
 
     public Optional<String> getPgOpt() {
-        return getFieldOpt("PG");
+        return getAnnotationOpt("PG");
     }
 
     public boolean containsPi() {
-        return containsFieldKey("PI");
+        return containsAnnotationKey("PI");
     }
 
     public String getPi() {
-        return getField("PI");
+        return getAnnotation("PI");
     }
 
     public Optional<String> getPiOpt() {
-        return getFieldOpt("PI");
+        return getAnnotationOpt("PI");
     }
 
     public boolean containsPl() {
-        return containsFieldKey("PL");
+        return containsAnnotationKey("PL");
     }
 
     public String getPl() {
-        return getField("PL");
+        return getAnnotation("PL");
     }
 
     public Optional<String> getPlOpt() {
-        return getFieldOpt("PL");
+        return getAnnotationOpt("PL");
     }
 
     public boolean containsPm() {
-        return containsFieldKey("PM");
+        return containsAnnotationKey("PM");
     }
 
     public String getPm() {
-        return getField("PM");
+        return getAnnotation("PM");
     }
 
     public Optional<String> getPmOpt() {
-        return getFieldOpt("PM");
+        return getAnnotationOpt("PM");
     }
 
     public boolean containsPu() {
-        return containsFieldKey("PU");
+        return containsAnnotationKey("PU");
     }
 
     public String getPu() {
-        return getField("PU");
+        return getAnnotation("PU");
     }
 
     public Optional<String> getPuOpt() {
-        return getFieldOpt("PU");
+        return getAnnotationOpt("PU");
     }
 
     public boolean containsSm() {
-        return containsFieldKey("SM");
+        return containsAnnotationKey("SM");
     }
 
     public String getSm() {
-        return getField("SM");
+        return getAnnotation("SM");
     }
 
     public Optional<String> getSmOpt() {
-        return getFieldOpt("SM");
+        return getAnnotationOpt("SM");
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("@");
-        sb.append(getTag());
+        sb.append(getKey());
 
-        // required fields
+        // required annotations
         sb.append("\t");
         sb.append("ID:");
         sb.append(getId());
 
-        // optional fields
+        // optional annotations
         if (containsCn()) {
             sb.append("\t");
             sb.append("CN:");
@@ -278,8 +276,8 @@ public final class SamReadGroupHeaderLine extends AbstractSamHeaderLine {
             sb.append(getSm());
         }
 
-        // remaining fields
-        Set<String> remainingKeys = new HashSet<String>(getFields().keySet());
+        // remaining annotations
+        Set<String> remainingKeys = new HashSet<String>(getAnnotations().keySet());
         remainingKeys.remove("ID");
         remainingKeys.remove("CN");
         remainingKeys.remove("DS");
@@ -298,7 +296,7 @@ public final class SamReadGroupHeaderLine extends AbstractSamHeaderLine {
             sb.append("\t");
             sb.append(key);
             sb.append(":");
-            sb.append(getField(key));
+            sb.append(getAnnotation(key));
         }
 
         return sb.toString();
@@ -314,10 +312,10 @@ public final class SamReadGroupHeaderLine extends AbstractSamHeaderLine {
         checkNotNull(value);
         checkArgument(value.startsWith("@RG"));
 
-        Map<String, String> fields = parseFields(value.replace("@RG", "").trim());
-        if (!fields.containsKey("ID")) {
-            throw new IllegalArgumentException("required field ID missing");
+        Map<String, String> annotations = parseAnnotations(value.replace("@RG", "").trim());
+        if (!annotations.containsKey("ID")) {
+            throw new IllegalArgumentException("required annotation ID missing");
         }
-        return new SamReadGroupHeaderLine(fields);
+        return new SamReadGroupHeaderLine(annotations);
     }
 }

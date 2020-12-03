@@ -67,7 +67,7 @@ public final class Gfa2Reader {
     }
 
     /**
-     * Stream zero or more GFA 2.0 records from the specified readable.
+     * Stream GFA 2.0 records if any from the specified readable.
      *
      * @param readable readable to stream from, must not be null
      * @param listener event based listener callback, must not be null
