@@ -65,7 +65,7 @@
   </modules>
 
   <properties>
-    <adam.version>0.32.0</adam.version>
+    <adam.version>0.33.0</adam.version>
     <avro.version>1.8.2</avro.version>
     <bdg-convert.version>0.10.0</bdg-convert.version>
     <bdg-formats.version>0.15.0</bdg-formats.version>
@@ -78,7 +78,7 @@
     <dsh-commandline.version>1.1</dsh-commandline.version>
     <dsh-compress.version>1.4.2</dsh-compress.version>
     <dsh-graph.version>1.0</dsh-graph.version>
-    <hadoop.version>2.7.5</hadoop.version>
+    <hadoop.version>3.2.1</hadoop.version>
     <htsjdk.version>2.23.0</htsjdk.version>
     <jdk.version>1.8</jdk.version>
     <jmh.version>1.25.2</jmh.version>
