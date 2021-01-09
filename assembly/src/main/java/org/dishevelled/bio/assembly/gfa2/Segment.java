@@ -97,16 +97,6 @@ public final class Segment extends Gfa2Record {
     }
 
     /**
-     * Return an optional wrapping the identifier for this segment.
-     *
-     * @deprecated will be removed in 2.0, identifier is always non-null
-     * @return an optional wrapping the identifier for this segment
-     */
-    public Optional<String> getIdOpt() {
-        return Optional.ofNullable(id);
-    }
-
-    /**
      * Return the length for this segment.
      *
      * @return the length for this segment
