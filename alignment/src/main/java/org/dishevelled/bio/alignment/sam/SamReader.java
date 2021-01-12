@@ -431,11 +431,8 @@ public final class SamReader {
      * Collect.
      */
     private static final class Collect extends SamAdapter {
-        /** Arbitrary large capacity for list of SAM records. */
-        private static final int CAPACITY = 10_000_000;
-
         /** List of SAM records. */
-        private final List<SamRecord> records = new ArrayList<SamRecord>(CAPACITY);
+        private final List<SamRecord> records = new ArrayList<SamRecord>();
 
         @Override
         public boolean record(final SamRecord record) {

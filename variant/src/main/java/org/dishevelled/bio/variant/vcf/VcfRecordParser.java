@@ -36,9 +36,6 @@ import java.util.List;
  * @author  Michael Heuer
  */
 public final class VcfRecordParser {
-    /** Arbitrary large capacity for list of VCF records. */
-    private static final int CAPACITY = 100000;
-
 
     /**
      * Private no-arg constructor.
@@ -70,7 +67,7 @@ public final class VcfRecordParser {
         private final VcfRecord.Builder builder = VcfRecord.builder();
 
         /** List of VCF records. */
-        private List<VcfRecord> records = new ArrayList<VcfRecord>(CAPACITY);
+        private List<VcfRecord> records = new ArrayList<VcfRecord>();
 
 
         @Override

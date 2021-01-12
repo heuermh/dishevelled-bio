@@ -227,7 +227,7 @@ public final class PafReader {
      */
     private static class Collect implements PafListener {
         /** List of collected PAF records. */
-        private final List<PafRecord> records = new ArrayList<PafRecord>(100000);
+        private final List<PafRecord> records = new ArrayList<PafRecord>();
 
 
         @Override

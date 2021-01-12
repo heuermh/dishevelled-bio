@@ -27,8 +27,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
 
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.concurrent.Immutable;
@@ -175,7 +175,7 @@ public final class Gfa2Reader {
      */
     private static class Collect implements Gfa2Listener {
         /** List of collected GFA 2.0 records. */
-        private final List<Gfa2Record> records = new LinkedList<Gfa2Record>();
+        private final List<Gfa2Record> records = new ArrayList<Gfa2Record>();
 
 
         @Override

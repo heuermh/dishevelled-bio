@@ -27,7 +27,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.io.CharStreams;
@@ -133,7 +133,7 @@ public final class BedReader {
      */
     private static class Collect implements BedListener {
         /** List of collected BED records. */
-        private final List<BedRecord> records = new LinkedList<BedRecord>();
+        private final List<BedRecord> records = new ArrayList<BedRecord>();
 
 
         @Override

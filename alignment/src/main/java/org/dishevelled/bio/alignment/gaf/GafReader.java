@@ -229,7 +229,7 @@ public final class GafReader {
      */
     private static class Collect implements GafListener {
         /** List of collected GAF records. */
-        private final List<GafRecord> records = new ArrayList<GafRecord>(100000);
+        private final List<GafRecord> records = new ArrayList<GafRecord>();
 
 
         @Override

@@ -253,7 +253,7 @@ public final class Gfa1Reader {
      */
     private static class Segments extends Gfa1Adapter {
         /** List of collected GFA 1.0 segment records. */
-        private final List<Segment> segments = new ArrayList<Segment>(10000);
+        private final List<Segment> segments = new ArrayList<Segment>();
 
         @Override
         protected boolean containment(final Containment containment) {

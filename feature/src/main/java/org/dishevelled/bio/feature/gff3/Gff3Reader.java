@@ -27,7 +27,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.io.CharStreams;
@@ -133,7 +133,7 @@ public final class Gff3Reader {
      */
     private static class Collect implements Gff3Listener {
         /** List of collected GFF3 records. */
-        private final List<Gff3Record> records = new LinkedList<Gff3Record>();
+        private final List<Gff3Record> records = new ArrayList<Gff3Record>();
 
 
         @Override
