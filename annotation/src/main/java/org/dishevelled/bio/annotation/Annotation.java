@@ -74,7 +74,6 @@ public final class Annotation {
      *
      * @param name name, must not be null
      * @param type type, must not be null
-     * @param arrayType array type, if any
      * @param value value, must not be null
      */
     public Annotation(final String name, final String type, final String value) {
