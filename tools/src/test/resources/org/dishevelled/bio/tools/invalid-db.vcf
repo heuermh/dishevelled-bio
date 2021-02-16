@@ -1,0 +1,6 @@
+##fileformat=VCFv4.2
+##reference=GRCh37
+##INFO=<ID=DB,Number=1,Type=String,Description="dbSNP identifier, build 146">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+1	2400	CM42	A	G	.	.	DB=rs903331232
+1	4800	CM84	C	T	.	.	DB=rs1441881282
