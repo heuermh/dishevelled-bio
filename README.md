@@ -62,6 +62,7 @@ commands:
   gfa1-to-gfa2    convert GFA 1.0 format to GFA 2.0 format
   interleave-fastq    convert first and second sequence files in FASTQ format to interleaved FASTQ format
   reassemble-paths    reassemble paths in GFA 1.0 format from traversal records
+  remap-dbsnp    remap Type=String DB flags in VCF format to DB Type=Flag and dbsnp Type=String fields
   remap-phase-set    remap Type=String PS phase set ids in VCF format to Type=Integer
   split-bed    split files in BED format
   split-fasta    split files in FASTA format

@@ -165,6 +165,7 @@ public final class Tools implements Callable<Integer> {
         .put("interleave-fastq", new Command("interleave-fastq", "convert first and second sequence files in FASTQ format to interleaved FASTQ format", InterleaveFastq.class))
         //.put("intersect-bed", new Command("intersect-bed", "similar to bedtools2 intersect -v", IntersectBed.class))
         .put("reassemble-paths", new Command("reassemble-paths", "reassemble paths in GFA 1.0 format from traversal records", ReassemblePaths.class))
+        .put("remap-dbsnp", new Command("remap-dbsnp", "remap Type=String DB flags in VCF format to DB Type=Flag and dbsnp Type=String fields", RemapDbSnp.class))
         .put("remap-phase-set", new Command("remap-phase-set", "remap Type=String PS phase set ids in VCF format to Type=Integer", RemapPhaseSet.class))
         .put("split-bed", new Command("split-bed", "split files in BED format", SplitBed.class))
         .put("split-fasta", new Command("split-fasta", "split files in FASTA format", SplitFasta.class))

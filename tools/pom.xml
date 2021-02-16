@@ -340,6 +340,10 @@
               <mainClass>org.dishevelled.bio.tools.ReassemblePaths</mainClass>
             </program>
             <program>
+              <id>dsh-remap-dbsnp</id>
+              <mainClass>org.dishevelled.bio.tools.RemapDbSnp</mainClass>
+            </program>
+            <program>
               <id>dsh-remap-phase-set</id>
               <mainClass>org.dishevelled.bio.tools.RemapPhaseSet</mainClass>
             </program>
