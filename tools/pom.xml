@@ -340,6 +340,18 @@
               <mainClass>org.dishevelled.bio.tools.ReassemblePaths</mainClass>
             </program>
             <program>
+              <id>dsh-rename-bed-references</id>
+              <mainClass>org.dishevelled.bio.tools.RenameBedReferences</mainClass>
+            </program>
+            <program>
+              <id>dsh-rename-gff3-references</id>
+              <mainClass>org.dishevelled.bio.tools.RenameGff3References</mainClass>
+            </program>
+            <program>
+              <id>dsh-rename-vcf-references</id>
+              <mainClass>org.dishevelled.bio.tools.RenameVcfReferences</mainClass>
+            </program>
+            <program>
               <id>dsh-remap-dbsnp</id>
               <mainClass>org.dishevelled.bio.tools.RemapDbSnp</mainClass>
             </program>

@@ -51,13 +51,10 @@ import org.dishevelled.commandline.argument.FileArgument;
 /**
  * Rename references in GFF3 files.
  *
- * @deprecated by RenameGff3References in version 2.1, to be removed in 3.0
+ * @since 2.1
  * @author  Michael Heuer
  */
-public final class RenameReferences implements Callable<Integer> {
-    private final boolean chr;
-    private final File inputGff3File;
-    private final File outputGff3File;
+public final class RenameGff3References extends AbstractRenameReferences {
     private static final String USAGE = "dsh-rename-references [--chr] -i input.gff3.gz -o output.gff3.gz";
 
 
@@ -68,10 +65,8 @@ public final class RenameReferences implements Callable<Integer> {
      * @param inputGff3File input GFF3 file, if any
      * @param outputGff3File output GFF3 file, if any
      */
-    public RenameReferences(final boolean chr, final File inputGff3File, final File outputGff3File) {
-        this.chr = chr;
-        this.inputGff3File = inputGff3File;
-        this.outputGff3File = outputGff3File;
+    public RenameGff3References(final boolean chr, final File inputGff3File, final File outputGff3File) {
+        super(chr, inputGff3File, outputGff3File);
     }
 
 
@@ -80,8 +75,8 @@ public final class RenameReferences implements Callable<Integer> {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(inputGff3File);
-            writer = writer(outputGff3File);
+            reader = reader(inputFile);
+            writer = writer(outputFile);
 
             final PrintWriter w = writer;
             Gff3Reader.stream(reader, new Gff3Listener() {
@@ -118,45 +113,6 @@ public final class RenameReferences implements Callable<Integer> {
         }
     }
 
-    private static final Pattern AUTOSOMAL = Pattern.compile("^([0-9]+)$");
-    private static final Pattern SEX = Pattern.compile("^([XYZW])$");
-    private static final Pattern MITOCHONDRIAL = Pattern.compile("^[chrM,MT]$");
-    private static final Pattern CHR = Pattern.compile("^chr(.+)$");
-    private static final Pattern CHRUN_ = Pattern.compile("^chrUn_(.+)$");
-    private static final Pattern V = Pattern.compile("([0-9]+)v([0-9]+)");
-
-    static String addChr(final String seqid) {
-        String result = seqid;
-
-        // 1 --> chr1
-        result = AUTOSOMAL.matcher(result).replaceAll("chr$1");
-        // X --> chrX
-        result = SEX.matcher(result).replaceAll("chr$1");
-        // MT --> chrM
-        result = MITOCHONDRIAL.matcher(result).replaceAll("chrM");
-
-        return result;
-    }
-
-    static String removeChr(final String seqid) {
-        String result = seqid;
-
-        // 123v1 --> 123.1
-        result = V.matcher(result).replaceAll("$1.$2");
-        // chrUn_GL00 --> GL00
-        result = CHRUN_.matcher(result).replaceAll("$1");
-        // chrM --> MT
-        result = MITOCHONDRIAL.matcher(result).replaceAll("MT");
-        // chr1 --> 1
-        result = CHR.matcher(result).replaceAll("$1");
-
-        return result;
-    }
-
-    String rename(final String seqid) {
-        return chr ? addChr(seqid) : removeChr(seqid);
-    }
-
     /**
      * Main.
      *
@@ -165,14 +121,14 @@ public final class RenameReferences implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        Switch chr = new Switch("c", "chr", "add \"chr\" to chromosome names");
+        Switch chr = new Switch("c", "chr", "add \"chr\" to chromosome reference names");
         FileArgument inputGff3File = new FileArgument("i", "input-gff3-file", "input GFF3 file, default stdin", false);
         FileArgument outputGff3File = new FileArgument("o", "output-gff3-file", "output GFF3 file, default stdout", false);
 
         ArgumentList arguments = new ArgumentList(about, help, chr, inputGff3File, outputGff3File);
         CommandLine commandLine = new CommandLine(args);
 
-        RenameReferences renameReferences = null;
+        RenameGff3References renameGff3References = null;
         try {
             CommandLineParser.parse(commandLine, arguments);
             if (about.wasFound()) {
@@ -183,7 +139,7 @@ public final class RenameReferences implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            renameReferences = new RenameReferences(chr.wasFound(), inputGff3File.getValue(), outputGff3File.getValue());
+            renameGff3References = new RenameGff3References(chr.wasFound(), inputGff3File.getValue(), outputGff3File.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {
@@ -202,7 +158,7 @@ public final class RenameReferences implements Callable<Integer> {
             System.exit(-1);
         }
         try {
-            System.exit(renameReferences.call());
+            System.exit(renameGff3References.call());
         }
         catch (Exception e) {
             e.printStackTrace();

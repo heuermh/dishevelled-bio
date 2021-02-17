@@ -1,0 +1,5 @@
+##fileformat=VCFv4.2
+##INFO=<ID=DB,Number=0,Type=Flag,Description="dbSNP membership, build 146">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+1	2400	rs903331232	A	G	.	.	DB
+1	4800	rs1441881282	C	T	.	.	DB

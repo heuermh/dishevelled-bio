@@ -26,15 +26,16 @@ package org.dishevelled.bio.tools;
 import static org.dishevelled.compress.Readers.reader;
 import static org.dishevelled.compress.Writers.writer;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import java.util.concurrent.Callable;
+
+import java.util.regex.Pattern;
 
 import org.dishevelled.bio.variant.vcf.VcfGenotype;
 import org.dishevelled.bio.variant.vcf.VcfHeader;
@@ -46,6 +47,7 @@ import org.dishevelled.bio.variant.vcf.VcfStreamAdapter;
 
 import org.dishevelled.bio.variant.vcf.header.VcfHeaderLineType;
 import org.dishevelled.bio.variant.vcf.header.VcfHeaderLines;
+import org.dishevelled.bio.variant.vcf.header.VcfHeaderLine;
 
 import org.dishevelled.commandline.ArgumentList;
 import org.dishevelled.commandline.CommandLine;
@@ -57,64 +59,53 @@ import org.dishevelled.commandline.Usage;
 import org.dishevelled.commandline.argument.FileArgument;
 
 /**
- * Remap Type=String DB flags in VCF format to DB Type=Flag and dbsnp Type=String fields.
+ * Rename references in VCF files.
  *
+ * @since 2.1
  * @author  Michael Heuer
  */
-public final class RemapDbSnp implements Callable<Integer> {
-    private final File inputVcfFile;
-    private final File outputVcfFile;
-    private static final String USAGE = "dsh-remap-dbsnp -i input.vcf.gz -o output.vcf.gz";
+public final class RenameVcfReferences extends AbstractRenameReferences {
+    private static final String USAGE = "dsh-rename-vcf-references [--chr] -i input.vcf.gz -o output.vcf.gz";
 
 
     /**
-     * Remap Type=String DB flags in VCF format to DB Type=Flag and dbsnp Type=String fields.
+     * Rename references in VCF files.
      *
+     * @param chr true to add "chr" to chromosome names
      * @param inputVcfFile input VCF file, if any
      * @param outputVcfFile output VCF file, if any
      */
-    public RemapDbSnp(final File inputVcfFile, final File outputVcfFile) {
-        this.inputVcfFile = inputVcfFile;
-        this.outputVcfFile = outputVcfFile;
+    public RenameVcfReferences(final boolean chr, final File inputVcfFile, final File outputVcfFile) {
+        super(chr, inputVcfFile, outputVcfFile);
     }
 
 
     @Override
     public Integer call() throws Exception {
+        BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            writer = writer(outputVcfFile);
+            writer = writer(outputFile);
 
             final PrintWriter w = writer;
-            VcfReader.stream(reader(inputVcfFile), new VcfStreamAdapter() {
+            VcfReader.stream(reader(inputFile), new VcfStreamAdapter() {
                     private boolean wroteSamples = false;
-                    private boolean remapDbSnp = false;
                     private List<VcfSample> samples = new ArrayList<VcfSample>();
 
                     @Override
                     public void header(final VcfHeader header) {
                         VcfHeaderLines headerLines = VcfHeaderLines.fromHeader(header);
-
-                        // add additional dbsnp INFO field header line if necessary
-                        if (headerLines.getInfoHeaderLines().containsKey("DB") &&
-                            VcfHeaderLineType.String.equals(headerLines.getInfoHeaderLines().get("DB").getType())) {
-
-                            remapDbSnp = true;
-                            VcfHeader.Builder builder = VcfHeader.builder().withFileFormat(header.getFileFormat());
-                            for (String meta : header.getMeta()) {
-                                if (meta.startsWith("##INFO=<ID=DB")) {
-                                    builder.withMeta("##INFO=<ID=DB,Number=0,Type=Flag,Description=\"dbSNP membership\">");
-                                    builder.withMeta("##INFO=<ID=dbsnp,Number=1,Type=String,Description=\"dbSNP identifier\">");
-                                }
-                                else {
-                                    builder.withMeta(meta);
-                                }
+                        // error if ##contig header lines present
+                        if (!headerLines.getContigHeaderLines().isEmpty()) {
+                            throw new RuntimeException("renaming references may cause inconsistencies when ##contig header lines present, e.g.:\n" + headerLines.getContigHeaderLines().values().iterator().next());
+                        }
+                        // error if ##reference header line present
+                        for (VcfHeaderLine line : headerLines.getHeaderLines()) {
+                            if ("reference".equals(line.getKey())) {
+                                throw new RuntimeException("renaming references may cause inconsistencies when ##reference header line present:\n" + line.toString());
                             }
-                            VcfWriter.writeHeader(builder.build(), w);
                         }
-                        else {
-                            VcfWriter.writeHeader(header, w);
-                        }
+                        VcfWriter.writeHeader(header, w);
                     }
 
                     @Override
@@ -130,24 +121,23 @@ public final class RemapDbSnp implements Callable<Integer> {
                             wroteSamples = true;
                         }
 
-                        // write out record, remapping DB INFO field if necessary
-                        if (remapDbSnp && record.containsInfoKey("DB")) {
-                            String dbSnpId = record.getInfoString("DB");
-                            VcfRecord copy = VcfRecord.builder(record)
-                                .replaceInfo("DB", "true")
-                                .replaceInfo("dbsnp", dbSnpId)
-                                .build();
-                            VcfWriter.writeRecord(samples, copy, w);
-                        }
-                        else {
-                            VcfWriter.writeRecord(samples, record, w);
-                        }
+                        // write out record, renaming chrom
+                        VcfRecord renamed = VcfRecord.builder(record)
+                            .withChrom(rename(record.getChrom()))
+                            .build();
+
+                        VcfWriter.writeRecord(samples, renamed, w);
                     }
                 });
-
             return 0;
         }
         finally {
+            try {
+                reader.close();
+            }
+            catch (Exception e) {
+                // empty
+            }
             try {
                 writer.close();
             }
@@ -165,13 +155,14 @@ public final class RemapDbSnp implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
+        Switch chr = new Switch("c", "chr", "add \"chr\" to chromosome reference names");
         FileArgument inputVcfFile = new FileArgument("i", "input-vcf-file", "input VCF file, default stdin", false);
         FileArgument outputVcfFile = new FileArgument("o", "output-vcf-file", "output VCF file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputVcfFile, outputVcfFile);
+        ArgumentList arguments = new ArgumentList(about, help, chr, inputVcfFile, outputVcfFile);
         CommandLine commandLine = new CommandLine(args);
 
-        RemapDbSnp remapDbSnp = null;
+        RenameVcfReferences renameVcfReferences = null;
         try {
             CommandLineParser.parse(commandLine, arguments);
             if (about.wasFound()) {
@@ -182,7 +173,7 @@ public final class RemapDbSnp implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            remapDbSnp = new RemapDbSnp(inputVcfFile.getValue(), outputVcfFile.getValue());
+            renameVcfReferences = new RenameVcfReferences(chr.wasFound(), inputVcfFile.getValue(), outputVcfFile.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {
@@ -201,7 +192,7 @@ public final class RemapDbSnp implements Callable<Integer> {
             System.exit(-1);
         }
         try {
-            System.exit(remapDbSnp.call());
+            System.exit(renameVcfReferences.call());
         }
         catch (Exception e) {
             e.printStackTrace();

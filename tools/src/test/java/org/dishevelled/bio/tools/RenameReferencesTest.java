@@ -33,6 +33,7 @@ import org.junit.Test;
 /**
  * Unit test for RenameReferences.
  *
+ * @deprecated to be removed in 3.0
  * @author  Michael Heuer
  */
 public final class RenameReferencesTest {
