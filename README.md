@@ -64,6 +64,9 @@ commands:
   reassemble-paths    reassemble paths in GFA 1.0 format from traversal records
   remap-dbsnp    remap Type=String DB flags in VCF format to DB Type=Flag and dbsnp Type=String fields
   remap-phase-set    remap Type=String PS phase set ids in VCF format to Type=Integer
+  rename-bed-references    rename references in BED files
+  rename-gff3-references    rename references in GFF3 files
+  rename-vcf-references    rename references in VCF files
   split-bed    split files in BED format
   split-fasta    split files in FASTA format
   split-fastq    split files in FASTQ format
