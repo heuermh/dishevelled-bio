@@ -340,6 +340,14 @@
               <mainClass>org.dishevelled.bio.tools.ReassemblePaths</mainClass>
             </program>
             <program>
+              <id>dsh-remap-dbsnp</id>
+              <mainClass>org.dishevelled.bio.tools.RemapDbSnp</mainClass>
+            </program>
+            <program>
+              <id>dsh-remap-phase-set</id>
+              <mainClass>org.dishevelled.bio.tools.RemapPhaseSet</mainClass>
+            </program>
+            <program>
               <id>dsh-rename-bed-references</id>
               <mainClass>org.dishevelled.bio.tools.RenameBedReferences</mainClass>
             </program>
@@ -350,18 +358,6 @@
             <program>
               <id>dsh-rename-vcf-references</id>
               <mainClass>org.dishevelled.bio.tools.RenameVcfReferences</mainClass>
-            </program>
-            <program>
-              <id>dsh-remap-dbsnp</id>
-              <mainClass>org.dishevelled.bio.tools.RemapDbSnp</mainClass>
-            </program>
-            <program>
-              <id>dsh-remap-phase-set</id>
-              <mainClass>org.dishevelled.bio.tools.RemapPhaseSet</mainClass>
-            </program>
-            <program>
-              <id>dsh-rename-references</id>
-              <mainClass>org.dishevelled.bio.tools.RenameReferences</mainClass>
             </program>
             <program>
               <id>dsh-split-bed</id>
