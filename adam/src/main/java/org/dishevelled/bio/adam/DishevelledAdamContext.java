@@ -58,12 +58,12 @@ import org.bdgenomics.adam.converters.DefaultHeaderLines;
 import org.bdgenomics.adam.models.SequenceDictionary;
 import org.bdgenomics.adam.models.SequenceRecord;
 
-import org.bdgenomics.adam.rdd.ADAMContext;
+import org.bdgenomics.adam.ds.ADAMContext;
 
-import org.bdgenomics.adam.rdd.feature.FeatureDataset;
+import org.bdgenomics.adam.ds.feature.FeatureDataset;
 
-import org.bdgenomics.adam.rdd.variant.GenotypeDataset;
-import org.bdgenomics.adam.rdd.variant.VariantDataset;
+import org.bdgenomics.adam.ds.variant.GenotypeDataset;
+import org.bdgenomics.adam.ds.variant.VariantDataset;
 
 import org.bdgenomics.convert.Converter;
 import org.bdgenomics.convert.ConversionStringency;
