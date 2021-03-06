@@ -105,25 +105,16 @@ public final class IdentifyGfa1 implements Callable<Integer> {
                             Containment containment = (Containment) gfa1Record;
                             Gfa1Writer.write(new Containment(containment.getContainer(), containment.getContained(), containment.getPosition(), containment.getOverlap(), addId(id, containment.getAnnotations())), w);
                         }
-                        else if (gfa1Record instanceof Header) {
-                            Header header = (Header) gfa1Record;
-                            Gfa1Writer.write(new Header(addId(id, header.getAnnotations())), w);
-                        }
                         else if (gfa1Record instanceof Link) {
                             Link link = (Link) gfa1Record;
                             Gfa1Writer.write(new Link(link.getSource(), link.getTarget(), link.getOverlap(), addId(id, link.getAnnotations())), w);
                         }
-                        else if (gfa1Record instanceof Path) {
-                            Path path = (Path) gfa1Record;
-                            Gfa1Writer.write(new Path(path.getName(), path.getSegments(), path.getOverlaps(), addId(id, path.getAnnotations())), w);
-                        }
-                        else if (gfa1Record instanceof Segment) {
-                            Segment segment = (Segment) gfa1Record;
-                            Gfa1Writer.write(new Segment(segment.getName(), segment.getSequence(), addId(id, segment.getAnnotations())), w);
-                        }
                         else if (gfa1Record instanceof Traversal) {
                             Traversal traversal = (Traversal) gfa1Record;
                             Gfa1Writer.write(new Traversal(traversal.getPathName(), traversal.getOrdinal(), traversal.getSource(), traversal.getTarget(), traversal.getOverlap(), addId(id, traversal.getAnnotations())), w);
+                        }
+                        else {
+                            Gfa1Writer.write(gfa1Record, w);
                         }
                         return true;
                     }
@@ -155,13 +146,13 @@ public final class IdentifyGfa1 implements Callable<Integer> {
      * @return new annotations including an annotation for the specified identifier
      */
     private static Map<String, Annotation> addId(final String id, final Map<String, Annotation> annotations) {
-        Annotation value = new Annotation("id", "Z", id);
+        Annotation value = new Annotation("ID", "Z", id);
         if (annotations.isEmpty()) {
-            return ImmutableMap.of("id", value);
+            return ImmutableMap.of("ID", value);
         }
         return ImmutableMap.<String, Annotation>builder()
             .putAll(annotations)
-            .put("id", value)
+            .put("ID", value)
             .build();
     }
 
