@@ -64,10 +64,21 @@ public final class Reference {
     /**
      * Return the identifier for this reference.
      *
+     * @deprecated replaced by name field, to be removed in version 3.0
      * @return the identifier for this reference
      */
     public String getId() {
         return id;
+    }
+
+    /**
+     * Return the name for this reference.
+     *
+     * @since 2.0.3
+     * @return the name for this reference
+     */
+    public String getName() {
+        return getId();
     }
 
     /**

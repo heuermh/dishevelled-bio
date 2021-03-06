@@ -37,6 +37,16 @@ public enum Orientation {
     REVERSE;
 
     /**
+     * Return the symbol for this orientation, + or -.
+     *
+     * @since 2.0.3
+     * @return the symbol for this orientation, + or -
+     */
+    public String getSymbol() {
+        return isForward() ? "+" : "-";
+    }
+
+    /**
      * Return true if this orientation is <code>Orientation.FORWARD</code>.
      *
      * @return true if this orientation is <code>Orientation.FORWARD</code>
