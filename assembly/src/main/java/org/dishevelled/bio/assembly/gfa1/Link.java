@@ -476,10 +476,10 @@ public final class Link extends Gfa1Record {
     //
 
     /**
-     * Return true if the annotations for this segment contain
+     * Return true if the annotations for this link contain
      * the reserved key <code>ID</code>.
      *
-     * @return true if the annotations for this segment contain
+     * @return true if the annotations for this link contain
      *    the reserved key <code>ID</code>
      */
     public boolean containsId() {

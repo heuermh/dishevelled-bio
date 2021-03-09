@@ -164,6 +164,43 @@ public final class Traversal extends Gfa1Record {
         return Optional.ofNullable(overlap);
     }
 
+
+    // optional fields
+
+    /**
+     * Return true if the annotations for this traversal contain
+     * the reserved key <code>ID</code>.
+     *
+     * @return true if the annotations for this traversal contain
+     *    the reserved key <code>ID</code>
+     */
+    public boolean containsId() {
+        return containsAnnotationKey("ID");
+    }
+
+    /**
+     * Return the Type=Z value for the reserved key <code>ID</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the reserved key <code>ID</code>
+     *    as a string
+     */
+    public String getId() {
+        return getAnnotationString("ID");
+    }
+
+    /**
+     * Return an optional Type=Z value for the reserved key <code>ID</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the reserved key <code>ID</code>
+     *   as a string
+     */
+    public Optional<String> getIdOpt() {
+        return getAnnotationStringOpt("ID");
+    }
+
+
     @Override
     public int hashCode() {
         return hashCode;

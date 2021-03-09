@@ -290,10 +290,10 @@ public final class Containment extends Gfa1Record {
     //
 
     /**
-     * Return true if the annotations for this segment contain
+     * Return true if the annotations for this containment contain
      * the reserved key <code>ID</code>.
      *
-     * @return true if the annotations for this segment contain
+     * @return true if the annotations for this containment contain
      *    the reserved key <code>ID</code>
      */
     public boolean containsId() {
