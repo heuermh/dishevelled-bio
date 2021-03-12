@@ -27,7 +27,7 @@
   <parent>
     <groupId>org.dishevelled</groupId>
     <artifactId>dsh-parent</artifactId>
-    <version>23</version>
+    <version>24-SNAPSHOT</version>
   </parent>
   <artifactId>dsh-bio</artifactId>
   <packaging>pom</packaging>
