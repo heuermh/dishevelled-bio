@@ -57,7 +57,7 @@ import org.dishevelled.commandline.Usage;
 import org.dishevelled.commandline.argument.FileArgument;
 
 /**
- * Remap Type=String PS phase set ids in VCF format to Type=Integer.
+ * Remap PS Type=String phase set ids in VCF format to PS Type=Integer.
  *
  * @author  Michael Heuer
  */

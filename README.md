@@ -60,10 +60,11 @@ commands:
   filter-sam    filter alignments in SAM format
   filter-vcf    filter variants in VCF format
   gfa1-to-gfa2    convert GFA 1.0 format to GFA 2.0 format
+  identify-gfa1    add identifier annotation to records in GFA 1.0 format
   interleave-fastq    convert first and second sequence files in FASTQ format to interleaved FASTQ format
   reassemble-paths    reassemble paths in GFA 1.0 format from traversal records
-  remap-dbsnp    remap Type=String DB flags in VCF format to DB Type=Flag and dbsnp Type=String fields
-  remap-phase-set    remap Type=String PS phase set ids in VCF format to Type=Integer
+  remap-dbsnp    remap DB Type=String flags in VCF format to DB Type=Flag and dbsnp Type=String fields
+  remap-phase-set    remap PS Type=String phase set ids in VCF format to PS Type=Integer
   rename-bed-references    rename references in BED files
   rename-gff3-references    rename references in GFF3 files
   rename-vcf-references    rename references in VCF files

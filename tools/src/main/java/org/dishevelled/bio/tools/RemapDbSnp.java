@@ -57,7 +57,7 @@ import org.dishevelled.commandline.Usage;
 import org.dishevelled.commandline.argument.FileArgument;
 
 /**
- * Remap Type=String DB flags in VCF format to DB Type=Flag and dbsnp Type=String fields.
+ * Remap DB Type=String flags in VCF format to DB Type=Flag and dbsnp Type=String fields.
  *
  * @author  Michael Heuer
  */
@@ -68,7 +68,7 @@ public final class RemapDbSnp implements Callable<Integer> {
 
 
     /**
-     * Remap Type=String DB flags in VCF format to DB Type=Flag and dbsnp Type=String fields.
+     * Remap DB Type=String flags in VCF format to DB Type=Flag and dbsnp Type=String fields.
      *
      * @param inputVcfFile input VCF file, if any
      * @param outputVcfFile output VCF file, if any
