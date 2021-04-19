@@ -71,7 +71,7 @@
     <bdg-formats.version>0.15.0</bdg-formats.version>
     <biojava.version>1.9.5</biojava.version>
     <commons-csv.version>1.8</commons-csv.version>
-    <commons-codec.version>1.14</commons-codec.version>
+    <commons-codec.version>1.15</commons-codec.version>
     <commons-io.version>2.8.0</commons-io.version>
     <commons-math3.version>3.6.1</commons-math3.version>
     <dsh-bitset.version>3.0</dsh-bitset.version>
@@ -81,7 +81,7 @@
     <hadoop.version>3.2.1</hadoop.version>
     <htsjdk.version>2.24.1</htsjdk.version>
     <jdk.version>1.8</jdk.version>
-    <jmh.version>1.25.2</jmh.version>
+    <jmh.version>1.29</jmh.version>
     <kryo-serializers.version>0.45</kryo-serializers.version>
     <maven.enforcer.maven-version>[3.1.1,)</maven.enforcer.maven-version>
     <maven.enforcer.jdk-version>[1.8,)</maven.enforcer.jdk-version>
