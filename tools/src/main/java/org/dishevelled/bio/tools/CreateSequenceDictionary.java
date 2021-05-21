@@ -30,6 +30,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import java.util.concurrent.Callable;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -47,6 +50,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.URLArgument;
 
 /**
  * Create a SequenceDictionary from DNA sequences in FASTA format.
@@ -55,6 +59,7 @@ import org.dishevelled.commandline.argument.FileArgument;
  */
 @SuppressWarnings("deprecation")
 public final class CreateSequenceDictionary implements Callable<Integer> {
+    private final URL url;
     private final File inputFastaFile;
     private final File outputSequenceDictionaryFile;
     private static final String USAGE = "dsh-create-sequence-dictionary [args]";
@@ -66,8 +71,34 @@ public final class CreateSequenceDictionary implements Callable<Integer> {
      * @param outputSequenceDictionaryFile output SequenceDictionary .dict file, if any
      */
     public CreateSequenceDictionary(final File inputFastaFile, final File outputSequenceDictionaryFile) {
+        this(null, inputFastaFile, outputSequenceDictionaryFile);
+    }
+
+    /**
+     * Create a SequenceDictionary from DNA sequences in FASTA format with the specified URL.
+     *
+     * @since 2.1
+     * @param url URL, if any
+     * @param inputFastaFile input FASTA file, if any
+     * @param outputSequenceDictionaryFile output SequenceDictionary .dict file, if any
+     */
+    public CreateSequenceDictionary(final URL url,
+                                    final File inputFastaFile,
+                                    final File outputSequenceDictionaryFile) {
         this.inputFastaFile = inputFastaFile;
         this.outputSequenceDictionaryFile = outputSequenceDictionaryFile;
+
+        try {
+            if (url != null) {
+                this.url = url;
+            }
+            else {
+                this.url = inputFastaFile == null ? null : inputFastaFile.toURL();
+            }
+        }
+        catch (MalformedURLException e) {
+            throw new IllegalArgumentException("could not create URL, caught " + e.getMessage(), e);
+        }
     }
 
 
@@ -78,7 +109,6 @@ public final class CreateSequenceDictionary implements Callable<Integer> {
         try {
             reader = reader(inputFastaFile);
             writer = writer(outputSequenceDictionaryFile);
-            String url = inputFastaFile == null ? null : inputFastaFile.toURL().toString();
 
             writer.println("@HD\tVN:1.6");
             for (SequenceIterator sequences = SeqIOTools.readFastaDNA(reader); sequences.hasNext(); ) {
@@ -128,10 +158,11 @@ public final class CreateSequenceDictionary implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
+        URLArgument url = new URLArgument("u", "url", "URL, default input FASTA file path", false);
         FileArgument inputFastaFile = new FileArgument("i", "input-fasta-file", "input FASTA file, default stdin", false);
         FileArgument outputSequenceDictionaryFile = new FileArgument("o", "output-sequence-dictionary-file", "output SequenceDictionary .dict file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputFastaFile, outputSequenceDictionaryFile);
+        ArgumentList arguments = new ArgumentList(about, help, url, inputFastaFile, outputSequenceDictionaryFile);
         CommandLine commandLine = new CommandLine(args);
 
         CreateSequenceDictionary createSequenceDictionary = null;
@@ -146,7 +177,7 @@ public final class CreateSequenceDictionary implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            createSequenceDictionary = new CreateSequenceDictionary(inputFastaFile.getValue(), outputSequenceDictionaryFile.getValue());
+            createSequenceDictionary = new CreateSequenceDictionary(url.getValue(), inputFastaFile.getValue(), outputSequenceDictionaryFile.getValue());
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);
