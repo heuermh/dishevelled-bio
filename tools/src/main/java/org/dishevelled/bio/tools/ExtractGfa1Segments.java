@@ -52,6 +52,7 @@ import org.dishevelled.commandline.argument.IntegerArgument;
 /**
  * Extract assembly segment sequences in GFA 1.0 format to FASTA format.
  *
+ * @since 2.1
  * @author  Michael Heuer
  */
 public final class ExtractGfa1Segments implements Callable<Integer> {
