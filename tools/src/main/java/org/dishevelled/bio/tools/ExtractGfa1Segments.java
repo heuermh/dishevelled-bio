@@ -50,7 +50,7 @@ import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
 
 /**
- * Extract GFA1 segment sequences in FASTA format.
+ * Extract assembly segment sequences in GFA 1.0 format to FASTA format.
  *
  * @author  Michael Heuer
  */
@@ -62,9 +62,9 @@ public final class ExtractGfa1Segments implements Callable<Integer> {
     private static final String USAGE = "dsh-extract-gfa1-segments [args]";
 
     /**
-     * Extract GFA1 segment sequences in FASTA format.
+     * Extract assembly segment sequences in GFA 1.0 format to FASTA format.
      *
-     * @param inputGfa1File input GFA1 file, if any
+     * @param inputGfa1File input GFA 1.0 file, if any
      * @param outputFastaFile output FASTA file, if any
      * @param lineWidth line width
      */
@@ -137,7 +137,7 @@ public final class ExtractGfa1Segments implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputGfa1File = new FileArgument("i", "input-gfa1-file", "input GFA1 file, default stdin", false);
+        FileArgument inputGfa1File = new FileArgument("i", "input-gfa1-file", "input GFA 1.0 file, default stdin", false);
         FileArgument outputFastaFile = new FileArgument("o", "output-fasta-file", "output FASTA file, default stdout", false);
         IntegerArgument lineWidth = new IntegerArgument("w", "line-width", "line width, default " + DEFAULT_LINE_WIDTH, false);
 
