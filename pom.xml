@@ -27,7 +27,7 @@
   <parent>
     <groupId>org.dishevelled</groupId>
     <artifactId>dsh-parent</artifactId>
-    <version>26-SNAPSHOT</version>
+    <version>27-SNAPSHOT</version>
   </parent>
   <artifactId>dsh-bio</artifactId>
   <packaging>pom</packaging>
@@ -72,7 +72,7 @@
     <biojava.version>1.9.5</biojava.version>
     <commons-csv.version>1.8</commons-csv.version>
     <commons-codec.version>1.15</commons-codec.version>
-    <commons-io.version>2.10.0</commons-io.version>
+    <commons-io.version>2.11.0</commons-io.version>
     <commons-math3.version>3.6.1</commons-math3.version>
     <dsh-bitset.version>3.0</dsh-bitset.version>
     <dsh-commandline.version>1.1</dsh-commandline.version>
