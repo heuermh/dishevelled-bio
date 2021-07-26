@@ -39,18 +39,18 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Unit test for ExtractGfa1Segments.
+ * Unit test for ExportSegments.
  *
  * @author  Michael Heuer
  */
-public final class ExtractGfa1SegmentsTest {
+public final class ExportSegmentsTest {
     private File inputGfa1File;
     private File outputFastaFile;
 
     @Before
     public void setUp() throws IOException {
-        inputGfa1File = File.createTempFile("extractGfa1SegmentsTest", ".gfa");
-        outputFastaFile = File.createTempFile("extractGfa1SegmentsTest", "fa");
+        inputGfa1File = File.createTempFile("exportSegmentsTest", ".gfa");
+        outputFastaFile = File.createTempFile("exportSegmentsTest", "fa");
     }
 
     @After
@@ -61,19 +61,19 @@ public final class ExtractGfa1SegmentsTest {
 
     @Test
     public void testConstructor() {
-        assertNotNull(new ExtractGfa1Segments(inputGfa1File, outputFastaFile, ExtractGfa1Segments.DEFAULT_LINE_WIDTH));
+        assertNotNull(new ExportSegments(inputGfa1File, outputFastaFile, ExportSegments.DEFAULT_LINE_WIDTH));
     }
 
     @Test
-    public void testExtractGfa1Segments() throws Exception {
+    public void testExportSegments() throws Exception {
         copyResource("segments.gfa", inputGfa1File);
-        new ExtractGfa1Segments(inputGfa1File, outputFastaFile, ExtractGfa1Segments.DEFAULT_LINE_WIDTH).call();
+        new ExportSegments(inputGfa1File, outputFastaFile, ExportSegments.DEFAULT_LINE_WIDTH).call();
 
         String description = Files.asCharSource(outputFastaFile, Charset.forName("UTF-8")).readFirstLine();
         assertEquals(">2 LN:i:2\tRC:i:50\tFC:i:100\tKC:i:0\tzz:Z:Test", description);
     }
 
     private static void copyResource(final String name, final File file) throws Exception {
-        Files.write(Resources.toByteArray(ExtractGfa1SegmentsTest.class.getResource(name)), file);
+        Files.write(Resources.toByteArray(ExportSegmentsTest.class.getResource(name)), file);
     }
 }

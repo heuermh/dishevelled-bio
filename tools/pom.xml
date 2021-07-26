@@ -260,8 +260,8 @@
               <mainClass>org.dishevelled.bio.tools.DownsampleInterleavedFastq</mainClass>
             </program>
             <program>
-              <id>dsh-extract-gfa1-segments</id>
-              <mainClass>org.dishevelled.bio.tools.ExtractGfa1Segments</mainClass>
+              <id>dsh-export-segments</id>
+              <mainClass>org.dishevelled.bio.tools.ExportSegments</mainClass>
             </program>
             <program>
               <id>dsh-extract-fastq</id>

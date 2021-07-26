@@ -42,7 +42,7 @@ commands:
   disinterleave-fastq    convert interleaved FASTQ format into first and second sequence files in FASTQ format
   downsample-fastq    downsample sequences from files in FASTQ format
   downsample-interleaved-fastq    downsample sequences from a file in interleaved FASTQ format
-  extract-gfa1-segments    extract assembly segment sequences in GFA 1.0 format to FASTA format
+  export-segments    export assembly segment sequences in GFA 1.0 format to FASTA format
   extract-fasta    extract matching sequences in FASTA format
   extract-fastq    extract matching sequences in FASTQ format
   extract-fastq-by-length    extract sequences in FASTQ format with a range of lengths
