@@ -546,6 +546,220 @@ public final class Segment extends Gfa1Record {
         return getUrOpt();
     }
 
+    //
+
+    /**
+     * Return true if the annotations for this segment contain
+     * the rGFA reserved key <code>SN</code>.
+     *
+     * @return true if the annotations for this segment contain
+     *    the rGFA reserved key <code>SN</code>
+     */
+    public boolean containsSn() {
+        return containsAnnotationKey("SN");
+    }
+
+    /**
+     * Return the Type=Z value for the rGFA reserved key <code>SN</code>
+     * as a string.
+     *
+     * @return the Type=Z value for the rGFA reserved key <code>SN</code>
+     *    as a string
+     */
+    public String getSn() {
+        return getAnnotationString("SN");
+    }
+
+    /**
+     * Return an optional Type=Z value for the rGFA reserved key <code>SN</code>
+     * as a string.
+     *
+     * @return an optional Type=Z value for the rGFA reserved key <code>SN</code>
+     *   as a string
+     */
+    public Optional<String> getSnOpt() {
+        return getAnnotationStringOpt("SN");
+    }
+
+    /**
+     * Return true if the annotations for this segment contain
+     * the rGFA reserved key <code>SN</code>.
+     *
+     * @return true if the annotations for this segment contain
+     *    the rGFA reserved key <code>SN</code>
+     */
+    public boolean containsStableSequenceName() {
+        return containsSn();
+    }
+
+    /**
+     * Return the name of stable sequence from which this segment is derived
+     * (Type=Z value for the rGFA reserved key <code>SN</code> as a string).
+     *
+     * @return the name of stable sequence from which this segment is derived
+     *    (Type=Z value for the rGFA reserved key <code>SN</code> as a string)
+     */
+    public String getStableSequenceName() {
+        return getSn();
+    }
+
+    /**
+     * Return an optional wrapping the name of stable sequence from which this
+     * segment is derived (Type=Z value for the rGFA reserved key <code>SN</code>
+     * as a string).
+     *
+     * @return an optional wrapping the name of stable sequence from which this
+     *    segment is derived (Type=Z value for the rGFA reserved key <code>SN</code>
+     *    as a string)
+     */
+    public Optional<String> getStableSequenceNameOpt() {
+        return getSnOpt();
+    }
+
+    //
+
+    /**
+     * Return true if the annotations for this segment contain
+     * the rGFA reserved key <code>SO</code>.
+     *
+     * @return true if the annotations for this segment contain
+     *    the rGFA reserved key <code>SO</code>
+     */
+    public boolean containsSo() {
+        return containsAnnotationKey("SO");
+    }
+
+    /**
+     * Return the Type=i value for the rGFA reserved key <code>SO</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the rGFA reserved key <code>SO</code>
+     *    as an integer
+     */
+    public int getSo() {
+        return getAnnotationInteger("SO");
+    }
+
+    /**
+     * Return an optional Type=i value for the rGFA reserved key <code>SO</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the rGFA reserved key <code>SO</code>
+     *   as an integer
+     */
+    public Optional<Integer> getSoOpt() {
+        return getAnnotationIntegerOpt("SO");
+    }
+
+    /**
+     * Return true if the annotations for this segment contain
+     * the rGFA reserved key <code>SO</code>.
+     *
+     * @return true if the annotations for this segment contain
+     *    the rGFA reserved key <code>SO</code>
+     */
+    public boolean containsStableSequenceOffset() {
+        return containsSo();
+    }
+
+    /**
+     * Return the offset on the stable sequence for this segment
+     * (Type=i value for the rGFA reserved key <code>SO</code> as an integer).
+     *
+     * @return the offset on the stable sequence for this segment
+     *    (Type=i value for the rGFA reserved key <code>SO</code> as an integer)
+     */
+    public int getStableSequenceOffset() {
+        return getSo();
+    }
+
+    /**
+     * Return an optional wrapping the offset on the stable sequence for this
+     * segment (Type=i value for the rGFA reserved key <code>SO</code>
+     * as an integer).
+     *
+     * @return an optional wrapping the offset on the stable sequence for this
+     *    segment (Type=i value for the rGFA reserved key <code>SO</code>
+     *    as an integer)
+     */
+    public Optional<Integer> getStableSequenceOffsetOpt() {
+        return getSoOpt();
+    }
+
+    //
+
+    /**
+     * Return true if the annotations for this segment contain
+     * the rGFA reserved key <code>SR</code>.
+     *
+     * @return true if the annotations for this segment contain
+     *    the rGFA reserved key <code>SR</code>
+     */
+    public boolean containsSr() {
+        return containsAnnotationKey("SR");
+    }
+
+    /**
+     * Return the Type=i value for the rGFA reserved key <code>SR</code>
+     * as an integer.
+     *
+     * @return the Type=i value for the rGFA reserved key <code>SR</code>
+     *    as an integer
+     */
+    public int getSr() {
+        return getAnnotationInteger("SR");
+    }
+
+    /**
+     * Return an optional Type=i value for the rGFA reserved key <code>SR</code>
+     * as an integer.
+     *
+     * @return an optional Type=i value for the rGFA reserved key <code>SR</code>
+     *   as an integer
+     */
+    public Optional<Integer> getSrOpt() {
+        return getAnnotationIntegerOpt("SR");
+    }
+
+    /**
+     * Return true if the annotations for this segment contain
+     * the rGFA reserved key <code>SR</code>.
+     *
+     * @return true if the annotations for this segment contain
+     *    the rGFA reserved key <code>SR</code>
+     */
+    public boolean containsStableSequenceRank() {
+        return containsSr();
+    }
+
+    /**
+     * Return the rank of the stable sequence for this segment
+     * (Type=i value for the rGFA reserved key <code>SR</code> as an integer).
+     *
+     * Rank is 0 if on a linear reference genome; &gt;0 otherwise.
+     *
+     * @return the rank of the stable sequence for this segment
+     *    (Type=i value for the rGFA reserved key <code>SR</code> as an integer)
+     */
+    public int getStableSequenceRank() {
+        return getSr();
+    }
+
+    /**
+     * Return an optional wrapping the rank of the stable sequence for this
+     * segment (Type=i value for the rGFA reserved key <code>SR</code>
+     * as an integer).
+     *
+     * Rank is 0 if on a linear reference genome; &gt;0 otherwise.
+     *
+     * @return an optional wrapping the rank of the stable sequence for this
+     *    segment (Type=i value for the rGFA reserved key <code>SR</code>
+     *    as an integer)
+     */
+    public Optional<Integer> getStableSequenceRankOpt() {
+        return getSrOpt();
+    }
+
 
     @Override
     public int hashCode() {

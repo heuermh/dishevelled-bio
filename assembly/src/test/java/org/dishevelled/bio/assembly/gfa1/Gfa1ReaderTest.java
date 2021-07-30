@@ -147,4 +147,25 @@ public class Gfa1ReaderTest {
     public void testSegmentsNullReadable() throws Exception {
         segments(null);
     }
+
+    @Test
+    public void testrGfaFormat() throws Exception {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("MT.rGFA.gfa")))) {
+            for (Gfa1Record record : read(reader)) {
+                if (record instanceof Segment) {
+                    Segment segment = (Segment) record;
+
+                    // SN, SO, and SR are required for rGFA format
+                    assertTrue(segment.containsSn());
+                    assertTrue(segment.containsSo());
+                    assertTrue(segment.containsSr());
+
+                    // aliases
+                    assertTrue(segment.containsStableSequenceName());
+                    assertTrue(segment.containsStableSequenceOffset());
+                    assertTrue(segment.containsStableSequenceRank());
+                }
+            }
+        }
+    }
 }
