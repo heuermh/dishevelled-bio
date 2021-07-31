@@ -30,8 +30,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import java.util.concurrent.Callable;
@@ -47,10 +45,7 @@ import org.dishevelled.bio.assembly.gfa1.Gfa1Listener;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Reader;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Record;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Writer;
-import org.dishevelled.bio.assembly.gfa1.Header;
 import org.dishevelled.bio.assembly.gfa1.Link;
-import org.dishevelled.bio.assembly.gfa1.Path;
-import org.dishevelled.bio.assembly.gfa1.Segment;
 import org.dishevelled.bio.assembly.gfa1.Traversal;
 
 import org.dishevelled.commandline.ArgumentList;

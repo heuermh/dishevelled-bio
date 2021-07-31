@@ -194,7 +194,7 @@ public final class FilterGff3 extends AbstractFilter {
 
         @Override
         public boolean accept(final Gff3Record record) {
-            return record.getScore() == null ? false : record.getScore() > score;
+            return record.getScore() != null && record.getScore() > score;
         }
     }
 

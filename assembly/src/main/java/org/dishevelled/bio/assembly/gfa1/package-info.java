@@ -23,6 +23,6 @@
 */
 
 /**
- * Graphical Fragment Assembly (GFA) 1.0 support.
+ * Graphical Fragment Assembly (GFA) 1.0 and Reference GFA (rGFA) support.
  */
 package org.dishevelled.bio.assembly.gfa1;

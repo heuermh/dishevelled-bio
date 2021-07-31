@@ -588,7 +588,7 @@ public final class Segment extends Gfa1Record {
      * @return true if the annotations for this segment contain
      *    the rGFA reserved key <code>SN</code>
      */
-    public boolean containsStableSequenceName() {
+    public boolean containsStableName() {
         return containsSn();
     }
 
@@ -599,7 +599,7 @@ public final class Segment extends Gfa1Record {
      * @return the name of stable sequence from which this segment is derived
      *    (Type=Z value for the rGFA reserved key <code>SN</code> as a string)
      */
-    public String getStableSequenceName() {
+    public String getStableName() {
         return getSn();
     }
 
@@ -612,7 +612,7 @@ public final class Segment extends Gfa1Record {
      *    segment is derived (Type=Z value for the rGFA reserved key <code>SN</code>
      *    as a string)
      */
-    public Optional<String> getStableSequenceNameOpt() {
+    public Optional<String> getStableNameOpt() {
         return getSnOpt();
     }
 
@@ -658,7 +658,7 @@ public final class Segment extends Gfa1Record {
      * @return true if the annotations for this segment contain
      *    the rGFA reserved key <code>SO</code>
      */
-    public boolean containsStableSequenceOffset() {
+    public boolean containsStableOffset() {
         return containsSo();
     }
 
@@ -669,7 +669,7 @@ public final class Segment extends Gfa1Record {
      * @return the offset on the stable sequence for this segment
      *    (Type=i value for the rGFA reserved key <code>SO</code> as an integer)
      */
-    public int getStableSequenceOffset() {
+    public int getStableOffset() {
         return getSo();
     }
 
@@ -682,7 +682,7 @@ public final class Segment extends Gfa1Record {
      *    segment (Type=i value for the rGFA reserved key <code>SO</code>
      *    as an integer)
      */
-    public Optional<Integer> getStableSequenceOffsetOpt() {
+    public Optional<Integer> getStableOffsetOpt() {
         return getSoOpt();
     }
 
@@ -728,7 +728,7 @@ public final class Segment extends Gfa1Record {
      * @return true if the annotations for this segment contain
      *    the rGFA reserved key <code>SR</code>
      */
-    public boolean containsStableSequenceRank() {
+    public boolean containsStableRank() {
         return containsSr();
     }
 
@@ -741,7 +741,7 @@ public final class Segment extends Gfa1Record {
      * @return the rank of the stable sequence for this segment
      *    (Type=i value for the rGFA reserved key <code>SR</code> as an integer)
      */
-    public int getStableSequenceRank() {
+    public int getStableRank() {
         return getSr();
     }
 
@@ -756,7 +756,7 @@ public final class Segment extends Gfa1Record {
      *    segment (Type=i value for the rGFA reserved key <code>SR</code>
      *    as an integer)
      */
-    public Optional<Integer> getStableSequenceRankOpt() {
+    public Optional<Integer> getStableRankOpt() {
         return getSrOpt();
     }
 

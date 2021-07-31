@@ -118,7 +118,7 @@ public final class Gfa1ToGfa2 implements Callable<Integer> {
                             Gfa2Writer.write(new org.dishevelled.bio.assembly.gfa2.Segment(segment.getId(), segment.getSequence().length(), segment.getSequence(), segment.getAnnotations()), w);
                         }
                         else if (segment.getAnnotations().containsKey("LN")) {
-                            Gfa2Writer.write(new org.dishevelled.bio.assembly.gfa2.Segment(segment.getId(), Integer.valueOf(segment.getAnnotations().get("LN").getValue()), segment.getSequence(), segment.getAnnotations()), w);
+                            Gfa2Writer.write(new org.dishevelled.bio.assembly.gfa2.Segment(segment.getId(), Integer.parseInt(segment.getAnnotations().get("LN").getValue()), segment.getSequence(), segment.getAnnotations()), w);
                         }
                         else {
                             Gfa2Writer.write(new org.dishevelled.bio.assembly.gfa2.Segment(segment.getId(), 0, segment.getSequence(), segment.getAnnotations()), w);

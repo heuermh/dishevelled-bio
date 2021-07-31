@@ -34,9 +34,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javax.script.Compilable;
 import javax.script.CompiledScript;
 import javax.script.ScriptEngine;
@@ -57,7 +54,6 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
-import org.dishevelled.commandline.argument.IntegerArgument;
 import org.dishevelled.commandline.argument.StringArgument;
 
 /**

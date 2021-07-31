@@ -85,13 +85,13 @@ public final class CompressRgfa implements Callable<Integer> {
                             Segment segment = (Segment) rgfaRecord;
 
                             // SN, SO, SR are required for rGFA segments
-                            if (!segment.containsStableSequenceName()) {
+                            if (!segment.containsStableName()) {
                                 throw new IllegalArgumentException("rGFA segment " + segment.getName() + " must contain SN tag");
                             }
-                            if (!segment.containsStableSequenceOffset()) {
+                            if (!segment.containsStableOffset()) {
                                 throw new IllegalArgumentException("rGFA segment " + segment.getName() + " must contain SO tag");
                             }
-                            if (!segment.containsStableSequenceRank()) {
+                            if (!segment.containsStableRank()) {
                                 throw new IllegalArgumentException("rGFA segment " + segment.getName() + " must contain SR tag");
                             }
                         }

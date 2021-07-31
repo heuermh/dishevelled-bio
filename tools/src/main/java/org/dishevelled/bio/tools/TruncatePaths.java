@@ -32,11 +32,8 @@ import java.io.PrintWriter;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import java.util.concurrent.Callable;
-
-import org.dishevelled.bio.annotation.Annotation;
 
 import org.dishevelled.bio.assembly.gfa1.Gfa1Listener;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Reader;
@@ -44,7 +41,6 @@ import org.dishevelled.bio.assembly.gfa1.Gfa1Record;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Writer;
 import org.dishevelled.bio.assembly.gfa1.Path;
 import org.dishevelled.bio.assembly.gfa1.Reference;
-import org.dishevelled.bio.assembly.gfa1.Traversal;
 
 import org.dishevelled.commandline.ArgumentList;
 import org.dishevelled.commandline.CommandLine;

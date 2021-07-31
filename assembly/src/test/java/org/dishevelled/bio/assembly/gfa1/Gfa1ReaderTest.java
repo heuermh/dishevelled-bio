@@ -161,9 +161,9 @@ public class Gfa1ReaderTest {
                     assertTrue(segment.containsSr());
 
                     // aliases
-                    assertTrue(segment.containsStableSequenceName());
-                    assertTrue(segment.containsStableSequenceOffset());
-                    assertTrue(segment.containsStableSequenceRank());
+                    assertTrue(segment.containsStableName());
+                    assertTrue(segment.containsStableOffset());
+                    assertTrue(segment.containsStableRank());
                 }
             }
         }

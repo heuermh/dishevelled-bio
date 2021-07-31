@@ -28,7 +28,6 @@ import static org.dishevelled.compress.Writers.writer;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 
 import java.util.concurrent.Callable;
@@ -88,11 +87,9 @@ public final class ExportSegments implements Callable<Integer> {
                     @Override
                     public boolean segment(final Segment segment) {
                         if (segment.hasSequence()) {
-                            String description = describeSegment(segment);
-                            String sequence = segment.getSequence();
-
                             w.print(">");
                             w.println(describeSegment(segment));
+                            String sequence = segment.getSequence();
                             for (int i = 0, length = sequence.length(); i <= length; i += lineWidth) {
                                 w.println(sequence.substring(i, Math.min(i + lineWidth, length)));
                             }

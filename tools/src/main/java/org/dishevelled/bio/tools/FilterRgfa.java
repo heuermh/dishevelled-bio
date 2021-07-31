@@ -36,9 +36,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javax.script.Compilable;
 import javax.script.CompiledScript;
 import javax.script.ScriptEngine;
@@ -254,11 +251,11 @@ public final class FilterRgfa extends AbstractFilter {
         public boolean accept(final Gfa1Record record) {
             if (record instanceof Segment) {
                 Segment segment = (Segment) record;
-                return segment.containsFragmentCount() ? false : segment.getFragmentCount() >= fragmentCount;
+                return !segment.containsFragmentCount() && segment.getFragmentCount() >= fragmentCount;
             }
             else if (record instanceof Link) {
                 Link link = (Link) record;
-                return link.containsFragmentCount() ? false : link.getFragmentCount() >= fragmentCount;
+                return !link.containsFragmentCount() && link.getFragmentCount() >= fragmentCount;
             }
             return true;
         }
@@ -284,11 +281,11 @@ public final class FilterRgfa extends AbstractFilter {
         public boolean accept(final Gfa1Record record) {
             if (record instanceof Segment) {
                 Segment segment = (Segment) record;
-                return segment.containsKmerCount() ? false : segment.getKmerCount() >= kmerCount;
+                return !segment.containsKmerCount() && segment.getKmerCount() >= kmerCount;
             }
             else if (record instanceof Link) {
                 Link link = (Link) record;
-                return link.containsKmerCount() ? false : link.getKmerCount() >= kmerCount;
+                return !link.containsKmerCount() && link.getKmerCount() >= kmerCount;
             }
             return true;
         }
@@ -314,7 +311,7 @@ public final class FilterRgfa extends AbstractFilter {
         public boolean accept(final Gfa1Record record) {
             if (record instanceof Link) {
                 Link link = (Link) record;
-                return link.containsMappingQuality() ? false : link.getMappingQuality() >= mappingQuality;
+                return !link.containsMappingQuality() && link.getMappingQuality() >= mappingQuality;
             }
             return true;
         }
@@ -340,7 +337,7 @@ public final class FilterRgfa extends AbstractFilter {
         public boolean accept(final Gfa1Record record) {
             if (record instanceof Link) {
                 Link link = (Link) record;
-                return link.containsMismatchCount() ? false : link.getMismatchCount() < mismatchCount;
+                return !link.containsMismatchCount() && link.getMismatchCount() < mismatchCount;
             }
             return true;
         }
@@ -366,11 +363,11 @@ public final class FilterRgfa extends AbstractFilter {
         public boolean accept(final Gfa1Record record) {
             if (record instanceof Segment) {
                 Segment segment = (Segment) record;
-                return segment.containsReadCount() ? false : segment.getReadCount() >= readCount;
+                return !segment.containsReadCount() && segment.getReadCount() >= readCount;
             }
             else if (record instanceof Link) {
                 Link link = (Link) record;
-                return link.containsReadCount() ? false : link.getReadCount() >= readCount;
+                return !link.containsReadCount() && link.getReadCount() >= readCount;
             }
             return true;
         }
