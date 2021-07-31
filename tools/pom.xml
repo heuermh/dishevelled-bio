@@ -240,6 +240,10 @@
               <mainClass>org.dishevelled.bio.tools.CompressPaf</mainClass>
             </program>
             <program>
+              <id>dsh-compress-rgfa</id>
+              <mainClass>org.dishevelled.bio.tools.CompressRgfa</mainClass>
+            </program>
+            <program>
               <id>dsh-compress-sam</id>
               <mainClass>org.dishevelled.bio.tools.CompressSam</mainClass>
             </program>
@@ -318,6 +322,10 @@
             <program>
               <id>dsh-filter-paf</id>
               <mainClass>org.dishevelled.bio.tools.FilterPaf</mainClass>
+            </program>
+            <program>
+              <id>dsh-filter-rgfa</id>
+              <mainClass>org.dishevelled.bio.tools.FilterRgfa</mainClass>
             </program>
             <program>
               <id>dsh-filter-sam</id>

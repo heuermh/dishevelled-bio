@@ -36,6 +36,7 @@ commands:
   compress-gfa2    compress assembly in GFA 2.0 format to splittable bgzf or bzip2 compression codecs
   compress-gff3    compress features in GFF3 format to splittable bgzf or bzip2 compression codecs
   compress-paf    compress alignments in PAF format to splittable bgzf or bzip2 compression codecs
+  compress-rgfa    compress assembly in rGFA format to splittable bgzf or bzip2 compression codecs
   compress-sam    compress alignments in SAM format to splittable bgzf or bzip2 compression codecs
   compress-vcf    compress variants and genotypes in VCF format to splittable bgzf or bzip2 compression codecs
   create-sequence-dictionary    create a SequenceDictionary from DNA sequences in FASTA format
@@ -58,6 +59,7 @@ commands:
   filter-gfa2    filter assembly in GFA 2.0 format
   filter-gff3    filter features in GFF3 format
   filter-paf    filter alignments in PAF format
+  filter-rgfa    filter assembly in rGFA format
   filter-sam    filter alignments in SAM format
   filter-vcf    filter variants in VCF format
   gfa1-to-gfa2    convert GFA 1.0 format to GFA 2.0 format
