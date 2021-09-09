@@ -98,7 +98,7 @@ public final class PairedEndFastqReader {
                             listener.paired(fastq, other);
                         }
                         else {
-                            throw new PairedEndFastqReaderException("fastq " + fastq + " other " + other);
+                            throw new PairedEndFastqReaderException("could not determine left and right of pair, fastq " + fastq.getDescription() + " other " + other.getDescription());
                         }
                         keyedByPrefix.remove(prefix);
                     }
@@ -167,7 +167,7 @@ public final class PairedEndFastqReader {
                         left = null;
                     }
                     else {
-                        throw new PairedEndFastqReaderException("invalid interleaved FASTQ format, left=" + (left == null ? "null" : left.getDescription()) + " right=" + (fastq == null ? "null" : fastq.getDescription()));
+                        throw new PairedEndFastqReaderException("invalid interleaved FASTQ format, left " + (left == null ? "null" : left.getDescription()) + " right " + (fastq == null ? "null" : fastq.getDescription()));
                     }
                 }
             };
