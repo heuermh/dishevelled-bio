@@ -50,6 +50,7 @@ commands:
   fasta-to-fastq    convert DNA sequences in FASTA format to FASTQ format
   fastq-description    output description lines from sequences in FASTQ format
   fastq-sequence-length    output sequence lengths from sequences in FASTQ format
+  fastq-to-bam    convert sequences in FASTQ format to unaligned BAM format
   fastq-to-fasta    convert sequences in FASTQ format to FASTA format
   filter-bed    filter features in BED format
   filter-fasta    filter sequences in FASTA format
@@ -65,6 +66,7 @@ commands:
   gfa1-to-gfa2    convert GFA 1.0 format to GFA 2.0 format
   identify-gfa1    add identifier annotation to records in GFA 1.0 format
   interleave-fastq    convert first and second sequence files in FASTQ format to interleaved FASTQ format
+  interleaved-fastq-to-bam    convert sequences in interleaved FASTQ format to unaligned BAM format
   reassemble-paths    reassemble paths in GFA 1.0 format from traversal records
   remap-dbsnp    remap DB Type=String flags in VCF format to DB Type=Flag and dbsnp Type=String fields
   remap-phase-set    remap PS Type=String phase set ids in VCF format to PS Type=Integer

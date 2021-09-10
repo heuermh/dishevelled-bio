@@ -1,0 +1,198 @@
+/*
+
+    dsh-bio-tools  Command line tools.
+    Copyright (c) 2013-2021 held jointly by the individual authors.
+
+    This library is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as published
+    by the Free Software Foundation; either version 3 of the License, or (at
+    your option) any later version.
+
+    This library is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; with out even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+    License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this library;  if not, write to the Free Software Foundation,
+    Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA.
+
+    > http://www.fsf.org/licensing/licenses/lgpl.html
+    > http://www.opensource.org/licenses/lgpl-license.php
+
+*/
+package org.dishevelled.bio.tools;
+
+import static org.dishevelled.compress.Readers.reader;
+import static org.dishevelled.compress.Writers.writer;
+
+import static org.dishevelled.bio.read.PairedEndFastqReader.isLeft;
+import static org.dishevelled.bio.read.PairedEndFastqReader.isRight;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.PrintWriter;
+
+import java.util.concurrent.Callable;
+
+import htsjdk.samtools.SAMFileHeader;
+import htsjdk.samtools.SAMFileWriter;
+import htsjdk.samtools.SAMFileWriterFactory;
+import htsjdk.samtools.SAMRecord;
+import htsjdk.samtools.SAMUtils;
+
+import htsjdk.samtools.util.SequenceUtil;
+import htsjdk.samtools.util.StringUtil;
+
+import org.biojava.bio.program.fastq.Fastq;
+
+import org.dishevelled.bio.read.PairedEndAdapter;
+import org.dishevelled.bio.read.PairedEndFastqReader;
+
+import org.dishevelled.commandline.ArgumentList;
+import org.dishevelled.commandline.CommandLine;
+import org.dishevelled.commandline.CommandLineParseException;
+import org.dishevelled.commandline.CommandLineParser;
+import org.dishevelled.commandline.Switch;
+import org.dishevelled.commandline.Usage;
+
+import org.dishevelled.commandline.argument.FileArgument;
+
+/**
+ * Convert sequences in interleaved FASTQ format to unaligned BAM format.
+ *
+ * @since 2.1
+ * @author  Michael Heuer
+ */
+public final class InterleavedFastqToBam implements Callable<Integer> {
+    private final File fastqFile;
+    private final File bamFile;
+    private final SAMFileHeader header = new SAMFileHeader();
+    private final SAMFileWriterFactory writerFactory = new SAMFileWriterFactory();
+    private static final String USAGE = "dsh-interleaved-fastq-to-bam [args]";
+
+
+    /**
+     * Convert sequences in interleaved FASTQ format to unaligned BAM format.
+     *
+     * @param fastqFile input interleaved FASTQ file, if any
+     * @param bamFile output BAM file, if any
+     */
+    public InterleavedFastqToBam(final File fastqFile, final File bamFile) {
+        this.fastqFile = fastqFile;
+        this.bamFile = bamFile;
+    }
+
+
+    @Override
+    public Integer call() throws Exception {
+        BufferedReader reader = null;
+        SAMFileWriter writer = null;
+        try {
+            reader = reader(fastqFile);
+
+            if (bamFile == null) {
+                writer = writerFactory.makeBAMWriter(header, false, System.out);
+            }
+            else {
+                writer = writerFactory.makeBAMWriter(header, false, bamFile);
+            }
+
+            final SAMFileWriter sfw = writer;
+            PairedEndFastqReader.streamInterleaved(reader, new PairedEndAdapter() {
+                    @Override
+                    public void paired(final Fastq left, final Fastq right) {
+                        sfw.addAlignment(convertLeft(left));
+                        sfw.addAlignment(convertRight(right));
+                    }
+                });
+
+            return 0;
+        }
+        finally {
+            try {
+                reader.close();
+            }
+            catch (Exception e) {
+                // ignore
+            }
+            try {
+                writer.close();
+            }
+            catch (Exception e) {
+                // ignore
+            }
+        }
+    }
+
+    SAMRecord convertLeft(final Fastq left)
+    {
+        SAMRecord record = convert(left);
+        record.setReadPairedFlag(true);
+        record.setFirstOfPairFlag(true);
+        return record;
+    }
+
+    SAMRecord convertRight(final Fastq right)
+    {
+        SAMRecord record = convert(right);
+        record.setReadPairedFlag(true);
+        record.setSecondOfPairFlag(true);
+        return record;
+    }
+
+    private SAMRecord convert(final Fastq fastq)
+    {
+        SAMRecord record = new SAMRecord(header);
+        record.setReadName(SequenceUtil.getSamReadNameFromFastqHeader(fastq.getDescription()));
+        record.setReadBases(StringUtil.stringToBytes(fastq.getSequence()));
+        record.setBaseQualities(SAMUtils.fastqToPhred(fastq.getQuality()));
+        //record.setAttribute("RG", readGroupId);
+        //record.setAttribute("LB", library);
+        //record.setAttribute("PU", platformUnit);
+        //record.setInferredInsertSize(insertSize);
+        record.setReadUnmappedFlag(true);
+        return record;
+    }
+    
+    /**
+     * Main.
+     *
+     * @param args command line args
+     */
+    public static void main(final String[] args) {
+        Switch about = new Switch("a", "about", "display about message");
+        Switch help = new Switch("h", "help", "display help message");
+        FileArgument fastqFile = new FileArgument("i", "input-fastq-file", "input interleaved FASTQ file, default stdin", false);
+        FileArgument bamFile = new FileArgument("o", "output-bam-file", "output BAM file, default stdout", false);
+
+        ArgumentList arguments = new ArgumentList(about, help, fastqFile, bamFile);
+        CommandLine commandLine = new CommandLine(args);
+
+        InterleavedFastqToBam interleavedFastqToBam = null;
+        try
+        {
+            CommandLineParser.parse(commandLine, arguments);
+            if (about.wasFound()) {
+                About.about(System.out);
+                System.exit(0);
+            }
+            if (help.wasFound()) {
+                Usage.usage(USAGE, null, commandLine, arguments, System.out);
+                System.exit(0);
+            }
+            interleavedFastqToBam = new InterleavedFastqToBam(fastqFile.getValue(), bamFile.getValue());
+        }
+        catch (CommandLineParseException e) {
+            Usage.usage(USAGE, e, commandLine, arguments, System.err);
+            System.exit(-1);
+        }
+        try {
+            System.exit(interleavedFastqToBam.call());
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+}
