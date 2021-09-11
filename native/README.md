@@ -6,7 +6,7 @@ GraalVM native image application for `dsh-bio`.
 Install
 
  * Apache Maven 3.3.9 or later, https://maven.apache.org
- * GraalVM Community Edition 19.3.0 based on OpenJDK 8u232, https://www.graalvm.org/downloads/
+ * GraalVM Community Edition 21.2.0 based on OpenJDK 11, https://www.graalvm.org/downloads/
 
 ```
 $ gu install native-image
@@ -15,7 +15,7 @@ $ gu install native-image
 To build, use Maven with GraalVM specified in `JAVA_HOME`
 
 ```
-$ JAVA_HOME=/path/to/.../graalvm-ce-java8-19.3.0/Contents/Home mvn package
+$ JAVA_HOME=/path/to/.../graalvm-ce-java11-${version}/Contents/Home mvn package
 
 $ ./target/dsh-bio-native --help
 usage:
@@ -28,9 +28,9 @@ commands:
 ...
 ```
 
-### Benchmarks
+### JDK 8 Benchmarks
 
-On OSX, compared to Oracle JDK 8
+On OSX, GraalVM Community Edition 19.3.0 based on OpenJDK 8u232 compared to Oracle JDK 8 1.8.0_191-b12
 
 ```
 $ java -version
