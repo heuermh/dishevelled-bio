@@ -33,7 +33,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
-import java.util.concurrent.Callable;
+import java.util.List;
+
+import javax.annotation.Nullable;
 
 import htsjdk.samtools.SAMFileHeader;
 import htsjdk.samtools.SAMFileWriter;
@@ -57,6 +59,9 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.IntegerArgument;
+import org.dishevelled.commandline.argument.StringArgument;
+import org.dishevelled.commandline.argument.StringListArgument;
 
 /**
  * Convert sequences in interleaved FASTQ format to unaligned BAM format.
@@ -64,7 +69,7 @@ import org.dishevelled.commandline.argument.FileArgument;
  * @since 2.1
  * @author  Michael Heuer
  */
-public final class InterleavedFastqToBam implements Callable<Integer> {
+public final class InterleavedFastqToBam extends WithReadGroup {
     private final File fastqFile;
     private final File bamFile;
     private final SAMFileHeader header = new SAMFileHeader();
@@ -78,9 +83,21 @@ public final class InterleavedFastqToBam implements Callable<Integer> {
      * @param fastqFile input interleaved FASTQ file, if any
      * @param bamFile output BAM file, if any
      */
-    public InterleavedFastqToBam(final File fastqFile, final File bamFile) {
+    public InterleavedFastqToBam(@Nullable final File fastqFile,
+                                 @Nullable final File bamFile,
+                                 @Nullable final String readGroupId,
+                                 @Nullable final String readGroupSample,
+                                 @Nullable final String readGroupLibrary,
+                                 @Nullable final String readGroupPlatformUnit,
+                                 @Nullable final Integer readGroupInsertSize,
+                                 @Nullable final List<String> readGroupBarcodes) {
+
+        super(readGroupId, readGroupSample, readGroupLibrary, readGroupPlatformUnit, readGroupInsertSize, readGroupBarcodes);
         this.fastqFile = fastqFile;
         this.bamFile = bamFile;
+
+        // add read group to header if present
+        toReadGroupOpt().ifPresent(readGroup -> header.addReadGroup(readGroup));
     }
 
 
@@ -147,10 +164,20 @@ public final class InterleavedFastqToBam implements Callable<Integer> {
         record.setReadName(SequenceUtil.getSamReadNameFromFastqHeader(fastq.getDescription()));
         record.setReadBases(StringUtil.stringToBytes(fastq.getSequence()));
         record.setBaseQualities(SAMUtils.fastqToPhred(fastq.getQuality()));
-        //record.setAttribute("RG", readGroupId);
-        //record.setAttribute("LB", library);
-        //record.setAttribute("PU", platformUnit);
-        //record.setInferredInsertSize(insertSize);
+
+        if (getReadGroupId() != null) {
+            record.setAttribute("RG", getReadGroupId());
+
+            if (getReadGroupLibrary() != null) {
+                record.setAttribute("LB", getReadGroupLibrary());
+            }
+            if (getReadGroupPlatformUnit() != null) {
+                record.setAttribute("PU", getReadGroupPlatformUnit());
+            }
+            if (getReadGroupInsertSize() != null) {
+                record.setInferredInsertSize(getReadGroupInsertSize());
+            }
+        }
         record.setReadUnmappedFlag(true);
         return record;
     }
@@ -166,7 +193,14 @@ public final class InterleavedFastqToBam implements Callable<Integer> {
         FileArgument fastqFile = new FileArgument("i", "input-fastq-file", "input interleaved FASTQ file, default stdin", false);
         FileArgument bamFile = new FileArgument("o", "output-bam-file", "output BAM file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, fastqFile, bamFile);
+        StringArgument readGroupId = createReadGroupIdArgument();
+        StringArgument readGroupSample = createReadGroupSampleArgument();
+        StringArgument readGroupLibrary = createReadGroupLibraryArgument();
+        StringArgument readGroupPlatformUnit = createReadGroupPlatformUnitArgument();
+        IntegerArgument readGroupInsertSize = createReadGroupInsertSizeArgument();
+        StringListArgument readGroupBarcodes = createReadGroupBarcodesArgument();
+
+        ArgumentList arguments = new ArgumentList(about, help, fastqFile, bamFile, readGroupId, readGroupSample, readGroupLibrary, readGroupPlatformUnit, readGroupInsertSize, readGroupBarcodes);
         CommandLine commandLine = new CommandLine(args);
 
         InterleavedFastqToBam interleavedFastqToBam = null;
@@ -181,7 +215,7 @@ public final class InterleavedFastqToBam implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            interleavedFastqToBam = new InterleavedFastqToBam(fastqFile.getValue(), bamFile.getValue());
+            interleavedFastqToBam = new InterleavedFastqToBam(fastqFile.getValue(), bamFile.getValue(), readGroupId.getValue(), readGroupSample.getValue(), readGroupLibrary.getValue(), readGroupPlatformUnit.getValue(), readGroupInsertSize.getValue(), readGroupBarcodes.getValue());
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);

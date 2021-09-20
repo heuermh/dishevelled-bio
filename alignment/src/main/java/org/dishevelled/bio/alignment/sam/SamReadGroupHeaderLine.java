@@ -71,6 +71,19 @@ public final class SamReadGroupHeaderLine extends AbstractSamHeaderLine {
         return getAnnotationOpt("CN");
     }
 
+    public boolean containsSequencingCenter() {
+        return containsCn();
+    }
+
+    public String getSequencingCenter() {
+        return getCn();
+    }
+
+    public Optional<String> getSequencingCenterOpt() {
+        return getCnOpt();
+    }
+
+
     public boolean containsDs() {
         return containsAnnotationKey("DS");
     }
@@ -82,6 +95,19 @@ public final class SamReadGroupHeaderLine extends AbstractSamHeaderLine {
     public Optional<String> getDsOpt() {
         return getAnnotationOpt("DS");
     }
+
+    public boolean containsDescription() {
+        return containsDs();
+    }
+
+    public String getDescription() {
+        return getDs();
+    }
+
+    public Optional<String> getDescriptionOpt() {
+        return getDsOpt();
+    }
+
 
     public boolean containsDt() {
         return containsAnnotationKey("DT");
@@ -95,6 +121,19 @@ public final class SamReadGroupHeaderLine extends AbstractSamHeaderLine {
         return getAnnotationOpt("DT");
     }
 
+    public boolean containsDateRunProduced() {
+        return containsDt();
+    }
+
+    public String getDateRunProduced() {
+        return getDt();
+    }
+
+    public Optional<String> getDateRunProducedOpt() {
+        return getDtOpt();
+    }
+
+
     public boolean containsFo() {
         return containsAnnotationKey("FO");
     }
@@ -106,6 +145,19 @@ public final class SamReadGroupHeaderLine extends AbstractSamHeaderLine {
     public Optional<String> getFoOpt() {
         return getAnnotationOpt("FO");
     }
+
+    public boolean containsFlowOrder() {
+        return containsFo();
+    }
+
+    public String getFlowOrder() {
+        return getFo();
+    }
+
+    public Optional<String> getFlowOrderOpt() {
+        return getFoOpt();
+    }
+
 
     public boolean containsKs() {
         return containsAnnotationKey("KS");
@@ -119,6 +171,19 @@ public final class SamReadGroupHeaderLine extends AbstractSamHeaderLine {
         return getAnnotationOpt("KS");
     }
 
+    public boolean containsKeySequence() {
+        return containsKs();
+    }
+
+    public String getKeySequence() {
+        return getKs();
+    }
+
+    public Optional<String> getKeySequenceOpt() {
+        return getKsOpt();
+    }
+
+
     public boolean containsLb() {
         return containsAnnotationKey("LB");
     }
@@ -130,7 +195,20 @@ public final class SamReadGroupHeaderLine extends AbstractSamHeaderLine {
     public Optional<String> getLbOpt() {
         return getAnnotationOpt("LB");
     }
-    
+
+    public boolean containsLibrary() {
+        return containsLb();
+    }
+
+    public String getLibrary() {
+        return getLb();
+    }
+
+    public Optional<String> getLibraryOpt() {
+        return getLbOpt();
+    }
+
+
     public boolean containsPg() {
         return containsAnnotationKey("PG");
     }
@@ -142,6 +220,19 @@ public final class SamReadGroupHeaderLine extends AbstractSamHeaderLine {
     public Optional<String> getPgOpt() {
         return getAnnotationOpt("PG");
     }
+
+    public boolean containsProgramGroup() {
+        return containsPg();
+    }
+
+    public String getProgramGroup() {
+        return getPg();
+    }
+
+    public Optional<String> getProgramGroupOpt() {
+        return getPgOpt();
+    }
+
 
     public boolean containsPi() {
         return containsAnnotationKey("PI");
@@ -155,6 +246,19 @@ public final class SamReadGroupHeaderLine extends AbstractSamHeaderLine {
         return getAnnotationOpt("PI");
     }
 
+    public boolean containsPredictedMedianInsertSize() {
+        return containsPi();
+    }
+
+    public String getPredictedMedianInsertSize() {
+        return getPi();
+    }
+
+    public Optional<String> getPredictedMedianInsertSizeOpt() {
+        return getPiOpt();
+    }
+
+
     public boolean containsPl() {
         return containsAnnotationKey("PL");
     }
@@ -166,6 +270,19 @@ public final class SamReadGroupHeaderLine extends AbstractSamHeaderLine {
     public Optional<String> getPlOpt() {
         return getAnnotationOpt("PL");
     }
+
+    public boolean containsPlatform() {
+        return containsPl();
+    }
+
+    public String getPlatform() {
+        return getPl();
+    }
+
+    public Optional<String> getPlatformOpt() {
+        return getPlOpt();
+    }
+
 
     public boolean containsPm() {
         return containsAnnotationKey("PM");
@@ -179,6 +296,19 @@ public final class SamReadGroupHeaderLine extends AbstractSamHeaderLine {
         return getAnnotationOpt("PM");
     }
 
+    public boolean containsPlatformModel() {
+        return containsPm();
+    }
+
+    public String getPlatformModel() {
+        return getPm();
+    }
+
+    public Optional<String> getPlatformModelOpt() {
+        return getPmOpt();
+    }
+
+
     public boolean containsPu() {
         return containsAnnotationKey("PU");
     }
@@ -191,6 +321,19 @@ public final class SamReadGroupHeaderLine extends AbstractSamHeaderLine {
         return getAnnotationOpt("PU");
     }
 
+    public boolean containsPlatformUnit() {
+        return containsPu();
+    }
+
+    public String getPlatformUnit() {
+        return getPu();
+    }
+
+    public Optional<String> getPlatformUnitOpt() {
+        return getPuOpt();
+    }
+
+
     public boolean containsSm() {
         return containsAnnotationKey("SM");
     }
@@ -202,6 +345,44 @@ public final class SamReadGroupHeaderLine extends AbstractSamHeaderLine {
     public Optional<String> getSmOpt() {
         return getAnnotationOpt("SM");
     }
+
+    public boolean containsSample() {
+        return containsSm();
+    }
+
+    public String getSample() {
+        return getSm();
+    }
+
+    public Optional<String> getSampleOpt() {
+        return getSmOpt();
+    }
+
+
+    public boolean containsBc() {
+        return containsAnnotationKey("BC");
+    }
+
+    public String getBc() {
+        return getAnnotation("BC");
+    }
+
+    public Optional<String> getBcOpt() {
+        return getAnnotationOpt("BC");
+    }
+
+    public boolean containsBarcode() {
+        return containsBc();
+    }
+
+    public String getBarcode() {
+        return getBc();
+    }
+
+    public Optional<String> getBarcodeOpt() {
+        return getBcOpt();
+    }
+
 
     @Override
     public String toString() {
@@ -275,6 +456,11 @@ public final class SamReadGroupHeaderLine extends AbstractSamHeaderLine {
             sb.append("SM:");
             sb.append(getSm());
         }
+        if (containsBc()) {
+            sb.append("\t");
+            sb.append("BC:");
+            sb.append(getBc());
+        }
 
         // remaining annotations
         Set<String> remainingKeys = new HashSet<String>(getAnnotations().keySet());
@@ -291,6 +477,7 @@ public final class SamReadGroupHeaderLine extends AbstractSamHeaderLine {
         remainingKeys.remove("PM");
         remainingKeys.remove("PU");
         remainingKeys.remove("SM");
+        remainingKeys.remove("BC");
 
         for (String key : remainingKeys) {
             sb.append("\t");
