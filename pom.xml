@@ -27,7 +27,7 @@
   <parent>
     <groupId>org.dishevelled</groupId>
     <artifactId>dsh-parent</artifactId>
-    <version>27</version>
+    <version>28-SNAPSHOT</version>
   </parent>
   <artifactId>dsh-bio</artifactId>
   <packaging>pom</packaging>
@@ -70,7 +70,7 @@
     <bdg-convert.version>0.12.0</bdg-convert.version>
     <bdg-formats.version>0.16.0</bdg-formats.version>
     <biojava.version>1.9.5</biojava.version>
-    <commons-csv.version>1.8</commons-csv.version>
+    <commons-csv.version>1.9.0</commons-csv.version>
     <commons-codec.version>1.15</commons-codec.version>
     <commons-io.version>2.11.0</commons-io.version>
     <commons-math3.version>3.6.1</commons-math3.version>
@@ -81,7 +81,7 @@
     <hadoop.version>3.3.1</hadoop.version>
     <htsjdk.version>2.24.1</htsjdk.version>
     <jdk.version>1.8</jdk.version>
-    <jmh.version>1.32</jmh.version>
+    <jmh.version>1.33</jmh.version>
     <kryo-serializers.version>0.45</kryo-serializers.version>
     <maven.enforcer.maven-version>[3.1.1,)</maven.enforcer.maven-version>
     <maven.enforcer.jdk-version>[1.8,)</maven.enforcer.jdk-version>
