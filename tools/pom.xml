@@ -296,6 +296,10 @@
               <mainClass>org.dishevelled.bio.tools.FastqToFasta</mainClass>
             </program>
             <program>
+              <id>dsh-fastq-to-text</id>
+              <mainClass>org.dishevelled.bio.tools.FastqToText</mainClass>
+            </program>
+            <program>
               <id>dsh-filter-bed</id>
               <mainClass>org.dishevelled.bio.tools.FilterBed</mainClass>
             </program>

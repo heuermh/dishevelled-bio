@@ -52,6 +52,7 @@ commands:
   fastq-sequence-length    output sequence lengths from sequences in FASTQ format
   fastq-to-bam    convert sequences in FASTQ format to unaligned BAM format
   fastq-to-fasta    convert sequences in FASTQ format to FASTA format
+  fastq-to-text    convert sequences in FASTQ format to tab-separated values (tsv) text format
   filter-bed    filter features in BED format
   filter-fasta    filter sequences in FASTA format
   filter-fastq    filter sequences in FASTQ format
