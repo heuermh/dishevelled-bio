@@ -424,6 +424,10 @@
               <mainClass>org.dishevelled.bio.tools.SplitVcf</mainClass>
             </program>
             <program>
+              <id>dsh-text-to-fastq</id>
+              <mainClass>org.dishevelled.bio.tools.TextToFastq</mainClass>
+            </program>
+            <program>
               <id>dsh-traverse-paths</id>
               <mainClass>org.dishevelled.bio.tools.TraversePaths</mainClass>
             </program>

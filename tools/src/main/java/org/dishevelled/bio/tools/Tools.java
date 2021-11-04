@@ -186,6 +186,7 @@ public final class Tools implements Callable<Integer> {
         .put("split-paf", new Command("split-paf", "split files in PAF format", SplitPaf.class))
         .put("split-sam", new Command("split-sam", "split files in SAM format", SplitSam.class))
         .put("split-vcf", new Command("split-vcf", "split files in VCF format", SplitVcf.class))
+        .put("text-to-fastq", new Command("text-to-fastq", "convert sequences in tab-separated values (tsv) text format to FASTQ format", TextToFastq.class))
         .put("traverse-paths", new Command("traverse-paths", "traverse paths in GFA 1.0 format", TraversePaths.class))
         .put("truncate-fasta", new Command("truncate-fasta", "truncate sequences in FASTA format", TruncateFasta.class))
         .put("truncate-paths", new Command("truncate-paths", "truncate paths in GFA 1.0 format", TruncatePaths.class))

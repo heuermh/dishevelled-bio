@@ -83,6 +83,7 @@ commands:
   split-paf    split files in PAF format
   split-sam    split files in SAM format
   split-vcf    split files in VCF format
+  text-to-fastq    convert sequences in tab-separated values (tsv) text format to FASTQ format
   traverse-paths    traverse paths in GFA 1.0 format
   truncate-fasta    truncate sequences in FASTA format
   truncate-paths    truncate paths in GFA 1.0 format
