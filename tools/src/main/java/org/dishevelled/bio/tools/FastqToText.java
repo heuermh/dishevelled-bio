@@ -28,6 +28,8 @@ import static org.dishevelled.compress.Writers.writer;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileWriter;
 import java.io.PrintWriter;
 
 import java.util.concurrent.Callable;
@@ -70,19 +72,27 @@ public final class FastqToText implements Callable<Integer> {
     }
 
 
+    private final class SigpipeException extends RuntimeException {
+        SigpipeException(final String message) { super(message); }
+    }
+
     @Override
     public Integer call() throws Exception {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
             reader = reader(fastqFile);
-            writer = writer(textFile);
+            writer = textFile == null ? new PrintWriter(new FileWriter(FileDescriptor.out)) : writer(textFile);
 
             final PrintWriter w = writer;
+            final java.util.concurrent.atomic.AtomicLong count = new java.util.concurrent.atomic.AtomicLong();
+
             fastqReader.stream(reader, new StreamListener() {
                     @Override
                     public void fastq(final Fastq fastq)
                     {
+                        long c = count.incrementAndGet();
+
                         StringBuilder sb = new StringBuilder(2400);
                         sb.append(fastq.getDescription());
                         sb.append("\t");
@@ -90,9 +100,16 @@ public final class FastqToText implements Callable<Integer> {
                         sb.append("\t");
                         sb.append(fastq.getQuality());
                         w.println(sb.toString());
+
+                        if (((c % 1000) == 0) && w.checkError()) {
+                            throw new SigpipeException("caught SIGPIPE after " + c + " records");
+                        }
                     }
                 });
 
+            return 0;
+        }
+        catch (SigpipeException e) {
             return 0;
         }
         finally {
