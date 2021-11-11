@@ -51,6 +51,7 @@ import org.dishevelled.commandline.argument.FileArgument;
 /**
  * Convert sequences in FASTQ format to tab-separated values (tsv) text format.
  *
+ * @since 2.1
  * @author  Michael Heuer
  */
 @SuppressWarnings("restriction")

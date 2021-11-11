@@ -30,13 +30,10 @@ import java.io.File;
 import java.io.PrintWriter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import java.util.concurrent.Callable;
 
-import org.dishevelled.bio.variant.vcf.VcfGenotype;
 import org.dishevelled.bio.variant.vcf.VcfHeader;
 import org.dishevelled.bio.variant.vcf.VcfReader;
 import org.dishevelled.bio.variant.vcf.VcfRecord;
@@ -59,6 +56,7 @@ import org.dishevelled.commandline.argument.FileArgument;
 /**
  * Remap DB Type=String flags in VCF format to DB Type=Flag and dbsnp Type=String fields.
  *
+ * @since 2.1
  * @author  Michael Heuer
  */
 public final class RemapDbSnp implements Callable<Integer> {

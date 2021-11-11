@@ -145,13 +145,13 @@ public final class SplitInterleavedFastq extends AbstractSplit {
         }
     }
 
-    static final String getBaseName(final File file) {
+    static String getBaseName(final File file) {
         String baseName = Files.getNameWithoutExtension(file.getName());
         // trim trailing .ifq if present
         return baseName.endsWith(".ifq") ? baseName.substring(0, baseName.length() - 4) : baseName;
     }
 
-    static final String getFileExtensions(final File file) {
+    static String getFileExtensions(final File file) {
         String baseName = Files.getNameWithoutExtension(file.getName());
         String extension = Files.getFileExtension(file.getName());
         // add .ifq to extension if present

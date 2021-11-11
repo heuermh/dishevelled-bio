@@ -55,6 +55,7 @@ import org.dishevelled.commandline.argument.URLArgument;
 /**
  * Create a SequenceDictionary from DNA sequences in FASTA format.
  *
+ * @since 2.1
  * @author  Michael Heuer
  */
 @SuppressWarnings("deprecation")

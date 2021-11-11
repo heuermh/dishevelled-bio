@@ -24,11 +24,9 @@
 package org.dishevelled.bio.tools;
 
 import static org.dishevelled.compress.Readers.reader;
-import static org.dishevelled.compress.Writers.writer;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.PrintWriter;
 
 import java.util.List;
 

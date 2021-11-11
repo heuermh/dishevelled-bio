@@ -55,6 +55,7 @@ import org.dishevelled.commandline.argument.FileArgument;
 /**
  * Convert sequences in tab-separated values (tsv) text format to FASTQ format.
  *
+ * @since 2.1
  * @author  Michael Heuer
  */
 public final class TextToFastq implements Callable<Integer> {

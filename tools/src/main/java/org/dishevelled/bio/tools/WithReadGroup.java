@@ -114,28 +114,56 @@ abstract class WithReadGroup implements Callable<Integer> {
     }
 
 
-    // todo: remove these in favor of toReadGroup?
-    
+    /**
+     * Return the read group id, if any.
+     *
+     * @return the read group id, if any
+     */
     protected final String getReadGroupId() {
         return readGroupId;
     }
 
+    /**
+     * Return the read group sample, if any.
+     *
+     * @return the read group sample, if any
+     */
     protected final String getReadGroupSample() {
         return readGroupSample;
     }
 
+    /**
+     * Return the read group library, if any.
+     *
+     * @return the read group library, if any
+     */
     protected final String getReadGroupLibrary() {
         return readGroupLibrary;
     }
 
+    /**
+     * Return the read group platform unit, if any.
+     *
+     * @return the read group platform unit, if any
+     */
     protected final String getReadGroupPlatformUnit() {
         return readGroupPlatformUnit;
     }
 
+    /**
+     * Return the read group insert size, if any.
+     *
+     * @return the read group insert size, if any
+     */
     protected final Integer getReadGroupInsertSize() {
         return readGroupInsertSize;
     }
 
+    /**
+     * Return the list of read group barcodes, if any.
+     *
+     * @return the list of read group barcodes, if any
+     */
     protected final List<String> getReadGroupBarcodes() {
         return readGroupBarcodes;
     }
@@ -146,7 +174,7 @@ abstract class WithReadGroup implements Callable<Integer> {
      *
      * @return a new read group id commandline argument
      */
-    static final StringArgument createReadGroupIdArgument() {
+    static StringArgument createReadGroupIdArgument() {
         return new StringArgument("r", "read-group-id", "read group id", false);
     }
 
@@ -155,7 +183,7 @@ abstract class WithReadGroup implements Callable<Integer> {
      *
      * @return a new read group sample commandline argument
      */
-    static final StringArgument createReadGroupSampleArgument() {
+    static StringArgument createReadGroupSampleArgument() {
         return new StringArgument("s", "read-group-sample", "read group sample", false);
     }
 
@@ -164,7 +192,7 @@ abstract class WithReadGroup implements Callable<Integer> {
      *
      * @return a new read group library commandline argument
      */
-    static final StringArgument createReadGroupLibraryArgument() {
+    static StringArgument createReadGroupLibraryArgument() {
         return new StringArgument("y", "read-group-library", "read group library", false);
     }
 
@@ -173,7 +201,7 @@ abstract class WithReadGroup implements Callable<Integer> {
      *
      * @return a new read group platform unit commandline argument
      */
-    static final StringArgument createReadGroupPlatformUnitArgument() {
+    static StringArgument createReadGroupPlatformUnitArgument() {
         return new StringArgument("p", "read-group-platform-unit", "read group platform unit", false);
     }
 
@@ -182,7 +210,7 @@ abstract class WithReadGroup implements Callable<Integer> {
      *
      * @return a new read group insert size commandline argument
      */
-    static final IntegerArgument createReadGroupInsertSizeArgument() {
+    static IntegerArgument createReadGroupInsertSizeArgument() {
         return new IntegerArgument("z", "read-group-insert-size", "read group predicted median insert size", false);
     }
 
@@ -191,7 +219,7 @@ abstract class WithReadGroup implements Callable<Integer> {
      *
      * @return a new read group barcodes commandline argument
      */
-    static final StringListArgument createReadGroupBarcodesArgument() {
+    static StringListArgument createReadGroupBarcodesArgument() {
         return new StringListArgument("b", "read-group-barcodes", "read group barcodes", false);
     }
 }

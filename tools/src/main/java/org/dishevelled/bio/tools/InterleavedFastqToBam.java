@@ -24,14 +24,9 @@
 package org.dishevelled.bio.tools;
 
 import static org.dishevelled.compress.Readers.reader;
-import static org.dishevelled.compress.Writers.writer;
-
-import static org.dishevelled.bio.read.PairedEndFastqReader.isLeft;
-import static org.dishevelled.bio.read.PairedEndFastqReader.isRight;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.PrintWriter;
 
 import java.util.List;
 

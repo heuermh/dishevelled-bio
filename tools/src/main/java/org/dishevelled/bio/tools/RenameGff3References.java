@@ -30,10 +30,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
-import java.util.concurrent.Callable;
-
-import java.util.regex.Pattern;
-
 import org.dishevelled.bio.feature.gff3.Gff3Listener;
 import org.dishevelled.bio.feature.gff3.Gff3Reader;
 import org.dishevelled.bio.feature.gff3.Gff3Record;

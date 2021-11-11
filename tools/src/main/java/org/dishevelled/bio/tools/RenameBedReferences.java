@@ -30,10 +30,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
-import java.util.concurrent.Callable;
-
-import java.util.regex.Pattern;
-
 import org.dishevelled.bio.feature.bed.BedListener;
 import org.dishevelled.bio.feature.bed.BedReader;
 import org.dishevelled.bio.feature.bed.BedRecord;
