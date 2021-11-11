@@ -53,6 +53,7 @@ import org.dishevelled.commandline.argument.FileArgument;
  *
  * @author  Michael Heuer
  */
+@SuppressWarnings("restriction")
 public final class FastqToText implements Callable<Integer> {
     private final File fastqFile;
     private final File textFile;
@@ -72,27 +73,19 @@ public final class FastqToText implements Callable<Integer> {
     }
 
 
-    private final class SigpipeException extends RuntimeException {
-        SigpipeException(final String message) { super(message); }
-    }
-
     @Override
     public Integer call() throws Exception {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
             reader = reader(fastqFile);
-            writer = textFile == null ? new PrintWriter(new FileWriter(FileDescriptor.out)) : writer(textFile);
+            writer = writer(textFile);
 
             final PrintWriter w = writer;
-            final java.util.concurrent.atomic.AtomicLong count = new java.util.concurrent.atomic.AtomicLong();
-
             fastqReader.stream(reader, new StreamListener() {
                     @Override
                     public void fastq(final Fastq fastq)
                     {
-                        long c = count.incrementAndGet();
-
                         StringBuilder sb = new StringBuilder(2400);
                         sb.append(fastq.getDescription());
                         sb.append("\t");
@@ -100,16 +93,9 @@ public final class FastqToText implements Callable<Integer> {
                         sb.append("\t");
                         sb.append(fastq.getQuality());
                         w.println(sb.toString());
-
-                        if (((c % 1000) == 0) && w.checkError()) {
-                            throw new SigpipeException("caught SIGPIPE after " + c + " records");
-                        }
                     }
                 });
 
-            return 0;
-        }
-        catch (SigpipeException e) {
             return 0;
         }
         finally {
@@ -134,6 +120,15 @@ public final class FastqToText implements Callable<Integer> {
      * @param args command line args
      */
     public static void main(final String[] args) {
+
+        // install a signal handler to exit on SIGPIPE
+        sun.misc.Signal.handle(new sun.misc.Signal("PIPE"), new sun.misc.SignalHandler() {
+                @Override
+                public void handle(final sun.misc.Signal signal) {
+                    System.exit(0);
+                }
+            });
+
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
         FileArgument fastqFile = new FileArgument("i", "input-fastq-file", "input FASTQ file, default stdin", false);
