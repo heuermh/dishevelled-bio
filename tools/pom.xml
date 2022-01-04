@@ -344,6 +344,18 @@
               <mainClass>org.dishevelled.bio.tools.FilterVcf</mainClass>
             </program>
             <program>
+              <id>dsh-gfa1-to-cytoscape</id>
+              <mainClass>org.dishevelled.bio.tools.Gfa1ToCytoscape</mainClass>
+            </program>
+            <program>
+              <id>dsh-gfa1-to-cytoscape-edges</id>
+              <mainClass>org.dishevelled.bio.tools.Gfa1ToCytoscapeEdges</mainClass>
+            </program>
+            <program>
+              <id>dsh-gfa1-to-cytoscape-nodes</id>
+              <mainClass>org.dishevelled.bio.tools.Gfa1ToCytoscapeNodes</mainClass>
+            </program>
+            <program>
               <id>dsh-gfa1-to-gfa2</id>
               <mainClass>org.dishevelled.bio.tools.Gfa1ToGfa2</mainClass>
             </program>
