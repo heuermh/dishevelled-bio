@@ -59,6 +59,7 @@ import org.dishevelled.commandline.argument.FileArgument;
 /**
  * Convert GFA 1.0 format to edges.txt format for Cytoscape.
  *
+ * @since 2.1
  * @author  Michael Heuer
  */
 public final class Gfa1ToCytoscapeEdges implements Callable<Integer> {
