@@ -33,46 +33,38 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Unit test for Gfa1ToCytoscape.
+ * Unit test for SegmentsToCytoscapeNodes.
  *
  * @author  Michael Heuer
  */
-public final class Gfa1ToCytoscapeTest {
+public final class SegmentsToCytoscapeNodesTest {
     private File inputGfa1File;
     private File outputNodesFile;
-    private File outputEdgesFile;
 
     @Before
     public void setUp() throws IOException {
-        inputGfa1File = File.createTempFile("gfa1ToCytoscapeTest", ".gfa");
-        outputNodesFile = File.createTempFile("gfa1ToCytoscapeTest", ".nodes.txt");
-        outputEdgesFile = File.createTempFile("gfa1ToCytoscapeTest", ".edges.txt");
+        inputGfa1File = File.createTempFile("segmentsToCytoscapeNodesTest", ".gfa");
+        outputNodesFile = File.createTempFile("segmentsToCytoscapeNodesTest", ".nodes.txt");
     }
 
     @After
     public void tearDown() {
         inputGfa1File.delete();
         outputNodesFile.delete();
-        outputEdgesFile.delete();
     }
 
     @Test
     public void testConstructor() {
-        assertNotNull(new Gfa1ToCytoscape(inputGfa1File, outputNodesFile, outputEdgesFile));
+        assertNotNull(new SegmentsToCytoscapeNodes(inputGfa1File, outputNodesFile));
     }
 
     @Test
     public void testConstructorNullInputGfa1File() {
-        assertNotNull(new Gfa1ToCytoscape(null, outputNodesFile, outputEdgesFile));
+        assertNotNull(new SegmentsToCytoscapeNodes(null, outputNodesFile));
     }
 
-    @Test(expected=NullPointerException.class)
+    @Test
     public void testConstructorNullOutputNodesFile() {
-        new Gfa1ToCytoscape(inputGfa1File, null, outputEdgesFile);
-    }
-
-    @Test(expected=NullPointerException.class)
-    public void testConstructorNullOutputEdgesFile() {
-        new Gfa1ToCytoscape(inputGfa1File, outputNodesFile, null);
+        assertNotNull(new SegmentsToCytoscapeNodes(inputGfa1File, null));
     }
 }

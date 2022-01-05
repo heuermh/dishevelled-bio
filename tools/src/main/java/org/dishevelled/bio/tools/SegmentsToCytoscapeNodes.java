@@ -29,21 +29,10 @@ import static org.dishevelled.compress.Writers.writer;
 import java.io.File;
 import java.io.PrintWriter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import java.util.concurrent.Callable;
 
-import org.dishevelled.bio.annotation.Annotation;
-
-import org.dishevelled.bio.assembly.gfa1.Containment;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Adapter;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Reader;
-import org.dishevelled.bio.assembly.gfa1.Header;
-import org.dishevelled.bio.assembly.gfa1.Link;
-import org.dishevelled.bio.assembly.gfa1.Path;
 import org.dishevelled.bio.assembly.gfa1.Segment;
 
 import org.dishevelled.commandline.ArgumentList;
@@ -56,26 +45,25 @@ import org.dishevelled.commandline.Usage;
 import org.dishevelled.commandline.argument.FileArgument;
 
 /**
- * Convert GFA 1.0 format to nodes.txt format for Cytoscape.
+ * Convert segments in GFA 1.0 format to nodes.txt format for Cytoscape.
  *
  * @since 2.1
  * @author  Michael Heuer
  */
-public final class Gfa1ToCytoscapeNodes implements Callable<Integer> {
+public final class SegmentsToCytoscapeNodes implements Callable<Integer> {
     private final File inputGfa1File;
     private final File outputNodesFile;
-    private static final String HEADER = "id\tsequence\tlength\tread_count\t" +
-        "fragment_count\tkmer_count\tsequence_checksum\tsequence_uri";
-    private static final String USAGE = "dsh-gfa1-to-cytoscape-nodes -i input.gfa.gz -n nodes.txt.gz";
+    private static final String HEADER = "name\tsequence\tlength\treadCount\tfragmentCount\tkmerCount\tsequenceChecksum\tsequenceUri";
+    private static final String USAGE = "dsh-segments-to-cytoscape-nodes -i input.gfa.gz -n nodes.txt.gz";
 
     /**
-     * Convert GFA 1.0 format to nodes.txt format for Cytoscape.
+     * Convert segments in GFA 1.0 format to nodes.txt format for Cytoscape.
      *
      * @param inputGfa1File input GFA 1.0 file, if any
      * @param outputNodesFile output nodes.txt file, if any
      */
-    public Gfa1ToCytoscapeNodes(final File inputGfa1File,
-                                final File outputNodesFile) {
+    public SegmentsToCytoscapeNodes(final File inputGfa1File,
+                                    final File outputNodesFile) {
         this.inputGfa1File = inputGfa1File;
         this.outputNodesFile = outputNodesFile;
     }
@@ -94,7 +82,7 @@ public final class Gfa1ToCytoscapeNodes implements Callable<Integer> {
                     @Override
                     public boolean segment(final Segment segment) {
                         StringBuilder sb = new StringBuilder();
-                        sb.append(segment.getId());
+                        sb.append(segment.getName());
                         sb.append("\t");
                         sb.append(segment.getSequenceOpt().orElse(""));
                         sb.append("\t");
@@ -109,7 +97,7 @@ public final class Gfa1ToCytoscapeNodes implements Callable<Integer> {
                         sb.append(segment.containsSequenceChecksum() ? String.valueOf(segment.getSequenceChecksum()) : "");
                         sb.append("\t");
                         sb.append(segment.getSequenceUriOpt().orElse(""));
-                        nw.println(sb.toString());
+                        nw.println(sb);
                         return true;
                     }
                 });
@@ -141,7 +129,7 @@ public final class Gfa1ToCytoscapeNodes implements Callable<Integer> {
         ArgumentList arguments = new ArgumentList(about, help, inputGfa1File, outputNodesFile);
         CommandLine commandLine = new CommandLine(args);
 
-        Gfa1ToCytoscapeNodes gfa1ToCytoscapeNodes = null;
+        SegmentsToCytoscapeNodes gfa1ToCytoscapeNodes = null;
         try {
             CommandLineParser.parse(commandLine, arguments);
             if (about.wasFound()) {
@@ -152,7 +140,7 @@ public final class Gfa1ToCytoscapeNodes implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            gfa1ToCytoscapeNodes = new Gfa1ToCytoscapeNodes(inputGfa1File.getValue(), outputNodesFile.getValue());
+            gfa1ToCytoscapeNodes = new SegmentsToCytoscapeNodes(inputGfa1File.getValue(), outputNodesFile.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {

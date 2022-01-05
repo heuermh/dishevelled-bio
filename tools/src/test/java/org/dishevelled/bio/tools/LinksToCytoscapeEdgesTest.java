@@ -33,18 +33,18 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Unit test for Gfa1ToCytoscapeEdges.
+ * Unit test for LinksToCytoscapeEdges.
  *
  * @author  Michael Heuer
  */
-public final class Gfa1ToCytoscapeEdgesTest {
+public final class LinksToCytoscapeEdgesTest {
     private File inputGfa1File;
     private File outputEdgesFile;
 
     @Before
     public void setUp() throws IOException {
-        inputGfa1File = File.createTempFile("gfa1ToCytoscapeEdgesTest", ".gfa");
-        outputEdgesFile = File.createTempFile("gfa1ToCytoscapeEdgesTest", ".edges.txt");
+        inputGfa1File = File.createTempFile("linksToCytoscapeEdgesTest", ".gfa");
+        outputEdgesFile = File.createTempFile("linksToCytoscapeEdgesTest", ".edges.txt");
     }
 
     @After
@@ -55,16 +55,16 @@ public final class Gfa1ToCytoscapeEdgesTest {
 
     @Test
     public void testConstructor() {
-        assertNotNull(new Gfa1ToCytoscapeEdges(inputGfa1File, outputEdgesFile));
+        assertNotNull(new LinksToCytoscapeEdges(inputGfa1File, outputEdgesFile));
     }
 
     @Test
     public void testConstructorNullInputGfa1File() {
-        assertNotNull(new Gfa1ToCytoscapeEdges(null, outputEdgesFile));
+        assertNotNull(new LinksToCytoscapeEdges(null, outputEdgesFile));
     }
 
     @Test
     public void testConstructorNullOutputEdgesFile() {
-        assertNotNull(new Gfa1ToCytoscapeEdges(inputGfa1File, null));
+        assertNotNull(new LinksToCytoscapeEdges(inputGfa1File, null));
     }
 }
