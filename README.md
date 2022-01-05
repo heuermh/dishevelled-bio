@@ -64,19 +64,18 @@ commands:
   filter-rgfa    filter assembly in rGFA format
   filter-sam    filter alignments in SAM format
   filter-vcf    filter variants in VCF format
-  gfa1-to-cytoscape    convert GFA 1.0 format to nodes.txt and edges.txt format for Cytoscape
-  gfa1-to-cytoscape-edges    convert GFA 1.0 format to edges.txt format for Cytoscape
-  gfa1-to-cytoscape-nodes    convert GFA 1.0 format to nodes.txt format for Cytoscape
   gfa1-to-gfa2    convert GFA 1.0 format to GFA 2.0 format
   identify-gfa1    add identifier annotation to records in GFA 1.0 format
   interleave-fastq    convert first and second sequence files in FASTQ format to interleaved FASTQ format
   interleaved-fastq-to-bam    convert sequences in interleaved FASTQ format to unaligned BAM format
+  links-to-cytoscape-edges    convert links in GFA 1.0 format to edges.txt format for Cytoscape
   reassemble-paths    reassemble paths in GFA 1.0 format from traversal records
   remap-dbsnp    remap DB Type=String flags in VCF format to DB Type=Flag and dbsnp Type=String fields
   remap-phase-set    remap PS Type=String phase set ids in VCF format to PS Type=Integer
   rename-bed-references    rename references in BED files
   rename-gff3-references    rename references in GFF3 files
   rename-vcf-references    rename references in VCF files
+  segments-to-cytoscape-nodes    convert segments in GFA 1.0 format to nodes.txt format for Cytoscape
   split-bed    split files in BED format
   split-fasta    split files in FASTA format
   split-fastq    split files in FASTQ format
@@ -87,6 +86,7 @@ commands:
   split-sam    split files in SAM format
   split-vcf    split files in VCF format
   text-to-fastq    convert sequences in tab-separated values (tsv) text format to FASTQ format
+  traversals-to-cytoscape-edges    convert traversals in GFA 1.0 format to edges.txt format for Cytoscape
   traverse-paths    traverse paths in GFA 1.0 format
   truncate-fasta    truncate sequences in FASTA format
   truncate-paths    truncate paths in GFA 1.0 format
