@@ -368,6 +368,10 @@
               <mainClass>org.dishevelled.bio.tools.LinksToCytoscapeEdges</mainClass>
             </program>
             <program>
+              <id>dsh-links-to-property-graph</id>
+              <mainClass>org.dishevelled.bio.tools.LinksToPropertyGraph</mainClass>
+            </program>
+            <program>
               <id>dsh-reassemble-paths</id>
               <mainClass>org.dishevelled.bio.tools.ReassemblePaths</mainClass>
             </program>
@@ -394,6 +398,10 @@
             <program>
               <id>dsh-segments-to-cytoscape-nodes</id>
               <mainClass>org.dishevelled.bio.tools.SegmentsToCytoscapeNodes</mainClass>
+            </program>
+            <program>
+              <id>dsh-segments-to-property-graph</id>
+              <mainClass>org.dishevelled.bio.tools.SegmentsToPropertyGraph</mainClass>
             </program>
             <program>
               <id>dsh-split-bed</id>
@@ -438,6 +446,10 @@
             <program>
               <id>dsh-traversals-to-cytoscape-edges</id>
               <mainClass>org.dishevelled.bio.tools.TraversalsToCytoscapeEdges</mainClass>
+            </program>
+            <program>
+              <id>dsh-traversals-to-property-graph</id>
+              <mainClass>org.dishevelled.bio.tools.TraversalsToPropertyGraph</mainClass>
             </program>
             <program>
               <id>dsh-traverse-paths</id>

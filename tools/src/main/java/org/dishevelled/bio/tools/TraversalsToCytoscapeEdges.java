@@ -54,7 +54,7 @@ public final class TraversalsToCytoscapeEdges implements Callable<Integer> {
     private final File inputGfa1File;
     private final File outputEdgesFile;
     private static final String HEADER = "source\tsourceOrientation\ttarget\ttargetOrientation\tinteraction\tid\tpathName\tordinal\toverlap";
-    private static final String USAGE = "dsh-traversals-to-cytoscape-edges -i input.gfa.gz -n edges.txt.gz";
+    private static final String USAGE = "dsh-traversals-to-cytoscape-edges -i input.gfa.gz -o edges.txt.gz";
 
     /**
      * Convert traversals in GFA 1.0 format to edges.txt format for Cytoscape.

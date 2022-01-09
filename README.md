@@ -69,6 +69,7 @@ commands:
   interleave-fastq    convert first and second sequence files in FASTQ format to interleaved FASTQ format
   interleaved-fastq-to-bam    convert sequences in interleaved FASTQ format to unaligned BAM format
   links-to-cytoscape-edges    convert links in GFA 1.0 format to edges.txt format for Cytoscape
+  links-to-property-graph    convert links in GFA 1.0 format to property graph CSV format
   reassemble-paths    reassemble paths in GFA 1.0 format from traversal records
   remap-dbsnp    remap DB Type=String flags in VCF format to DB Type=Flag and dbsnp Type=String fields
   remap-phase-set    remap PS Type=String phase set ids in VCF format to PS Type=Integer
@@ -76,6 +77,7 @@ commands:
   rename-gff3-references    rename references in GFF3 files
   rename-vcf-references    rename references in VCF files
   segments-to-cytoscape-nodes    convert segments in GFA 1.0 format to nodes.txt format for Cytoscape
+  segments-to-property-graph    convert segments in GFA 1.0 format to property graph CSV format
   split-bed    split files in BED format
   split-fasta    split files in FASTA format
   split-fastq    split files in FASTQ format
@@ -87,6 +89,7 @@ commands:
   split-vcf    split files in VCF format
   text-to-fastq    convert sequences in tab-separated values (tsv) text format to FASTQ format
   traversals-to-cytoscape-edges    convert traversals in GFA 1.0 format to edges.txt format for Cytoscape
+  traversals-to-property-graph    convert traversals in GFA 1.0 format to property graph CSV format
   traverse-paths    traverse paths in GFA 1.0 format
   truncate-fasta    truncate sequences in FASTA format
   truncate-paths    truncate paths in GFA 1.0 format

@@ -33,7 +33,7 @@ import java.util.concurrent.Callable;
 
 import org.dishevelled.bio.assembly.gfa1.Gfa1Adapter;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Reader;
-import org.dishevelled.bio.assembly.gfa1.Link;
+import org.dishevelled.bio.assembly.gfa1.Segment;
 
 import org.dishevelled.commandline.ArgumentList;
 import org.dishevelled.commandline.CommandLine;
@@ -45,60 +45,59 @@ import org.dishevelled.commandline.Usage;
 import org.dishevelled.commandline.argument.FileArgument;
 
 /**
- * Convert links in GFA 1.0 format to edges.txt format for Cytoscape.
+ * Convert segments in GFA 1.0 format to property graph CSV format.
  *
  * @since 2.1
  * @author  Michael Heuer
  */
-public final class LinksToCytoscapeEdges implements Callable<Integer> {
+public final class SegmentsToPropertyGraph implements Callable<Integer> {
     private final File inputGfa1File;
-    private final File outputEdgesFile;
-    private static final String HEADER = "source\tsourceOrientation\ttarget\ttargetOrientation\tinteraction\tid\toverlap\tmappingQuality\tmismatchCount";
-    private static final String USAGE = "dsh-links-to-cytoscape-edges -i input.gfa.gz -o edges.txt.gz";
+    private final File outputNodesFile;
+    private static final String HEADER = "~id,sequence:String,length:Long,readCount:Int,fragmentCount:Int,kmerCount:Int,sequenceChecksum:String,sequenceUri:String";
+    private static final String USAGE = "dsh-segments-to-property-graph -i input.gfa.gz -o nodes.csv.gz";
 
     /**
-     * Convert links in GFA 1.0 format to edges.txt format for Cytoscape.
+     * Convert segments in GFA 1.0 format to property graph CSV format.
      *
      * @param inputGfa1File input GFA 1.0 file, if any
-     * @param outputEdgesFile output edges.txt file, if any
+     * @param outputNodesFile output nodes.csv file, if any
      */
-    public LinksToCytoscapeEdges(final File inputGfa1File,
-                                 final File outputEdgesFile) {
+    public SegmentsToPropertyGraph(final File inputGfa1File,
+                                   final File outputNodesFile) {
         this.inputGfa1File = inputGfa1File;
-        this.outputEdgesFile = outputEdgesFile;
+        this.outputNodesFile = outputNodesFile;
     }
 
 
     @Override
     public Integer call() throws Exception {
-        PrintWriter edgesWriter = null;
+        PrintWriter nodesWriter = null;
         try {
-            edgesWriter = writer(outputEdgesFile);
-            edgesWriter.println(HEADER);
+            nodesWriter = writer(outputNodesFile);
+            nodesWriter.println(HEADER);
 
-            final PrintWriter ew = edgesWriter;
+            final PrintWriter nw = nodesWriter;
             Gfa1Reader.stream(reader(inputGfa1File), new Gfa1Adapter() {
 
                     @Override
-                    public boolean link(final Link link) {
+                    public boolean segment(final Segment segment) {
                         StringBuilder sb = new StringBuilder();
-                        sb.append(link.getSource().getName());
-                        sb.append("\t");
-                        sb.append(link.getSource().getOrientation().getSymbol());
-                        sb.append("\t");
-                        sb.append(link.getTarget().getName());
-                        sb.append("\t");
-                        sb.append(link.getTarget().getOrientation().getSymbol());
-                        sb.append("\tlink\t");
-                        sb.append(link.getIdOpt().orElse(""));
-                        sb.append("\t");
-                        sb.append(link.getOverlapOpt().orElse(""));
-                        sb.append("\t");
-                        sb.append(link.containsMappingQuality() ? link.getMappingQuality() : "");
-                        sb.append("\t");
-                        sb.append(link.containsMismatchCount() ? link.getMismatchCount() : "");
-                        sb.append("\t");
-                        ew.println(sb);
+                        sb.append(segment.getName());
+                        sb.append(",");
+                        sb.append(segment.getSequenceOpt().orElse(""));
+                        sb.append(",");
+                        sb.append(segment.containsLength() ? segment.getLength() : "");
+                        sb.append(",");
+                        sb.append(segment.containsReadCount() ? segment.getReadCount() : "");
+                        sb.append(",");
+                        sb.append(segment.containsFragmentCount() ? segment.getFragmentCount() : "");
+                        sb.append(",");
+                        sb.append(segment.containsKmerCount() ? segment.getKmerCount() : "");
+                        sb.append(",");
+                        sb.append(segment.containsSequenceChecksum() ? String.valueOf(segment.getSequenceChecksum()) : "");
+                        sb.append(",");
+                        sb.append(segment.getSequenceUriOpt().orElse(""));
+                        nw.println(sb);
                         return true;
                     }
                 });
@@ -107,7 +106,7 @@ public final class LinksToCytoscapeEdges implements Callable<Integer> {
         }
         finally {
             try {
-                edgesWriter.close();
+                nodesWriter.close();
             }
             catch (Exception e) {
                 // empty
@@ -125,12 +124,12 @@ public final class LinksToCytoscapeEdges implements Callable<Integer> {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
         FileArgument inputGfa1File = new FileArgument("i", "input-gfa1-file", "input GFA 1.0 file, default stdin", false);
-        FileArgument outputEdgesFile = new FileArgument("o", "output-edges-file", "output Cytoscape edges.txt format file, default stdout", false);
+        FileArgument outputNodesFile = new FileArgument("o", "output-nodes-file", "output property graph CSV format file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputGfa1File, outputEdgesFile);
+        ArgumentList arguments = new ArgumentList(about, help, inputGfa1File, outputNodesFile);
         CommandLine commandLine = new CommandLine(args);
 
-        LinksToCytoscapeEdges linksToCytoscapeEdges = null;
+        SegmentsToPropertyGraph segmentsToPropertyGraph = null;
         try {
             CommandLineParser.parse(commandLine, arguments);
             if (about.wasFound()) {
@@ -141,7 +140,7 @@ public final class LinksToCytoscapeEdges implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            linksToCytoscapeEdges = new LinksToCytoscapeEdges(inputGfa1File.getValue(), outputEdgesFile.getValue());
+            segmentsToPropertyGraph = new SegmentsToPropertyGraph(inputGfa1File.getValue(), outputNodesFile.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {
@@ -160,7 +159,7 @@ public final class LinksToCytoscapeEdges implements Callable<Integer> {
             System.exit(-1);
         }
         try {
-            System.exit(linksToCytoscapeEdges.call());
+            System.exit(segmentsToPropertyGraph.call());
         }
         catch (Exception e) {
             e.printStackTrace();

@@ -33,7 +33,7 @@ import java.util.concurrent.Callable;
 
 import org.dishevelled.bio.assembly.gfa1.Gfa1Adapter;
 import org.dishevelled.bio.assembly.gfa1.Gfa1Reader;
-import org.dishevelled.bio.assembly.gfa1.Link;
+import org.dishevelled.bio.assembly.gfa1.Traversal;
 
 import org.dishevelled.commandline.ArgumentList;
 import org.dishevelled.commandline.CommandLine;
@@ -45,25 +45,25 @@ import org.dishevelled.commandline.Usage;
 import org.dishevelled.commandline.argument.FileArgument;
 
 /**
- * Convert links in GFA 1.0 format to edges.txt format for Cytoscape.
+ * Convert traversals in GFA 1.0 format to property graph CSV format.
  *
  * @since 2.1
  * @author  Michael Heuer
  */
-public final class LinksToCytoscapeEdges implements Callable<Integer> {
+public final class TraversalsToPropertyGraph implements Callable<Integer> {
     private final File inputGfa1File;
     private final File outputEdgesFile;
-    private static final String HEADER = "source\tsourceOrientation\ttarget\ttargetOrientation\tinteraction\tid\toverlap\tmappingQuality\tmismatchCount";
-    private static final String USAGE = "dsh-links-to-cytoscape-edges -i input.gfa.gz -o edges.txt.gz";
+    private static final String HEADER = "~id,~source,~target,sourceOrientation:String,targetOrientation:String,interaction:String,pathName:String,ordinal:Int,overlap:String";
+    private static final String USAGE = "dsh-traversals-to-property-graph -i input.gfa.gz -o traversal-edges.csv.gz";
 
     /**
-     * Convert links in GFA 1.0 format to edges.txt format for Cytoscape.
+     * Convert traversals in GFA 1.0 format to property graph CSV format.
      *
      * @param inputGfa1File input GFA 1.0 file, if any
-     * @param outputEdgesFile output edges.txt file, if any
+     * @param outputEdgesFile output traversal-edges.csv file, if any
      */
-    public LinksToCytoscapeEdges(final File inputGfa1File,
-                                 final File outputEdgesFile) {
+    public TraversalsToPropertyGraph(final File inputGfa1File,
+                                      final File outputEdgesFile) {
         this.inputGfa1File = inputGfa1File;
         this.outputEdgesFile = outputEdgesFile;
     }
@@ -80,28 +80,30 @@ public final class LinksToCytoscapeEdges implements Callable<Integer> {
             Gfa1Reader.stream(reader(inputGfa1File), new Gfa1Adapter() {
 
                     @Override
-                    public boolean link(final Link link) {
+                    public boolean traversal(final Traversal traversal) {
+                        if (!traversal.containsId()) {
+                            throw new IllegalArgumentException("traversal identifiers are required for property graph CSV format");
+                        }
                         StringBuilder sb = new StringBuilder();
-                        sb.append(link.getSource().getName());
-                        sb.append("\t");
-                        sb.append(link.getSource().getOrientation().getSymbol());
-                        sb.append("\t");
-                        sb.append(link.getTarget().getName());
-                        sb.append("\t");
-                        sb.append(link.getTarget().getOrientation().getSymbol());
-                        sb.append("\tlink\t");
-                        sb.append(link.getIdOpt().orElse(""));
-                        sb.append("\t");
-                        sb.append(link.getOverlapOpt().orElse(""));
-                        sb.append("\t");
-                        sb.append(link.containsMappingQuality() ? link.getMappingQuality() : "");
-                        sb.append("\t");
-                        sb.append(link.containsMismatchCount() ? link.getMismatchCount() : "");
-                        sb.append("\t");
+                        sb.append(traversal.getId());
+                        sb.append(",");
+                        sb.append(traversal.getSource().getName());
+                        sb.append(",");
+                        sb.append(traversal.getTarget().getName());
+                        sb.append(",");
+                        sb.append(traversal.getSource().getOrientation().getSymbol());
+                        sb.append(",");
+                        sb.append(traversal.getTarget().getOrientation().getSymbol());
+                        sb.append(",traversal,");
+                        sb.append(traversal.getPathName());
+                        sb.append(",");
+                        sb.append(traversal.getOrdinal());
+                        sb.append(",");
+                        sb.append(traversal.getOverlapOpt().orElse(""));
                         ew.println(sb);
                         return true;
                     }
-                });
+            });
 
             return 0;
         }
@@ -125,12 +127,12 @@ public final class LinksToCytoscapeEdges implements Callable<Integer> {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
         FileArgument inputGfa1File = new FileArgument("i", "input-gfa1-file", "input GFA 1.0 file, default stdin", false);
-        FileArgument outputEdgesFile = new FileArgument("o", "output-edges-file", "output Cytoscape edges.txt format file, default stdout", false);
+        FileArgument outputEdgesFile = new FileArgument("o", "output-edges-file", "output property graph CSV format file, default stdout", false);
 
         ArgumentList arguments = new ArgumentList(about, help, inputGfa1File, outputEdgesFile);
         CommandLine commandLine = new CommandLine(args);
 
-        LinksToCytoscapeEdges linksToCytoscapeEdges = null;
+        TraversalsToPropertyGraph traversalsToPropertyGraph = null;
         try {
             CommandLineParser.parse(commandLine, arguments);
             if (about.wasFound()) {
@@ -141,7 +143,7 @@ public final class LinksToCytoscapeEdges implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            linksToCytoscapeEdges = new LinksToCytoscapeEdges(inputGfa1File.getValue(), outputEdgesFile.getValue());
+            traversalsToPropertyGraph = new TraversalsToPropertyGraph(inputGfa1File.getValue(), outputEdgesFile.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {
@@ -160,7 +162,7 @@ public final class LinksToCytoscapeEdges implements Callable<Integer> {
             System.exit(-1);
         }
         try {
-            System.exit(linksToCytoscapeEdges.call());
+            System.exit(traversalsToPropertyGraph.call());
         }
         catch (Exception e) {
             e.printStackTrace();
