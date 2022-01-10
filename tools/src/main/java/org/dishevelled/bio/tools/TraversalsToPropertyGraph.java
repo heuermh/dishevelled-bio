@@ -94,7 +94,7 @@ public final class TraversalsToPropertyGraph implements Callable<Integer> {
                         sb.append(traversal.getSource().getOrientation().getSymbol());
                         sb.append(",");
                         sb.append(traversal.getTarget().getOrientation().getSymbol());
-                        sb.append(",traversal,");
+                        sb.append(",T,");
                         sb.append(traversal.getPathName());
                         sb.append(",");
                         sb.append(traversal.getOrdinal());

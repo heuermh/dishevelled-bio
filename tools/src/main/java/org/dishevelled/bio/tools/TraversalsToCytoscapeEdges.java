@@ -89,9 +89,7 @@ public final class TraversalsToCytoscapeEdges implements Callable<Integer> {
                         sb.append(traversal.getTarget().getName());
                         sb.append("\t");
                         sb.append(traversal.getTarget().getOrientation().getSymbol());
-                        sb.append("\t");
-                        sb.append("traversal");
-                        sb.append("\t");
+                        sb.append("\tT\t");
                         sb.append(traversal.getIdOpt().orElse(""));
                         sb.append("\t");
                         sb.append(traversal.getPathName());

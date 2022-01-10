@@ -89,7 +89,7 @@ public final class LinksToCytoscapeEdges implements Callable<Integer> {
                         sb.append(link.getTarget().getName());
                         sb.append("\t");
                         sb.append(link.getTarget().getOrientation().getSymbol());
-                        sb.append("\tlink\t");
+                        sb.append("\tL\t");
                         sb.append(link.getIdOpt().orElse(""));
                         sb.append("\t");
                         sb.append(link.getOverlapOpt().orElse(""));

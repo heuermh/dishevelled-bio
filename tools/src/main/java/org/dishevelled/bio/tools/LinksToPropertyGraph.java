@@ -94,7 +94,7 @@ public final class LinksToPropertyGraph implements Callable<Integer> {
                         sb.append(link.getSource().getOrientation().getSymbol());
                         sb.append(",");
                         sb.append(link.getTarget().getOrientation().getSymbol());
-                        sb.append(",link,");
+                        sb.append(",L,");
                         sb.append(link.getOverlapOpt().orElse(""));
                         sb.append(",");
                         sb.append(link.containsMappingQuality() ? link.getMappingQuality() : "");
