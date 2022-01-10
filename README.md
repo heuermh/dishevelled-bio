@@ -40,9 +40,11 @@ commands:
   compress-sam    compress alignments in SAM format to splittable bgzf or bzip2 compression codecs
   compress-vcf    compress variants and genotypes in VCF format to splittable bgzf or bzip2 compression codecs
   create-sequence-dictionary    create a SequenceDictionary from DNA sequences in FASTA format
+  decode-segments    decode segment sequences in GFA 1.0 format
   disinterleave-fastq    convert interleaved FASTQ format into first and second sequence files in FASTQ format
   downsample-fastq    downsample sequences from files in FASTQ format
   downsample-interleaved-fastq    downsample sequences from a file in interleaved FASTQ format
+  encode-segments    encode segment sequences in GFA 1.0 format
   export-segments    export assembly segment sequences in GFA 1.0 format to FASTA format
   extract-fasta    extract matching sequences in FASTA format
   extract-fastq    extract matching sequences in FASTQ format

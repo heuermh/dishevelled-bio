@@ -67,6 +67,11 @@
       </dependency>
       <dependency>
         <groupId>org.dishevelled</groupId>
+        <artifactId>dsh-bio-sequence</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.dishevelled</groupId>
         <artifactId>dsh-bio-variant</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -165,6 +170,11 @@
     </dependency>
     <dependency>
       <groupId>org.dishevelled</groupId>
+      <artifactId>dsh-bio-sequence</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.dishevelled</groupId>
       <artifactId>dsh-bio-variant</artifactId>
       <scope>compile</scope>
     </dependency>
@@ -252,6 +262,10 @@
               <mainClass>org.dishevelled.bio.tools.CreateSequenceDictionary</mainClass>
             </program>
             <program>
+              <id>dsh-decode-segments</id>
+              <mainClass>org.dishevelled.bio.tools.DecodeSegments</mainClass>
+            </program>
+            <program>
               <id>dsh-disinterleave-fastq</id>
               <mainClass>org.dishevelled.bio.tools.DisinterleaveFastq</mainClass>
             </program>
@@ -262,6 +276,10 @@
             <program>
               <id>dsh-downsample-interleaved-fastq</id>
               <mainClass>org.dishevelled.bio.tools.DownsampleInterleavedFastq</mainClass>
+            </program>
+            <program>
+              <id>dsh-encode-segments</id>
+              <mainClass>org.dishevelled.bio.tools.EncodeSegments</mainClass>
             </program>
             <program>
               <id>dsh-export-segments</id>
