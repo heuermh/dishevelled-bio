@@ -130,6 +130,9 @@ public final class Tools implements Callable<Integer> {
 
     /** Map of commands keyed by command name. */
     static SortedMap<String, Command> COMMANDS = new ImmutableSortedMap.Builder<String, Command>(Ordering.natural())
+        .put("add-segment-length", new Command("add-segment-length", "add length annotation to segments in GFA 1.0 format", AddSegmentLength.class))
+        .put("base64-decode-segments", new Command("base64-decode-segments", "decode segment sequences from Base64 byte arrays in GFA 1.0 format", Base64DecodeSegments.class))
+        .put("base64-encode-segments", new Command("base64-encode-segments", "encode segment sequences to Base64 byte arrays in GFA 1.0 format", Base64EncodeSegments.class))
         .put("compress-bed", new Command("compress-bed", "compress features in BED format to splittable bgzf or bzip2 compression codecs", CompressBed.class))
         .put("compress-fasta", new Command("compress-fasta", "compress sequences in FASTA format to splittable bgzf or bzip2 compression codecs", CompressFasta.class))
         .put("compress-fastq", new Command("compress-fastq", "compress sequences in FASTQ format to splittable bgzf or bzip2 compression codecs", CompressFastq.class))

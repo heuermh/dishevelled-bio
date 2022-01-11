@@ -25,20 +25,20 @@ package org.dishevelled.bio.tools;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-import static org.apache.commons.codec.binary.Hex.encodeHexString;
-
 import static org.dishevelled.compress.Readers.reader;
 import static org.dishevelled.compress.Writers.writer;
 
-import static org.dishevelled.bio.sequence.Sequences.encode;
-import static org.dishevelled.bio.sequence.Sequences.encodeWithNs;
-import static org.dishevelled.bio.sequence.Sequences.encodeWithAmbiguity;
+import static org.dishevelled.bio.sequence.Sequences.decode;
+import static org.dishevelled.bio.sequence.Sequences.decodeWithNs;
+import static org.dishevelled.bio.sequence.Sequences.decodeWithAmbiguity;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import java.nio.ByteBuffer;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,30 +61,30 @@ import org.dishevelled.commandline.Usage;
 import org.dishevelled.commandline.argument.FileArgument;
 
 /**
- * Encode segment sequences in GFA 1.0 format.
+ * Decode segment sequences from Base64 byte arrays in GFA 1.0 format.
  *
  * @since 2.1
  * @author  Michael Heuer
  */
-public final class EncodeSegments implements Callable<Integer> {
+public final class Base64DecodeSegments implements Callable<Integer> {
     private final File inputGfa1File;
     private final File outputGfa1File;
     private final boolean withNs;
     private final boolean withAmbiguity;
-    private static final String USAGE = "dsh-encode-segments -i input.gfa.gz -o output.gfa.gz";
+    private static final String USAGE = "dsh-base64-decode-segments -i input.gfa.gz -o output.gfa.gz";
 
     /**
-     * Encode segment sequences in GFA 1.0 format.
+     * Decode segment sequences from Base64 byte arrays in GFA 1.0 format.
      *
      * @param inputGfa1File input GFA 1.0 file, if any
-     * @param withNs encode with Ns
-     * @param withAmbiguity encode with ambiguity
+     * @param withNs decode with Ns
+     * @param withAmbiguity decode with ambiguity
      * @param outputGfa1File output GFA 1.0 file, if any
      */
-    public EncodeSegments(final File inputGfa1File,
-                          final boolean withNs,
-                          final boolean withAmbiguity,
-                          final File outputGfa1File) {
+    public Base64DecodeSegments(final File inputGfa1File,
+                                final boolean withNs,
+                                final boolean withAmbiguity,
+                                final File outputGfa1File) {
 
         checkArgument(!(withNs && withAmbiguity), "withNs and withAmbiguity are mutually exclusive");
         this.inputGfa1File = inputGfa1File;
@@ -106,28 +106,32 @@ public final class EncodeSegments implements Callable<Integer> {
                     public final boolean record(final Gfa1Record record) {
                         if (record instanceof Segment) {
                             Segment segment = (Segment) record;
-                            if (segment.hasSequence()) {
+                            if (segment.containsAnnotationKey("bs")) {
                                 String name = segment.getName();
-                                String sequence = segment.getSequence();
-                                ByteBuffer encodedSequence = null;
-                                if (withNs) {
-                                    encodedSequence = encodeWithNs(sequence);
+                                if (!segment.containsLength()) {
+                                    throw new IllegalArgumentException("missing length (LN:i) annotation");
                                 }
-                                else if (withAmbiguity) {
-                                    encodedSequence = encodeWithAmbiguity(sequence);
+                                int length = segment.getLength();
+                                String sequence = null;
+                                ByteBuffer encodedSequence = base64(segment.getAnnotationString("bs"));
+                                try {
+                                    if (withNs) {
+                                        sequence = decodeWithNs(encodedSequence, length);
+                                    }
+                                    else if (withAmbiguity) {
+                                        sequence = decodeWithAmbiguity(encodedSequence, length);
+                                    }
+                                    else {
+                                        sequence = decode(encodedSequence, length);
+                                    }
                                 }
-                                else {
-                                    encodedSequence = encode(sequence);
+                                catch (IOException e) {
+                                    throw new IllegalArgumentException("could not decode sequence", e);
                                 }
 
                                 Map<String, Annotation> annotations = new HashMap<String, Annotation>(segment.getAnnotations());
-                                annotations.put("es", new Annotation("es", "H", encodeHexString(encodedSequence)));
-                                // add length annotation if missing
-                                if (!annotations.containsKey("LN")) {
-                                    annotations.put("LN", new Annotation("LN", "i", String.valueOf(sequence.length())));
-                                }
-                                w.println(new Segment(name, null, annotations).toString());
-
+                                annotations.remove("bs");
+                                w.println(new Segment(name, sequence, annotations).toString());
                             }
                             else {
                                 w.println(segment.toString());
@@ -152,6 +156,9 @@ public final class EncodeSegments implements Callable<Integer> {
         }
     }
 
+    static ByteBuffer base64(final String base64String) {
+        return ByteBuffer.wrap(Base64.getDecoder().decode(base64String));
+    }
 
     /**
      * Main.
@@ -164,12 +171,12 @@ public final class EncodeSegments implements Callable<Integer> {
         FileArgument inputGfa1File = new FileArgument("i", "input-gfa1-file", "input GFA 1.0 file, default stdin", false);
         FileArgument outputGfa1File = new FileArgument("o", "output-gfa1-file", "output GFA 1.0 file, default stdout", false);
 
-        Switch withNs = new Switch("n", "with-ns", "encode sequence with Ns e.g. {a,c,g,t,n}");
-        Switch withAmbiguity = new Switch("g", "with-ambiguity", "encode sequence with ambiguity e.g. {a,c,g,t,m,r,t,...}");
+        Switch withNs = new Switch("n", "with-ns", "decode sequence with Ns e.g. {a,c,g,t,n}");
+        Switch withAmbiguity = new Switch("g", "with-ambiguity", "decode sequence with ambiguity e.g. {a,c,g,t,m,r,t,...}");
         ArgumentList arguments = new ArgumentList(about, help, inputGfa1File, withNs, withAmbiguity, outputGfa1File);
         CommandLine commandLine = new CommandLine(args);
 
-        EncodeSegments encodeSegments = null;
+        Base64DecodeSegments base64DecodeSegments = null;
         try {
             CommandLineParser.parse(commandLine, arguments);
             if (about.wasFound()) {
@@ -180,7 +187,7 @@ public final class EncodeSegments implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            encodeSegments = new EncodeSegments(inputGfa1File.getValue(), withNs.getValue(), withAmbiguity.getValue(), outputGfa1File.getValue());
+            base64DecodeSegments = new Base64DecodeSegments(inputGfa1File.getValue(), withNs.getValue(), withAmbiguity.getValue(), outputGfa1File.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {
@@ -199,7 +206,7 @@ public final class EncodeSegments implements Callable<Integer> {
             System.exit(-1);
         }
         try {
-            System.exit(encodeSegments.call());
+            System.exit(base64DecodeSegments.call());
         }
         catch (Exception e) {
             e.printStackTrace();

@@ -165,7 +165,7 @@ public final class DecodeSegments implements Callable<Integer> {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
         FileArgument inputGfa1File = new FileArgument("i", "input-gfa1-file", "input GFA 1.0 file, default stdin", false);
-        FileArgument outputGfa1File = new FileArgument("o", "output-gfa1-file", "output GFA 1.0 filefile, default stdout", false);
+        FileArgument outputGfa1File = new FileArgument("o", "output-gfa1-file", "output GFA 1.0 file, default stdout", false);
 
         Switch withNs = new Switch("n", "with-ns", "decode sequence with Ns e.g. {a,c,g,t,n}");
         Switch withAmbiguity = new Switch("g", "with-ambiguity", "decode sequence with ambiguity e.g. {a,c,g,t,m,r,t,...}");

@@ -28,6 +28,9 @@ usage:
 dsh-bio [command] [args]
 
 commands:
+  add-segment-length    add length annotation to segments in GFA 1.0 format
+  base64-decode-segments    decode segment sequences from Base64 byte arrays in GFA 1.0 format
+  base64-encode-segments    encode segment sequences to Base64 byte arrays in GFA 1.0 format
   compress-bed    compress features in BED format to splittable bgzf or bzip2 compression codecs
   compress-fasta    compress sequences in FASTA format to splittable bgzf or bzip2 compression codecs
   compress-fastq    compress sequences in FASTQ format to splittable bgzf or bzip2 compression codecs

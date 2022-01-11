@@ -23,21 +23,12 @@
 */
 package org.dishevelled.bio.tools;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
-import static org.apache.commons.codec.binary.Hex.encodeHexString;
-
 import static org.dishevelled.compress.Readers.reader;
 import static org.dishevelled.compress.Writers.writer;
 
-import static org.dishevelled.bio.sequence.Sequences.encode;
-import static org.dishevelled.bio.sequence.Sequences.encodeWithNs;
-import static org.dishevelled.bio.sequence.Sequences.encodeWithAmbiguity;
-
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
-
-import java.nio.ByteBuffer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,35 +52,25 @@ import org.dishevelled.commandline.Usage;
 import org.dishevelled.commandline.argument.FileArgument;
 
 /**
- * Encode segment sequences in GFA 1.0 format.
+ * Add length annotation to segments in GFA 1.0 format.
  *
  * @since 2.1
  * @author  Michael Heuer
  */
-public final class EncodeSegments implements Callable<Integer> {
+public final class AddSegmentLength implements Callable<Integer> {
     private final File inputGfa1File;
     private final File outputGfa1File;
-    private final boolean withNs;
-    private final boolean withAmbiguity;
-    private static final String USAGE = "dsh-encode-segments -i input.gfa.gz -o output.gfa.gz";
+    private static final String USAGE = "dsh-add-segment-length -i input.gfa.gz -o output.gfa.gz";
 
     /**
-     * Encode segment sequences in GFA 1.0 format.
+     * Add length annotation to segments in GFA 1.0 format.
      *
      * @param inputGfa1File input GFA 1.0 file, if any
-     * @param withNs encode with Ns
-     * @param withAmbiguity encode with ambiguity
      * @param outputGfa1File output GFA 1.0 file, if any
      */
-    public EncodeSegments(final File inputGfa1File,
-                          final boolean withNs,
-                          final boolean withAmbiguity,
-                          final File outputGfa1File) {
-
-        checkArgument(!(withNs && withAmbiguity), "withNs and withAmbiguity are mutually exclusive");
+    public AddSegmentLength(final File inputGfa1File,
+                            final File outputGfa1File) {
         this.inputGfa1File = inputGfa1File;
-        this.withNs = withNs;
-        this.withAmbiguity = withAmbiguity;
         this.outputGfa1File = outputGfa1File;
     }
 
@@ -106,28 +87,12 @@ public final class EncodeSegments implements Callable<Integer> {
                     public final boolean record(final Gfa1Record record) {
                         if (record instanceof Segment) {
                             Segment segment = (Segment) record;
-                            if (segment.hasSequence()) {
+                            if (segment.hasSequence() && !segment.containsLength()) {
                                 String name = segment.getName();
                                 String sequence = segment.getSequence();
-                                ByteBuffer encodedSequence = null;
-                                if (withNs) {
-                                    encodedSequence = encodeWithNs(sequence);
-                                }
-                                else if (withAmbiguity) {
-                                    encodedSequence = encodeWithAmbiguity(sequence);
-                                }
-                                else {
-                                    encodedSequence = encode(sequence);
-                                }
-
                                 Map<String, Annotation> annotations = new HashMap<String, Annotation>(segment.getAnnotations());
-                                annotations.put("es", new Annotation("es", "H", encodeHexString(encodedSequence)));
-                                // add length annotation if missing
-                                if (!annotations.containsKey("LN")) {
-                                    annotations.put("LN", new Annotation("LN", "i", String.valueOf(sequence.length())));
-                                }
-                                w.println(new Segment(name, null, annotations).toString());
-
+                                annotations.put("LN", new Annotation("LN", "i", String.valueOf(sequence.length())));
+                                w.println(new Segment(name, sequence, annotations).toString());
                             }
                             else {
                                 w.println(segment.toString());
@@ -164,12 +129,10 @@ public final class EncodeSegments implements Callable<Integer> {
         FileArgument inputGfa1File = new FileArgument("i", "input-gfa1-file", "input GFA 1.0 file, default stdin", false);
         FileArgument outputGfa1File = new FileArgument("o", "output-gfa1-file", "output GFA 1.0 file, default stdout", false);
 
-        Switch withNs = new Switch("n", "with-ns", "encode sequence with Ns e.g. {a,c,g,t,n}");
-        Switch withAmbiguity = new Switch("g", "with-ambiguity", "encode sequence with ambiguity e.g. {a,c,g,t,m,r,t,...}");
-        ArgumentList arguments = new ArgumentList(about, help, inputGfa1File, withNs, withAmbiguity, outputGfa1File);
+        ArgumentList arguments = new ArgumentList(about, help, inputGfa1File, outputGfa1File);
         CommandLine commandLine = new CommandLine(args);
 
-        EncodeSegments encodeSegments = null;
+        AddSegmentLength addSegmentLength = null;
         try {
             CommandLineParser.parse(commandLine, arguments);
             if (about.wasFound()) {
@@ -180,7 +143,7 @@ public final class EncodeSegments implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            encodeSegments = new EncodeSegments(inputGfa1File.getValue(), withNs.getValue(), withAmbiguity.getValue(), outputGfa1File.getValue());
+            addSegmentLength = new AddSegmentLength(inputGfa1File.getValue(), outputGfa1File.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {
@@ -199,7 +162,7 @@ public final class EncodeSegments implements Callable<Integer> {
             System.exit(-1);
         }
         try {
-            System.exit(encodeSegments.call());
+            System.exit(addSegmentLength.call());
         }
         catch (Exception e) {
             e.printStackTrace();

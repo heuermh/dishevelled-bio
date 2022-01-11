@@ -39,6 +39,7 @@ import java.io.PrintWriter;
 
 import java.nio.ByteBuffer;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,30 +62,30 @@ import org.dishevelled.commandline.Usage;
 import org.dishevelled.commandline.argument.FileArgument;
 
 /**
- * Encode segment sequences in GFA 1.0 format.
+ * Encode segment sequences as Base64 byte arrays in GFA 1.0 format.
  *
  * @since 2.1
  * @author  Michael Heuer
  */
-public final class EncodeSegments implements Callable<Integer> {
+public final class Base64EncodeSegments implements Callable<Integer> {
     private final File inputGfa1File;
     private final File outputGfa1File;
     private final boolean withNs;
     private final boolean withAmbiguity;
-    private static final String USAGE = "dsh-encode-segments -i input.gfa.gz -o output.gfa.gz";
+    private static final String USAGE = "dsh-base64-encode-segments -i input.gfa.gz -o output.gfa.gz";
 
     /**
-     * Encode segment sequences in GFA 1.0 format.
+     * Encode segment sequences as Base64 byte arrays in GFA 1.0 format.
      *
      * @param inputGfa1File input GFA 1.0 file, if any
      * @param withNs encode with Ns
      * @param withAmbiguity encode with ambiguity
      * @param outputGfa1File output GFA 1.0 file, if any
      */
-    public EncodeSegments(final File inputGfa1File,
-                          final boolean withNs,
-                          final boolean withAmbiguity,
-                          final File outputGfa1File) {
+    public Base64EncodeSegments(final File inputGfa1File,
+                                final boolean withNs,
+                                final boolean withAmbiguity,
+                                final File outputGfa1File) {
 
         checkArgument(!(withNs && withAmbiguity), "withNs and withAmbiguity are mutually exclusive");
         this.inputGfa1File = inputGfa1File;
@@ -121,7 +122,7 @@ public final class EncodeSegments implements Callable<Integer> {
                                 }
 
                                 Map<String, Annotation> annotations = new HashMap<String, Annotation>(segment.getAnnotations());
-                                annotations.put("es", new Annotation("es", "H", encodeHexString(encodedSequence)));
+                                annotations.put("bs", new Annotation("bs", "Z", base64(encodedSequence)));
                                 // add length annotation if missing
                                 if (!annotations.containsKey("LN")) {
                                     annotations.put("LN", new Annotation("LN", "i", String.valueOf(sequence.length())));
@@ -152,6 +153,13 @@ public final class EncodeSegments implements Callable<Integer> {
         }
     }
 
+    static String base64(final ByteBuffer byteBuffer) {
+        ByteBuffer readOnly = byteBuffer.asReadOnlyBuffer();
+        readOnly.position(0);
+        byte[] b = new byte[readOnly.limit()];
+        readOnly.get(b, 0, b.length);
+        return Base64.getEncoder().withoutPadding().encodeToString(b);
+    }
 
     /**
      * Main.
@@ -169,7 +177,7 @@ public final class EncodeSegments implements Callable<Integer> {
         ArgumentList arguments = new ArgumentList(about, help, inputGfa1File, withNs, withAmbiguity, outputGfa1File);
         CommandLine commandLine = new CommandLine(args);
 
-        EncodeSegments encodeSegments = null;
+        Base64EncodeSegments base64EncodeSegments = null;
         try {
             CommandLineParser.parse(commandLine, arguments);
             if (about.wasFound()) {
@@ -180,7 +188,7 @@ public final class EncodeSegments implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            encodeSegments = new EncodeSegments(inputGfa1File.getValue(), withNs.getValue(), withAmbiguity.getValue(), outputGfa1File.getValue());
+            base64EncodeSegments = new Base64EncodeSegments(inputGfa1File.getValue(), withNs.getValue(), withAmbiguity.getValue(), outputGfa1File.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {
@@ -199,7 +207,7 @@ public final class EncodeSegments implements Callable<Integer> {
             System.exit(-1);
         }
         try {
-            System.exit(encodeSegments.call());
+            System.exit(base64EncodeSegments.call());
         }
         catch (Exception e) {
             e.printStackTrace();
