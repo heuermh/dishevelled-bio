@@ -63,7 +63,7 @@ public final class TraversalsToPropertyGraph implements Callable<Integer> {
      * @param outputEdgesFile output traversal-edges.csv file, if any
      */
     public TraversalsToPropertyGraph(final File inputGfa1File,
-                                      final File outputEdgesFile) {
+                                     final File outputEdgesFile) {
         this.inputGfa1File = inputGfa1File;
         this.outputEdgesFile = outputEdgesFile;
     }
@@ -94,7 +94,7 @@ public final class TraversalsToPropertyGraph implements Callable<Integer> {
                         sb.append(traversal.getSource().getOrientation().getSymbol());
                         sb.append(",");
                         sb.append(traversal.getTarget().getOrientation().getSymbol());
-                        sb.append(",T,");
+                        sb.append(",t,");
                         sb.append(traversal.getPathName());
                         sb.append(",");
                         sb.append(traversal.getOrdinal());
