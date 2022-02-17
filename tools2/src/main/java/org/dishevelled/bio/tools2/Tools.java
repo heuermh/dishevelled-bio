@@ -25,6 +25,8 @@ package org.dishevelled.bio.tools2;
 
 import java.util.List;
 
+import picocli.AutoComplete.GenerateCompletion;
+
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.HelpCommand;
@@ -39,9 +41,9 @@ import picocli.CommandLine.ScopeType;
 @Command(
   name = "dsh-bio",
   scope = ScopeType.INHERIT,
-  subcommands = { CompressBed.class, HelpCommand.class },
+  subcommands = { CompressBed.class, HelpCommand.class, GenerateCompletion.class },
   mixinStandardHelpOptions = true,
-  //  showAtFileInUsageHelp = true,
+  sortOptions = false,
   usageHelpAutoWidth = true,
   resourceBundle = "org.dishevelled.bio.tools2.Messages",
   versionProvider = org.dishevelled.bio.tools2.About.class
