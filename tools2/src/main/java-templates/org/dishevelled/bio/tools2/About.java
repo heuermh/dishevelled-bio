@@ -27,10 +27,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.PrintStream;
 
+import picocli.CommandLine.IVersionProvider;
+
 /**
  * About.
  */
-final class About {
+public final class About implements IVersionProvider {
     private static final String ARTIFACT_ID = "${project.artifactId}";
     private static final String BUILD_TIMESTAMP = "${build-helper-maven-plugin.build.timestamp}";
     private static final String COMMIT = "${git.commit.id}";
@@ -112,6 +114,15 @@ final class About {
         return sb.toString();
     }
 
+    @Override
+    public String[] getVersion() {
+        return new String[] {
+            artifactId() + " " + version(),
+            "Commit: " + commit() + " Build: " + buildTimestamp(),
+            copyright(),
+            license()
+        };
+    }
 
     /**
      * Write about text to the specified print stream.

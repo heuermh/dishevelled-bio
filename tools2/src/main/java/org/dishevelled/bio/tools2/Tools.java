@@ -40,7 +40,8 @@ import picocli.CommandLine.Parameters;
   subcommands = { CompressBed.class, HelpCommand.class },
   mixinStandardHelpOptions = true,
   usageHelpAutoWidth = true,
-  resourceBundle = "org.dishevelled.bio.tools2.Messages"
+  resourceBundle = "org.dishevelled.bio.tools2.Messages",
+  versionProvider = org.dishevelled.bio.tools2.About.class
 )
 public final class Tools {
 

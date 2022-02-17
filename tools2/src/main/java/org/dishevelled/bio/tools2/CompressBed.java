@@ -54,7 +54,8 @@ import picocli.CommandLine.Parameters;
   mixinStandardHelpOptions = true,
   sortOptions = false,
   usageHelpAutoWidth = true,
-  resourceBundle = "org.dishevelled.bio.tools2.Messages"
+  resourceBundle = "org.dishevelled.bio.tools2.Messages",
+  versionProvider = org.dishevelled.bio.tools2.About.class
 )
 public final class CompressBed implements Callable<Integer> {
 
