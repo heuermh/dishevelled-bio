@@ -23,10 +23,6 @@
 */
 package org.dishevelled.bio.tools2;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.io.PrintStream;
-
 import picocli.CommandLine.IVersionProvider;
 
 /**
@@ -96,41 +92,12 @@ public final class About implements IVersionProvider {
     }
 
     @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(artifactId());
-        sb.append(" ");
-        sb.append(version());
-        sb.append("\n");
-        sb.append("Commit: ");
-        sb.append(commit());
-        sb.append("  Build: ");
-        sb.append(buildTimestamp());
-        sb.append("\n");
-        sb.append(copyright());
-        sb.append("\n");
-        sb.append(license());
-        sb.append("\n");
-        return sb.toString();
-    }
-
-    @Override
     public String[] getVersion() {
         return new String[] {
-            artifactId() + " " + version(),
-            "Commit: " + commit() + " Build: " + buildTimestamp(),
+            "@|fg(blue) " + artifactId() + "|@ " + version(),
+            "@|fg(yellow) Commit:|@ " + commit() + " @|fg(yellow) Build:|@ " + buildTimestamp(),
             copyright(),
             license()
         };
-    }
-
-    /**
-     * Write about text to the specified print stream.
-     *
-     * @param out print stream to write about text to
-     */
-    public static void about(final PrintStream out) {
-        checkNotNull(out);
-        out.print(new About().toString());
     }
 }

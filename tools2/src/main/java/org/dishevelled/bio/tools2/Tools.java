@@ -29,6 +29,7 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.HelpCommand;
 import picocli.CommandLine.Parameters;
+import picocli.CommandLine.ScopeType;
 
 /**
  * Command line tools.
@@ -37,8 +38,10 @@ import picocli.CommandLine.Parameters;
  */
 @Command(
   name = "dsh-bio",
+  scope = ScopeType.INHERIT,
   subcommands = { CompressBed.class, HelpCommand.class },
   mixinStandardHelpOptions = true,
+  //  showAtFileInUsageHelp = true,
   usageHelpAutoWidth = true,
   resourceBundle = "org.dishevelled.bio.tools2.Messages",
   versionProvider = org.dishevelled.bio.tools2.About.class

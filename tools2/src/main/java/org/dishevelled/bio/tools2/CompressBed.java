@@ -49,14 +49,7 @@ import picocli.CommandLine.Parameters;
  * @since 1.1
  * @author  Michael Heuer
  */
-@Command(
-  name = "compress-bed",
-  mixinStandardHelpOptions = true,
-  sortOptions = false,
-  usageHelpAutoWidth = true,
-  resourceBundle = "org.dishevelled.bio.tools2.Messages",
-  versionProvider = org.dishevelled.bio.tools2.About.class
-)
+@Command(name = "compress-bed")
 public final class CompressBed implements Callable<Integer> {
 
     @Parameters(arity = "0..*")
