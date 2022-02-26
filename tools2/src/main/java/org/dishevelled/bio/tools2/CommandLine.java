@@ -23,45 +23,21 @@
 */
 package org.dishevelled.bio.tools2;
 
-import java.util.List;
-
-import picocli.AutoComplete.GenerateCompletion;
-
-import picocli.CommandLine.Command;
-import picocli.CommandLine.HelpCommand;
-import picocli.CommandLine.Parameters;
-import picocli.CommandLine.ScopeType;
-
 /**
- * Command line tools.
+ * Wrapper for picocli.CommandLine API.
  *
+ * @since 3.0
  * @author  Michael Heuer
  */
-@Command(
-  name = "dsh-bio",
-  scope = ScopeType.INHERIT,
-  subcommands = {
-      CompressBed.class,
-      HelpCommand.class,
-      GenerateCompletion.class
-  },
-  mixinStandardHelpOptions = true,
-  sortOptions = false,
-  usageHelpAutoWidth = true,
-  resourceBundle = "org.dishevelled.bio.tools2.Messages",
-  versionProvider = org.dishevelled.bio.tools2.About.class
-)
-public final class Tools {
-
-    @Parameters(hidden = true)
-    private List<String> ignored;
+final class CommandLine extends picocli.CommandLine {
 
     /**
-     * Main.
+     * Create a new command line for the specified command.
      *
-     * @param args command line args
+     * @param command command
      */
-    public static void main(final String[] args) {
-        System.exit(new CommandLine(new Tools()).execute(args));
+    CommandLine(final Object command) {
+        super(command);
+        setUsageHelpLongOptionsMaxWidth(42);
     }
 }

@@ -23,6 +23,8 @@
 */
 package org.dishevelled.bio.tools2;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import static org.dishevelled.compress.Readers.reader;
 import static org.dishevelled.compress.Writers.writer;
 
@@ -38,7 +40,6 @@ import java.util.concurrent.Callable;
 import org.dishevelled.bio.feature.bed.BedReader;
 import org.dishevelled.bio.feature.bed.BedWriter;
 
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
@@ -65,7 +66,7 @@ public final class CompressBed implements Callable<Integer> {
      * @since 3.0
      */
     public CompressBed() {
-        this(null, null);
+        // empty
     }
 
     /**
@@ -76,6 +77,19 @@ public final class CompressBed implements Callable<Integer> {
      */
     public CompressBed(final File inputBedFile, final File outputBedFile) {
         inputBedFiles.add(inputBedFile);
+        this.outputBedFile = outputBedFile;
+    }
+
+    /**
+     * Compress features in BED format to splittable bgzf or bzip2 compression codecs.
+     *
+     * @since 3.0
+     * @param inputBedFile list of input BED files, must not be null
+     * @param outputBedFile output BED file, if any
+     */
+    public CompressBed(final List<File> inputBedFiles, final File outputBedFile) {
+        checkNotNull(inputBedFiles);
+        this.inputBedFiles.addAll(inputBedFiles);
         this.outputBedFile = outputBedFile;
     }
 
@@ -104,9 +118,12 @@ public final class CompressBed implements Callable<Integer> {
      * @param args command line args
      */
     public static void main(final String[] args) {
+        System.exit(new CommandLine(new CompressBed()).execute(args));
         // todo: warn if inputBedFiles is empty and interactive tty
+        /*
         CommandLine commandLine = new CommandLine(new CompressBed());
         commandLine.setUsageHelpLongOptionsMaxWidth(42);
         System.exit(commandLine.execute(args));
+        */
     }
 }
