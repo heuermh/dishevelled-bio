@@ -59,7 +59,6 @@ public final class CompressBed implements Callable<Integer> {
     @Option(names = { "-o", "--output-bed-file" })
     private File outputBedFile = null;
 
-
     /**
      * Compress features in BED format to splittable bgzf or bzip2 compression codecs.
      *
@@ -101,8 +100,8 @@ public final class CompressBed implements Callable<Integer> {
         try (final PrintWriter writer = writer(outputBedFile)) {
             for (File inputBedFile : inputBedFiles) {
                 try (BufferedReader reader = reader(inputBedFile)) {
-                     BedReader.stream(reader, bedRecord -> {
-                             BedWriter.write(bedRecord, writer);
+                     BedReader.stream(reader, record -> {
+                             BedWriter.write(record, writer);
                              return true;
                          });
                      }
@@ -119,11 +118,5 @@ public final class CompressBed implements Callable<Integer> {
      */
     public static void main(final String[] args) {
         System.exit(new CommandLine(new CompressBed()).execute(args));
-        // todo: warn if inputBedFiles is empty and interactive tty
-        /*
-        CommandLine commandLine = new CommandLine(new CompressBed());
-        commandLine.setUsageHelpLongOptionsMaxWidth(42);
-        System.exit(commandLine.execute(args));
-        */
     }
 }
