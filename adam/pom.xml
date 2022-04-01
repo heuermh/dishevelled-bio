@@ -53,8 +53,9 @@
           </filters>
           <relocations>
             <relocation>
-              <pattern>com.google.common</pattern>
-              <shadedPattern>org.dishevelled.bio.adam.shaded.com.google.common</shadedPattern>
+              <!-- guava and guice both need to be shaded -->
+              <pattern>com.google</pattern>
+              <shadedPattern>org.dishevelled.bio.adam.shaded.com.google</shadedPattern>
             </relocation>
           </relocations>
         </configuration>
