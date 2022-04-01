@@ -10,7 +10,7 @@ dishevelled.org bio
 Install
 
  * JDK 1.8 or later, https://openjdk.java.net
- * Apache Maven 3.3.9 or later, https://maven.apache.org
+ * Apache Maven 3.8.5 or later, https://maven.apache.org
 
 To build
 
