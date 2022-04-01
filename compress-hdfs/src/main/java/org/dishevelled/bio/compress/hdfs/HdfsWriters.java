@@ -28,9 +28,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static org.dishevelled.compress.Compress.isBgzfFilename;
 import static org.dishevelled.compress.Compress.isBzip2Filename;
 import static org.dishevelled.compress.Compress.isGzipFilename;
+import static org.dishevelled.compress.Compress.isXzFilename;
+import static org.dishevelled.compress.Compress.isZstdFilename;
 import static org.dishevelled.compress.Writers.bgzfOutputStreamWriter;
 import static org.dishevelled.compress.Writers.bzip2OutputStreamWriter;
 import static org.dishevelled.compress.Writers.gzipOutputStreamWriter;
+import static org.dishevelled.compress.Writers.xzOutputStreamWriter;
+import static org.dishevelled.compress.Writers.zstdOutputStreamWriter;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -44,7 +48,7 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
 /**
- * HDFS writers with support for bgzf, gzip, and bzip2 compression.
+ * HDFS writers with support for bgzf, gzip, bzip2, xz, and zstd compression.
  *
  * @since 1.1
  * @author  Michael Heuer
@@ -77,6 +81,7 @@ public final class HdfsWriters {
         FileSystem fileSystem = p.getFileSystem(conf);
         OutputStream outputStream = fileSystem.create(p);
 
+        // check bgzf before gzip
         if (isBgzfFilename(path)) {
             return bgzfOutputStreamWriter(outputStream);
         }
@@ -85,6 +90,12 @@ public final class HdfsWriters {
         }
         else if (isBzip2Filename(path)) {
             return bzip2OutputStreamWriter(outputStream);
+        }
+        else if (isXzFilename(path)) {
+            return xzOutputStreamWriter(outputStream);
+        }
+        else if (isZstdFilename(path)) {
+            return zstdOutputStreamWriter(outputStream);
         }
         return new PrintWriter(new BufferedWriter(new OutputStreamWriter(outputStream)), true);
     }

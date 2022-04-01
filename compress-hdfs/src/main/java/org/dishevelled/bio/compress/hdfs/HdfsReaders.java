@@ -28,9 +28,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static org.dishevelled.compress.Compress.isBgzfFilename;
 import static org.dishevelled.compress.Compress.isBzip2Filename;
 import static org.dishevelled.compress.Compress.isGzipFilename;
+import static org.dishevelled.compress.Compress.isXzFilename;
+import static org.dishevelled.compress.Compress.isZstdFilename;
 import static org.dishevelled.compress.Readers.bgzfInputStreamReader;
 import static org.dishevelled.compress.Readers.bzip2InputStreamReader;
 import static org.dishevelled.compress.Readers.gzipInputStreamReader;
+import static org.dishevelled.compress.Readers.xzInputStreamReader;
+import static org.dishevelled.compress.Readers.zstdInputStreamReader;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -43,7 +47,7 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
 /**
- * HDFS readers with support for bgzf, gzip, and bzip2 compression.
+ * HDFS readers with support for bgzf, gzip, bzip2, xz, and zstd compression.
  *
  * @since 1.1
  * @author  Michael Heuer
@@ -76,6 +80,7 @@ public final class HdfsReaders {
         FileSystem fileSystem = p.getFileSystem(conf);
         InputStream inputStream = fileSystem.open(p);
 
+        // check bgzf before gzip
         if (isBgzfFilename(path)) {
             return bgzfInputStreamReader(inputStream);
         }
@@ -84,6 +89,12 @@ public final class HdfsReaders {
         }
         else if (isBzip2Filename(path)) {
             return bzip2InputStreamReader(inputStream);
+        }
+        else if (isXzFilename(path)) {
+            return xzInputStreamReader(inputStream);
+        }
+        else if (isZstdFilename(path)) {
+            return zstdInputStreamReader(inputStream);
         }
         return new BufferedReader(new InputStreamReader(inputStream));
     }
