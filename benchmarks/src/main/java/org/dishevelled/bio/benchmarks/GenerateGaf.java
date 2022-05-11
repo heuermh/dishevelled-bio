@@ -25,6 +25,7 @@ package org.dishevelled.bio.benchmarks;
 
 import static org.dishevelled.compress.Writers.writer;
 
+import java.io.File;
 import java.io.PrintWriter;
 
 import com.google.common.collect.ImmutableMap;
@@ -42,7 +43,7 @@ public class GenerateGaf {
     public static void main(final String args[]) throws Exception {
         PrintWriter writer = null;
         try {
-            writer = writer(null);
+            writer = writer((File) null);
             for (int i = 0; i < 10_000_000; i++) {
 
                 String queryName = "query";
