@@ -102,7 +102,10 @@ import scala.collection.Seq;
 
 /**
  * Extends ADAMContext with load methods for dsh-bio models.
+ *
+ * @deprecated to be removed in version 3.0
  */
+@Deprecated
 public class DishevelledAdamContext extends ADAMContext {
     /** Java Spark context. */
     private final transient JavaSparkContext javaSparkContext;

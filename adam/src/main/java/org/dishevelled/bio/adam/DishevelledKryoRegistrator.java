@@ -34,8 +34,9 @@ import org.bdgenomics.adam.serialization.ADAMKryoRegistrator;
 /**
  * Dishevelled kryo registrator.
  *
- * @author  Michael Heuer
+ * @deprecated to be removed in version 3.0
  */
+@Deprecated
 public class DishevelledKryoRegistrator extends ADAMKryoRegistrator {
 
     @Override
