@@ -24,6 +24,8 @@
 
 /**
  * Adapt dsh-bio models to ADAM.
+ *
+ * @deprecated to be removed in version 3.0
  */
 package org.dishevelled.bio.adam;
 
