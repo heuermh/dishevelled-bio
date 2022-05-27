@@ -30,6 +30,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.concurrent.Callable;
 
 import org.dishevelled.bio.assembly.gfa1.Gfa1Listener;
@@ -46,6 +48,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Compress assembly in rGFA format to splittable bgzf or bzip2 compression codecs.
@@ -54,7 +57,7 @@ import org.dishevelled.commandline.argument.FileArgument;
  * @author  Michael Heuer
  */
 public final class CompressRgfa implements Callable<Integer> {
-    private final File inputRgfaFile;
+    private final Path inputRgfaPath;
     private final File outputRgfaFile;
     private static final String USAGE = "dsh-compress-rgfa [args]";
 
@@ -65,7 +68,18 @@ public final class CompressRgfa implements Callable<Integer> {
      * @param outputRgfaFile output rGFA file, if any
      */
     public CompressRgfa(final File inputRgfaFile, final File outputRgfaFile) {
-        this.inputRgfaFile = inputRgfaFile;
+        this(inputRgfaFile == null ? null : inputRgfaFile.toPath(), outputRgfaFile);
+    }
+
+    /**
+     * Compress assembly in rGFA format to splittable bgzf or bzip2 compression codecs.
+     *
+     * @since 2.1
+     * @param inputRgfaPath input rGFA path, if any
+     * @param outputRgfaFile output rGFA file, if any
+     */
+    public CompressRgfa(final Path inputRgfaPath, final File outputRgfaFile) {
+        this.inputRgfaPath = inputRgfaPath;
         this.outputRgfaFile = outputRgfaFile;
     }
 
@@ -74,7 +88,7 @@ public final class CompressRgfa implements Callable<Integer> {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(inputRgfaFile);
+            reader = reader(inputRgfaPath);
             writer = writer(outputRgfaFile);
             
             final PrintWriter w = writer;
@@ -127,10 +141,10 @@ public final class CompressRgfa implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputRgfaFile = new FileArgument("i", "input-rgfa-file", "input rGFA file, default stdin", false);
+        PathArgument inputRgfaPath = new PathArgument("i", "input-rgfa-path", "input rGFA path, default stdin", false);
         FileArgument outputRgfaFile = new FileArgument("o", "output-rgfa-file", "output rGFA file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputRgfaFile, outputRgfaFile);
+        ArgumentList arguments = new ArgumentList(about, help, inputRgfaPath, outputRgfaFile);
         CommandLine commandLine = new CommandLine(args);
 
         CompressRgfa compressRgfa = null;
@@ -145,7 +159,7 @@ public final class CompressRgfa implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            compressRgfa = new CompressRgfa(inputRgfaFile.getValue(), outputRgfaFile.getValue());
+            compressRgfa = new CompressRgfa(inputRgfaPath.getValue(), outputRgfaFile.getValue());
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);

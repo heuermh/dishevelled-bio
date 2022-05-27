@@ -31,6 +31,8 @@ import static org.dishevelled.compress.Writers.writer;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +65,7 @@ import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.DoubleArgument;
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 import org.dishevelled.commandline.argument.StringArgument;
 import org.dishevelled.commandline.argument.StringListArgument;
 
@@ -73,7 +76,7 @@ import org.dishevelled.commandline.argument.StringListArgument;
  */
 public final class FilterVcf extends AbstractFilter {
     private final List<Filter> filters;
-    private final File inputVcfFile;
+    private final Path inputVcfPath;
     private final File outputVcfFile;
     private static final String USAGE = "dsh-filter-vcf -d rs149201999 -i input.vcf.gz -o output.vcf.gz";
 
@@ -86,9 +89,21 @@ public final class FilterVcf extends AbstractFilter {
      * @param outputVcfFile output VCF file, if any
      */
     public FilterVcf(final List<Filter> filters, final File inputVcfFile, final File outputVcfFile) {
+        this(filters, inputVcfFile == null ? null : inputVcfFile.toPath(), outputVcfFile);
+    }
+
+    /**
+     * Filter variants in VCF format.
+     *
+     * @since 2.1
+     * @param filters list of filters, must not be null
+     * @param inputVcfPath input VCF path, if any
+     * @param outputVcfFile output VCF file, if any
+     */
+    public FilterVcf(final List<Filter> filters, final Path inputVcfPath, final File outputVcfFile) {
         checkNotNull(filters);
         this.filters = ImmutableList.copyOf(filters);
-        this.inputVcfFile = inputVcfFile;
+        this.inputVcfPath = inputVcfPath;
         this.outputVcfFile = outputVcfFile;
     }
 
@@ -100,7 +115,7 @@ public final class FilterVcf extends AbstractFilter {
             writer = writer(outputVcfFile);
 
             final PrintWriter w = writer;
-            VcfReader.stream(reader(inputVcfFile), new VcfStreamAdapter() {
+            VcfReader.stream(reader(inputVcfPath), new VcfStreamAdapter() {
                     private boolean wroteSamples = false;
                     private List<VcfSample> samples = new ArrayList<VcfSample>();
 
@@ -306,10 +321,10 @@ public final class FilterVcf extends AbstractFilter {
         DoubleArgument qualFilter = new DoubleArgument("q", "qual", "filter by quality score", false);
         Switch filterFilter = new Switch("f", "filter", "filter to records that have passed all filters");
         StringArgument scriptFilter = new StringArgument("e", "script", "filter by script, eval against r", false);
-        FileArgument inputVcfFile = new FileArgument("i", "input-vcf-file", "input VCF file, default stdin", false);
+        PathArgument inputVcfPath = new PathArgument("i", "input-vcf-path", "input VCF path, default stdin", false);
         FileArgument outputVcfFile = new FileArgument("o", "output-vcf-file", "output VCF file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, idFilter, rangeFilter, qualFilter, filterFilter, scriptFilter, inputVcfFile, outputVcfFile);
+        ArgumentList arguments = new ArgumentList(about, help, idFilter, rangeFilter, qualFilter, filterFilter, scriptFilter, inputVcfPath, outputVcfFile);
         CommandLine commandLine = new CommandLine(args);
 
         FilterVcf filterVcf = null;
@@ -339,7 +354,7 @@ public final class FilterVcf extends AbstractFilter {
             if (scriptFilter.wasFound()) {
                 filters.add(new ScriptFilter(scriptFilter.getValue()));
             }
-            filterVcf = new FilterVcf(filters, inputVcfFile.getValue(), outputVcfFile.getValue());
+            filterVcf = new FilterVcf(filters, inputVcfPath.getValue(), outputVcfFile.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {

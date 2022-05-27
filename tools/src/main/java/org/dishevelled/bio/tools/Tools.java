@@ -173,6 +173,7 @@ public final class Tools implements Callable<Integer> {
         //.put("intersect-bed", new Command("intersect-bed", "similar to bedtools2 intersect -v", IntersectBed.class))
         .put("links-to-cytoscape-edges", new Command("links-to-cytoscape-edges", "convert links in GFA 1.0 format to edges.txt format for Cytoscape", LinksToCytoscapeEdges.class))
         .put("links-to-property-graph", new Command("links-to-property-graph", "convert links in GFA 1.0 format to property graph CSV format", LinksToPropertyGraph.class))
+        .put("list-filesystems", new Command("list-filesystems", "list filesystem providers", ListFilesystems.class))
         .put("reassemble-paths", new Command("reassemble-paths", "reassemble paths in GFA 1.0 format from traversal records", ReassemblePaths.class))
         .put("rename-bed-references", new Command("rename-bed-references", "rename references in BED files", RenameBedReferences.class))
         .put("rename-gff3-references", new Command("rename-gff3-references", "rename references in GFF3 files", RenameGff3References.class))

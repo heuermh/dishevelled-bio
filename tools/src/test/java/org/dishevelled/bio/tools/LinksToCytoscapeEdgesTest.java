@@ -60,7 +60,7 @@ public final class LinksToCytoscapeEdgesTest {
 
     @Test
     public void testConstructorNullInputGfa1File() {
-        assertNotNull(new LinksToCytoscapeEdges(null, outputEdgesFile));
+        assertNotNull(new LinksToCytoscapeEdges((File) null, outputEdgesFile));
     }
 
     @Test

@@ -28,6 +28,8 @@ import static org.dishevelled.compress.Readers.reader;
 import java.io.BufferedReader;
 import java.io.File;
 
+import java.nio.file.Path;
+
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -57,6 +59,7 @@ import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
 import org.dishevelled.commandline.argument.StringArgument;
 import org.dishevelled.commandline.argument.StringListArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Convert sequences in FASTQ format to unaligned BAM format.
@@ -65,7 +68,7 @@ import org.dishevelled.commandline.argument.StringListArgument;
  * @author  Michael Heuer
  */
 public final class FastqToBam extends WithReadGroup {
-    private final File fastqFile;
+    private final Path fastqPath;
     private final File bamFile;
     private final SAMFileHeader header = new SAMFileHeader();
     private final SAMFileWriterFactory writerFactory = new SAMFileWriterFactory();
@@ -78,6 +81,12 @@ public final class FastqToBam extends WithReadGroup {
      *
      * @param fastqFile input FASTQ file, if any
      * @param bamFile output BAM file, if any
+     * @param readGroupId read group id, if any
+     * @param readGroupSample read group sample, if any
+     * @param readGroupLibrary read group library, if any
+     * @param readGroupPlatformUnit read group platform unit, if any
+     * @param readGroupInsertSize read group insert size, if any
+     * @param readGroupBarcodes read group barcodes, if any
      */
     public FastqToBam(@Nullable final File fastqFile,
                       @Nullable final File bamFile,
@@ -88,8 +97,40 @@ public final class FastqToBam extends WithReadGroup {
                       @Nullable final Integer readGroupInsertSize,
                       @Nullable final List<String> readGroupBarcodes) {
 
+        this(fastqFile == null ? null : fastqFile.toPath(),
+             bamFile,
+             readGroupId,
+             readGroupSample,
+             readGroupLibrary,
+             readGroupPlatformUnit,
+             readGroupInsertSize,
+             readGroupBarcodes);
+    }
+
+    /**
+     * Convert sequences in FASTQ format to unaligned BAM format.
+     *
+     * @since 2.1
+     * @param fastqPath input FASTQ path, if any
+     * @param bamFile output BAM file, if any
+     * @param readGroupId read group id, if any
+     * @param readGroupSample read group sample, if any
+     * @param readGroupLibrary read group library, if any
+     * @param readGroupPlatformUnit read group platform unit, if any
+     * @param readGroupInsertSize read group insert size, if any
+     * @param readGroupBarcodes read group barcodes, if any
+     */
+    public FastqToBam(@Nullable final Path fastqPath,
+                      @Nullable final File bamFile,
+                      @Nullable final String readGroupId,
+                      @Nullable final String readGroupSample,
+                      @Nullable final String readGroupLibrary,
+                      @Nullable final String readGroupPlatformUnit,
+                      @Nullable final Integer readGroupInsertSize,
+                      @Nullable final List<String> readGroupBarcodes) {
+
         super(readGroupId, readGroupSample, readGroupLibrary, readGroupPlatformUnit, readGroupInsertSize, readGroupBarcodes);
-        this.fastqFile = fastqFile;
+        this.fastqPath = fastqPath;
         this.bamFile = bamFile;
 
         // add read group to header if present
@@ -102,7 +143,7 @@ public final class FastqToBam extends WithReadGroup {
         BufferedReader reader = null;
         SAMFileWriter writer = null;
         try {
-            reader = reader(fastqFile);
+            reader = reader(fastqPath);
 
             if (bamFile == null) {
                 writer = writerFactory.makeBAMWriter(header, false, System.out);
@@ -170,7 +211,7 @@ public final class FastqToBam extends WithReadGroup {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument fastqFile = new FileArgument("i", "input-fastq-file", "input FASTQ file, default stdin", false);
+        PathArgument fastqPath = new PathArgument("i", "input-fastq-path", "input FASTQ path, default stdin", false);
         FileArgument bamFile = new FileArgument("o", "output-bam-file", "output BAM file, default stdout", false);
 
         StringArgument readGroupId = createReadGroupIdArgument();
@@ -180,7 +221,7 @@ public final class FastqToBam extends WithReadGroup {
         IntegerArgument readGroupInsertSize = createReadGroupInsertSizeArgument();
         StringListArgument readGroupBarcodes = createReadGroupBarcodesArgument();
 
-        ArgumentList arguments = new ArgumentList(about, help, fastqFile, bamFile, readGroupId, readGroupSample, readGroupLibrary, readGroupPlatformUnit, readGroupInsertSize, readGroupBarcodes);
+        ArgumentList arguments = new ArgumentList(about, help, fastqPath, bamFile, readGroupId, readGroupSample, readGroupLibrary, readGroupPlatformUnit, readGroupInsertSize, readGroupBarcodes);
         CommandLine commandLine = new CommandLine(args);
 
         FastqToBam fastqToBam = null;
@@ -195,7 +236,7 @@ public final class FastqToBam extends WithReadGroup {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            fastqToBam = new FastqToBam(fastqFile.getValue(), bamFile.getValue(), readGroupId.getValue(), readGroupSample.getValue(), readGroupLibrary.getValue(), readGroupPlatformUnit.getValue(), readGroupInsertSize.getValue(), readGroupBarcodes.getValue());
+            fastqToBam = new FastqToBam(fastqPath.getValue(), bamFile.getValue(), readGroupId.getValue(), readGroupSample.getValue(), readGroupLibrary.getValue(), readGroupPlatformUnit.getValue(), readGroupInsertSize.getValue(), readGroupBarcodes.getValue());
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);

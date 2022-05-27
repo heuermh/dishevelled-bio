@@ -33,6 +33,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.List;
 import java.util.Map;
 
@@ -68,6 +70,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 import org.dishevelled.commandline.argument.StringArgument;
 
 import rx.Observable;
@@ -78,8 +81,8 @@ import rx.Observable;
  * @author  Michael Heuer
  */
 public final class IntersectBed implements Callable<Integer> {
-    private final File aInputFile;
-    private final File bInputFile;
+    private final Path aInputPath;
+    private final Path bInputPath;
     private final File outputFile;
     private final Strategy strategy;
     private static final String DEFAULT_STRATEGY = "range-set";
@@ -95,10 +98,26 @@ public final class IntersectBed implements Callable<Integer> {
      * @param strategy strategy, must not be null
      */
     public IntersectBed(final File aInputFile, final File bInputFile, final File outputFile, final Strategy strategy) {
-        checkNotNull(bInputFile);
+        this(aInputFile == null ? null : aInputFile.toPath(),
+             bInputFile == null ? null : bInputFile.toPath(),
+             outputFile,
+             strategy);
+    }
+
+    /**
+     * Similar to bedtools2 intersect -v.
+     *
+     * @since 2.1
+     * @param aInputPath a input path, if any
+     * @param bInputPath b input path, must not be null
+     * @param outputFile output file, if any
+     * @param strategy strategy, must not be null
+     */
+    public IntersectBed(final Path aInputPath, final Path bInputPath, final File outputFile, final Strategy strategy) {
+        checkNotNull(bInputPath);
         checkNotNull(strategy);
-        this.aInputFile = aInputFile;
-        this.bInputFile = bInputFile;
+        this.aInputPath = aInputPath;
+        this.bInputPath = bInputPath;
         this.outputFile = outputFile;
         this.strategy = strategy;
     }
@@ -111,8 +130,8 @@ public final class IntersectBed implements Callable<Integer> {
         PrintWriter writer = null;
 
         try {
-            a = reader(aInputFile);
-            b = reader(bInputFile);
+            a = reader(aInputPath);
+            b = reader(bInputPath);
             writer = writer(outputFile);
 
             strategy.intersectBed(a, b, writer);
@@ -361,12 +380,12 @@ public final class IntersectBed implements Callable<Integer> {
      */
     public static void main(final String[] args) {
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument aInputFile = new FileArgument("a", "a-input-file", "A input BED file, default stdin", false);
-        FileArgument bInputFile = new FileArgument("b", "b-input-file", "B input BED file", true);
+        PathArgument aInputPath = new PathArgument("a", "a-input-path", "A input BED path, default stdin", false);
+        PathArgument bInputPath = new PathArgument("b", "b-input-path", "B input BED path", true);
         FileArgument outputFile = new FileArgument("o", "output-file", "output BED file, default stdout", false);
         StringArgument strategy = new StringArgument("s", "strategy", "strategy { range-list, range-set, centered-range-tree, r-tree, r-star-tree }, default range-set", false);
 
-        ArgumentList arguments = new ArgumentList(help, aInputFile, bInputFile, outputFile, strategy);
+        ArgumentList arguments = new ArgumentList(help, aInputPath, bInputPath, outputFile, strategy);
         CommandLine commandLine = new CommandLine(args);
 
         IntersectBed intersectBed = null;
@@ -377,7 +396,7 @@ public final class IntersectBed implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            intersectBed = new IntersectBed(aInputFile.getValue(), bInputFile.getValue(), outputFile.getValue(), strategies.get(strategy.getValue(DEFAULT_STRATEGY)));
+            intersectBed = new IntersectBed(aInputPath.getValue(), bInputPath.getValue(), outputFile.getValue(), strategies.get(strategy.getValue(DEFAULT_STRATEGY)));
         }
         catch (CommandLineParseException | NullPointerException e) {
             if (help.wasFound()) {

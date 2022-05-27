@@ -77,6 +77,7 @@
     <dsh-commandline.version>1.2</dsh-commandline.version>
     <dsh-compress.version>1.6</dsh-compress.version>
     <dsh-graph.version>1.0</dsh-graph.version>
+    <google-cloud.version>0.124.14</google-cloud.version>
     <hadoop.version>3.3.1</hadoop.version>
     <htsjdk.version>2.24.1</htsjdk.version>
     <jdk.version>1.8</jdk.version>
@@ -92,6 +93,11 @@
   </properties>
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>com.google.cloud</groupId>
+        <artifactId>google-cloud-nio</artifactId>
+        <version>${google-cloud.version}</version>
+      </dependency>
       <dependency>
         <groupId>com.github.davidmoten</groupId>
         <artifactId>rtree</artifactId>

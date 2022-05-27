@@ -31,6 +31,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.concurrent.Callable;
 
 import org.biojava.bio.seq.Sequence;
@@ -48,6 +50,7 @@ import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 import org.dishevelled.commandline.argument.StringArgument;
 
 /**
@@ -57,7 +60,7 @@ import org.dishevelled.commandline.argument.StringArgument;
  */
 @SuppressWarnings("deprecation")
 public final class TruncateFasta implements Callable<Integer> {
-    private final File inputFastaFile;
+    private final Path inputFastaPath;
     private final File outputFastaFile;
     private final int length;
     private final String alphabet;
@@ -77,7 +80,20 @@ public final class TruncateFasta implements Callable<Integer> {
      * @param lineWidth line width
      */
     public TruncateFasta(final File inputFastaFile, final File outputFastaFile, final int length, final int lineWidth) {
-        this(inputFastaFile, outputFastaFile, length, DEFAULT_ALPHABET, lineWidth);
+        this(inputFastaFile == null ? null : inputFastaFile.toPath(), outputFastaFile, length, lineWidth);
+    }
+
+    /**
+     * Truncate sequences in FASTA format.
+     *
+     * @since 2.1
+     * @param inputFastaPath input FASTA path, if any
+     * @param outputFastaFile output FASTA file, if any
+     * @param length length, must be at least 0
+     * @param lineWidth line width
+     */
+    public TruncateFasta(final Path inputFastaPath, final File outputFastaFile, final int length, final int lineWidth) {
+        this(inputFastaPath, outputFastaFile, length, DEFAULT_ALPHABET, lineWidth);
     }
 
     /**
@@ -95,10 +111,33 @@ public final class TruncateFasta implements Callable<Integer> {
                          final int length,
                          final String alphabet,
                          final int lineWidth) {
+
+        this(inputFastaFile == null ? null : inputFastaFile.toPath(),
+             outputFastaFile,
+             length,
+             alphabet,
+             lineWidth);
+    }
+
+    /**
+     * Truncate sequences in FASTA format.
+     *
+     * @since 2.1
+     * @param inputFastaPath input FASTA path, if any
+     * @param outputFastaFile output FASTA file, if any
+     * @param length length, must be at least 0
+     * @param alphabet input FASTA file alphabet { dna, protein }, if any
+     * @param lineWidth line width
+     */
+    public TruncateFasta(final Path inputFastaPath,
+                         final File outputFastaFile,
+                         final int length,
+                         final String alphabet,
+                         final int lineWidth) {
         if (length < 0) {
             throw new IllegalArgumentException("length must be at least zero");
         }
-        this.inputFastaFile = inputFastaFile;
+        this.inputFastaPath = inputFastaPath;
         this.outputFastaFile = outputFastaFile;
         this.length = length;
         this.alphabet = alphabet;
@@ -111,7 +150,7 @@ public final class TruncateFasta implements Callable<Integer> {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(inputFastaFile);
+            reader = reader(inputFastaPath);
             writer = writer(outputFastaFile);
 
             for (SequenceIterator sequences = isProteinAlphabet() ? SeqIOTools.readFastaProtein(reader) : SeqIOTools.readFastaDNA(reader); sequences.hasNext(); ) {
@@ -164,13 +203,13 @@ public final class TruncateFasta implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputFastaFile = new FileArgument("i", "input-fasta-file", "input FASTA file, default stdin", false);
+        PathArgument inputFastaPath = new PathArgument("i", "input-fasta-path", "input FASTA path, default stdin", false);
         FileArgument outputFastaFile = new FileArgument("o", "output-fasta-file", "output FASTA file, default stdout", false);
         IntegerArgument length = new IntegerArgument("l", "length", "length, default " + DEFAULT_LENGTH, false);
         StringArgument alphabet = new StringArgument("e", "alphabet", "input FASTA alphabet { dna, protein }, default dna", false);
         IntegerArgument lineWidth = new IntegerArgument("w", "line-width", "line width, default " + DEFAULT_LINE_WIDTH, false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputFastaFile, outputFastaFile, length, alphabet, lineWidth);
+        ArgumentList arguments = new ArgumentList(about, help, inputFastaPath, outputFastaFile, length, alphabet, lineWidth);
         CommandLine commandLine = new CommandLine(args);
 
         TruncateFasta truncateFasta = null;
@@ -185,7 +224,7 @@ public final class TruncateFasta implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            truncateFasta = new TruncateFasta(inputFastaFile.getValue(), outputFastaFile.getValue(), length.getValue(DEFAULT_LENGTH), alphabet.getValue(DEFAULT_ALPHABET), lineWidth.getValue(DEFAULT_LINE_WIDTH));
+            truncateFasta = new TruncateFasta(inputFastaPath.getValue(), outputFastaFile.getValue(), length.getValue(DEFAULT_LENGTH), alphabet.getValue(DEFAULT_ALPHABET), lineWidth.getValue(DEFAULT_LINE_WIDTH));
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);

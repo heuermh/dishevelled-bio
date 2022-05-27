@@ -30,6 +30,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.concurrent.Callable;
 
 import org.dishevelled.bio.alignment.gaf.GafRecord;
@@ -42,6 +44,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Compress alignments in GAF format to splittable bgzf or bzip2 compression
@@ -51,7 +54,7 @@ import org.dishevelled.commandline.argument.FileArgument;
  * @author  Michael Heuer
  */
 public final class CompressGaf implements Callable<Integer> {
-    private final File inputGafFile;
+    private final Path inputGafPath;
     private final File outputGafFile;
     private static final String USAGE = "dsh-compress-gaf [args]";
 
@@ -63,7 +66,19 @@ public final class CompressGaf implements Callable<Integer> {
      * @param outputGafFile output GAF file, if any
      */
     public CompressGaf(final File inputGafFile, final File outputGafFile) {
-        this.inputGafFile = inputGafFile;
+        this(inputGafFile == null ? null : inputGafFile.toPath(), outputGafFile);
+    }
+
+    /**
+     * Compress alignments in GAF format to splittable bgzf or bzip2 compression
+     * codecs.
+     *
+     * @since 2.1
+     * @param inputGafPath input GAF path, if any
+     * @param outputGafFile output GAF file, if any
+     */
+    public CompressGaf(final Path inputGafPath, final File outputGafFile) {
+        this.inputGafPath = inputGafPath;
         this.outputGafFile = outputGafFile;
     }
 
@@ -73,7 +88,7 @@ public final class CompressGaf implements Callable<Integer> {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(inputGafFile);
+            reader = reader(inputGafPath);
             writer = writer(outputGafFile);
 
             while (reader.ready()) {
@@ -113,10 +128,10 @@ public final class CompressGaf implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputGafFile = new FileArgument("i", "input-gaf-file", "input GAF file, default stdin", false);
+        PathArgument inputGafPath = new PathArgument("i", "input-gaf-path", "input GAF path, default stdin", false);
         FileArgument outputGafFile = new FileArgument("o", "output-gaf-file", "output GAF file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputGafFile, outputGafFile);
+        ArgumentList arguments = new ArgumentList(about, help, inputGafPath, outputGafFile);
         CommandLine commandLine = new CommandLine(args);
 
         CompressGaf compressGaf = null;
@@ -131,7 +146,7 @@ public final class CompressGaf implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            compressGaf = new CompressGaf(inputGafFile.getValue(), outputGafFile.getValue());
+            compressGaf = new CompressGaf(inputGafPath.getValue(), outputGafFile.getValue());
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);

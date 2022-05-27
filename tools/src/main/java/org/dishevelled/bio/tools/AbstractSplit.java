@@ -33,6 +33,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 
+import java.nio.file.Path;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,13 +55,13 @@ import org.apache.commons.io.output.ProxyWriter;
  * @author  Michael Heuer
  */
 abstract class AbstractSplit implements Callable<Integer> {
-    /** Input file, if any. */
-    protected final File inputFile;
+    /** Input path, if any. */
+    protected final Path inputPath;
 
-    /** Split the input file at the next record after each n bytes, if any. */
+    /** Split the input path at the next record after each n bytes, if any. */
     protected final long bytes;
 
-    /** Split the input file after each n records, if any. */
+    /** Split the input path after each n records, if any. */
     protected final long records;
 
     /** Output file prefix. */
@@ -81,14 +83,14 @@ abstract class AbstractSplit implements Callable<Integer> {
     /**
      * Abstract split callable.
      *
-     * @param inputFile input file, if any
-     * @param bytes split the input file at next record after each n bytes, if any
-     * @param records split the input file after each n records, if any
+     * @param inputPath input path, if any
+     * @param bytes split the input path at next record after each n bytes, if any
+     * @param records split the input path after each n records, if any
      * @param prefix output file prefix, must not be null
      * @param leftPad left pad split index in output file name
      * @param suffix output file suffix, must not be null
      */
-    protected AbstractSplit(final File inputFile,
+    protected AbstractSplit(final Path inputPath,
                             final Long bytes,
                             final Long records,
                             final String prefix,
@@ -96,7 +98,7 @@ abstract class AbstractSplit implements Callable<Integer> {
                             final String suffix) {
         checkNotNull(prefix);
         checkNotNull(suffix);
-        this.inputFile = inputFile;
+        this.inputPath = inputPath;
         this.bytes = bytes == null ? Long.MAX_VALUE : bytes;
         this.records = records == null ? Long.MAX_VALUE : records;
         this.prefix = prefix;
@@ -229,5 +231,25 @@ abstract class AbstractSplit implements Callable<Integer> {
             throw new IllegalArgumentException("byte string '" + b + "' has unknown unit '" + unit + "'");
         }
         return Math.round(Double.parseDouble(value) * Math.pow(1024, pow));
+    }
+
+    static String getNameWithoutExtension(final Path path) {
+        if (path == null && path.getNameCount() == 0) {
+            return "";
+        }
+        String fileName = path.getName(path.getNameCount() - 1).toString();
+        // from guava Files.java
+        int dotIndex = fileName.lastIndexOf('.');
+        return (dotIndex == -1) ? fileName : fileName.substring(0, dotIndex);
+    }
+
+    static String getFileExtension(final Path path) {
+        if (path == null && path.getNameCount() == 0) {
+            return "";
+        }
+        String fileName = path.getName(path.getNameCount() - 1).toString();
+        // from guava Files.java
+        int dotIndex = fileName.lastIndexOf('.');
+        return (dotIndex == -1) ? "" : fileName.substring(dotIndex + 1);
     }
 }

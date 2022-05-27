@@ -30,6 +30,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.concurrent.Callable;
 
 import org.dishevelled.bio.feature.bed.BedListener;
@@ -45,6 +47,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Compress features in BED format to splittable bgzf or bzip2 compression codecs.
@@ -53,7 +56,7 @@ import org.dishevelled.commandline.argument.FileArgument;
  * @author  Michael Heuer
  */
 public final class CompressBed implements Callable<Integer> {
-    private final File inputBedFile;
+    private final Path inputBedPath;
     private final File outputBedFile;
     private static final String USAGE = "dsh-compress-bed [args]";
 
@@ -64,7 +67,18 @@ public final class CompressBed implements Callable<Integer> {
      * @param outputBedFile output BED file, if any
      */
     public CompressBed(final File inputBedFile, final File outputBedFile) {
-        this.inputBedFile = inputBedFile;
+        this(inputBedFile == null ? null : inputBedFile.toPath(), outputBedFile);
+    }
+
+    /**
+     * Compress features in BED format to splittable bgzf or bzip2 compression codecs.
+     *
+     * @since 2.1
+     * @param inputBedPath input BED path, if any
+     * @param outputBedFile output BED file, if any
+     */
+    public CompressBed(final Path inputBedPath, final File outputBedFile) {
+        this.inputBedPath = inputBedPath;
         this.outputBedFile = outputBedFile;
     }
 
@@ -73,7 +87,7 @@ public final class CompressBed implements Callable<Integer> {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(inputBedFile);
+            reader = reader(inputBedPath);
             writer = writer(outputBedFile);
 
             final PrintWriter w = writer;
@@ -112,10 +126,10 @@ public final class CompressBed implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputBedFile = new FileArgument("i", "input-bed-file", "input BED file, default stdin", false);
+        PathArgument inputBedPath = new PathArgument("i", "input-bed-path", "input BED path, default stdin", false);
         FileArgument outputBedFile = new FileArgument("o", "output-bed-file", "output BED file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputBedFile, outputBedFile);
+        ArgumentList arguments = new ArgumentList(about, help, inputBedPath, outputBedFile);
         CommandLine commandLine = new CommandLine(args);
 
         CompressBed compressBed = null;
@@ -130,7 +144,7 @@ public final class CompressBed implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            compressBed = new CompressBed(inputBedFile.getValue(), outputBedFile.getValue());
+            compressBed = new CompressBed(inputBedPath.getValue(), outputBedFile.getValue());
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);

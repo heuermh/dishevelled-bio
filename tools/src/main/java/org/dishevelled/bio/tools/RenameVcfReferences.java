@@ -30,6 +30,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +53,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Rename references in VCF files.
@@ -70,7 +73,19 @@ public final class RenameVcfReferences extends AbstractRenameReferences {
      * @param outputVcfFile output VCF file, if any
      */
     public RenameVcfReferences(final boolean chr, final File inputVcfFile, final File outputVcfFile) {
-        super(chr, inputVcfFile, outputVcfFile);
+        this(chr, inputVcfFile == null ? null : inputVcfFile.toPath(), outputVcfFile);
+    }
+
+    /**
+     * Rename references in VCF files.
+     *
+     * @since 2.1
+     * @param chr true to add "chr" to chromosome names
+     * @param inputVcfPath input VCF path, if any
+     * @param outputVcfFile output VCF file, if any
+     */
+    public RenameVcfReferences(final boolean chr, final Path inputVcfPath, final File outputVcfFile) {
+        super(chr, inputVcfPath, outputVcfFile);
     }
 
 
@@ -82,7 +97,7 @@ public final class RenameVcfReferences extends AbstractRenameReferences {
             writer = writer(outputFile);
 
             final PrintWriter w = writer;
-            VcfReader.stream(reader(inputFile), new VcfStreamAdapter() {
+            VcfReader.stream(reader(inputPath), new VcfStreamAdapter() {
                     private boolean wroteSamples = false;
                     private List<VcfSample> samples = new ArrayList<VcfSample>();
 
@@ -150,10 +165,10 @@ public final class RenameVcfReferences extends AbstractRenameReferences {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
         Switch chr = new Switch("c", "chr", "add \"chr\" to chromosome reference names");
-        FileArgument inputVcfFile = new FileArgument("i", "input-vcf-file", "input VCF file, default stdin", false);
+        PathArgument inputVcfPath = new PathArgument("i", "input-vcf-path", "input VCF path, default stdin", false);
         FileArgument outputVcfFile = new FileArgument("o", "output-vcf-file", "output VCF file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, chr, inputVcfFile, outputVcfFile);
+        ArgumentList arguments = new ArgumentList(about, help, chr, inputVcfPath, outputVcfFile);
         CommandLine commandLine = new CommandLine(args);
 
         RenameVcfReferences renameVcfReferences = null;
@@ -167,7 +182,7 @@ public final class RenameVcfReferences extends AbstractRenameReferences {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            renameVcfReferences = new RenameVcfReferences(chr.wasFound(), inputVcfFile.getValue(), outputVcfFile.getValue());
+            renameVcfReferences = new RenameVcfReferences(chr.wasFound(), inputVcfPath.getValue(), outputVcfFile.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {

@@ -31,6 +31,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.concurrent.Callable;
 
 import org.biojava.bio.seq.Sequence;
@@ -48,6 +50,7 @@ import org.dishevelled.commandline.Usage;
 import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
 import org.dishevelled.commandline.argument.StringArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Compress sequences in FASTA format to splittable bgzf or bzip2 compression codecs.
@@ -56,7 +59,7 @@ import org.dishevelled.commandline.argument.StringArgument;
  * @author  Michael Heuer
  */
 public final class CompressFasta implements Callable<Integer> {
-    private final File inputFastaFile;
+    private final Path inputFastaPath;
     private final File outputFastaFile;
     private final String alphabet;
     private final int lineWidth;
@@ -73,7 +76,19 @@ public final class CompressFasta implements Callable<Integer> {
      * @param lineWidth line width
      */
     public CompressFasta(final File inputFastaFile, final File outputFastaFile, final int lineWidth) {
-        this(inputFastaFile, outputFastaFile, DEFAULT_ALPHABET, lineWidth);
+        this(inputFastaFile == null ? null : inputFastaFile.toPath(), outputFastaFile, DEFAULT_ALPHABET, lineWidth);
+    }
+
+    /**
+     * Compress sequences in FASTA format to splittable bgzf or bzip2 compression codecs.
+     *
+     * @since 2.1
+     * @param inputFastaPath input FASTA path, if any
+     * @param outputFastaFile output FASTA file, if any
+     * @param lineWidth line width
+     */
+    public CompressFasta(final Path inputFastaPath, final File outputFastaFile, final int lineWidth) {
+        this(inputFastaPath, outputFastaFile, DEFAULT_ALPHABET, lineWidth);
     }
 
     /**
@@ -86,7 +101,20 @@ public final class CompressFasta implements Callable<Integer> {
      * @param lineWidth line width
      */
     public CompressFasta(final File inputFastaFile, final File outputFastaFile, final String alphabet, final int lineWidth) {
-        this.inputFastaFile = inputFastaFile;
+        this(inputFastaFile == null ? null : inputFastaFile.toPath(), outputFastaFile, alphabet, lineWidth);
+    }
+
+    /**
+     * Compress sequences in FASTA format to splittable bgzf or bzip2 compression codecs.
+     *
+     * @since 2.1
+     * @param inputFastaPath input FASTA path, if any
+     * @param outputFastaFile output FASTA file, if any
+     * @param alphabet input FASTA file alphabet { dna, protein }, if any
+     * @param lineWidth line width
+     */
+    public CompressFasta(final Path inputFastaPath, final File outputFastaFile, final String alphabet, final int lineWidth) {
+        this.inputFastaPath = inputFastaPath;
         this.outputFastaFile = outputFastaFile;
         this.alphabet = alphabet;
         this.lineWidth = lineWidth;
@@ -97,7 +125,7 @@ public final class CompressFasta implements Callable<Integer> {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(inputFastaFile);
+            reader = reader(inputFastaPath);
             writer = writer(outputFastaFile);
 
             for (SequenceIterator sequences = isProteinAlphabet() ? SeqIOTools.readFastaProtein(reader) : SeqIOTools.readFastaDNA(reader); sequences.hasNext(); ) {
@@ -149,12 +177,12 @@ public final class CompressFasta implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputFastaFile = new FileArgument("i", "input-fasta-file", "input FASTA file, default stdin", false);
+        PathArgument inputFastaPath = new PathArgument("i", "input-fasta-path", "input FASTA path, default stdin", false);
         FileArgument outputFastaFile = new FileArgument("o", "output-fasta-file", "output FASTA file, default stdout", false);
         StringArgument alphabet = new StringArgument("e", "alphabet", "input FASTA alphabet { dna, protein }, default dna", false);
         IntegerArgument lineWidth = new IntegerArgument("w", "line-width", "line width, default " + DEFAULT_LINE_WIDTH, false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputFastaFile, outputFastaFile, alphabet, lineWidth);
+        ArgumentList arguments = new ArgumentList(about, help, inputFastaPath, outputFastaFile, alphabet, lineWidth);
         CommandLine commandLine = new CommandLine(args);
 
         CompressFasta compressFasta = null;
@@ -169,7 +197,7 @@ public final class CompressFasta implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            compressFasta = new CompressFasta(inputFastaFile.getValue(), outputFastaFile.getValue(), alphabet.getValue(DEFAULT_ALPHABET), lineWidth.getValue(DEFAULT_LINE_WIDTH));
+            compressFasta = new CompressFasta(inputFastaPath.getValue(), outputFastaFile.getValue(), alphabet.getValue(DEFAULT_ALPHABET), lineWidth.getValue(DEFAULT_LINE_WIDTH));
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);

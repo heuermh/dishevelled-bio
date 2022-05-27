@@ -32,6 +32,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +61,7 @@ import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 import org.dishevelled.commandline.argument.StringArgument;
 
 /**
@@ -69,7 +72,7 @@ import org.dishevelled.commandline.argument.StringArgument;
  */
 public final class FilterPaf extends AbstractFilter {
     private final List<Filter> filters;
-    private final File inputPafFile;
+    private final Path inputPafPath;
     private final File outputPafFile;
     private static final String USAGE = "dsh-filter-paf --mapping-quality 30 -i input.paf.bgz -o output.paf.bgz";
 
@@ -82,9 +85,21 @@ public final class FilterPaf extends AbstractFilter {
      * @param outputPafFile output PAF file, if any
      */
     public FilterPaf(final List<Filter> filters, final File inputPafFile, final File outputPafFile) {
+        this(filters, inputPafFile == null ? null : inputPafFile.toPath(), outputPafFile);
+    }
+
+    /**
+     * Filter alignments in PAF format.
+     *
+     * @since 2.1
+     * @param filters list of filters, must not be null
+     * @param inputPafPath input PAF path, if any
+     * @param outputPafFile output PAF file, if any
+     */
+    public FilterPaf(final List<Filter> filters, final Path inputPafPath, final File outputPafFile) {
         checkNotNull(filters);
         this.filters = ImmutableList.copyOf(filters);
-        this.inputPafFile = inputPafFile;
+        this.inputPafPath = inputPafPath;
         this.outputPafFile = outputPafFile;
     }
 
@@ -95,7 +110,7 @@ public final class FilterPaf extends AbstractFilter {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(inputPafFile);
+            reader = reader(inputPafPath);
             writer = writer(outputPafFile);
 
             while (reader.ready()) {
@@ -284,10 +299,10 @@ public final class FilterPaf extends AbstractFilter {
         StringArgument targetRangeFilter = new StringArgument("t", "target", "filter by target range, specify as targetName:start-end in 0-based coordindates", false);
         IntegerArgument mappingQualityFilter = new IntegerArgument("q", "mapping-quality", "filter by mapping quality", false);
         StringArgument scriptFilter = new StringArgument("e", "script", "filter by script, eval against r", false);
-        FileArgument inputPafFile = new FileArgument("i", "input-paf-file", "input PAF file, default stdin", false);
+        PathArgument inputPafPath = new PathArgument("i", "input-paf-path", "input PAF path, default stdin", false);
         FileArgument outputPafFile = new FileArgument("o", "output-paf-file", "output PAF file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, queryRangeFilter, targetRangeFilter, mappingQualityFilter, scriptFilter, inputPafFile, outputPafFile);
+        ArgumentList arguments = new ArgumentList(about, help, queryRangeFilter, targetRangeFilter, mappingQualityFilter, scriptFilter, inputPafPath, outputPafFile);
         CommandLine commandLine = new CommandLine(args);
 
         FilterPaf filterPaf = null;
@@ -314,7 +329,7 @@ public final class FilterPaf extends AbstractFilter {
             if (scriptFilter.wasFound()) {
                 filters.add(new ScriptFilter(scriptFilter.getValue()));
             }
-            filterPaf = new FilterPaf(filters, inputPafFile.getValue(), outputPafFile.getValue());
+            filterPaf = new FilterPaf(filters, inputPafPath.getValue(), outputPafFile.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {

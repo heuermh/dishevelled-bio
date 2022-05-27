@@ -30,6 +30,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.concurrent.Callable;
 
 import org.biojava.bio.program.fastq.Fastq;
@@ -45,6 +47,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Output description lines from sequences in FASTQ format.
@@ -52,7 +55,7 @@ import org.dishevelled.commandline.argument.FileArgument;
  * @author  Michael Heuer
  */
 public final class FastqDescription implements Callable<Integer> {
-    private final File fastqFile;
+    private final Path fastqPath;
     private final File descriptionFile;
     private final FastqReader fastqReader = new SangerFastqReader();
     private static final String USAGE = "dsh-fastq-description [args]";
@@ -65,7 +68,18 @@ public final class FastqDescription implements Callable<Integer> {
      * @param descriptionFile output file of description lines, if any
      */
     public FastqDescription(final File fastqFile, final File descriptionFile) {
-        this.fastqFile = fastqFile;
+        this(fastqFile == null ? null : fastqFile.toPath(), descriptionFile);
+    }
+
+    /**
+     * Output description lines from sequences in FASTQ format.
+     *
+     * @since 2.1
+     * @param fastqPath input FASTQ path, if any
+     * @param descriptionFile output file of description lines, if any
+     */
+    public FastqDescription(final Path fastqPath, final File descriptionFile) {
+        this.fastqPath = fastqPath;
         this.descriptionFile = descriptionFile;
     }
 
@@ -75,7 +89,7 @@ public final class FastqDescription implements Callable<Integer> {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(fastqFile);
+            reader = reader(fastqPath);
             writer = writer(descriptionFile);
 
             final PrintWriter w = writer;
@@ -113,10 +127,10 @@ public final class FastqDescription implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument fastqFile = new FileArgument("i", "fastq-file", "input FASTQ file, default stdin", false);
+        PathArgument fastqPath = new PathArgument("i", "fastq-path", "input FASTQ path, default stdin", false);
         FileArgument descriptionFile = new FileArgument("o", "description-file", "output file of description lines, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, fastqFile, descriptionFile);
+        ArgumentList arguments = new ArgumentList(about, help, fastqPath, descriptionFile);
         CommandLine commandLine = new CommandLine(args);
 
         FastqDescription fastqDescription = null;
@@ -131,7 +145,7 @@ public final class FastqDescription implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            fastqDescription = new FastqDescription(fastqFile.getValue(), descriptionFile.getValue());
+            fastqDescription = new FastqDescription(fastqPath.getValue(), descriptionFile.getValue());
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);

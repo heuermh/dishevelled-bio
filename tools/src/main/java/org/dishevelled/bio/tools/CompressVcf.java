@@ -30,6 +30,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +52,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Compress variants or genotypes in VCF format to splittable bgzf or bzip2 compression codecs.
@@ -58,7 +61,7 @@ import org.dishevelled.commandline.argument.FileArgument;
  * @author  Michael Heuer
  */
 public final class CompressVcf implements Callable<Integer> {
-    private final File inputVcfFile;
+    private final Path inputVcfPath;
     private final File outputVcfFile;
     private static final String USAGE = "dsh-compress-vcf [args]";
 
@@ -69,7 +72,18 @@ public final class CompressVcf implements Callable<Integer> {
      * @param outputVcfFile output VCF file, if any
      */
     public CompressVcf(final File inputVcfFile, final File outputVcfFile) {
-        this.inputVcfFile = inputVcfFile;
+        this(inputVcfFile == null ? null : inputVcfFile.toPath(), outputVcfFile);
+    }
+
+    /**
+     * Compress variants or genotypes in VCF format to splittable bgzf or bzip2 compression codecs.
+     *
+     * @since 2.1
+     * @param inputVcfPath input VCF path, if any
+     * @param outputVcfFile output VCF file, if any
+     */
+    public CompressVcf(final Path inputVcfPath, final File outputVcfFile) {
+        this.inputVcfPath = inputVcfPath;
         this.outputVcfFile = outputVcfFile;
     }
 
@@ -78,7 +92,7 @@ public final class CompressVcf implements Callable<Integer> {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(inputVcfFile);
+            reader = reader(inputVcfPath);
             writer = writer(outputVcfFile);
             
             final PrintWriter w = writer;
@@ -134,10 +148,10 @@ public final class CompressVcf implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputVcfFile = new FileArgument("i", "input-vcf-file", "input VCF file, default stdin", false);
+        PathArgument inputVcfPath = new PathArgument("i", "input-vcf-path", "input VCF path, default stdin", false);
         FileArgument outputVcfFile = new FileArgument("o", "output-vcf-file", "output VCF file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputVcfFile, outputVcfFile);
+        ArgumentList arguments = new ArgumentList(about, help, inputVcfPath, outputVcfFile);
         CommandLine commandLine = new CommandLine(args);
 
         CompressVcf compressVcf = null;
@@ -152,7 +166,7 @@ public final class CompressVcf implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            compressVcf = new CompressVcf(inputVcfFile.getValue(), outputVcfFile.getValue());
+            compressVcf = new CompressVcf(inputVcfPath.getValue(), outputVcfFile.getValue());
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);

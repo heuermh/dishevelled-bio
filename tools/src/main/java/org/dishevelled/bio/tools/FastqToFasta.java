@@ -30,6 +30,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.concurrent.Callable;
 
 import org.biojava.bio.program.fastq.Fastq;
@@ -45,6 +47,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Convert sequences in FASTQ format to FASTA format.
@@ -52,11 +55,10 @@ import org.dishevelled.commandline.argument.FileArgument;
  * @author  Michael Heuer
  */
 public final class FastqToFasta implements Callable<Integer> {
-    private final File fastqFile;
+    private final Path fastqPath;
     private final File fastaFile;
     private final FastqReader fastqReader = new SangerFastqReader();
     private static final String USAGE = "dsh-fastq-to-fasta [args]";
-
 
     /**
      * Convert sequences in FASTQ format to FASTA format.
@@ -65,7 +67,18 @@ public final class FastqToFasta implements Callable<Integer> {
      * @param fastaFile output FASTA file, if any
      */
     public FastqToFasta(final File fastqFile, final File fastaFile) {
-        this.fastqFile = fastqFile;
+        this(fastqFile == null ? null : fastqFile.toPath(), fastaFile);
+    }
+
+    /**
+     * Convert sequences in FASTQ format to FASTA format.
+     *
+     * @since 2.1
+     * @param fastqPath input FASTQ path, if any
+     * @param fastaFile output FASTA file, if any
+     */
+    public FastqToFasta(final Path fastqPath, final File fastaFile) {
+        this.fastqPath = fastqPath;
         this.fastaFile = fastaFile;
     }
 
@@ -75,7 +88,7 @@ public final class FastqToFasta implements Callable<Integer> {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(fastqFile);
+            reader = reader(fastqPath);
             writer = writer(fastaFile);
 
             final PrintWriter w = writer;
@@ -118,10 +131,10 @@ public final class FastqToFasta implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument fastqFile = new FileArgument("i", "input-fastq-file", "input FASTQ file, default stdin", false);
+        PathArgument fastqPath = new PathArgument("i", "input-fastq-path", "input FASTQ path, default stdin", false);
         FileArgument fastaFile = new FileArgument("o", "output-fasta-file", "output FASTA file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, fastqFile, fastaFile);
+        ArgumentList arguments = new ArgumentList(about, help, fastqPath, fastaFile);
         CommandLine commandLine = new CommandLine(args);
 
         FastqToFasta fastqToFasta = null;
@@ -136,7 +149,7 @@ public final class FastqToFasta implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            fastqToFasta = new FastqToFasta(fastqFile.getValue(), fastaFile.getValue());
+            fastqToFasta = new FastqToFasta(fastqPath.getValue(), fastaFile.getValue());
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);

@@ -60,7 +60,7 @@ public final class TraversalsToCytoscapeEdgesTest {
 
     @Test
     public void testConstructorNullInputGfa1File() {
-        assertNotNull(new TraversalsToCytoscapeEdges(null, outputEdgesFile));
+        assertNotNull(new TraversalsToCytoscapeEdges((File) null, outputEdgesFile));
     }
 
     @Test

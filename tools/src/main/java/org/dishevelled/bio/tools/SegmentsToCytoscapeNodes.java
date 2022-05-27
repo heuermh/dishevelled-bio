@@ -29,6 +29,8 @@ import static org.dishevelled.compress.Writers.writer;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.concurrent.Callable;
 
 import org.dishevelled.bio.assembly.gfa1.Gfa1Adapter;
@@ -43,6 +45,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Convert segments in GFA 1.0 format to nodes.txt format for Cytoscape.
@@ -51,7 +54,7 @@ import org.dishevelled.commandline.argument.FileArgument;
  * @author  Michael Heuer
  */
 public final class SegmentsToCytoscapeNodes implements Callable<Integer> {
-    private final File inputGfa1File;
+    private final Path inputGfa1Path;
     private final File outputNodesFile;
     private static final String HEADER = "name\tsequence\tlength\treadCount\tfragmentCount\tkmerCount\tsequenceChecksum\tsequenceUri";
     private static final String USAGE = "dsh-segments-to-cytoscape-nodes -i input.gfa.gz -o nodes.txt.gz";
@@ -64,7 +67,19 @@ public final class SegmentsToCytoscapeNodes implements Callable<Integer> {
      */
     public SegmentsToCytoscapeNodes(final File inputGfa1File,
                                     final File outputNodesFile) {
-        this.inputGfa1File = inputGfa1File;
+        this(inputGfa1File == null ? null : inputGfa1File.toPath(), outputNodesFile);
+    }
+
+    /**
+     * Convert segments in GFA 1.0 format to nodes.txt format for Cytoscape.
+     *
+     * @since 2.1
+     * @param inputGfa1Path input GFA 1.0 path, if any
+     * @param outputNodesFile output nodes.txt file, if any
+     */
+    public SegmentsToCytoscapeNodes(final Path inputGfa1Path,
+                                    final File outputNodesFile) {
+        this.inputGfa1Path = inputGfa1Path;
         this.outputNodesFile = outputNodesFile;
     }
 
@@ -77,7 +92,7 @@ public final class SegmentsToCytoscapeNodes implements Callable<Integer> {
             nodesWriter.println(HEADER);
 
             final PrintWriter nw = nodesWriter;
-            Gfa1Reader.stream(reader(inputGfa1File), new Gfa1Adapter() {
+            Gfa1Reader.stream(reader(inputGfa1Path), new Gfa1Adapter() {
 
                     @Override
                     public boolean segment(final Segment segment) {
@@ -123,10 +138,10 @@ public final class SegmentsToCytoscapeNodes implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputGfa1File = new FileArgument("i", "input-gfa1-file", "input GFA 1.0 file, default stdin", false);
+        PathArgument inputGfa1Path = new PathArgument("i", "input-gfa1-path", "input GFA 1.0 path, default stdin", false);
         FileArgument outputNodesFile = new FileArgument("o", "output-nodes-file", "output Cytoscape nodes.txt format file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputGfa1File, outputNodesFile);
+        ArgumentList arguments = new ArgumentList(about, help, inputGfa1Path, outputNodesFile);
         CommandLine commandLine = new CommandLine(args);
 
         SegmentsToCytoscapeNodes gfa1ToCytoscapeNodes = null;
@@ -140,7 +155,7 @@ public final class SegmentsToCytoscapeNodes implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            gfa1ToCytoscapeNodes = new SegmentsToCytoscapeNodes(inputGfa1File.getValue(), outputNodesFile.getValue());
+            gfa1ToCytoscapeNodes = new SegmentsToCytoscapeNodes(inputGfa1Path.getValue(), outputNodesFile.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {

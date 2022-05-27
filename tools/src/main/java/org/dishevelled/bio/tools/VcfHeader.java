@@ -29,6 +29,8 @@ import static org.dishevelled.compress.Writers.writer;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.Collections;
 
 import java.util.concurrent.Callable;
@@ -48,6 +50,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Extract and validate header lines from VCF format.
@@ -55,7 +58,7 @@ import org.dishevelled.commandline.argument.FileArgument;
  * @author  Michael Heuer
  */
 public final class VcfHeader implements Callable<Integer> {
-    private final File inputVcfFile;
+    private final Path inputVcfPath;
     private final File outputVcfHeaderFile;
     private final boolean validate;
     private static final String USAGE = "dsh-vcf-header --validate -i input.vcf.gz -o header.vcf.bgz";
@@ -69,7 +72,19 @@ public final class VcfHeader implements Callable<Integer> {
      * @param validate true to validate
      */
     public VcfHeader(final File inputVcfFile, final File outputVcfHeaderFile, final boolean validate) {
-        this.inputVcfFile = inputVcfFile;
+        this(inputVcfFile == null ? null : inputVcfFile.toPath(), outputVcfHeaderFile, validate);
+    }
+
+    /**
+     * Extract and validate header lines from VCF format.
+     *
+     * @since 2.1
+     * @param inputVcfPath input VCF path, if any
+     * @param outputVcfHeaderFile output VCF header file, if any
+     * @param validate true to validate
+     */
+    public VcfHeader(final Path inputVcfPath, final File outputVcfHeaderFile, final boolean validate) {
+        this.inputVcfPath = inputVcfPath;
         this.outputVcfHeaderFile = outputVcfHeaderFile;
         this.validate = validate;
     }
@@ -80,7 +95,7 @@ public final class VcfHeader implements Callable<Integer> {
         PrintWriter writer = null;
         try {
             writer = writer(outputVcfHeaderFile);
-            org.dishevelled.bio.variant.vcf.VcfHeader header = VcfReader.header(reader(inputVcfFile));
+            org.dishevelled.bio.variant.vcf.VcfHeader header = VcfReader.header(reader(inputVcfPath));
 
             if (validate) {
                 VcfHeaderLines.fromHeader(header);
@@ -108,11 +123,11 @@ public final class VcfHeader implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputVcfFile = new FileArgument("i", "input-vcf-file", "input VCF file, default stdin", false);
+        PathArgument inputVcfPath = new PathArgument("i", "input-vcf-path", "input VCF path, default stdin", false);
         FileArgument outputVcfHeaderFile = new FileArgument("o", "output-vcf-header-file", "output VCF header file, default stdout", false);
         Switch validate = new Switch("d", "validate", "validate VCF header lines");
 
-        ArgumentList arguments = new ArgumentList(about, help, inputVcfFile, outputVcfHeaderFile, validate);
+        ArgumentList arguments = new ArgumentList(about, help, inputVcfPath, outputVcfHeaderFile, validate);
         CommandLine commandLine = new CommandLine(args);
 
         VcfHeader vcfHeader = null;
@@ -126,7 +141,7 @@ public final class VcfHeader implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            vcfHeader = new VcfHeader(inputVcfFile.getValue(), outputVcfHeaderFile.getValue(), validate.wasFound());
+            vcfHeader = new VcfHeader(inputVcfPath.getValue(), outputVcfHeaderFile.getValue(), validate.wasFound());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {

@@ -30,6 +30,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.concurrent.Callable;
 
 import com.google.common.base.Joiner;
@@ -47,6 +49,7 @@ import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Export assembly segment sequences in GFA 1.0 format to FASTA format.
@@ -55,7 +58,7 @@ import org.dishevelled.commandline.argument.IntegerArgument;
  * @author  Michael Heuer
  */
 public final class ExportSegments implements Callable<Integer> {
-    private final File inputGfa1File;
+    private final Path inputGfa1Path;
     private final File outputFastaFile;
     private final int lineWidth;
     static final int DEFAULT_LINE_WIDTH = 70;
@@ -69,21 +72,34 @@ public final class ExportSegments implements Callable<Integer> {
      * @param lineWidth line width
      */
     public ExportSegments(final File inputGfa1File, final File outputFastaFile, final int lineWidth) {
-        this.inputGfa1File = inputGfa1File;
+        this(inputGfa1File == null ? null : inputGfa1File.toPath(), outputFastaFile, lineWidth);
+    }
+
+    /**
+     * Export assembly segment sequences in GFA 1.0 format to FASTA format.
+     *
+     * @since 2.1
+     * @param inputGfa1Path input GFA 1.0 path, if any
+     * @param outputFastaFile output FASTA file, if any
+     * @param lineWidth line width
+     */
+    public ExportSegments(final Path inputGfa1Path, final File outputFastaFile, final int lineWidth) {
+        this.inputGfa1Path = inputGfa1Path;
         this.outputFastaFile = outputFastaFile;
         this.lineWidth = lineWidth;
     }
+
 
     @Override
     public Integer call() throws Exception {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(inputGfa1File);
+            reader = reader(inputGfa1Path);
             writer = writer(outputFastaFile);
 
             final PrintWriter w = writer;
-            Gfa1Reader.stream(reader(inputGfa1File), new Gfa1Adapter() {
+            Gfa1Reader.stream(reader, new Gfa1Adapter() {
                     @Override
                     public boolean segment(final Segment segment) {
                         if (segment.hasSequence()) {
@@ -135,11 +151,11 @@ public final class ExportSegments implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputGfa1File = new FileArgument("i", "input-gfa1-file", "input GFA 1.0 file, default stdin", false);
+        PathArgument inputGfa1Path = new PathArgument("i", "input-gfa1-path", "input GFA 1.0 path, default stdin", false);
         FileArgument outputFastaFile = new FileArgument("o", "output-fasta-file", "output FASTA file, default stdout", false);
         IntegerArgument lineWidth = new IntegerArgument("w", "line-width", "line width, default " + DEFAULT_LINE_WIDTH, false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputGfa1File, outputFastaFile, lineWidth);
+        ArgumentList arguments = new ArgumentList(about, help, inputGfa1Path, outputFastaFile, lineWidth);
         CommandLine commandLine = new CommandLine(args);
 
         ExportSegments exportSegments = null;
@@ -154,7 +170,7 @@ public final class ExportSegments implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            exportSegments = new ExportSegments(inputGfa1File.getValue(), outputFastaFile.getValue(), lineWidth.getValue(DEFAULT_LINE_WIDTH));
+            exportSegments = new ExportSegments(inputGfa1Path.getValue(), outputFastaFile.getValue(), lineWidth.getValue(DEFAULT_LINE_WIDTH));
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);
