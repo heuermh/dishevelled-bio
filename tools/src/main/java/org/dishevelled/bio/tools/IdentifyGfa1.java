@@ -30,6 +30,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.Map;
 
 import java.util.concurrent.Callable;
@@ -56,6 +58,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Add identifier annotation to records in GFA 1.0 format.
@@ -64,7 +67,7 @@ import org.dishevelled.commandline.argument.FileArgument;
  * @author  Michael Heuer
  */
 public final class IdentifyGfa1 implements Callable<Integer> {
-    private final File inputGfa1File;
+    private final Path inputGfa1Path;
     private final File outputGfa1File;
     private static final String USAGE = "dsh-identify-gfa1 [args]";
 
@@ -76,7 +79,18 @@ public final class IdentifyGfa1 implements Callable<Integer> {
      * @param outputGfa1File output GFA 1.0 file, if any
      */
     public IdentifyGfa1(final File inputGfa1File, final File outputGfa1File) {
-        this.inputGfa1File = inputGfa1File;
+        this(inputGfa1File == null ? null : inputGfa1File.toPath(), outputGfa1File);
+    }
+
+    /**
+     * Add identifier annotation to records in GFA 1.0 format.
+     *
+     * @since 2.1
+     * @param inputGfa1Path input GFA 1.0 path, if any
+     * @param outputGfa1File output GFA 1.0 file, if any
+     */
+    public IdentifyGfa1(final Path inputGfa1Path, final File outputGfa1File) {
+        this.inputGfa1Path = inputGfa1Path;
         this.outputGfa1File = outputGfa1File;
     }
 
@@ -86,7 +100,7 @@ public final class IdentifyGfa1 implements Callable<Integer> {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(inputGfa1File);
+            reader = reader(inputGfa1Path);
             writer = writer(outputGfa1File);
 
             final PrintWriter w = writer;
@@ -160,10 +174,10 @@ public final class IdentifyGfa1 implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputGfa1File = new FileArgument("i", "input-gfa1-file", "input GFA 1.0 file, default stdin", false);
+        PathArgument inputGfa1Path = new PathArgument("i", "input-gfa1-path", "input GFA 1.0 path, default stdin", false);
         FileArgument outputGfa1File = new FileArgument("o", "output-gfa1-file", "output GFA 1.0 file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputGfa1File, outputGfa1File);
+        ArgumentList arguments = new ArgumentList(about, help, inputGfa1Path, outputGfa1File);
         CommandLine commandLine = new CommandLine(args);
 
         IdentifyGfa1 identifyGfa1 = null;
@@ -178,7 +192,7 @@ public final class IdentifyGfa1 implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            identifyGfa1 = new IdentifyGfa1(inputGfa1File.getValue(), outputGfa1File.getValue());
+            identifyGfa1 = new IdentifyGfa1(inputGfa1Path.getValue(), outputGfa1File.getValue());
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);

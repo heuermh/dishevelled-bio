@@ -63,6 +63,7 @@ import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 import org.dishevelled.commandline.argument.StringArgument;
 
 /**
@@ -73,7 +74,7 @@ import org.dishevelled.commandline.argument.StringArgument;
  */
 public final class FilterRgfa extends AbstractFilter {
     private final List<Filter> filters;
-    private final File inputRgfaFile;
+    private final java.nio.file.Path inputRgfaPath;
     private final File outputRgfaFile;
     private static final String USAGE = "dsh-filter-rgfa --read-count 40 -i input.rGFA.gfa.bgz -o output.rGFA.gfa.bgz";
 
@@ -86,9 +87,20 @@ public final class FilterRgfa extends AbstractFilter {
      * @param outputRgfaFile output rGFA file, if any
      */
     public FilterRgfa(final List<Filter> filters, final File inputRgfaFile, final File outputRgfaFile) {
+        this(filters, inputRgfaFile == null ? null : inputRgfaFile.toPath(), outputRgfaFile);
+    }
+
+    /**
+     * Filter assembly in rGFA format.
+     *
+     * @param filters list of filters, must not be null
+     * @param inputRgfaPath input rGFA path, if any
+     * @param outputRgfaFile output rGFA file, if any
+     */
+    public FilterRgfa(final List<Filter> filters, final java.nio.file.Path inputRgfaPath, final File outputRgfaFile) {
         checkNotNull(filters);
         this.filters = ImmutableList.copyOf(filters);
-        this.inputRgfaFile = inputRgfaFile;
+        this.inputRgfaPath = inputRgfaPath;
         this.outputRgfaFile = outputRgfaFile;
     }
 
@@ -100,7 +112,7 @@ public final class FilterRgfa extends AbstractFilter {
             writer = writer(outputRgfaFile);
 
             final PrintWriter w = writer;
-            Gfa1Reader.stream(reader(inputRgfaFile), new Gfa1Listener() {
+            Gfa1Reader.stream(reader(inputRgfaPath), new Gfa1Listener() {
                     @Override
                     public boolean record(final Gfa1Record record) {
                         // write out record
@@ -425,10 +437,10 @@ public final class FilterRgfa extends AbstractFilter {
         IntegerArgument mismatchCountFilter = new IntegerArgument("s", "mismatch-count", "filter links by mismatch count", false);
         IntegerArgument readCountFilter = new IntegerArgument("r", "read-count", "filter segments and links by read count", false);
         StringArgument scriptFilter = new StringArgument("e", "script", "filter by script, eval against r", false);
-        FileArgument inputRgfaFile = new FileArgument("i", "input-rgfa-file", "input rGFA file, default stdin", false);
+        PathArgument inputRgfaPath = new PathArgument("i", "input-rgfa-path", "input rGFA path, default stdin", false);
         FileArgument outputRgfaFile = new FileArgument("o", "output-rgfa-file", "output rGFA file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, segmentFilter, lengthFilter, fragmentCountFilter, kmerCountFilter, mappingQualityFilter, mismatchCountFilter, readCountFilter, scriptFilter, inputRgfaFile, outputRgfaFile);
+        ArgumentList arguments = new ArgumentList(about, help, segmentFilter, lengthFilter, fragmentCountFilter, kmerCountFilter, mappingQualityFilter, mismatchCountFilter, readCountFilter, scriptFilter, inputRgfaPath, outputRgfaFile);
         CommandLine commandLine = new CommandLine(args);
 
         FilterRgfa filterRgfa = null;
@@ -467,7 +479,7 @@ public final class FilterRgfa extends AbstractFilter {
             if (scriptFilter.wasFound()) {
                 filters.add(new ScriptFilter(scriptFilter.getValue()));
             }
-            filterRgfa = new FilterRgfa(filters, inputRgfaFile.getValue(), outputRgfaFile.getValue());
+            filterRgfa = new FilterRgfa(filters, inputRgfaPath.getValue(), outputRgfaFile.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {

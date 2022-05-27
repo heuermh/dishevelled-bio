@@ -28,9 +28,9 @@ import static org.dishevelled.compress.Writers.writer;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileWriter;
 import java.io.PrintWriter;
+
+import java.nio.file.Path;
 
 import java.util.concurrent.Callable;
 
@@ -47,6 +47,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Convert sequences in FASTQ format to tab-separated values (tsv) text format.
@@ -56,11 +57,10 @@ import org.dishevelled.commandline.argument.FileArgument;
  */
 @SuppressWarnings("restriction")
 public final class FastqToText implements Callable<Integer> {
-    private final File fastqFile;
+    private final Path fastqPath;
     private final File textFile;
     private final FastqReader fastqReader = new SangerFastqReader();
     private static final String USAGE = "dsh-fastq-to-text [args]";
-
 
     /**
      * Convert sequences in FASTQ format to tab-separated values (tsv) text format.
@@ -69,7 +69,17 @@ public final class FastqToText implements Callable<Integer> {
      * @param textFile output text file, if any
      */
     public FastqToText(final File fastqFile, final File textFile) {
-        this.fastqFile = fastqFile;
+        this(fastqFile == null ? null : fastqFile.toPath(), textFile);
+    }
+
+    /**
+     * Convert sequences in FASTQ format to tab-separated values (tsv) text format.
+     *
+     * @param fastqPath input FASTQ path, if any
+     * @param textFile output text file, if any
+     */
+    public FastqToText(final Path fastqPath, final File textFile) {
+        this.fastqPath = fastqPath;
         this.textFile = textFile;
     }
 
@@ -79,7 +89,7 @@ public final class FastqToText implements Callable<Integer> {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(fastqFile);
+            reader = reader(fastqPath);
             writer = writer(textFile);
 
             final PrintWriter w = writer;
@@ -132,10 +142,10 @@ public final class FastqToText implements Callable<Integer> {
 
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument fastqFile = new FileArgument("i", "input-fastq-file", "input FASTQ file, default stdin", false);
+        PathArgument fastqPath = new PathArgument("i", "input-fastq-path", "input FASTQ path, default stdin", false);
         FileArgument textFile = new FileArgument("o", "output-text-file", "output text file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, fastqFile, textFile);
+        ArgumentList arguments = new ArgumentList(about, help, fastqPath, textFile);
         CommandLine commandLine = new CommandLine(args);
 
         FastqToText fastqToText = null;
@@ -150,7 +160,7 @@ public final class FastqToText implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            fastqToText = new FastqToText(fastqFile.getValue(), textFile.getValue());
+            fastqToText = new FastqToText(fastqPath.getValue(), textFile.getValue());
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);

@@ -60,7 +60,7 @@ public final class SegmentsToPropertyGraphTest {
 
     @Test
     public void testConstructorNullInputGfa1File() {
-        assertNotNull(new SegmentsToPropertyGraph(null, outputNodesFile));
+        assertNotNull(new SegmentsToPropertyGraph((File) null, outputNodesFile));
     }
 
     @Test

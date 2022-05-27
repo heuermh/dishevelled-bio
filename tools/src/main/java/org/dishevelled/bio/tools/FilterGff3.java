@@ -31,6 +31,8 @@ import static org.dishevelled.compress.Writers.writer;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +63,7 @@ import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 import org.dishevelled.commandline.argument.StringArgument;
 
 /**
@@ -71,7 +74,7 @@ import org.dishevelled.commandline.argument.StringArgument;
  */
 public final class FilterGff3 extends AbstractFilter {
     private final List<Filter> filters;
-    private final File inputGff3File;
+    private final Path inputGff3Path;
     private final File outputGff3File;
     private static final String USAGE = "dsh-filter-gff3 --score 20.0 -i input.gff3.bgz -o output.gff3.bgz";
 
@@ -84,9 +87,21 @@ public final class FilterGff3 extends AbstractFilter {
      * @param outputGff3File output GFF3 file, if any
      */
     public FilterGff3(final List<Filter> filters, final File inputGff3File, final File outputGff3File) {
+        this(filters, inputGff3File == null ? null : inputGff3File.toPath(), outputGff3File);
+    }
+
+    /**
+     * Filter features in GFF3 format.
+     *
+     * @since 2.1
+     * @param filters list of filters, must not be null
+     * @param inputGff3File input GFF3 file, if any
+     * @param outputGff3File output GFF3 file, if any
+     */
+    public FilterGff3(final List<Filter> filters, final Path inputGff3Path, final File outputGff3File) {
         checkNotNull(filters);
         this.filters = ImmutableList.copyOf(filters);
-        this.inputGff3File = inputGff3File;
+        this.inputGff3Path = inputGff3Path;
         this.outputGff3File = outputGff3File;
     }
 
@@ -98,7 +113,7 @@ public final class FilterGff3 extends AbstractFilter {
             writer = writer(outputGff3File);
 
             final PrintWriter w = writer;
-            Gff3Reader.stream(reader(inputGff3File), new Gff3Listener() {
+            Gff3Reader.stream(reader(inputGff3Path), new Gff3Listener() {
                     @Override
                     public boolean record(final Gff3Record record) {
                         // write out record
@@ -245,10 +260,10 @@ public final class FilterGff3 extends AbstractFilter {
         StringArgument rangeFilter = new StringArgument("r", "range", "filter by range, specify as chrom:start-end in 0-based coordindates", false);
         IntegerArgument scoreFilter = new IntegerArgument("s", "score", "filter by score", false);
         StringArgument scriptFilter = new StringArgument("e", "script", "filter by script, eval against r", false);
-        FileArgument inputGff3File = new FileArgument("i", "input-gff3-file", "input GFF3 file, default stdin", false);
+        PathArgument inputGff3Path = new PathArgument("i", "input-gff3-path", "input GFF3 path, default stdin", false);
         FileArgument outputGff3File = new FileArgument("o", "output-gff3-file", "output GFF3 file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, rangeFilter, scoreFilter, scriptFilter, inputGff3File, outputGff3File);
+        ArgumentList arguments = new ArgumentList(about, help, rangeFilter, scoreFilter, scriptFilter, inputGff3Path, outputGff3File);
         CommandLine commandLine = new CommandLine(args);
 
         FilterGff3 filterGff3 = null;
@@ -272,7 +287,7 @@ public final class FilterGff3 extends AbstractFilter {
             if (scriptFilter.wasFound()) {
                 filters.add(new ScriptFilter(scriptFilter.getValue()));
             }
-            filterGff3 = new FilterGff3(filters, inputGff3File.getValue(), outputGff3File.getValue());
+            filterGff3 = new FilterGff3(filters, inputGff3Path.getValue(), outputGff3File.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {

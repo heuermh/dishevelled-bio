@@ -79,6 +79,11 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>com.google.cloud</groupId>
+      <artifactId>google-cloud-nio</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
       <groupId>com.google.code.findbugs</groupId>
       <artifactId>jsr305</artifactId>
       <scope>compile</scope>
@@ -167,6 +172,11 @@
       <groupId>org.dishevelled</groupId>
       <artifactId>dsh-bio-variant</artifactId>
       <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <scope>runtime</scope>
     </dependency>
   </dependencies>
   <build>
@@ -370,6 +380,10 @@
             <program>
               <id>dsh-links-to-property-graph</id>
               <mainClass>org.dishevelled.bio.tools.LinksToPropertyGraph</mainClass>
+            </program>
+            <program>
+              <id>dsh-list-filesystems</id>
+              <mainClass>org.dishevelled.bio.tools.ListFilesystems</mainClass>
             </program>
             <program>
               <id>dsh-reassemble-paths</id>

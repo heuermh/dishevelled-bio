@@ -32,6 +32,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +61,7 @@ import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 import org.dishevelled.commandline.argument.StringArgument;
 
 /**
@@ -69,7 +72,7 @@ import org.dishevelled.commandline.argument.StringArgument;
  */
 public final class FilterGaf extends AbstractFilter {
     private final List<Filter> filters;
-    private final File inputGafFile;
+    private final Path inputGafPath;
     private final File outputGafFile;
     private static final String USAGE = "dsh-filter-gaf --mapping-quality 30 -i input.gaf.bgz -o output.gaf.bgz";
 
@@ -82,9 +85,21 @@ public final class FilterGaf extends AbstractFilter {
      * @param outputGafFile output GAF file, if any
      */
     public FilterGaf(final List<Filter> filters, final File inputGafFile, final File outputGafFile) {
+        this(filters, inputGafFile == null ? null : inputGafFile.toPath(), outputGafFile);
+    }
+
+    /**
+     * Filter alignments in GAF format.
+     *
+     * @since 2.1
+     * @param filters list of filters, must not be null
+     * @param inputGafPath input GAF path, if any
+     * @param outputGafFile output GAF file, if any
+     */
+    public FilterGaf(final List<Filter> filters, final Path inputGafPath, final File outputGafFile) {
         checkNotNull(filters);
         this.filters = ImmutableList.copyOf(filters);
-        this.inputGafFile = inputGafFile;
+        this.inputGafPath = inputGafPath;
         this.outputGafFile = outputGafFile;
     }
 
@@ -95,7 +110,7 @@ public final class FilterGaf extends AbstractFilter {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(inputGafFile);
+            reader = reader(inputGafPath);
             writer = writer(outputGafFile);
 
             while (reader.ready()) {
@@ -253,10 +268,10 @@ public final class FilterGaf extends AbstractFilter {
         StringArgument queryRangeFilter = new StringArgument("r", "query", "filter by query range, specify as queryName:start-end in 0-based coordindates", false);
         IntegerArgument mappingQualityFilter = new IntegerArgument("q", "mapping-quality", "filter by mapping quality", false);
         StringArgument scriptFilter = new StringArgument("e", "script", "filter by script, eval against r", false);
-        FileArgument inputGafFile = new FileArgument("i", "input-gaf-file", "input GAF file, default stdin", false);
+        PathArgument inputGafPath = new PathArgument("i", "input-gaf-path", "input GAF path, default stdin", false);
         FileArgument outputGafFile = new FileArgument("o", "output-gaf-file", "output GAF file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, queryRangeFilter, mappingQualityFilter, scriptFilter, inputGafFile, outputGafFile);
+        ArgumentList arguments = new ArgumentList(about, help, queryRangeFilter, mappingQualityFilter, scriptFilter, inputGafPath, outputGafFile);
         CommandLine commandLine = new CommandLine(args);
 
         FilterGaf filterGaf = null;
@@ -280,7 +295,7 @@ public final class FilterGaf extends AbstractFilter {
             if (scriptFilter.wasFound()) {
                 filters.add(new ScriptFilter(scriptFilter.getValue()));
             }
-            filterGaf = new FilterGaf(filters, inputGafFile.getValue(), outputGafFile.getValue());
+            filterGaf = new FilterGaf(filters, inputGafPath.getValue(), outputGafFile.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {

@@ -30,7 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import com.google.common.io.Files;
+import java.nio.file.Path;
 
 import org.biojava.bio.seq.Sequence;
 import org.biojava.bio.seq.SequenceIterator;
@@ -44,9 +44,9 @@ import org.dishevelled.commandline.CommandLineParser;
 import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
-import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
 import org.dishevelled.commandline.argument.LongArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 import org.dishevelled.commandline.argument.StringArgument;
 
 import org.dishevelled.compress.Compress;
@@ -65,6 +65,7 @@ public final class SplitFasta extends AbstractSplit {
     static final String DESCRIPTION_LINE = "description_line";
     private static final String USAGE = "dsh-split-fasta -r 100 -i foo.fa.gz";
 
+
     /**
      * Split FASTA files.
      *
@@ -81,7 +82,32 @@ public final class SplitFasta extends AbstractSplit {
                       final String prefix,
                       final String suffix,
                       final int lineWidth) {
-        this(inputFile, DEFAULT_ALPHABET, bytes, records, prefix, -1, suffix, lineWidth);
+        this(inputFile == null ? null : inputFile.toPath(),
+             bytes,
+             records,
+             prefix,
+             suffix,
+             lineWidth);
+    }
+
+    /**
+     * Split FASTA files.
+     *
+     * @since 2.1
+     * @param inputPath input path, if any
+     * @param bytes split the input path at next record after each n bytes, if any
+     * @param records split the input path after each n records, if any
+     * @param prefix output file prefix, must not be null
+     * @param suffix output file suffix, must not be null
+     * @param lineWidth line width
+     */
+    public SplitFasta(final Path inputPath,
+                      final Long bytes,
+                      final Long records,
+                      final String prefix,
+                      final String suffix,
+                      final int lineWidth) {
+        this(inputPath, DEFAULT_ALPHABET, bytes, records, prefix, -1, suffix, lineWidth);
     }
 
     /**
@@ -103,7 +129,35 @@ public final class SplitFasta extends AbstractSplit {
                       final int leftPad,
                       final String suffix,
                       final int lineWidth) {
-        this(inputFile, DEFAULT_ALPHABET, bytes, records, prefix, leftPad, suffix, lineWidth);
+        this(inputFile == null ? null : inputFile.toPath(),
+             bytes,
+             records,
+             prefix,
+             leftPad,
+             suffix,
+             lineWidth);
+    }
+
+    /**
+     * Split FASTA files.
+     *
+     * @since 2.1
+     * @param inputPath input path, if any
+     * @param bytes split the input path at next record after each n bytes, if any
+     * @param records split the input path after each n records, if any
+     * @param prefix output file prefix, must not be null
+     * @param leftPad left pad split index in output file name
+     * @param suffix output file suffix, must not be null
+     * @param lineWidth line width
+     */
+    public SplitFasta(final Path inputPath,
+                      final Long bytes,
+                      final Long records,
+                      final String prefix,
+                      final int leftPad,
+                      final String suffix,
+                      final int lineWidth) {
+        this(inputPath, DEFAULT_ALPHABET, bytes, records, prefix, leftPad, suffix, lineWidth);
     }
 
     /**
@@ -127,7 +181,38 @@ public final class SplitFasta extends AbstractSplit {
                       final int leftPad,
                       final String suffix,
                       final int lineWidth) {
-        super(inputFile, bytes, records, prefix, leftPad, suffix);
+        this(inputFile == null ? null : inputFile.toPath(),
+             alphabet,
+             bytes,
+             records,
+             prefix,
+             leftPad,
+             suffix,
+             lineWidth);
+    }
+
+    /**
+     * Split FASTA files.
+     *
+     * @since 2.1
+     * @param inputPath input path, if any
+     * @param alphabet input path alphabet { dna, protein }, if any
+     * @param bytes split the input path at next record after each n bytes, if any
+     * @param records split the input path after each n records, if any
+     * @param prefix output file prefix, must not be null
+     * @param leftPad left pad split index in output file name
+     * @param suffix output file suffix, must not be null
+     * @param lineWidth line width
+     */
+    public SplitFasta(final Path inputPath,
+                      final String alphabet,
+                      final Long bytes,
+                      final Long records,
+                      final String prefix,
+                      final int leftPad,
+                      final String suffix,
+                      final int lineWidth) {
+        super(inputPath, bytes, records, prefix, leftPad, suffix);
         this.lineWidth = lineWidth;
         this.alphabet = alphabet;
     }
@@ -137,7 +222,7 @@ public final class SplitFasta extends AbstractSplit {
     public Integer call() throws Exception {
         BufferedReader reader = null;
         try {
-            reader = reader(inputFile);
+            reader = reader(inputPath);
 
             long r = 0L;
             int files = 0;
@@ -204,8 +289,8 @@ public final class SplitFasta extends AbstractSplit {
         }
     }
 
-    static final String getBaseName(final File file) {
-        String baseName = Files.getNameWithoutExtension(file.getName());
+    static final String getBaseName(final Path path) {
+        String baseName = getNameWithoutExtension(path);
         // trim trailing .fa or .fasta if present after trimming compression extension
         if (baseName.endsWith(".fa")) {
             return baseName.substring(0, baseName.length() - 3);
@@ -216,9 +301,9 @@ public final class SplitFasta extends AbstractSplit {
         return baseName;
     }
 
-    static final String getFileExtensions(final File file) {
-        String baseName = Files.getNameWithoutExtension(file.getName());
-        String extension = Files.getFileExtension(file.getName());
+    static final String getFileExtensions(final Path path) {
+        String baseName = getNameWithoutExtension(path);
+        String extension = getFileExtension(path);
         // add .fa or .fasta to extension if present
         if (baseName.endsWith(".fa")) {
             return ".fa." + extension;
@@ -237,15 +322,16 @@ public final class SplitFasta extends AbstractSplit {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputFile = new FileArgument("i", "input-file", "input FASTA file, default stdin", false);
+        PathArgument inputPath = new PathArgument("i", "input-path", "input FASTA path, default stdin", false);
         StringArgument alphabet = new StringArgument("e", "alphabet", "input FASTA alphabet { dna, protein }, default dna", false);
-        StringArgument bytes = new StringArgument("b", "bytes", "split input file at next record after each n bytes", false);
-        LongArgument records = new LongArgument("r", "records", "split input file after each n records", false);
+        StringArgument bytes = new StringArgument("b", "bytes", "split input path at next record after each n bytes", false);
+        LongArgument records = new LongArgument("r", "records", "split input path after each n records", false);
         StringArgument prefix = new StringArgument("p", "prefix", "output file prefix", false);
         IntegerArgument leftPad = new IntegerArgument("d", "left-pad", "left pad split index in output file name", false);
         StringArgument suffix = new StringArgument("s", "suffix", "output file suffix, e.g. .fa.gz", false);
         IntegerArgument lineWidth = new IntegerArgument("w", "line-width", "line width, default " + DEFAULT_LINE_WIDTH, false);
-        ArgumentList arguments = new ArgumentList(about, help, inputFile, alphabet, bytes, records, prefix, leftPad, suffix, lineWidth);
+
+        ArgumentList arguments = new ArgumentList(about, help, inputPath, alphabet, bytes, records, prefix, leftPad, suffix, lineWidth);
         CommandLine commandLine = new CommandLine(args);
 
         SplitFasta splitFasta = null;
@@ -265,8 +351,8 @@ public final class SplitFasta extends AbstractSplit {
 
             String p = prefix.getValue();
             if (!prefix.wasFound()) {
-                if (inputFile.wasFound()) {
-                    p = getBaseName(inputFile.getValue());
+                if (inputPath.wasFound()) {
+                    p = getBaseName(inputPath.getValue());
                 }
                 else {
                     p = "x";
@@ -275,8 +361,8 @@ public final class SplitFasta extends AbstractSplit {
 
             String s = suffix.getValue();
             if (!suffix.wasFound()) {
-                if (inputFile.wasFound()) {
-                    s = getFileExtensions(inputFile.getValue());
+                if (inputPath.wasFound()) {
+                    s = getFileExtensions(inputPath.getValue());
                 }
                 else {
                     if (Compress.isBgzfInputStream(System.in)) {
@@ -294,7 +380,7 @@ public final class SplitFasta extends AbstractSplit {
                 }
             }
 
-            splitFasta = new SplitFasta(inputFile.getValue(), alphabet.getValue(DEFAULT_ALPHABET), b, records.getValue(), p, leftPad.getValue(-1), s, lineWidth.getValue(DEFAULT_LINE_WIDTH));
+            splitFasta = new SplitFasta(inputPath.getValue(), alphabet.getValue(DEFAULT_ALPHABET), b, records.getValue(), p, leftPad.getValue(-1), s, lineWidth.getValue(DEFAULT_LINE_WIDTH));
         }
         catch (CommandLineParseException | NullPointerException e) {
             if (about.wasFound()) {

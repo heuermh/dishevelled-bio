@@ -60,7 +60,7 @@ public final class TraversalsToPropertyGraphTest {
 
     @Test
     public void testConstructorNullInputGfa1File() {
-        assertNotNull(new TraversalsToPropertyGraph(null, outputEdgesFile));
+        assertNotNull(new TraversalsToPropertyGraph((File) null, outputEdgesFile));
     }
 
     @Test

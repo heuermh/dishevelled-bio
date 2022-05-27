@@ -30,6 +30,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -51,6 +53,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Convert Ensembl variant table to VCF format.
@@ -58,7 +61,7 @@ import org.dishevelled.commandline.argument.FileArgument;
  * @author  Michael Heuer
  */
 public class EnsemblVariantTableToVcf implements Callable<Integer>  {
-    private final File inputEnsemblVariantTableFile;
+    private final Path inputEnsemblVariantTablePath;
     private final File outputVcfFile;
     private static final String USAGE = "dsh-variant-table-to-vcf [args]";
 
@@ -69,7 +72,18 @@ public class EnsemblVariantTableToVcf implements Callable<Integer>  {
      * @param outputVcfFile output VCF file, if any
      */
     public EnsemblVariantTableToVcf(final File inputEnsemblVariantTableFile, final File outputVcfFile) {
-        this.inputEnsemblVariantTableFile = inputEnsemblVariantTableFile;
+        this(inputEnsemblVariantTableFile == null ? null : inputEnsemblVariantTableFile.toPath(), outputVcfFile);
+    }
+
+    /**
+     * Convert Ensembl variant table to VCF format
+     *
+     * @since 2.1
+     * @param inputEnsemblVariantTablePath input Ensembl variant table path, if any
+     * @param outputVcfFile output VCF file, if any
+     */
+    public EnsemblVariantTableToVcf(final Path inputEnsemblVariantTablePath, final File outputVcfFile) {
+        this.inputEnsemblVariantTablePath = inputEnsemblVariantTablePath;
         this.outputVcfFile = outputVcfFile;
     }
 
@@ -79,7 +93,7 @@ public class EnsemblVariantTableToVcf implements Callable<Integer>  {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(inputEnsemblVariantTableFile);
+            reader = reader(inputEnsemblVariantTablePath);
             writer = writer(outputVcfFile);
 
             VcfHeader header = VcfHeader.builder()
@@ -140,10 +154,10 @@ public class EnsemblVariantTableToVcf implements Callable<Integer>  {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputEnsemblVariantTableFile = new FileArgument("i", "input-variant-table-file", "input Ensembl variant table file, default stdin", false);
+        PathArgument inputEnsemblVariantTablePath = new PathArgument("i", "input-variant-table-path", "input Ensembl variant table path, default stdin", false);
         FileArgument outputVcfFile = new FileArgument("o", "output-vcf-file", "output VCF file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputEnsemblVariantTableFile, outputVcfFile);
+        ArgumentList arguments = new ArgumentList(about, help, inputEnsemblVariantTablePath, outputVcfFile);
         CommandLine commandLine = new CommandLine(args);
 
         EnsemblVariantTableToVcf ensemblVariantTableToVcf = null;
@@ -157,7 +171,7 @@ public class EnsemblVariantTableToVcf implements Callable<Integer>  {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            ensemblVariantTableToVcf = new EnsemblVariantTableToVcf(inputEnsemblVariantTableFile.getValue(), outputVcfFile.getValue());
+            ensemblVariantTableToVcf = new EnsemblVariantTableToVcf(inputEnsemblVariantTablePath.getValue(), outputVcfFile.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {

@@ -30,6 +30,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.concurrent.Callable;
 
 import com.google.common.base.Joiner;
@@ -46,6 +48,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 import org.dishevelled.graph.Edge;
 
@@ -55,7 +58,7 @@ import org.dishevelled.graph.Edge;
  * @author  Michael Heuer
  */
 public final class VcfPedigree implements Callable<Integer> {
-    private final File inputVcfFile;
+    private final Path inputVcfPath;
     private final File outputPedigreeFile;
     private static final String USAGE = "dsh-vcf-pedigree -i input.vcf.gz -o pedigree.txt";
 
@@ -67,7 +70,18 @@ public final class VcfPedigree implements Callable<Integer> {
      * @param outputPedigreeFile output pedigree file, if any
      */
     public VcfPedigree(final File inputVcfFile, final File outputPedigreeFile) {
-        this.inputVcfFile = inputVcfFile;
+        this(inputVcfFile == null ? null : inputVcfFile.toPath(), outputPedigreeFile);
+    }
+
+    /**
+     * Extract a pedigree from VCF format.
+     *
+     * @since 2.1
+     * @param inputVcfPath input VCF path, if any
+     * @param outputPedigreeFile output pedigree file, if any
+     */
+    public VcfPedigree(final Path inputVcfPath, final File outputPedigreeFile) {
+        this.inputVcfPath = inputVcfPath;
         this.outputPedigreeFile = outputPedigreeFile;
     }
 
@@ -77,7 +91,7 @@ public final class VcfPedigree implements Callable<Integer> {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(inputVcfFile);
+            reader = reader(inputVcfPath);
             writer = writer(outputPedigreeFile);
 
             for (Edge<VcfSample, Relationship> edge : VcfReader.pedigree(reader).getGraph().edges()) {
@@ -115,10 +129,10 @@ public final class VcfPedigree implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputVcfFile = new FileArgument("i", "input-vcf-file", "input VCF file, default stdin", false);
+        PathArgument inputVcfPath = new PathArgument("i", "input-vcf-path", "input VCF path, default stdin", false);
         FileArgument outputPedigreeFile = new FileArgument("o", "output-pedigree-file", "output pedigree file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputVcfFile, outputPedigreeFile);
+        ArgumentList arguments = new ArgumentList(about, help, inputVcfPath, outputPedigreeFile);
         CommandLine commandLine = new CommandLine(args);
 
         VcfPedigree vcfPedigree = null;
@@ -132,7 +146,7 @@ public final class VcfPedigree implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            vcfPedigree = new VcfPedigree(inputVcfFile.getValue(), outputPedigreeFile.getValue());
+            vcfPedigree = new VcfPedigree(inputVcfPath.getValue(), outputPedigreeFile.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {

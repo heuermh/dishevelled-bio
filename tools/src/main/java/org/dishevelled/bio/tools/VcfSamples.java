@@ -29,6 +29,8 @@ import static org.dishevelled.compress.Writers.writer;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.concurrent.Callable;
 
 import com.google.common.base.Joiner;
@@ -46,6 +48,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Extract samples from VCF format.
@@ -53,7 +56,7 @@ import org.dishevelled.commandline.argument.FileArgument;
  * @author  Michael Heuer
  */
 public final class VcfSamples implements Callable<Integer> {
-    private final File inputVcfFile;
+    private final Path inputVcfPath;
     private final File outputSampleFile;
     private static final String USAGE = "dsh-vcf-samples -i input.vcf.gz -o samples.txt";
 
@@ -65,7 +68,18 @@ public final class VcfSamples implements Callable<Integer> {
      * @param outputSampleFile output sample file, if any
      */
     public VcfSamples(final File inputVcfFile, final File outputSampleFile) {
-        this.inputVcfFile = inputVcfFile;
+        this(inputVcfFile == null ? null : inputVcfFile.toPath(), outputSampleFile);
+    }
+
+    /**
+     * Extract samples from VCF format.
+     *
+     * @since 2.1
+     * @param inputVcfPath input VCF path, if any
+     * @param outputSampleFile output sample file, if any
+     */
+    public VcfSamples(final Path inputVcfPath, final File outputSampleFile) {
+        this.inputVcfPath = inputVcfPath;
         this.outputSampleFile = outputSampleFile;
     }
 
@@ -77,7 +91,7 @@ public final class VcfSamples implements Callable<Integer> {
             writer = writer(outputSampleFile);
 
             final PrintWriter w = writer;
-            VcfReader.stream(reader(inputVcfFile), new VcfStreamAdapter() {
+            VcfReader.stream(reader(inputVcfPath), new VcfStreamAdapter() {
                     @Override
                     public void sample(final VcfSample sample) {
                         if (sample.getGenomes().length == 0) {
@@ -112,10 +126,10 @@ public final class VcfSamples implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputVcfFile = new FileArgument("i", "input-vcf-file", "input VCF file, default stdin", false);
+        PathArgument inputVcfPath = new PathArgument("i", "input-vcf-path", "input VCF path, default stdin", false);
         FileArgument outputSampleFile = new FileArgument("o", "output-sample-file", "output sample file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputVcfFile, outputSampleFile);
+        ArgumentList arguments = new ArgumentList(about, help, inputVcfPath, outputSampleFile);
         CommandLine commandLine = new CommandLine(args);
 
         VcfSamples vcfSamples = null;
@@ -129,7 +143,7 @@ public final class VcfSamples implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            vcfSamples = new VcfSamples(inputVcfFile.getValue(), outputSampleFile.getValue());
+            vcfSamples = new VcfSamples(inputVcfPath.getValue(), outputSampleFile.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {

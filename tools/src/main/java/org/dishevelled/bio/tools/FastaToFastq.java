@@ -32,6 +32,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.Iterator;
 
 import java.util.concurrent.Callable;
@@ -59,6 +61,7 @@ import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Convert DNA sequences in FASTA format to FASTQ format.
@@ -68,7 +71,7 @@ import org.dishevelled.commandline.argument.IntegerArgument;
 @SuppressWarnings("deprecation")
 public final class FastaToFastq implements Callable<Integer> {
     private final int quality;
-    private final File fastaFile;
+    private final Path fastaPath;
     private final File fastqFile;
     public static final int DEFAULT_QUALITY = 40;
     private static final String USAGE = "dsh-fasta-to-fastq [args]";
@@ -82,9 +85,21 @@ public final class FastaToFastq implements Callable<Integer> {
      * @param quality quality, must be in the range [0..93]
      */
     public FastaToFastq(final File fastaFile, final File fastqFile, final int quality) {
+        this(fastaFile == null ? null : fastaFile.toPath(), fastqFile, quality);
+    }
+
+    /**
+     * Convert DNA sequences in FASTA format to FASTQ format.
+     *
+     * @since 2.1
+     * @param fastaPath input FASTA path, if any
+     * @param fastqFile output FASTQ file, if any
+     * @param quality quality, must be in the range [0..93]
+     */
+    public FastaToFastq(final Path fastaPath, final File fastqFile, final int quality) {
         checkArgument((quality > -1) && (quality < 94), "quality must be in the range [0..93]");
         this.quality = quality;
-        this.fastaFile = fastaFile;
+        this.fastaPath = fastaPath;
         this.fastqFile = fastqFile;
     }
 
@@ -94,7 +109,7 @@ public final class FastaToFastq implements Callable<Integer> {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(fastaFile);
+            reader = reader(fastaPath);
             writer = writer(fastqFile);
             FastqWriter fastqWriter = new SangerFastqWriter();
 
@@ -145,11 +160,11 @@ public final class FastaToFastq implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument fastaFile = new FileArgument("i", "input-fasta-file", "input FASTA file, default stdin", false);
+        PathArgument fastaPath = new PathArgument("i", "input-fasta-path", "input FASTA path, default stdin", false);
         FileArgument fastqFile = new FileArgument("o", "output-fastq-file", "output FASTQ file, default stdout", false);
         IntegerArgument quality = new IntegerArgument("q", "quality", "quality score for FASTQ, [0..93], default " + DEFAULT_QUALITY, false);
 
-        ArgumentList arguments = new ArgumentList(about, help, fastaFile, fastqFile, quality);
+        ArgumentList arguments = new ArgumentList(about, help, fastaPath, fastqFile, quality);
         CommandLine commandLine = new CommandLine(args);
 
         FastaToFastq fastaToFastq = null;
@@ -164,7 +179,7 @@ public final class FastaToFastq implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            fastaToFastq = new FastaToFastq(fastaFile.getValue(), fastqFile.getValue(), quality.getValue(DEFAULT_QUALITY));
+            fastaToFastq = new FastaToFastq(fastaPath.getValue(), fastqFile.getValue(), quality.getValue(DEFAULT_QUALITY));
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);

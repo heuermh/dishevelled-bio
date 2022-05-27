@@ -60,7 +60,7 @@ public final class LinksToPropertyGraphTest {
 
     @Test
     public void testConstructorNullInputGfa1File() {
-        assertNotNull(new LinksToPropertyGraph(null, outputEdgesFile));
+        assertNotNull(new LinksToPropertyGraph((File) null, outputEdgesFile));
     }
 
     @Test

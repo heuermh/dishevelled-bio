@@ -33,6 +33,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +61,7 @@ import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 import org.dishevelled.commandline.argument.StringArgument;
 
 /**
@@ -69,7 +72,7 @@ import org.dishevelled.commandline.argument.StringArgument;
  */
 public final class FilterFastq extends AbstractFilter {
     private final List<Filter> filters;
-    private final File inputFastqFile;
+    private final Path inputFastqPath;
     private final File outputFastqFile;
     private final FastqReader fastqReader = new SangerFastqReader();
     private final FastqWriter fastqWriter = new SangerFastqWriter();
@@ -84,9 +87,21 @@ public final class FilterFastq extends AbstractFilter {
      * @param outputFastqFile output FASTQ file, if any
      */
     public FilterFastq(final List<Filter> filters, final File inputFastqFile, final File outputFastqFile) {
+        this(filters, inputFastqFile == null ? null : inputFastqFile.toPath(), outputFastqFile);
+    }
+
+    /**
+     * Filter sequences in FASTQ format.
+     *
+     * @since 2.1
+     * @param filters list of filters, must not be null
+     * @param inputFastqPath input FASTQ path, if any
+     * @param outputFastqFile output FASTQ file, if any
+     */
+    public FilterFastq(final List<Filter> filters, final Path inputFastqPath, final File outputFastqFile) {
         checkNotNull(filters);
         this.filters = ImmutableList.copyOf(filters);
-        this.inputFastqFile = inputFastqFile;
+        this.inputFastqPath = inputFastqPath;
         this.outputFastqFile = outputFastqFile;
     }
 
@@ -96,7 +111,7 @@ public final class FilterFastq extends AbstractFilter {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(inputFastqFile);
+            reader = reader(inputFastqPath);
             writer = writer(outputFastqFile);
 
             final PrintWriter w = writer;
@@ -213,10 +228,10 @@ public final class FilterFastq extends AbstractFilter {
         Switch help = new Switch("h", "help", "display help message");
         IntegerArgument lengthFilter = new IntegerArgument("n", "length", "filter by length", false);
         StringArgument scriptFilter = new StringArgument("e", "script", "filter by script, eval against r", false);
-        FileArgument inputFastqFile = new FileArgument("i", "input-fastq-file", "input FASTQ file, default stdin", false);
+        PathArgument inputFastqPath = new PathArgument("i", "input-fastq-path", "input FASTQ path, default stdin", false);
         FileArgument outputFastqFile = new FileArgument("o", "output-fastq-file", "output FASTQ file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, lengthFilter, scriptFilter, inputFastqFile, outputFastqFile);
+        ArgumentList arguments = new ArgumentList(about, help, lengthFilter, scriptFilter, inputFastqPath, outputFastqFile);
         CommandLine commandLine = new CommandLine(args);
 
         FilterFastq filterFastq = null;
@@ -237,7 +252,7 @@ public final class FilterFastq extends AbstractFilter {
             if (scriptFilter.wasFound()) {
                 filters.add(new ScriptFilter(scriptFilter.getValue()));
             }
-            filterFastq = new FilterFastq(filters, inputFastqFile.getValue(), outputFastqFile.getValue());
+            filterFastq = new FilterFastq(filters, inputFastqPath.getValue(), outputFastqFile.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {

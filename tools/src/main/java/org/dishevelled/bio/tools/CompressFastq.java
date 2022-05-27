@@ -31,6 +31,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.concurrent.Callable;
 
 import org.biojava.bio.program.fastq.Fastq;
@@ -49,6 +51,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Compress sequences in FASTQ format to splittable bgzf or bzip2 compression codecs.
@@ -57,7 +60,7 @@ import org.dishevelled.commandline.argument.FileArgument;
  * @author  Michael Heuer
  */
 public final class CompressFastq implements Callable<Integer> {
-    private final File inputFastqFile;
+    private final Path inputFastqPath;
     private final File outputFastqFile;
     private static final String USAGE = "dsh-compress-fastq [args]";
 
@@ -68,7 +71,18 @@ public final class CompressFastq implements Callable<Integer> {
      * @param outputFastqFile output FASTQ file, if any
      */
     public CompressFastq(final File inputFastqFile, final File outputFastqFile) {
-        this.inputFastqFile = inputFastqFile;
+        this(inputFastqFile == null ? null : inputFastqFile.toPath(), outputFastqFile);
+    }
+
+    /**
+     * Compress sequences in FASTQ format to splittable bgzf or bzip2 compression codecs.
+     *
+     * @since 2.1
+     * @param inputFastqPath input FASTQ path, if any
+     * @param outputFastqFile output FASTQ file, if any
+     */
+    public CompressFastq(final Path inputFastqPath, final File outputFastqFile) {
+        this.inputFastqPath = inputFastqPath;
         this.outputFastqFile = outputFastqFile;
     }
 
@@ -77,7 +91,7 @@ public final class CompressFastq implements Callable<Integer> {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(inputFastqFile);
+            reader = reader(inputFastqPath);
             writer = writer(outputFastqFile);
 
             final PrintWriter w = writer;
@@ -122,10 +136,10 @@ public final class CompressFastq implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputFastqFile = new FileArgument("i", "input-fastq-file", "input FASTQ file, default stdin", false);
+        PathArgument inputFastqPath = new PathArgument("i", "input-fastq-path", "input FASTQ path, default stdin", false);
         FileArgument outputFastqFile = new FileArgument("o", "output-fastq-file", "output FASTQ file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputFastqFile, outputFastqFile);
+        ArgumentList arguments = new ArgumentList(about, help, inputFastqPath, outputFastqFile);
         CommandLine commandLine = new CommandLine(args);
 
         CompressFastq compressFastq = null;
@@ -140,7 +154,7 @@ public final class CompressFastq implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            compressFastq = new CompressFastq(inputFastqFile.getValue(), outputFastqFile.getValue());
+            compressFastq = new CompressFastq(inputFastqPath.getValue(), outputFastqFile.getValue());
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);

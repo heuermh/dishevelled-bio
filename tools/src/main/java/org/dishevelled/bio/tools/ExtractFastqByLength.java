@@ -31,6 +31,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.concurrent.Callable;
 
 import org.biojava.bio.program.fastq.Fastq;
@@ -49,6 +51,7 @@ import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Extract sequences in FASTQ format with a range of lengths.
@@ -58,7 +61,7 @@ import org.dishevelled.commandline.argument.IntegerArgument;
  */
 @SuppressWarnings("deprecation")
 public final class ExtractFastqByLength implements Callable<Integer> {
-    private final File inputFastqFile;
+    private final Path inputFastqPath;
     private final File outputFastqFile;
     private final int minimumLength;
     private final int maximumLength;
@@ -75,7 +78,20 @@ public final class ExtractFastqByLength implements Callable<Integer> {
      * @param maximumLength maximum sequence length, exclusive
      */
     public ExtractFastqByLength(final File inputFastqFile, final File outputFastqFile, final int minimumLength, final int maximumLength) {
-        this.inputFastqFile = inputFastqFile;
+        this(inputFastqFile == null ? null : inputFastqFile.toPath(), outputFastqFile, minimumLength, maximumLength);
+    }
+
+    /**
+     * Extract matching sequences in FASTQ format.
+     *
+     * @since 2.1
+     * @param inputFastqPath input FASTQ path, if any
+     * @param outputFastqFile output FASTQ file, if any
+     * @param minimumLength minimum sequence length, inclusive
+     * @param maximumLength maximum sequence length, exclusive
+     */
+    public ExtractFastqByLength(final Path inputFastqPath, final File outputFastqFile, final int minimumLength, final int maximumLength) {
+        this.inputFastqPath = inputFastqPath;
         this.outputFastqFile = outputFastqFile;
         this.minimumLength = minimumLength;
         this.maximumLength = maximumLength;
@@ -87,7 +103,7 @@ public final class ExtractFastqByLength implements Callable<Integer> {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(inputFastqFile);
+            reader = reader(inputFastqPath);
             writer = writer(outputFastqFile);
 
             final PrintWriter w = writer;
@@ -132,12 +148,12 @@ public final class ExtractFastqByLength implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputFastqFile = new FileArgument("i", "input-fastq-file", "input FASTQ file, default stdin", false);
+        PathArgument inputFastqPath = new PathArgument("i", "input-fastq-path", "input FASTQ path, default stdin", false);
         FileArgument outputFastqFile = new FileArgument("o", "output-fastq-file", "output FASTQ file, default stdout", false);
         IntegerArgument minimumLength = new IntegerArgument("m", "minimum-length", "minimum sequence length, inclusive", true);
         IntegerArgument maximumLength = new IntegerArgument("x", "maximum-length", "maximum sequence length, exclusive", true);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputFastqFile, outputFastqFile, minimumLength, maximumLength);
+        ArgumentList arguments = new ArgumentList(about, help, inputFastqPath, outputFastqFile, minimumLength, maximumLength);
         CommandLine commandLine = new CommandLine(args);
 
         ExtractFastqByLength extractFastqByLength = null;
@@ -152,7 +168,7 @@ public final class ExtractFastqByLength implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            extractFastqByLength = new ExtractFastqByLength(inputFastqFile.getValue(), outputFastqFile.getValue(), minimumLength.getValue(), maximumLength.getValue());
+            extractFastqByLength = new ExtractFastqByLength(inputFastqPath.getValue(), outputFastqFile.getValue(), minimumLength.getValue(), maximumLength.getValue());
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);

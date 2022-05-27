@@ -60,7 +60,7 @@ public final class SegmentsToCytoscapeNodesTest {
 
     @Test
     public void testConstructorNullInputGfa1File() {
-        assertNotNull(new SegmentsToCytoscapeNodes(null, outputNodesFile));
+        assertNotNull(new SegmentsToCytoscapeNodes((File) null, outputNodesFile));
     }
 
     @Test

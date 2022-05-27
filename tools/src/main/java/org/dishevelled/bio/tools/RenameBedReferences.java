@@ -30,6 +30,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import org.dishevelled.bio.feature.bed.BedListener;
 import org.dishevelled.bio.feature.bed.BedReader;
 import org.dishevelled.bio.feature.bed.BedRecord;
@@ -43,6 +45,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Rename references in BED files.
@@ -62,7 +65,19 @@ public final class RenameBedReferences extends AbstractRenameReferences {
      * @param outputBedFile output BED file, if any
      */
     public RenameBedReferences(final boolean chr, final File inputBedFile, final File outputBedFile) {
-        super(chr, inputBedFile, outputBedFile);
+        this(chr, inputBedFile == null ? null : inputBedFile.toPath(), outputBedFile);
+    }
+
+    /**
+     * Rename references in BED files.
+     *
+     * @since 2.1
+     * @param chr true to add "chr" to chromosome names
+     * @param inputBedPath input BED path, if any
+     * @param outputBedFile output BED file, if any
+     */
+    public RenameBedReferences(final boolean chr, final Path inputBedPath, final File outputBedFile) {
+        super(chr, inputBedPath, outputBedFile);
     }
 
 
@@ -71,7 +86,7 @@ public final class RenameBedReferences extends AbstractRenameReferences {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(inputFile);
+            reader = reader(inputPath);
             writer = writer(outputFile);
 
             final PrintWriter w = writer;
@@ -156,10 +171,10 @@ public final class RenameBedReferences extends AbstractRenameReferences {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
         Switch chr = new Switch("c", "chr", "add \"chr\" to chromosome reference names");
-        FileArgument inputBedFile = new FileArgument("i", "input-bed-file", "input BED file, default stdin", false);
+        PathArgument inputBedPath = new PathArgument("i", "input-bed-path", "input BED path, default stdin", false);
         FileArgument outputBedFile = new FileArgument("o", "output-bed-file", "output BED file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, chr, inputBedFile, outputBedFile);
+        ArgumentList arguments = new ArgumentList(about, help, chr, inputBedPath, outputBedFile);
         CommandLine commandLine = new CommandLine(args);
 
         RenameBedReferences renameBedReferences = null;
@@ -173,7 +188,7 @@ public final class RenameBedReferences extends AbstractRenameReferences {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            renameBedReferences = new RenameBedReferences(chr.wasFound(), inputBedFile.getValue(), outputBedFile.getValue());
+            renameBedReferences = new RenameBedReferences(chr.wasFound(), inputBedPath.getValue(), outputBedFile.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {

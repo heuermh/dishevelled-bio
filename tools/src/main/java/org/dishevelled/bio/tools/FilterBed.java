@@ -31,6 +31,8 @@ import static org.dishevelled.compress.Writers.writer;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,6 +64,7 @@ import org.dishevelled.commandline.Usage;
 import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
 import org.dishevelled.commandline.argument.StringArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Filter features in BED format.
@@ -71,7 +74,7 @@ import org.dishevelled.commandline.argument.StringArgument;
  */
 public final class FilterBed extends AbstractFilter {
     private final List<Filter> filters;
-    private final File inputBedFile;
+    private final Path inputBedPath;
     private final File outputBedFile;
     private static final String USAGE = "dsh-filter-bed --score 20.0 -i input.bed.bgz -o output.bed.bgz";
 
@@ -84,9 +87,21 @@ public final class FilterBed extends AbstractFilter {
      * @param outputBedFile output BED file, if any
      */
     public FilterBed(final List<Filter> filters, final File inputBedFile, final File outputBedFile) {
+        this(filters, inputBedFile == null ? null : inputBedFile.toPath(), outputBedFile);
+    }
+
+    /**
+     * Filter features in BED format.
+     *
+     * @since 2.1
+     * @param filters list of filters, must not be null
+     * @param inputBedPath input BED path, if any
+     * @param outputBedFile output BED file, if any
+     */
+    public FilterBed(final List<Filter> filters, final Path inputBedPath, final File outputBedFile) {
         checkNotNull(filters);
         this.filters = ImmutableList.copyOf(filters);
-        this.inputBedFile = inputBedFile;
+        this.inputBedPath = inputBedPath;
         this.outputBedFile = outputBedFile;
     }
 
@@ -98,7 +113,7 @@ public final class FilterBed extends AbstractFilter {
             writer = writer(outputBedFile);
 
             final PrintWriter w = writer;
-            BedReader.stream(reader(inputBedFile), new BedListener() {
+            BedReader.stream(reader(inputBedPath), new BedListener() {
                     @Override
                     public boolean record(final BedRecord record) {
                         // write out record
@@ -245,10 +260,10 @@ public final class FilterBed extends AbstractFilter {
         StringArgument rangeFilter = new StringArgument("r", "range", "filter by range, specify as chrom:start-end in 0-based coordindates", false);
         IntegerArgument scoreFilter = new IntegerArgument("s", "score", "filter by score", false);
         StringArgument scriptFilter = new StringArgument("e", "script", "filter by script, eval against r", false);
-        FileArgument inputBedFile = new FileArgument("i", "input-bed-file", "input BED file, default stdin", false);
+        PathArgument inputBedPath = new PathArgument("i", "input-bed-path", "input BED path, default stdin", false);
         FileArgument outputBedFile = new FileArgument("o", "output-bed-file", "output BED file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, rangeFilter, scoreFilter, scriptFilter, inputBedFile, outputBedFile);
+        ArgumentList arguments = new ArgumentList(about, help, rangeFilter, scoreFilter, scriptFilter, inputBedPath, outputBedFile);
         CommandLine commandLine = new CommandLine(args);
 
         FilterBed filterBed = null;
@@ -272,7 +287,7 @@ public final class FilterBed extends AbstractFilter {
             if (scriptFilter.wasFound()) {
                 filters.add(new ScriptFilter(scriptFilter.getValue()));
             }
-            filterBed = new FilterBed(filters, inputBedFile.getValue(), outputBedFile.getValue());
+            filterBed = new FilterBed(filters, inputBedPath.getValue(), outputBedFile.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {

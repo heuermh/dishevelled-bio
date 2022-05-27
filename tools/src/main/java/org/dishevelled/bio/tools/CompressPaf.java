@@ -30,6 +30,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.concurrent.Callable;
 
 import org.dishevelled.bio.alignment.paf.PafRecord;
@@ -42,6 +44,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Compress alignments in PAF format to splittable bgzf or bzip2 compression
@@ -51,7 +54,7 @@ import org.dishevelled.commandline.argument.FileArgument;
  * @author  Michael Heuer
  */
 public final class CompressPaf implements Callable<Integer> {
-    private final File inputPafFile;
+    private final Path inputPafPath;
     private final File outputPafFile;
     private static final String USAGE = "dsh-compress-paf [args]";
 
@@ -63,7 +66,19 @@ public final class CompressPaf implements Callable<Integer> {
      * @param outputPafFile output PAF file, if any
      */
     public CompressPaf(final File inputPafFile, final File outputPafFile) {
-        this.inputPafFile = inputPafFile;
+        this(inputPafFile == null ? null : inputPafFile.toPath(), outputPafFile);
+    }
+
+    /**
+     * Compress alignments in PAF format to splittable bgzf or bzip2 compression
+     * codecs.
+     *
+     * @since 2.1
+     * @param inputPafPath input PAF path, if any
+     * @param outputPafFile output PAF file, if any
+     */
+    public CompressPaf(final Path inputPafPath, final File outputPafFile) {
+        this.inputPafPath = inputPafPath;
         this.outputPafFile = outputPafFile;
     }
 
@@ -73,7 +88,7 @@ public final class CompressPaf implements Callable<Integer> {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(inputPafFile);
+            reader = reader(inputPafPath);
             writer = writer(outputPafFile);
 
             while (reader.ready()) {
@@ -113,10 +128,10 @@ public final class CompressPaf implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputPafFile = new FileArgument("i", "input-paf-file", "input PAF file, default stdin", false);
+        PathArgument inputPafPath = new PathArgument("i", "input-paf-path", "input PAF path, default stdin", false);
         FileArgument outputPafFile = new FileArgument("o", "output-paf-file", "output PAF file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputPafFile, outputPafFile);
+        ArgumentList arguments = new ArgumentList(about, help, inputPafPath, outputPafFile);
         CommandLine commandLine = new CommandLine(args);
 
         CompressPaf compressPaf = null;
@@ -131,7 +146,7 @@ public final class CompressPaf implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            compressPaf = new CompressPaf(inputPafFile.getValue(), outputPafFile.getValue());
+            compressPaf = new CompressPaf(inputPafPath.getValue(), outputPafFile.getValue());
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);

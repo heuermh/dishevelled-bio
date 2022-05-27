@@ -30,6 +30,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.concurrent.Callable;
 
 import org.biojava.bio.program.fastq.Fastq;
@@ -45,6 +47,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Output sequence lengths from sequences in FASTQ format.
@@ -53,11 +56,10 @@ import org.dishevelled.commandline.argument.FileArgument;
  * @author  Michael Heuer
  */
 public final class FastqSequenceLength implements Callable<Integer> {
-    private final File fastqFile;
+    private final Path fastqPath;
     private final File sequenceLengthFile;
     private final FastqReader fastqReader = new SangerFastqReader();
     private static final String USAGE = "dsh-fastq-sequence-length [args]";
-
 
     /**
      * Output sequence lengths from sequences in FASTQ format.
@@ -66,7 +68,18 @@ public final class FastqSequenceLength implements Callable<Integer> {
      * @param sequenceLengthFile output file of sequence lengths, if any
      */
     public FastqSequenceLength(final File fastqFile, final File sequenceLengthFile) {
-        this.fastqFile = fastqFile;
+        this(fastqFile == null ? null : fastqFile.toPath(), sequenceLengthFile);
+    }
+
+    /**
+     * Output sequence lengths from sequences in FASTQ format.
+     *
+     * @since 2.1
+     * @param fastqPath input FASTQ path, if any
+     * @param sequenceLengthFile output file of sequence lengths, if any
+     */
+    public FastqSequenceLength(final Path fastqPath, final File sequenceLengthFile) {
+        this.fastqPath = fastqPath;
         this.sequenceLengthFile = sequenceLengthFile;
     }
 
@@ -76,7 +89,7 @@ public final class FastqSequenceLength implements Callable<Integer> {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(fastqFile);
+            reader = reader(fastqPath);
             writer = writer(sequenceLengthFile);
 
             final PrintWriter w = writer;
@@ -114,10 +127,10 @@ public final class FastqSequenceLength implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument fastqFile = new FileArgument("i", "fastq-file", "input FASTQ file, default stdin", false);
+        PathArgument fastqPath = new PathArgument("i", "fastq-path", "input FASTQ path, default stdin", false);
         FileArgument sequenceLengthFile = new FileArgument("o", "sequence-length-file", "output file of sequence lengths, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, fastqFile, sequenceLengthFile);
+        ArgumentList arguments = new ArgumentList(about, help, fastqPath, sequenceLengthFile);
         CommandLine commandLine = new CommandLine(args);
 
         FastqSequenceLength fastqSequenceLength = null;
@@ -132,7 +145,7 @@ public final class FastqSequenceLength implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            fastqSequenceLength = new FastqSequenceLength(fastqFile.getValue(), sequenceLengthFile.getValue());
+            fastqSequenceLength = new FastqSequenceLength(fastqPath.getValue(), sequenceLengthFile.getValue());
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);

@@ -33,6 +33,8 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.io.IOException;
 
+import java.nio.file.Path;
+
 import java.util.concurrent.Callable;
 
 import org.biojava.bio.program.fastq.Fastq;
@@ -50,6 +52,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Convert first and second sequence files in FASTQ format to interleaved FASTQ format.
@@ -57,8 +60,8 @@ import org.dishevelled.commandline.argument.FileArgument;
  * @author  Michael Heuer
  */
 public final class InterleaveFastq implements Callable<Integer> {
-    private final File firstFastqFile;
-    private final File secondFastqFile;
+    private final Path firstFastqPath;
+    private final Path secondFastqPath;
     private final File pairedFile;
     private final File unpairedFile;
     private static final String USAGE = "dsh-interleave-fastq -1 foo_1.fq.gz -2 foo_2.fq.gz -p foo.paired.fq.gz -u foo.unpaired.fq.gz";
@@ -73,12 +76,28 @@ public final class InterleaveFastq implements Callable<Integer> {
      * @param unpairedFile output unpaired FASTQ file, must not be null
      */
     public InterleaveFastq(final File firstFastqFile, final File secondFastqFile, final File pairedFile, final File unpairedFile) {
-        checkNotNull(firstFastqFile);
-        checkNotNull(secondFastqFile);
+        this(firstFastqFile == null ? null : firstFastqFile.toPath(),
+             secondFastqFile == null ? null : secondFastqFile.toPath(),
+             pairedFile,
+             unpairedFile);
+    }
+
+    /**
+     * Convert first and second sequence files in FASTQ format to interleaved FASTQ format.
+     *
+     * @since 2.1
+     * @param firstFastqPath first FASTQ input path, must not be null
+     * @param secondFastqPath second FASTQ input path, must not be null
+     * @param pairedFile output interleaved paired FASTQ file, must not be null
+     * @param unpairedFile output unpaired FASTQ file, must not be null
+     */
+    public InterleaveFastq(final Path firstFastqPath, final Path secondFastqPath, final File pairedFile, final File unpairedFile) {
+        checkNotNull(firstFastqPath);
+        checkNotNull(secondFastqPath);
         checkNotNull(pairedFile);
         checkNotNull(unpairedFile);
-        this.firstFastqFile = firstFastqFile;
-        this.secondFastqFile = secondFastqFile;
+        this.firstFastqPath = firstFastqPath;
+        this.secondFastqPath = secondFastqPath;
         this.pairedFile = pairedFile;
         this.unpairedFile = unpairedFile;
     }
@@ -91,8 +110,8 @@ public final class InterleaveFastq implements Callable<Integer> {
         PrintWriter pairedWriter = null;
         PrintWriter unpairedWriter = null;
         try {
-            firstReader = reader(firstFastqFile);
-            secondReader = reader(secondFastqFile);
+            firstReader = reader(firstFastqPath);
+            secondReader = reader(secondFastqPath);
             pairedWriter = writer(pairedFile);
             unpairedWriter = writer(unpairedFile);
 
@@ -164,12 +183,12 @@ public final class InterleaveFastq implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument firstFastqFile = new FileArgument("1", "first-fastq-file", "first FASTQ input file", true);
-        FileArgument secondFastqFile = new FileArgument("2", "second-fastq-file", "second FASTQ input file", true);
+        PathArgument firstFastqPath = new PathArgument("1", "first-fastq-path", "first FASTQ input path", true);
+        PathArgument secondFastqPath = new PathArgument("2", "second-fastq-path", "second FASTQ input path", true);
         FileArgument pairedFile = new FileArgument("p", "paired-file", "output interleaved paired FASTQ file", true);
         FileArgument unpairedFile = new FileArgument("u", "unpaired-file", "output unpaired FASTQ file", true);
 
-        ArgumentList arguments = new ArgumentList(about, help, firstFastqFile, secondFastqFile, pairedFile, unpairedFile);
+        ArgumentList arguments = new ArgumentList(about, help, firstFastqPath, secondFastqPath, pairedFile, unpairedFile);
         CommandLine commandLine = new CommandLine(args);
 
         InterleaveFastq interleaveFastq = null;
@@ -183,7 +202,7 @@ public final class InterleaveFastq implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            interleaveFastq = new InterleaveFastq(firstFastqFile.getValue(), secondFastqFile.getValue(), pairedFile.getValue(), unpairedFile.getValue());
+            interleaveFastq = new InterleaveFastq(firstFastqPath.getValue(), secondFastqPath.getValue(), pairedFile.getValue(), unpairedFile.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {

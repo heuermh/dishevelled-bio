@@ -30,6 +30,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.concurrent.Callable;
 
 import org.dishevelled.bio.feature.gff3.Gff3Listener;
@@ -45,6 +47,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Compress features in GFF3 format to splittable bgzf or bzip2 compression codecs.
@@ -53,7 +56,7 @@ import org.dishevelled.commandline.argument.FileArgument;
  * @author  Michael Heuer
  */
 public final class CompressGff3 implements Callable<Integer> {
-    private final File inputGff3File;
+    private final Path inputGff3Path;
     private final File outputGff3File;
     private static final String USAGE = "dsh-compress-gff3 [args]";
 
@@ -64,7 +67,18 @@ public final class CompressGff3 implements Callable<Integer> {
      * @param outputGff3File output GFF3 file, if any
      */
     public CompressGff3(final File inputGff3File, final File outputGff3File) {
-        this.inputGff3File = inputGff3File;
+        this(inputGff3File == null ? null : inputGff3File.toPath(), outputGff3File);
+    }
+
+    /**
+     * Compress features in GFF3 format to splittable bgzf or bzip2 compression codecs.
+     *
+     * @since 2.1
+     * @param inputGff3Path input GFF3 path, if any
+     * @param outputGff3File output GFF3 file, if any
+     */
+    public CompressGff3(final Path inputGff3Path, final File outputGff3File) {
+        this.inputGff3Path = inputGff3Path;
         this.outputGff3File = outputGff3File;
     }
 
@@ -73,7 +87,7 @@ public final class CompressGff3 implements Callable<Integer> {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(inputGff3File);
+            reader = reader(inputGff3Path);
             writer = writer(outputGff3File);
             writer.println("##gff-version 3");
             
@@ -113,10 +127,10 @@ public final class CompressGff3 implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputGff3File = new FileArgument("i", "input-gff3-file", "input GFF3 file, default stdin", false);
+        PathArgument inputGff3Path = new PathArgument("i", "input-gff3-path", "input GFF3 path, default stdin", false);
         FileArgument outputGff3File = new FileArgument("o", "output-gff3-file", "output GFF3 file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputGff3File, outputGff3File);
+        ArgumentList arguments = new ArgumentList(about, help, inputGff3Path, outputGff3File);
         CommandLine commandLine = new CommandLine(args);
 
         CompressGff3 compressGff3 = null;
@@ -131,7 +145,7 @@ public final class CompressGff3 implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            compressGff3 = new CompressGff3(inputGff3File.getValue(), outputGff3File.getValue());
+            compressGff3 = new CompressGff3(inputGff3Path.getValue(), outputGff3File.getValue());
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);

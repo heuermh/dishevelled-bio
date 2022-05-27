@@ -29,6 +29,8 @@ import static org.dishevelled.compress.Writers.writer;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,6 +57,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Remap PS Type=String phase set ids in VCF format to PS Type=Integer.
@@ -62,7 +65,7 @@ import org.dishevelled.commandline.argument.FileArgument;
  * @author  Michael Heuer
  */
 public final class RemapPhaseSet implements Callable<Integer> {
-    private final File inputVcfFile;
+    private final Path inputVcfPath;
     private final File outputVcfFile;
     private static final String USAGE = "dsh-remap-phase-set -i input.vcf.gz -o output.vcf.gz";
 
@@ -74,7 +77,18 @@ public final class RemapPhaseSet implements Callable<Integer> {
      * @param outputVcfFile output VCF file, if any
      */
     public RemapPhaseSet(final File inputVcfFile, final File outputVcfFile) {
-        this.inputVcfFile = inputVcfFile;
+        this(inputVcfFile == null ? null : inputVcfFile.toPath(), outputVcfFile);
+    }
+
+    /**
+     * Remap Type=String PS phase set ids in VCF format to Type=Integer.
+     *
+     * @since 2.1
+     * @param inputVcfPath input VCF path, if any
+     * @param outputVcfFile output VCF file, if any
+     */
+    public RemapPhaseSet(final Path inputVcfPath, final File outputVcfFile) {
+        this.inputVcfPath = inputVcfPath;
         this.outputVcfFile = outputVcfFile;
     }
 
@@ -86,7 +100,7 @@ public final class RemapPhaseSet implements Callable<Integer> {
             writer = writer(outputVcfFile);
 
             final PrintWriter w = writer;
-            VcfReader.stream(reader(inputVcfFile), new VcfStreamAdapter() {
+            VcfReader.stream(reader(inputVcfPath), new VcfStreamAdapter() {
                     private boolean wroteSamples = false;
                     private boolean remapPhaseSet = false;
                     private List<VcfSample> samples = new ArrayList<VcfSample>();
@@ -178,10 +192,10 @@ public final class RemapPhaseSet implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputVcfFile = new FileArgument("i", "input-vcf-file", "input VCF file, default stdin", false);
+        PathArgument inputVcfPath = new PathArgument("i", "input-vcf-path", "input VCF path, default stdin", false);
         FileArgument outputVcfFile = new FileArgument("o", "output-vcf-file", "output VCF file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputVcfFile, outputVcfFile);
+        ArgumentList arguments = new ArgumentList(about, help, inputVcfPath, outputVcfFile);
         CommandLine commandLine = new CommandLine(args);
 
         RemapPhaseSet remapPhaseSet = null;
@@ -195,7 +209,7 @@ public final class RemapPhaseSet implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            remapPhaseSet = new RemapPhaseSet(inputVcfFile.getValue(), outputVcfFile.getValue());
+            remapPhaseSet = new RemapPhaseSet(inputVcfPath.getValue(), outputVcfFile.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {

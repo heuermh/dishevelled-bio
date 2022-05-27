@@ -30,6 +30,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.concurrent.Callable;
 
 import org.dishevelled.bio.alignment.sam.SamHeader;
@@ -46,6 +48,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Compress alignments in SAM format to splittable bgzf or bzip2 compression codecs.
@@ -54,7 +57,7 @@ import org.dishevelled.commandline.argument.FileArgument;
  * @author  Michael Heuer
  */
 public final class CompressSam implements Callable<Integer> {
-    private final File inputSamFile;
+    private final Path inputSamPath;
     private final File outputSamFile;
     private static final String USAGE = "dsh-compress-sam [args]";
 
@@ -65,7 +68,18 @@ public final class CompressSam implements Callable<Integer> {
      * @param outputSamFile output SAM file, if any
      */
     public CompressSam(final File inputSamFile, final File outputSamFile) {
-        this.inputSamFile = inputSamFile;
+        this(inputSamFile == null ? null : inputSamFile.toPath(), outputSamFile);
+    }
+
+    /**
+     * Compress alignments in SAM format to splittable bgzf or bzip2 compression codecs.
+     *
+     * @since 2.1
+     * @param inputSamPath input SAM path, if any
+     * @param outputSamFile output SAM file, if any
+     */
+    public CompressSam(final Path inputSamPath, final File outputSamFile) {
+        this.inputSamPath = inputSamPath;
         this.outputSamFile = outputSamFile;
     }
 
@@ -74,7 +88,7 @@ public final class CompressSam implements Callable<Integer> {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(inputSamFile);
+            reader = reader(inputSamPath);
             writer = writer(outputSamFile);
             
             final PrintWriter w = writer;
@@ -119,10 +133,10 @@ public final class CompressSam implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputSamFile = new FileArgument("i", "input-sam-file", "input SAM file, default stdin", false);
+        PathArgument inputSamPath = new PathArgument("i", "input-sam-path", "input SAM path, default stdin", false);
         FileArgument outputSamFile = new FileArgument("o", "output-sam-file", "output SAM file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputSamFile, outputSamFile);
+        ArgumentList arguments = new ArgumentList(about, help, inputSamPath, outputSamFile);
         CommandLine commandLine = new CommandLine(args);
 
         CompressSam compressSam = null;
@@ -137,7 +151,7 @@ public final class CompressSam implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            compressSam = new CompressSam(inputSamFile.getValue(), outputSamFile.getValue());
+            compressSam = new CompressSam(inputSamPath.getValue(), outputSamFile.getValue());
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);

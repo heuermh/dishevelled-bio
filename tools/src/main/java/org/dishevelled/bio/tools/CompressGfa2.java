@@ -30,6 +30,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.concurrent.Callable;
 
 import org.dishevelled.bio.assembly.gfa2.Gfa2Listener;
@@ -45,6 +47,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Compress assembly in GFA 2.0 format to splittable bgzf or bzip2 compression codecs.
@@ -53,7 +56,7 @@ import org.dishevelled.commandline.argument.FileArgument;
  * @author  Michael Heuer
  */
 public final class CompressGfa2 implements Callable<Integer> {
-    private final File inputGfa2File;
+    private final Path inputGfa2Path;
     private final File outputGfa2File;
     private static final String USAGE = "dsh-compress-gfa2 [args]";
 
@@ -64,7 +67,18 @@ public final class CompressGfa2 implements Callable<Integer> {
      * @param outputGfa2File output GFA 2.0 file, if any
      */
     public CompressGfa2(final File inputGfa2File, final File outputGfa2File) {
-        this.inputGfa2File = inputGfa2File;
+        this(inputGfa2File == null ? null : inputGfa2File.toPath(), outputGfa2File);
+    }
+
+    /**
+     * Compress assembly in GFA 2.0 format to splittable bgzf or bzip2 compression codecs.
+     *
+     * @since 2.1
+     * @param inputGfa2Path input GFA 2.0 path, if any
+     * @param outputGfa2File output GFA 2.0 file, if any
+     */
+    public CompressGfa2(final Path inputGfa2Path, final File outputGfa2File) {
+        this.inputGfa2Path = inputGfa2Path;
         this.outputGfa2File = outputGfa2File;
     }
 
@@ -73,7 +87,7 @@ public final class CompressGfa2 implements Callable<Integer> {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(inputGfa2File);
+            reader = reader(inputGfa2Path);
             writer = writer(outputGfa2File);
 
             final PrintWriter w = writer;
@@ -112,10 +126,10 @@ public final class CompressGfa2 implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputGfa2File = new FileArgument("i", "input-gfa2-file", "input GFA 2.0 file, default stdin", false);
+        PathArgument inputGfa2Path = new PathArgument("i", "input-gfa2-path", "input GFA 2.0 path, default stdin", false);
         FileArgument outputGfa2File = new FileArgument("o", "output-gfa2-file", "output GFA 2.0 file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputGfa2File, outputGfa2File);
+        ArgumentList arguments = new ArgumentList(about, help, inputGfa2Path, outputGfa2File);
         CommandLine commandLine = new CommandLine(args);
 
         CompressGfa2 compressGfa2 = null;
@@ -130,7 +144,7 @@ public final class CompressGfa2 implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            compressGfa2 = new CompressGfa2(inputGfa2File.getValue(), outputGfa2File.getValue());
+            compressGfa2 = new CompressGfa2(inputGfa2Path.getValue(), outputGfa2File.getValue());
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);

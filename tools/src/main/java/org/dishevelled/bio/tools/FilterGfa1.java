@@ -63,6 +63,7 @@ import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 import org.dishevelled.commandline.argument.StringArgument;
 
 /**
@@ -73,7 +74,7 @@ import org.dishevelled.commandline.argument.StringArgument;
  */
 public final class FilterGfa1 extends AbstractFilter {
     private final List<Filter> filters;
-    private final File inputGfa1File;
+    private final java.nio.file.Path inputGfa1Path;
     private final File outputGfa1File;
     private static final String USAGE = "dsh-filter-gfa1 --read-count 40 -i input.gfa1.bgz -o output.gfa1.bgz";
 
@@ -86,9 +87,21 @@ public final class FilterGfa1 extends AbstractFilter {
      * @param outputGfa1File output GFA 1.0 file, if any
      */
     public FilterGfa1(final List<Filter> filters, final File inputGfa1File, final File outputGfa1File) {
+        this(filters, inputGfa1File == null ? null : inputGfa1File.toPath(), outputGfa1File);
+    }
+
+    /**
+     * Filter assembly in GFA 1.0 format.
+     *
+     * @since 2.1
+     * @param filters list of filters, must not be null
+     * @param inputGfa1Path input GFA 1.0 path, if any
+     * @param outputGfa1File output GFA 1.0 file, if any
+     */
+    public FilterGfa1(final List<Filter> filters, final java.nio.file.Path inputGfa1Path, final File outputGfa1File) {
         checkNotNull(filters);
         this.filters = ImmutableList.copyOf(filters);
-        this.inputGfa1File = inputGfa1File;
+        this.inputGfa1Path = inputGfa1Path;
         this.outputGfa1File = outputGfa1File;
     }
 
@@ -100,7 +113,7 @@ public final class FilterGfa1 extends AbstractFilter {
             writer = writer(outputGfa1File);
 
             final PrintWriter w = writer;
-            Gfa1Reader.stream(reader(inputGfa1File), new Gfa1Listener() {
+            Gfa1Reader.stream(reader(inputGfa1Path), new Gfa1Listener() {
                     @Override
                     public boolean record(final Gfa1Record record) {
                         // write out record
@@ -425,10 +438,10 @@ public final class FilterGfa1 extends AbstractFilter {
         IntegerArgument mismatchCountFilter = new IntegerArgument("s", "mismatch-count", "filter links by mismatch count", false);
         IntegerArgument readCountFilter = new IntegerArgument("r", "read-count", "filter segments and links by read count", false);
         StringArgument scriptFilter = new StringArgument("e", "script", "filter by script, eval against r", false);
-        FileArgument inputGfa1File = new FileArgument("i", "input-gfa1-file", "input GFA 1.0 file, default stdin", false);
+        PathArgument inputGfa1Path = new PathArgument("i", "input-gfa1-path", "input GFA 1.0 path, default stdin", false);
         FileArgument outputGfa1File = new FileArgument("o", "output-gfa1-file", "output GFA 1.0 file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, segmentFilter, lengthFilter, fragmentCountFilter, kmerCountFilter, mappingQualityFilter, mismatchCountFilter, readCountFilter, scriptFilter, inputGfa1File, outputGfa1File);
+        ArgumentList arguments = new ArgumentList(about, help, segmentFilter, lengthFilter, fragmentCountFilter, kmerCountFilter, mappingQualityFilter, mismatchCountFilter, readCountFilter, scriptFilter, inputGfa1Path, outputGfa1File);
         CommandLine commandLine = new CommandLine(args);
 
         FilterGfa1 filterGfa1 = null;
@@ -467,7 +480,7 @@ public final class FilterGfa1 extends AbstractFilter {
             if (scriptFilter.wasFound()) {
                 filters.add(new ScriptFilter(scriptFilter.getValue()));
             }
-            filterGfa1 = new FilterGfa1(filters, inputGfa1File.getValue(), outputGfa1File.getValue());
+            filterGfa1 = new FilterGfa1(filters, inputGfa1Path.getValue(), outputGfa1File.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {

@@ -25,6 +25,8 @@ package org.dishevelled.bio.tools;
 
 import java.io.File;
 
+import java.nio.file.Path;
+
 import java.util.concurrent.Callable;
 
 import java.util.regex.Pattern;
@@ -36,7 +38,7 @@ import java.util.regex.Pattern;
  */
 abstract class AbstractRenameReferences implements Callable<Integer> {
     private final boolean chr;
-    protected final File inputFile;
+    protected final Path inputPath;
     protected final File outputFile;
     private static final Pattern AUTOSOMAL = Pattern.compile("^([0-9]+)$");
     private static final Pattern SEX = Pattern.compile("^([XYZW])$");
@@ -50,12 +52,12 @@ abstract class AbstractRenameReferences implements Callable<Integer> {
      * Create a new rename references callable.
      *
      * @param chr true to add "chr" to chromosome names
-     * @param inputFile input file, if any
+     * @param inputPath input path, if any
      * @param outputFile output file, if any
      */
-    protected AbstractRenameReferences(final boolean chr, final File inputFile, final File outputFile) {
+    protected AbstractRenameReferences(final boolean chr, final Path inputPath, final File outputFile) {
         this.chr = chr;
-        this.inputFile = inputFile;
+        this.inputPath = inputPath;
         this.outputFile = outputFile;
     }
 

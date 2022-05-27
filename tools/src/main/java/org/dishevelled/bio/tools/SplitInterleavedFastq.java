@@ -29,7 +29,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 
-import com.google.common.io.Files;
+import java.nio.file.Path;
 
 import org.biojava.bio.program.fastq.Fastq;
 import org.biojava.bio.program.fastq.FastqWriter;
@@ -45,9 +45,9 @@ import org.dishevelled.commandline.CommandLineParser;
 import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
-import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
 import org.dishevelled.commandline.argument.LongArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 import org.dishevelled.commandline.argument.StringArgument;
 
 import org.dishevelled.compress.Compress;
@@ -71,7 +71,26 @@ public final class SplitInterleavedFastq extends AbstractSplit {
      * @param suffix output file suffix, must not be null
      */
     public SplitInterleavedFastq(final File inputFile, final Long bytes, final Long records, final String prefix, final String suffix) {
-        this(inputFile, bytes, records, prefix, -1, suffix);
+        this(inputFile == null ? null : inputFile.toPath(),
+             bytes,
+             records,
+             prefix,
+             suffix);
+    }
+
+    /**
+     * Split interleaved FASTQ files.
+     *
+     * @since 2.1
+     * @param inputPath input path, if any
+     * @param bytes split the input path at next pair of records after each n bytes, if any
+     * @param records split the input path after each n records, respecting pairs, if any
+     * @param prefix output file prefix, must not be null
+     * @param suffix output file suffix, must not be null
+     */
+    public SplitInterleavedFastq(final Path inputPath, final Long bytes, final Long records, final String prefix, final String suffix) {
+
+        this(inputPath, bytes, records, prefix, -1, suffix);
     }
 
     /**
@@ -86,7 +105,27 @@ public final class SplitInterleavedFastq extends AbstractSplit {
      * @param suffix output file suffix, must not be null
      */
     public SplitInterleavedFastq(final File inputFile, final Long bytes, final Long records, final String prefix, final int leftPad, final String suffix) {
-        super(inputFile, bytes, records, prefix, leftPad, suffix);
+        this(inputFile == null ? null : inputFile.toPath(),
+             bytes,
+             records,
+             prefix,
+             leftPad,
+             suffix);
+    }
+
+    /**
+     * Split interleaved FASTQ files.
+     *
+     * @since 2.1
+     * @param inputPath input path, if any
+     * @param bytes split the input path at next pair of records after each n bytes, if any
+     * @param records split the input path after each n records, respecting pairs, if any
+     * @param prefix output file prefix, must not be null
+     * @param leftPad left pad split index in output file name
+     * @param suffix output file suffix, must not be null
+     */
+    public SplitInterleavedFastq(final Path inputPath, final Long bytes, final Long records, final String prefix, final int leftPad, final String suffix) {
+        super(inputPath, bytes, records, prefix, leftPad, suffix);
     }
 
 
@@ -94,7 +133,7 @@ public final class SplitInterleavedFastq extends AbstractSplit {
     public Integer call() throws Exception {
         BufferedReader reader = null;
         try {
-            reader = reader(inputFile);
+            reader = reader(inputPath);
 
             PairedEndFastqReader.streamInterleaved(reader, new PairedEndAdapter() {
                     private long r = 0L;
@@ -145,15 +184,15 @@ public final class SplitInterleavedFastq extends AbstractSplit {
         }
     }
 
-    static String getBaseName(final File file) {
-        String baseName = Files.getNameWithoutExtension(file.getName());
+    static String getBaseName(final Path path) {
+        String baseName = getNameWithoutExtension(path);
         // trim trailing .ifq if present
         return baseName.endsWith(".ifq") ? baseName.substring(0, baseName.length() - 4) : baseName;
     }
 
-    static String getFileExtensions(final File file) {
-        String baseName = Files.getNameWithoutExtension(file.getName());
-        String extension = Files.getFileExtension(file.getName());
+    static String getFileExtensions(final Path path) {
+        String baseName = getNameWithoutExtension(path);
+        String extension = getFileExtension(path);
         // add .ifq to extension if present
         return baseName.endsWith(".ifq") ? ".ifq." + extension : "." + extension;
     }
@@ -166,13 +205,14 @@ public final class SplitInterleavedFastq extends AbstractSplit {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputFile = new FileArgument("i", "input-file", "input interleaved FASTQ file, default stdin", false);
-        StringArgument bytes = new StringArgument("b", "bytes", "split input file at next pair of records after each n bytes", false);
-        LongArgument records = new LongArgument("r", "records", "split input file after each n records, respecting pairs", false);
+        PathArgument inputPath = new PathArgument("i", "input-path", "input interleaved FASTQ path, default stdin", false);
+        StringArgument bytes = new StringArgument("b", "bytes", "split input path at next pair of records after each n bytes", false);
+        LongArgument records = new LongArgument("r", "records", "split input path after each n records, respecting pairs", false);
         StringArgument prefix = new StringArgument("p", "prefix", "output file prefix", false);
         IntegerArgument leftPad = new IntegerArgument("d", "left-pad", "left pad split index in output file name", false);
         StringArgument suffix = new StringArgument("s", "suffix", "output file suffix, e.g. .ifq.gz", false);
-        ArgumentList arguments = new ArgumentList(about, help, inputFile, bytes, records, prefix, leftPad, suffix);
+
+        ArgumentList arguments = new ArgumentList(about, help, inputPath, bytes, records, prefix, leftPad, suffix);
         CommandLine commandLine = new CommandLine(args);
 
         SplitInterleavedFastq splitInterleavedFastq = null;
@@ -192,8 +232,8 @@ public final class SplitInterleavedFastq extends AbstractSplit {
 
             String p = prefix.getValue();
             if (!prefix.wasFound()) {
-                if (inputFile.wasFound()) {
-                    p = getBaseName(inputFile.getValue());
+                if (inputPath.wasFound()) {
+                    p = getBaseName(inputPath.getValue());
                 }
                 else {
                     p = "x";
@@ -202,8 +242,8 @@ public final class SplitInterleavedFastq extends AbstractSplit {
 
             String s = suffix.getValue();
             if (!suffix.wasFound()) {
-                if (inputFile.wasFound()) {
-                    s = getFileExtensions(inputFile.getValue());
+                if (inputPath.wasFound()) {
+                    s = getFileExtensions(inputPath.getValue());
                 }
                 else {
                     if (Compress.isBgzfInputStream(System.in)) {
@@ -221,7 +261,7 @@ public final class SplitInterleavedFastq extends AbstractSplit {
                 }
             }
 
-            splitInterleavedFastq = new SplitInterleavedFastq(inputFile.getValue(), b, records.getValue(), p, leftPad.getValue(-1), s);
+            splitInterleavedFastq = new SplitInterleavedFastq(inputPath.getValue(), b, records.getValue(), p, leftPad.getValue(-1), s);
         }
         catch (CommandLineParseException | NullPointerException e) {
             if (about.wasFound()) {

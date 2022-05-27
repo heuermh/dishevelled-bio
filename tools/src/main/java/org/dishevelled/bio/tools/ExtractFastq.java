@@ -31,6 +31,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.concurrent.Callable;
 
 import java.util.regex.Matcher;
@@ -53,6 +55,7 @@ import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.StringArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Extract matching sequences in FASTQ format.
@@ -61,7 +64,7 @@ import org.dishevelled.commandline.argument.StringArgument;
  */
 @SuppressWarnings("deprecation")
 public final class ExtractFastq implements Callable<Integer> {
-    private final File inputFastqFile;
+    private final Path inputFastqPath;
     private final File outputFastqFile;
     private final String name;
     private final Pattern pattern;
@@ -78,7 +81,20 @@ public final class ExtractFastq implements Callable<Integer> {
      * @param description FASTQ description regex pattern to match, if any
      */
     public ExtractFastq(final File inputFastqFile, final File outputFastqFile, final String name, final String description) {
-        this.inputFastqFile = inputFastqFile;
+        this(inputFastqFile == null ? null : inputFastqFile.toPath(), outputFastqFile, name, description);
+    }
+
+    /**
+     * Extract matching sequences in FASTQ format.
+     *
+     * @since 2.1
+     * @param inputFastqPath input FASTQ path, if any
+     * @param outputFastqFile output FASTQ file, if any
+     * @param name exact sequence name to match, if any
+     * @param description FASTQ description regex pattern to match, if any
+     */
+    public ExtractFastq(final Path inputFastqPath, final File outputFastqFile, final String name, final String description) {
+        this.inputFastqPath = inputFastqPath;
         this.outputFastqFile = outputFastqFile;
         this.name = name;
         try {
@@ -95,7 +111,7 @@ public final class ExtractFastq implements Callable<Integer> {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(inputFastqFile);
+            reader = reader(inputFastqPath);
             writer = writer(outputFastqFile);
 
             final PrintWriter w = writer;
@@ -145,12 +161,12 @@ public final class ExtractFastq implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputFastqFile = new FileArgument("i", "input-fastq-file", "input FASTQ file, default stdin", false);
+        PathArgument inputFastqPath = new PathArgument("i", "input-fastq-path", "input FASTQ path, default stdin", false);
         FileArgument outputFastqFile = new FileArgument("o", "output-fastq-file", "output FASTQ file, default stdout", false);
         StringArgument name = new StringArgument("n", "name", "exact sequence name to match", false);
         StringArgument description = new StringArgument("d", "description", "FASTQ description regex pattern to match", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputFastqFile, outputFastqFile, name, description);
+        ArgumentList arguments = new ArgumentList(about, help, inputFastqPath, outputFastqFile, name, description);
         CommandLine commandLine = new CommandLine(args);
 
         ExtractFastq extractFastq = null;
@@ -165,7 +181,7 @@ public final class ExtractFastq implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            extractFastq = new ExtractFastq(inputFastqFile.getValue(), outputFastqFile.getValue(), name.getValue(), description.getValue());
+            extractFastq = new ExtractFastq(inputFastqPath.getValue(), outputFastqFile.getValue(), name.getValue(), description.getValue());
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);

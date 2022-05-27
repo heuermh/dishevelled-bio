@@ -58,6 +58,7 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Convert GFA 1.0 format to GFA 2.0 format.
@@ -65,7 +66,7 @@ import org.dishevelled.commandline.argument.FileArgument;
  * @author  Michael Heuer
  */
 public final class Gfa1ToGfa2 implements Callable<Integer> {
-    private final File inputGfa1File;
+    private final java.nio.file.Path inputGfa1Path;
     private final File outputGfa2File;
     private static final String USAGE = "dsh-gfa1-to-gfa2 -i input.gfa1.gz -o output.gfa2.gz";
 
@@ -77,7 +78,18 @@ public final class Gfa1ToGfa2 implements Callable<Integer> {
      * @param outputGfa2File output GFA 2.0 file, if any
      */
     public Gfa1ToGfa2(final File inputGfa1File, final File outputGfa2File) {
-        this.inputGfa1File = inputGfa1File;
+        this(inputGfa1File == null ? null : inputGfa1File.toPath(), outputGfa2File);
+    }
+
+    /**
+     * Convert GFA 1.0 format to GFA 2.0 format.
+     *
+     * @since 2.1
+     * @param inputGfa1Path input GFA 1.0 path, if any
+     * @param outputGfa2File output GFA 2.0 file, if any
+     */
+    public Gfa1ToGfa2(final java.nio.file.Path inputGfa1Path, final File outputGfa2File) {
+        this.inputGfa1Path = inputGfa1Path;
         this.outputGfa2File = outputGfa2File;
     }
 
@@ -89,7 +101,7 @@ public final class Gfa1ToGfa2 implements Callable<Integer> {
             writer = writer(outputGfa2File);
 
             final PrintWriter w = writer;
-            Gfa1Reader.stream(reader(inputGfa1File), new Gfa1Adapter() {
+            Gfa1Reader.stream(reader(inputGfa1Path), new Gfa1Adapter() {
                     @Override
                     public boolean header(final Header header) {
                         // convert VN:Z:1.0 to VN:Z:2.0 annotation if present
@@ -186,10 +198,10 @@ public final class Gfa1ToGfa2 implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputGfa1File = new FileArgument("i", "input-gfa1-file", "input GFA 1.0 file, default stdin", false);
+        PathArgument inputGfa1Path = new PathArgument("i", "input-gfa1-path", "input GFA 1.0 path, default stdin", false);
         FileArgument outputGfa2File = new FileArgument("o", "output-gfa2-file", "output GFA 2.0 file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputGfa1File, outputGfa2File);
+        ArgumentList arguments = new ArgumentList(about, help, inputGfa1Path, outputGfa2File);
         CommandLine commandLine = new CommandLine(args);
 
         Gfa1ToGfa2 gfa1ToGfa2 = null;
@@ -203,7 +215,7 @@ public final class Gfa1ToGfa2 implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            gfa1ToGfa2 = new Gfa1ToGfa2(inputGfa1File.getValue(), outputGfa2File.getValue());
+            gfa1ToGfa2 = new Gfa1ToGfa2(inputGfa1Path.getValue(), outputGfa2File.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {

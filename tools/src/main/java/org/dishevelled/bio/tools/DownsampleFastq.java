@@ -33,6 +33,8 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.io.IOException;
 
+import java.nio.file.Path;
+
 import java.util.concurrent.Callable;
 
 import org.apache.commons.math3.distribution.BinomialDistribution;
@@ -57,6 +59,7 @@ import org.dishevelled.commandline.Usage;
 import org.dishevelled.commandline.argument.DoubleArgument;
 import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 
 /**
  * Downsample sequences from files in FASTQ format.
@@ -64,7 +67,7 @@ import org.dishevelled.commandline.argument.IntegerArgument;
  * @author  Michael Heuer
  */
 public final class DownsampleFastq implements Callable<Integer> {
-    private final File inputFastqFile;
+    private final Path inputFastqPath;
     private final File outputFastqFile;
     private final BinomialDistribution distribution;
     private final FastqReader fastqReader = new SangerFastqReader();
@@ -80,8 +83,20 @@ public final class DownsampleFastq implements Callable<Integer> {
      * @param distribution binomial distribution, must not be null
      */
     public DownsampleFastq(final File inputFastqFile, final File outputFastqFile, final BinomialDistribution distribution) {
+        this(inputFastqFile == null ? null : inputFastqFile.toPath(), outputFastqFile, distribution);
+    }
+
+    /**
+     * Downsample sequences from files in FASTQ format.
+     *
+     * @since 2.1
+     * @param inputFastqPath input FASTQ path, if any
+     * @param outputFastqFile output FASTQ file, if any
+     * @param distribution binomial distribution, must not be null
+     */
+    public DownsampleFastq(final Path inputFastqPath, final File outputFastqFile, final BinomialDistribution distribution) {
         checkNotNull(distribution);
-        this.inputFastqFile = inputFastqFile;
+        this.inputFastqPath = inputFastqPath;
         this.outputFastqFile = outputFastqFile;
         this.distribution = distribution;
     }
@@ -92,7 +107,7 @@ public final class DownsampleFastq implements Callable<Integer> {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(inputFastqFile);
+            reader = reader(inputFastqPath);
             writer = writer(outputFastqFile);
 
             final PrintWriter w = writer;
@@ -136,12 +151,12 @@ public final class DownsampleFastq implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        FileArgument inputFastqFile = new FileArgument("i", "input-fastq-file", "input FASTQ file, default stdin", false);
+        PathArgument inputFastqPath = new PathArgument("i", "input-fastq-path", "input FASTQ path, default stdin", false);
         FileArgument outputFastqFile = new FileArgument("o", "output-fastq-file", "output FASTQ file, default stdout", false);
         DoubleArgument probability = new DoubleArgument("p", "probability", "probability a FASTQ record will be removed, [0.0-1.0]", true);
         IntegerArgument seed = new IntegerArgument("z", "seed", "random number seed, default relates to current time", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputFastqFile, outputFastqFile, probability, seed);
+        ArgumentList arguments = new ArgumentList(about, help, inputFastqPath, outputFastqFile, probability, seed);
         CommandLine commandLine = new CommandLine(args);
 
         DownsampleFastq downsampleFastq = null;
@@ -160,7 +175,7 @@ public final class DownsampleFastq implements Callable<Integer> {
             RandomGenerator random = seed.wasFound() ? new MersenneTwister(seed.getValue()) : new MersenneTwister();
             BinomialDistribution distribution = new BinomialDistribution(random, 1, probability.getValue());
 
-            downsampleFastq = new DownsampleFastq(inputFastqFile.getValue(), outputFastqFile.getValue(), distribution);
+            downsampleFastq = new DownsampleFastq(inputFastqPath.getValue(), outputFastqFile.getValue(), distribution);
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {

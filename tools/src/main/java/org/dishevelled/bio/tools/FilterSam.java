@@ -31,6 +31,8 @@ import static org.dishevelled.compress.Writers.writer;
 import java.io.File;
 import java.io.PrintWriter;
 
+import java.nio.file.Path;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,6 +64,7 @@ import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
+import org.dishevelled.commandline.argument.PathArgument;
 import org.dishevelled.commandline.argument.StringArgument;
 
 /**
@@ -72,7 +75,7 @@ import org.dishevelled.commandline.argument.StringArgument;
  */
 public final class FilterSam extends AbstractFilter {
     private final List<Filter> filters;
-    private final File inputSamFile;
+    private final Path inputSamPath;
     private final File outputSamFile;
     private static final String USAGE = "dsh-filter-sam --mapq 30 -i input.sam.bgz -o output.sam.bgz";
 
@@ -85,9 +88,21 @@ public final class FilterSam extends AbstractFilter {
      * @param outputSamFile output SAM file, if any
      */
     public FilterSam(final List<Filter> filters, final File inputSamFile, final File outputSamFile) {
+        this(filters, inputSamFile == null ? null : inputSamFile.toPath(), outputSamFile);
+    }
+
+    /**
+     * Filter alignments in SAM format.
+     *
+     * @since 2.1
+     * @param filters list of filters, must not be null
+     * @param inputSamPath input SAM path, if any
+     * @param outputSamFile output SAM file, if any
+     */
+    public FilterSam(final List<Filter> filters, final Path inputSamPath, final File outputSamFile) {
         checkNotNull(filters);
         this.filters = ImmutableList.copyOf(filters);
-        this.inputSamFile = inputSamFile;
+        this.inputSamPath = inputSamPath;
         this.outputSamFile = outputSamFile;
     }
 
@@ -99,7 +114,7 @@ public final class FilterSam extends AbstractFilter {
             writer = writer(outputSamFile);
 
             final PrintWriter w = writer;
-            SamReader.stream(reader(inputSamFile), new SamListener() {
+            SamReader.stream(reader(inputSamPath), new SamListener() {
                     @Override
                     public boolean header(final SamHeader header) {
                         SamWriter.writeHeader(header, w);
@@ -251,10 +266,10 @@ public final class FilterSam extends AbstractFilter {
         StringArgument rangeFilter = new StringArgument("r", "range", "filter by range, specify as chrom:start-end in 0-based coordindates", false);
         IntegerArgument mapqFilter = new IntegerArgument("q", "mapq", "filter by mapq", false);
         StringArgument scriptFilter = new StringArgument("e", "script", "filter by script, eval against r", false);
-        FileArgument inputSamFile = new FileArgument("i", "input-sam-file", "input SAM file, default stdin", false);
+        PathArgument inputSamPath = new PathArgument("i", "input-sam-path", "input SAM path, default stdin", false);
         FileArgument outputSamFile = new FileArgument("o", "output-sam-file", "output SAM file, default stdout", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, rangeFilter, mapqFilter, scriptFilter, inputSamFile, outputSamFile);
+        ArgumentList arguments = new ArgumentList(about, help, rangeFilter, mapqFilter, scriptFilter, inputSamPath, outputSamFile);
         CommandLine commandLine = new CommandLine(args);
 
         FilterSam filterSam = null;
@@ -278,7 +293,7 @@ public final class FilterSam extends AbstractFilter {
             if (scriptFilter.wasFound()) {
                 filters.add(new ScriptFilter(scriptFilter.getValue()));
             }
-            filterSam = new FilterSam(filters, inputSamFile.getValue(), outputSamFile.getValue());
+            filterSam = new FilterSam(filters, inputSamPath.getValue(), outputSamFile.getValue());
         }
         catch (CommandLineParseException e) {
             if (about.wasFound()) {
