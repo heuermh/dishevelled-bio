@@ -9,7 +9,7 @@ dishevelled.org bio
 
 Install
 
- * JDK 1.8 or later, https://openjdk.java.net
+ * JDK 11 or later, https://openjdk.java.net
  * Apache Maven 3.8.5 or later, https://maven.apache.org
 
 To build
@@ -70,6 +70,7 @@ commands:
   interleaved-fastq-to-bam    convert sequences in interleaved FASTQ format to unaligned BAM format
   links-to-cytoscape-edges    convert links in GFA 1.0 format to edges.txt format for Cytoscape
   links-to-property-graph    convert links in GFA 1.0 format to property graph CSV format
+  list-filesystems    list filesystem providers
   reassemble-paths    reassemble paths in GFA 1.0 format from traversal records
   remap-dbsnp    remap DB Type=String flags in VCF format to DB Type=Flag and dbsnp Type=String fields
   remap-phase-set    remap PS Type=String phase set ids in VCF format to PS Type=Integer
@@ -110,10 +111,11 @@ dsh-split-bed -r 100 -i foo.bed.gz
 arguments:
    -a, --about  display about message [optional]
    -h, --help  display help message [optional]
-   -i, --input-file [class java.io.File]  input BED file, default stdin [optional]
-   -b, --bytes [class java.lang.String]  split input file at next record after each n bytes [optional]
-   -r, --records [class java.lang.Long]  split input file after each n records [optional]
+   -i, --input-path [interface java.nio.file.Path]  input BED path, default stdin [optional]
+   -b, --bytes [class java.lang.String]  split input path at next record after each n bytes [optional]
+   -r, --records [class java.lang.Long]  split input path after each n records [optional]
    -p, --prefix [class java.lang.String]  output file prefix [optional]
+   -d, --left-pad [class java.lang.Integer]  left pad split index in output file name [optional]
    -s, --suffix [class java.lang.String]  output file suffix, e.g. .bed.gz [optional]
 ```
 
@@ -127,10 +129,11 @@ dsh-split-bed -r 100 -i foo.bed.gz
 arguments:
    -a, --about  display about message [optional]
    -h, --help  display help message [optional]
-   -i, --input-file [class java.io.File]  input BED file, default stdin [optional]
-   -b, --bytes [class java.lang.String]  split input file at next record after each n bytes [optional]
-   -r, --records [class java.lang.Long]  split input file after each n records [optional]
+   -i, --input-path [interface java.nio.file.Path]  input BED path, default stdin [optional]
+   -b, --bytes [class java.lang.String]  split input path at next record after each n bytes [optional]
+   -r, --records [class java.lang.Long]  split input path after each n records [optional]
    -p, --prefix [class java.lang.String]  output file prefix [optional]
+   -d, --left-pad [class java.lang.Integer]  left pad split index in output file name [optional]
    -s, --suffix [class java.lang.String]  output file suffix, e.g. .bed.gz [optional]
 ```
 
@@ -141,6 +144,21 @@ Across the dishevelled.org bio command line tools, stdin and stdout should behav
 and files and streams compressed with Zstandard (zstd), XZ, GZIP, BZip2, and block-compressed GZIP
 (BGZF) are handled transparently. Use file extensions `.zst`, `.xz`, `.gz`, `.bz2`, and `.bgz`
 respectively to force the issue, if necessary.
+
+
+#### File systems
+
+As of version 2.1, cloud storage file systems from Google Cloud Storage (via `gs://` paths)
+and Amazon Simple Storage Service (Amazon S3) (via `s3://` paths) are supported for input paths.
+
+```
+$ dsh-bio list-filesystems
+Installed filesystem providers:
+  file	sun.nio.fs.MacOSXFileSystemProvider
+  jar	com.sun.nio.zipfs.ZipFileSystemProvider
+  gs	com.google.cloud.storage.contrib.nio.CloudStorageFileSystemProvider
+  s3	software.amazon.nio.spi.s3.S3FileSystemProvider
+```
 
 
 #### Expressions
@@ -155,8 +173,9 @@ r.getChrom() == 1 && r.getScore() > 10.0
 specified on the command line as
 
 ```bash
-$ dsh-filter-bed -i input.bed --script "r.getChrom() == 1 && r.getScore() > 10.0"
+$ dsh-bio filter-bed -i input.bed --script "r.getChrom() == 1 && r.getScore() > 10.0"
 ```
+
 
 ### Installing dishevelled-bio via Conda
 
