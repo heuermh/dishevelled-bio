@@ -98,7 +98,7 @@ public final class FilterFasta extends AbstractFilter {
     /**
      * Filter sequences in FASTA format.
      *
-     * @param since 2.1
+     * @since 2.1
      * @param filters list of filters, must not be null
      * @param inputFastaPath input FASTA path, if any
      * @param outputFastaFile output FASTA file, if any

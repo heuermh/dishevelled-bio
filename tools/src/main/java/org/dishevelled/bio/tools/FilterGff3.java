@@ -95,7 +95,7 @@ public final class FilterGff3 extends AbstractFilter {
      *
      * @since 2.1
      * @param filters list of filters, must not be null
-     * @param inputGff3File input GFF3 file, if any
+     * @param inputGff3Path input GFF3 path, if any
      * @param outputGff3File output GFF3 file, if any
      */
     public FilterGff3(final List<Filter> filters, final Path inputGff3Path, final File outputGff3File) {

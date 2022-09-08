@@ -80,6 +80,12 @@ public final class InterleavedFastqToBam extends WithReadGroup {
      *
      * @param fastqFile input interleaved FASTQ file, if any
      * @param bamFile output BAM file, if any
+     * @param readGroupId read group id, if any
+     * @param readGroupSample read group sample, if any
+     * @param readGroupLibrary read group library, if any
+     * @param readGroupPlatformUnit read group platform unit, if any
+     * @param readGroupInsertSize read group insert size, if any
+     * @param readGroupBarcodes read group barcodes, if any
      */
     public InterleavedFastqToBam(@Nullable final File fastqFile,
                                  @Nullable final File bamFile,
@@ -106,6 +112,12 @@ public final class InterleavedFastqToBam extends WithReadGroup {
      * @since 2.1
      * @param fastqPath input interleaved FASTQ path, if any
      * @param bamFile output BAM file, if any
+     * @param readGroupId read group id, if any
+     * @param readGroupSample read group sample, if any
+     * @param readGroupLibrary read group library, if any
+     * @param readGroupPlatformUnit read group platform unit, if any
+     * @param readGroupInsertSize read group insert size, if any
+     * @param readGroupBarcodes read group barcodes, if any
      */
     public InterleavedFastqToBam(@Nullable final Path fastqPath,
                                  @Nullable final File bamFile,
