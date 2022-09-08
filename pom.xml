@@ -66,6 +66,7 @@
   <properties>
     <adam.version>1.0</adam.version>
     <avro.version>1.10.2</avro.version>
+    <aws-java-nio-spi-for-s3.version>1.0.0</aws-java-nio-spi-for-s3.version>
     <bdg-convert.version>1.0</bdg-convert.version>
     <bdg-formats.version>1.0</bdg-formats.version>
     <biojava.version>1.9.5</biojava.version>
@@ -315,6 +316,18 @@
         <groupId>org.dishevelled</groupId>
         <artifactId>dsh-graph</artifactId>
         <version>${dsh-graph.version}</version>
+      </dependency>
+      <dependency>
+        <!--<groupId>software.aws.healthai</groupId>-->
+        <groupId>org.dishevelled.bundled.software.aws.healthai</groupId>
+        <artifactId>aws-java-nio-spi-for-s3</artifactId>
+        <version>${aws-java-nio-spi-for-s3.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>org.openjdk.jmh</groupId>
