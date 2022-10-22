@@ -26,7 +26,7 @@
   <parent>
     <groupId>org.dishevelled</groupId>
     <artifactId>dsh-parent</artifactId>
-    <version>33-SNAPSHOT</version>
+    <version>33</version>
   </parent>
   <artifactId>dsh-bio</artifactId>
   <packaging>pom</packaging>
@@ -76,7 +76,7 @@
     <commons-math3.version>3.6.1</commons-math3.version>
     <dsh-bitset.version>3.0</dsh-bitset.version>
     <dsh-commandline.version>1.2</dsh-commandline.version>
-    <dsh-compress.version>1.7-SNAPSHOT</dsh-compress.version>
+    <dsh-compress.version>1.6.1</dsh-compress.version>
     <dsh-graph.version>1.0</dsh-graph.version>
     <google-cloud.version>0.124.17</google-cloud.version>
     <hadoop.version>3.3.1</hadoop.version>
