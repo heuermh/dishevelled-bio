@@ -66,7 +66,7 @@
   <properties>
     <adam.version>1.0</adam.version>
     <avro.version>1.10.2</avro.version>
-    <aws-java-nio-spi-for-s3.version>1.0.0</aws-java-nio-spi-for-s3.version>
+    <aws-java-nio-spi-for-s3.version>1.1.1</aws-java-nio-spi-for-s3.version>
     <bdg-convert.version>1.0</bdg-convert.version>
     <bdg-formats.version>1.0</bdg-formats.version>
     <biojava.version>1.9.5</biojava.version>
@@ -318,8 +318,7 @@
         <version>${dsh-graph.version}</version>
       </dependency>
       <dependency>
-        <!--<groupId>software.aws.healthai</groupId>-->
-        <groupId>org.dishevelled.bundled.software.aws.healthai</groupId>
+        <groupId>software.amazon.nio.s3</groupId>
         <artifactId>aws-java-nio-spi-for-s3</artifactId>
         <version>${aws-java-nio-spi-for-s3.version}</version>
         <exclusions>
