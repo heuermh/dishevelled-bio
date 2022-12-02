@@ -80,7 +80,7 @@
     <dsh-graph.version>1.0</dsh-graph.version>
     <google-cloud.version>0.124.17</google-cloud.version>
     <hadoop.version>3.3.4</hadoop.version>
-    <htsjdk.version>3.0.2</htsjdk.version>
+    <htsjdk.version>3.0.4</htsjdk.version>
     <jdk.version>1.8</jdk.version>
     <jmh.version>1.35</jmh.version>
     <kryo-serializers.version>0.45</kryo-serializers.version>
