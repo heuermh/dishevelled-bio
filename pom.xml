@@ -64,11 +64,11 @@
   </modules>
 
   <properties>
-    <adam.version>1.0</adam.version>
-    <avro.version>1.10.2</avro.version>
+    <adam.version>1.1-SNAPSHOT</adam.version>
+    <avro.version>1.11.1</avro.version>
     <aws-java-nio-spi-for-s3.version>1.1.1</aws-java-nio-spi-for-s3.version>
     <bdg-convert.version>1.0</bdg-convert.version>
-    <bdg-formats.version>1.0</bdg-formats.version>
+    <bdg-formats.version>1.0.1</bdg-formats.version>
     <biojava.version>1.9.5</biojava.version>
     <commons-csv.version>1.9.0</commons-csv.version>
     <commons-codec.version>1.15</commons-codec.version>
@@ -79,7 +79,7 @@
     <dsh-compress.version>1.6.1</dsh-compress.version>
     <dsh-graph.version>1.0</dsh-graph.version>
     <google-cloud.version>0.124.17</google-cloud.version>
-    <hadoop.version>3.3.1</hadoop.version>
+    <hadoop.version>3.3.4</hadoop.version>
     <htsjdk.version>3.0.2</htsjdk.version>
     <jdk.version>1.8</jdk.version>
     <jmh.version>1.35</jmh.version>
@@ -90,7 +90,7 @@
     <scala.version>2.12.15</scala.version>
     <scala.version.prefix>2.12</scala.version.prefix>
     <slf4j.version>1.7.30</slf4j.version>
-    <spark.version>3.2.1</spark.version>
+    <spark.version>3.3.1</spark.version>
   </properties>
   <dependencyManagement>
     <dependencies>
