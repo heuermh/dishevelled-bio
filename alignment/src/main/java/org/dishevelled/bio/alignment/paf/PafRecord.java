@@ -145,7 +145,8 @@ public final class PafRecord extends AnnotatedRecord {
 
 
     /**
-     * Return the query name for this PAF record.
+     * Return the query name for this PAF record. For protein alignments,
+     * return the protein sequence name.
      *
      * @return the query name for this PAF record
      */
@@ -154,7 +155,8 @@ public final class PafRecord extends AnnotatedRecord {
     }
 
     /**
-     * Return the query length for this PAF record.
+     * Return the query length for this PAF record. For protein alignments,
+     * return the protein sequence length.
      *
      * @return the query length for this PAF record
      */
@@ -163,7 +165,8 @@ public final class PafRecord extends AnnotatedRecord {
     }
 
     /**
-     * Return the query start for this PAF record.
+     * Return the query start for this PAF record. For protein alignments,
+     * return the protein start coordinate (0-based).
      *
      * @return the query start for this PAF record
      */
@@ -172,7 +175,8 @@ public final class PafRecord extends AnnotatedRecord {
     }
 
     /**
-     * Return the query end for this PAF record.
+     * Return the query end for this PAF record. For protein alignments,
+     * return the protein end coordinate (0-based).
      *
      * @return the query end for this PAF record
      */
@@ -182,6 +186,7 @@ public final class PafRecord extends AnnotatedRecord {
 
     /**
      * Return the relative strand for this PAF record.
+     * I.e. <code>+</code> for forward strand; <code>-</code> for reverse.
      *
      * @return the relative strand for this PAF record
      */
@@ -190,7 +195,8 @@ public final class PafRecord extends AnnotatedRecord {
     }
 
     /**
-     * Return the target name for this PAF record.
+     * Return the target name for this PAF record. For protein alignments,
+     * return the contig sequence name.
      *
      * @return the target name for this PAF record.
      */
@@ -199,7 +205,8 @@ public final class PafRecord extends AnnotatedRecord {
     }
 
     /**
-     * Return the target length for this PAF record.
+     * Return the target length for this PAF record. For protein alignments,
+     * return the contig sequence length.
      *
      * @return the target length for this PAF record
      */
@@ -208,7 +215,8 @@ public final class PafRecord extends AnnotatedRecord {
     }
 
     /**
-     * Return the target start for this PAF record.
+     * Return the target start for this PAF record. For protein alignments,
+     * return the contig start coordinate on the original strand.
      *
      * @return the target start for this PAF record
      */
@@ -217,7 +225,8 @@ public final class PafRecord extends AnnotatedRecord {
     }
 
     /**
-     * Return the target end for this PAF record.
+     * Return the target end for this PAF record. For protein alignments,
+     * return the contig end coordinate on the original strand.
      *
      * @return the target end for this PAF record
      */
@@ -235,7 +244,8 @@ public final class PafRecord extends AnnotatedRecord {
     }
 
     /**
-     * Return the alignment block length for this PAF record.
+     * Return the alignment block length for this PAF record. For protein alignments,
+     * return the number of nucleotides in alignment, excluding introns.
      *
      * @return the alignment block length for this PAF record
      */
@@ -251,6 +261,27 @@ public final class PafRecord extends AnnotatedRecord {
     public int getMappingQuality() {
         return mappingQuality;
     }
+
+    /*
+      PAF may optionally have additional fields in the SAM-like typed key-value format.
+
+      PAF tags from minimap2?
+
+      Miniprot may output the following tags:
+
+      Tag	Type	Description
+      AS	i	Alignment score from dynamic programming
+      ms	i	Alignment score excluding introns
+      np	i	Number of amino acid matches with positive scores
+      da	i	Distance to the nearest start codon
+      do	i	Distance to the nearest stop codon
+      cg	i	Protein CIGAR  (should be type Z?)
+      cs	i	Difference string  (should be type Z?)
+
+      https://lh3.github.io/miniprot/miniprot.html
+
+    */
+
 
     @Override
     public int hashCode() {
