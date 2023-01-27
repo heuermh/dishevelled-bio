@@ -219,6 +219,10 @@
           <repositoryName>lib</repositoryName>
           <programs>
             <program>
+              <id>dsh-bin-fastq-quality-scores</id>
+              <mainClass>org.dishevelled.bio.tools.BinFastqQualityScores</mainClass>
+            </program>
+            <program>
               <id>dsh-compress-bed</id>
               <mainClass>org.dishevelled.bio.tools.CompressBed</mainClass>
             </program>

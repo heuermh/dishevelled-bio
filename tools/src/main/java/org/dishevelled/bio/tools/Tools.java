@@ -130,6 +130,7 @@ public final class Tools implements Callable<Integer> {
 
     /** Map of commands keyed by command name. */
     static SortedMap<String, Command> COMMANDS = new ImmutableSortedMap.Builder<String, Command>(Ordering.natural())
+        .put("bin-fastq-quality-scores", new Command("bin-fastq-quality-scores", "bin quality scores from files in FASTQ format", BinFastqQualityScores.class))
         .put("compress-bed", new Command("compress-bed", "compress features in BED format to splittable bgzf or bzip2 compression codecs", CompressBed.class))
         .put("compress-fasta", new Command("compress-fasta", "compress sequences in FASTA format to splittable bgzf or bzip2 compression codecs", CompressFasta.class))
         .put("compress-fastq", new Command("compress-fastq", "compress sequences in FASTQ format to splittable bgzf or bzip2 compression codecs", CompressFastq.class))

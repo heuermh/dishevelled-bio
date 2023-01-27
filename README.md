@@ -28,6 +28,7 @@ usage:
 dsh-bio [command] [args]
 
 commands:
+  bin-fastq-quality-scores    bin quality scores from files in FASTQ format
   compress-bed    compress features in BED format to splittable bgzf or bzip2 compression codecs
   compress-fasta    compress sequences in FASTA format to splittable bgzf or bzip2 compression codecs
   compress-fastq    compress sequences in FASTQ format to splittable bgzf or bzip2 compression codecs
