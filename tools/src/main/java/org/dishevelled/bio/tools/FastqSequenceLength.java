@@ -50,7 +50,7 @@ import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.PathArgument;
 
 /**
- * Output sequence lengths from sequences in FASTQ format.
+ * Output sequence lengths from DNA sequences in FASTQ format.
  *
  * @since 1.1
  * @author  Michael Heuer
@@ -62,7 +62,7 @@ public final class FastqSequenceLength implements Callable<Integer> {
     private static final String USAGE = "dsh-fastq-sequence-length [args]";
 
     /**
-     * Output sequence lengths from sequences in FASTQ format.
+     * Output sequence lengths from DNA sequences in FASTQ format.
      *
      * @param fastqFile input FASTQ file, if any
      * @param sequenceLengthFile output file of sequence lengths, if any
@@ -72,7 +72,7 @@ public final class FastqSequenceLength implements Callable<Integer> {
     }
 
     /**
-     * Output sequence lengths from sequences in FASTQ format.
+     * Output sequence lengths from DNA sequences in FASTQ format.
      *
      * @since 2.1
      * @param fastqPath input FASTQ path, if any

@@ -62,7 +62,7 @@ import org.dishevelled.commandline.argument.StringListArgument;
 import org.dishevelled.commandline.argument.PathArgument;
 
 /**
- * Convert sequences in FASTQ format to unaligned BAM format.
+ * Convert DNA sequences in FASTQ format to unaligned BAM format.
  *
  * @since 2.1
  * @author  Michael Heuer
@@ -77,7 +77,7 @@ public final class FastqToBam extends WithReadGroup {
 
 
     /**
-     * Convert sequences in FASTQ format to unaligned BAM format.
+     * Convert DNA sequences in FASTQ format to unaligned BAM format.
      *
      * @param fastqFile input FASTQ file, if any
      * @param bamFile output BAM file, if any
@@ -108,7 +108,7 @@ public final class FastqToBam extends WithReadGroup {
     }
 
     /**
-     * Convert sequences in FASTQ format to unaligned BAM format.
+     * Convert DNA sequences in FASTQ format to unaligned BAM format.
      *
      * @since 2.1
      * @param fastqPath input FASTQ path, if any

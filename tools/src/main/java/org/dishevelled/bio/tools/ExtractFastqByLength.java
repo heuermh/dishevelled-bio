@@ -54,7 +54,7 @@ import org.dishevelled.commandline.argument.IntegerArgument;
 import org.dishevelled.commandline.argument.PathArgument;
 
 /**
- * Extract sequences in FASTQ format with a range of lengths.
+ * Extract DNA sequences in FASTQ format with a range of lengths.
  *
  * @since 1.1
  * @author  Michael Heuer
@@ -70,7 +70,7 @@ public final class ExtractFastqByLength implements Callable<Integer> {
     private static final String USAGE = "dsh-extract-fastq-by-length [args]";
 
     /**
-     * Extract matching sequences in FASTQ format.
+     * Extract DNA sequences in FASTQ format with a range of lengths.
      *
      * @param inputFastqFile input FASTQ file, if any
      * @param outputFastqFile output FASTQ file, if any
@@ -82,7 +82,7 @@ public final class ExtractFastqByLength implements Callable<Integer> {
     }
 
     /**
-     * Extract matching sequences in FASTQ format.
+     * Extract DNA sequences in FASTQ format with a range of lengths.
      *
      * @since 2.1
      * @param inputFastqPath input FASTQ path, if any

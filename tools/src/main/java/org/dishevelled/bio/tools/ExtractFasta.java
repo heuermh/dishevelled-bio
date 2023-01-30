@@ -57,7 +57,7 @@ import org.dishevelled.commandline.argument.StringArgument;
 import org.dishevelled.commandline.argument.PathArgument;
 
 /**
- * Extract matching sequences in FASTA format.
+ * Extract matching DNA or protein sequences in FASTA format.
  *
  * @author  Michael Heuer
  */
@@ -75,7 +75,7 @@ public final class ExtractFasta implements Callable<Integer> {
     private static final String USAGE = "dsh-extract-fasta [args]";
 
     /**
-     * Extract matching sequences in FASTA format.
+     * Extract matching DNA or protein sequences in FASTA format.
      *
      * @param inputFastaFile input FASTA file, if any
      * @param outputFastaFile output FASTA file, if any
@@ -98,7 +98,7 @@ public final class ExtractFasta implements Callable<Integer> {
     }
 
     /**
-     * Extract matching sequences in FASTA format.
+     * Extract matching DNA or protein sequences in FASTA format.
      *
      * @since 2.1
      * @param inputFastaPath input FASTA path, if any
@@ -117,7 +117,7 @@ public final class ExtractFasta implements Callable<Integer> {
     }
 
     /**
-     * Extract matching sequences in FASTA format.
+     * Extract matching DNA or protein sequences in FASTA format.
      *
      * @since 2.0
      * @param inputFastaFile input FASTA file, if any
@@ -143,7 +143,7 @@ public final class ExtractFasta implements Callable<Integer> {
     }
 
     /**
-     * Extract matching sequences in FASTA format.
+     * Extract matching DNA or protein sequences in FASTA format.
      *
      * @since 2.1
      * @param inputFastaPath input FASTA path, if any

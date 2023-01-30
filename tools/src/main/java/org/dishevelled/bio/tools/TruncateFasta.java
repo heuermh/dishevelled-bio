@@ -54,7 +54,7 @@ import org.dishevelled.commandline.argument.PathArgument;
 import org.dishevelled.commandline.argument.StringArgument;
 
 /**
- * Truncate sequences in FASTA format.
+ * Truncate DNA or protein sequences in FASTA format.
  *
  * @author  Michael Heuer
  */
@@ -72,7 +72,7 @@ public final class TruncateFasta implements Callable<Integer> {
     private static final String USAGE = "dsh-truncate-fasta -l 1000 [args]";
 
     /**
-     * Truncate sequences in FASTA format.
+     * Truncate DNA or protein sequences in FASTA format.
      *
      * @param inputFastaFile input FASTA file, if any
      * @param outputFastaFile output FASTA file, if any
@@ -84,7 +84,7 @@ public final class TruncateFasta implements Callable<Integer> {
     }
 
     /**
-     * Truncate sequences in FASTA format.
+     * Truncate DNA or protein sequences in FASTA format.
      *
      * @since 2.1
      * @param inputFastaPath input FASTA path, if any
@@ -97,7 +97,7 @@ public final class TruncateFasta implements Callable<Integer> {
     }
 
     /**
-     * Truncate sequences in FASTA format.
+     * Truncate DNA or protein sequences in FASTA format.
      *
      * @since 2.0
      * @param inputFastaFile input FASTA file, if any
@@ -120,7 +120,7 @@ public final class TruncateFasta implements Callable<Integer> {
     }
 
     /**
-     * Truncate sequences in FASTA format.
+     * Truncate DNA or protein sequences in FASTA format.
      *
      * @since 2.1
      * @param inputFastaPath input FASTA path, if any

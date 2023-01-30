@@ -28,16 +28,12 @@ import static org.dishevelled.compress.Writers.writer;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import java.nio.file.Path;
 
 import java.util.concurrent.Callable;
-
-import org.biojava.bio.program.fastq.Fastq;
-import org.biojava.bio.program.fastq.FastqReader;
-import org.biojava.bio.program.fastq.SangerFastqReader;
-import org.biojava.bio.program.fastq.StreamListener;
 
 import org.dishevelled.commandline.ArgumentList;
 import org.dishevelled.commandline.CommandLine;
@@ -47,39 +43,39 @@ import org.dishevelled.commandline.Switch;
 import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
+import org.dishevelled.commandline.argument.IntegerArgument;
 import org.dishevelled.commandline.argument.PathArgument;
+import org.dishevelled.commandline.argument.StringArgument;
 
 /**
- * Convert DNA sequences in FASTQ format to FASTA format.
+ * Convert DNA or protein sequences in tab-separated values (tsv) text format to FASTA format.
  *
+ * @since 2.2
  * @author  Michael Heuer
  */
-public final class FastqToFasta implements Callable<Integer> {
-    private final Path fastqPath;
+public final class TextToFasta implements Callable<Integer> {
+    private final Path textPath;
     private final File fastaFile;
-    private final FastqReader fastqReader = new SangerFastqReader();
-    private static final String USAGE = "dsh-fastq-to-fasta [args]";
+    private final String alphabet;
+    private final int lineWidth;
+    static final String DEFAULT_ALPHABET = "dna";
+    static final int DEFAULT_LINE_WIDTH = 70;
+    private static final String USAGE = "dsh-text-to-fasta [args]";
+
 
     /**
-     * Convert DNA sequences in FASTQ format to FASTA format.
+     * Convert DNA or protein sequences in tab-separated values (tsv) text format to FASTA format.
      *
-     * @param fastqFile input FASTQ file, if any
+     * @param textPath input text path, if any
      * @param fastaFile output FASTA file, if any
+     * @param alphabet output FASTA file alphabet { dna, protein }, if any
+     * @param lineWidth output line width
      */
-    public FastqToFasta(final File fastqFile, final File fastaFile) {
-        this(fastqFile == null ? null : fastqFile.toPath(), fastaFile);
-    }
-
-    /**
-     * Convert DNA sequences in FASTQ format to FASTA format.
-     *
-     * @since 2.1
-     * @param fastqPath input FASTQ path, if any
-     * @param fastaFile output FASTA file, if any
-     */
-    public FastqToFasta(final Path fastqPath, final File fastaFile) {
-        this.fastqPath = fastqPath;
+    public TextToFasta(final Path textPath, final File fastaFile, final String alphabet, final int lineWidth) {
+        this.textPath = textPath;
         this.fastaFile = fastaFile;
+        this.alphabet = alphabet;
+        this.lineWidth = lineWidth;
     }
 
 
@@ -88,23 +84,25 @@ public final class FastqToFasta implements Callable<Integer> {
         BufferedReader reader = null;
         PrintWriter writer = null;
         try {
-            reader = reader(fastqPath);
+            reader = reader(textPath);
             writer = writer(fastaFile);
 
-            final PrintWriter w = writer;
-            fastqReader.stream(reader, new StreamListener() {
-                    @Override
-                    public void fastq(final Fastq fastq)
-                    {
-                        StringBuilder sb = new StringBuilder(1200);
-                        sb.append(">");
-                        sb.append(fastq.getDescription());
-                        sb.append("\n");
-                        sb.append(fastq.getSequence());
-                        w.println(sb.toString());
-                    }
-                });
+            long lineNumber = 0;
+            while (reader.ready()) {
+                lineNumber++;
+                String[] tokens = reader.readLine().split("\t");
+                if (tokens.length != 2) {
+                    throw new IOException("expected 2 tokens, found " + tokens.length + " at line number " + lineNumber);
+                }
 
+                // todo: if strict, use biojava to validate input and write?
+                String description = tokens[0];
+                String sequence = tokens[1];
+                writer.println(">" + description);
+                for (int i = 0, length = sequence.length(); i <= length; i += lineWidth) {
+                    writer.println(sequence.substring(i, Math.min(i + lineWidth, length)));
+                }
+            }
             return 0;
         }
         finally {
@@ -131,13 +129,15 @@ public final class FastqToFasta implements Callable<Integer> {
     public static void main(final String[] args) {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        PathArgument fastqPath = new PathArgument("i", "input-fastq-path", "input FASTQ path, default stdin", false);
+        PathArgument textPath = new PathArgument("i", "input-text-path", "input text path, default stdin", false);
         FileArgument fastaFile = new FileArgument("o", "output-fasta-file", "output FASTA file, default stdout", false);
+        StringArgument alphabet = new StringArgument("e", "alphabet", "output FASTA alphabet { dna, protein }, default dna", false);
+        IntegerArgument lineWidth = new IntegerArgument("w", "line-width", "output line width, default " + DEFAULT_LINE_WIDTH, false);
 
-        ArgumentList arguments = new ArgumentList(about, help, fastqPath, fastaFile);
+        ArgumentList arguments = new ArgumentList(about, help, textPath, fastaFile, alphabet, lineWidth);
         CommandLine commandLine = new CommandLine(args);
 
-        FastqToFasta fastqToFasta = null;
+        TextToFasta textToFasta = null;
         try
         {
             CommandLineParser.parse(commandLine, arguments);
@@ -149,14 +149,14 @@ public final class FastqToFasta implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            fastqToFasta = new FastqToFasta(fastqPath.getValue(), fastaFile.getValue());
+            textToFasta = new TextToFasta(textPath.getValue(), fastaFile.getValue(), alphabet.getValue(DEFAULT_ALPHABET), lineWidth.getValue(DEFAULT_LINE_WIDTH));
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);
             System.exit(-1);
         }
         try {
-            System.exit(fastqToFasta.call());
+            System.exit(textToFasta.call());
         }
         catch (Exception e) {
             e.printStackTrace();

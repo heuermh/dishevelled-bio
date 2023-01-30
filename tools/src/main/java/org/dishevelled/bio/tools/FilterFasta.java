@@ -63,7 +63,7 @@ import org.dishevelled.commandline.argument.StringArgument;
 import org.dishevelled.commandline.argument.PathArgument;
 
 /**
- * Filter sequences in FASTA format.
+ * Filter DNA or protein sequences in FASTA format.
  *
  * @since 1.3.3
  * @author  Michael Heuer
@@ -81,7 +81,7 @@ public final class FilterFasta extends AbstractFilter {
 
 
     /**
-     * Filter sequences in FASTA format.
+     * Filter DNA or protein sequences in FASTA format.
      *
      * @param filters list of filters, must not be null
      * @param inputFastaFile input FASTA file, if any
@@ -96,7 +96,7 @@ public final class FilterFasta extends AbstractFilter {
     }
 
     /**
-     * Filter sequences in FASTA format.
+     * Filter DNA or protein sequences in FASTA format.
      *
      * @since 2.1
      * @param filters list of filters, must not be null
@@ -109,7 +109,7 @@ public final class FilterFasta extends AbstractFilter {
     }
 
     /**
-     * Filter sequences in FASTA format.
+     * Filter DNA or protein sequences in FASTA format.
      *
      * @since 2.0
      * @param filters list of filters, must not be null
@@ -132,7 +132,7 @@ public final class FilterFasta extends AbstractFilter {
     }
 
     /**
-     * Filter sequences in FASTA format.
+     * Filter DNA or protein sequences in FASTA format.
      *
      * @since 2.1
      * @param filters list of filters, must not be null

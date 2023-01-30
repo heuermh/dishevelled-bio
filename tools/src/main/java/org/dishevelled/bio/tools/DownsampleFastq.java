@@ -62,7 +62,7 @@ import org.dishevelled.commandline.argument.IntegerArgument;
 import org.dishevelled.commandline.argument.PathArgument;
 
 /**
- * Downsample sequences from files in FASTQ format.
+ * Downsample DNA sequences from files in FASTQ format.
  *
  * @author  Michael Heuer
  */
@@ -76,7 +76,7 @@ public final class DownsampleFastq implements Callable<Integer> {
 
 
     /**
-     * Downsample sequences from files in FASTQ format.
+     * Downsample DNA sequences from files in FASTQ format.
      *
      * @param inputFastqFile input FASTQ file, if any
      * @param outputFastqFile output FASTQ file, if any
@@ -87,7 +87,7 @@ public final class DownsampleFastq implements Callable<Integer> {
     }
 
     /**
-     * Downsample sequences from files in FASTQ format.
+     * Downsample DNA sequences from files in FASTQ format.
      *
      * @since 2.1
      * @param inputFastqPath input FASTQ path, if any

@@ -50,7 +50,7 @@ import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.PathArgument;
 
 /**
- * Convert sequences in FASTQ format to tab-separated values (tsv) text format.
+ * Convert DNA sequences in FASTQ format to tab-separated values (tsv) text format.
  *
  * @since 2.1
  * @author  Michael Heuer
@@ -63,7 +63,7 @@ public final class FastqToText implements Callable<Integer> {
     private static final String USAGE = "dsh-fastq-to-text [args]";
 
     /**
-     * Convert sequences in FASTQ format to tab-separated values (tsv) text format.
+     * Convert DNA sequences in FASTQ format to tab-separated values (tsv) text format.
      *
      * @param fastqFile input FASTQ file, if any
      * @param textFile output text file, if any
@@ -73,7 +73,7 @@ public final class FastqToText implements Callable<Integer> {
     }
 
     /**
-     * Convert sequences in FASTQ format to tab-separated values (tsv) text format.
+     * Convert DNA sequences in FASTQ format to tab-separated values (tsv) text format.
      *
      * @param fastqPath input FASTQ path, if any
      * @param textFile output text file, if any

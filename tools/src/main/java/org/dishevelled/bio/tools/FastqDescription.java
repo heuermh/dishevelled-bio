@@ -50,7 +50,7 @@ import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.PathArgument;
 
 /**
- * Output description lines from sequences in FASTQ format.
+ * Output description lines from DNA sequences in FASTQ format.
  *
  * @author  Michael Heuer
  */
@@ -62,7 +62,7 @@ public final class FastqDescription implements Callable<Integer> {
 
 
     /**
-     * Output description lines from sequences in FASTQ format.
+     * Output description lines from DNA sequences in FASTQ format.
      *
      * @param fastqFile input FASTQ file, if any
      * @param descriptionFile output file of description lines, if any
@@ -72,7 +72,7 @@ public final class FastqDescription implements Callable<Integer> {
     }
 
     /**
-     * Output description lines from sequences in FASTQ format.
+     * Output description lines from DNA sequences in FASTQ format.
      *
      * @since 2.1
      * @param fastqPath input FASTQ path, if any

@@ -60,7 +60,7 @@ import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.PathArgument;
 
 /**
- * Convert interleaved FASTQ format into first and second sequence files in FASTQ format.
+ * Convert interleaved FASTQ format into first and second DNA sequence files in FASTQ format.
  *
  * @author  Michael Heuer
  */
@@ -73,7 +73,7 @@ public final class DisinterleaveFastq implements Callable<Integer> {
 
 
     /**
-     * Convert interleaved FASTQ format into first and second sequence files in FASTQ format.
+     * Convert interleaved FASTQ format into first and second DNA sequence files in FASTQ format.
      *
      * @param pairedFile input interleaved paired FASTQ file, must not be null
      * @param unpairedFile input unpaired FASTQ file, if any
@@ -88,7 +88,7 @@ public final class DisinterleaveFastq implements Callable<Integer> {
     }
 
     /**
-     * Convert interleaved FASTQ format into first and second sequence files in FASTQ format.
+     * Convert interleaved FASTQ format into first and second DNA sequence files in FASTQ format.
      *
      * @since 2.1
      * @param pairedPath input interleaved paired FASTQ path, must not be null

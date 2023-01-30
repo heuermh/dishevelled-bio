@@ -41,19 +41,20 @@ commands:
   compress-sam    compress alignments in SAM format to splittable bgzf or bzip2 compression codecs
   compress-vcf    compress variants and genotypes in VCF format to splittable bgzf or bzip2 compression codecs
   create-sequence-dictionary    create a SequenceDictionary from DNA sequences in FASTA format
-  disinterleave-fastq    convert interleaved FASTQ format into first and second sequence files in FASTQ format
-  downsample-fastq    downsample sequences from files in FASTQ format
-  downsample-interleaved-fastq    downsample sequences from a file in interleaved FASTQ format
+  disinterleave-fastq    convert interleaved FASTQ format into first and second DNA sequence files in FASTQ format
+  downsample-fastq    downsample DNA sequences from files in FASTQ format
+  downsample-interleaved-fastq    downsample DNA sequences from a file in interleaved FASTQ format
   export-segments    export assembly segment sequences in GFA 1.0 format to FASTA format
-  extract-fasta    extract matching sequences in FASTA format
-  extract-fastq    extract matching sequences in FASTQ format
-  extract-fastq-by-length    extract sequences in FASTQ format with a range of lengths
+  extract-fasta    extract matching DNA or protein sequences in FASTA format
+  extract-fastq    extract matching DNA sequences in FASTQ format
+  extract-fastq-by-length    extract DNA sequences in FASTQ format with a range of lengths
   fasta-to-fastq    convert DNA sequences in FASTA format to FASTQ format
-  fastq-description    output description lines from sequences in FASTQ format
-  fastq-sequence-length    output sequence lengths from sequences in FASTQ format
-  fastq-to-bam    convert sequences in FASTQ format to unaligned BAM format
-  fastq-to-fasta    convert sequences in FASTQ format to FASTA format
-  fastq-to-text    convert sequences in FASTQ format to tab-separated values (tsv) text format
+  fasta-to-text    convert DNA or protein sequences in FASTA format to tab-separated values (tsv) text format
+  fastq-description    output description lines from DNA sequences in FASTQ format
+  fastq-sequence-length    output sequence lengths from DNA sequences in FASTQ format
+  fastq-to-bam    convert DNA sequences in FASTQ format to unaligned BAM format
+  fastq-to-fasta    convert DNA sequences in FASTQ format to FASTA format
+  fastq-to-text    convert DNA sequences in FASTQ format to tab-separated values (tsv) text format
   filter-bed    filter features in BED format
   filter-fasta    filter sequences in FASTA format
   filter-fastq    filter sequences in FASTQ format
@@ -67,8 +68,8 @@ commands:
   filter-vcf    filter variants in VCF format
   gfa1-to-gfa2    convert GFA 1.0 format to GFA 2.0 format
   identify-gfa1    add identifier annotation to records in GFA 1.0 format
-  interleave-fastq    convert first and second sequence files in FASTQ format to interleaved FASTQ format
-  interleaved-fastq-to-bam    convert sequences in interleaved FASTQ format to unaligned BAM format
+  interleave-fastq    convert first and second DNA sequence files in FASTQ format to interleaved FASTQ format
+  interleaved-fastq-to-bam    convert DNA sequences in interleaved FASTQ format to unaligned BAM format
   links-to-cytoscape-edges    convert links in GFA 1.0 format to edges.txt format for Cytoscape
   links-to-property-graph    convert links in GFA 1.0 format to property graph CSV format
   list-filesystems    list filesystem providers
@@ -89,11 +90,12 @@ commands:
   split-paf    split files in PAF format
   split-sam    split files in SAM format
   split-vcf    split files in VCF format
-  text-to-fastq    convert sequences in tab-separated values (tsv) text format to FASTQ format
+  text-to-fasta    convert DNA or protein sequences in tab-separated values (tsv) text format to FASTA format
+  text-to-fastq    convert DNA sequences in tab-separated values (tsv) text format to FASTQ format
   traversals-to-cytoscape-edges    convert traversals in GFA 1.0 format to edges.txt format for Cytoscape
   traversals-to-property-graph    convert traversals in GFA 1.0 format to property graph CSV format
   traverse-paths    traverse paths in GFA 1.0 format
-  truncate-fasta    truncate sequences in FASTA format
+  truncate-fasta    truncate DNA or protein sequences in FASTA format
   truncate-paths    truncate paths in GFA 1.0 format
   variant-table-to-vcf    convert Ensembl variant table to VCF format
   vcf-pedigree    extract a pedigree from VCF format
