@@ -299,6 +299,10 @@
               <mainClass>org.dishevelled.bio.tools.FastaToFastq</mainClass>
             </program>
             <program>
+              <id>dsh-fasta-to-text</id>
+              <mainClass>org.dishevelled.bio.tools.FastaToText</mainClass>
+            </program>
+            <program>
               <id>dsh-fastq-description</id>
               <mainClass>org.dishevelled.bio.tools.FastqDescription</mainClass>
             </program>
@@ -461,6 +465,10 @@
             <program>
               <id>dsh-split-vcf</id>
               <mainClass>org.dishevelled.bio.tools.SplitVcf</mainClass>
+            </program>
+            <program>
+              <id>dsh-text-to-fasta</id>
+              <mainClass>org.dishevelled.bio.tools.TextToFasta</mainClass>
             </program>
             <program>
               <id>dsh-text-to-fastq</id>
