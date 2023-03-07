@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!--
     dsh-bio  dishevelled.org bio multimodule build.
-    Copyright (c) 2013-2022 held jointly by the individual authors.
+    Copyright (c) 2013-2023 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Lesser General Public License as published
@@ -379,7 +379,7 @@
         <configuration>
           <source>8</source>
           <!-- todo:  must manually update the copyright dates here -->
-          <bottom>Copyright (c) 2013-2022 held jointly by the individual authors. Licensed under the &lt;a
+          <bottom>Copyright (c) 2013-2023 held jointly by the individual authors. Licensed under the &lt;a
             href="http://www.fsf.org/licensing/licenses/lgpl.html"&gt;GNU Lesser General Public License&lt;a&gt; (LGPL).
           </bottom>
         </configuration>
@@ -396,7 +396,7 @@
         <configuration>
           <source>8</source>
           <!-- todo:  must manually update the copyright dates here -->
-          <bottom>Copyright (c) 2013-2022 held jointly by the individual authors. Licensed under the &lt;a
+          <bottom>Copyright (c) 2013-2023 held jointly by the individual authors. Licensed under the &lt;a
             href="http://www.fsf.org/licensing/licenses/lgpl.html"&gt;GNU Lesser General Public License&lt;a&gt; (LGPL).
           </bottom>
         </configuration>
@@ -424,7 +424,7 @@
               <show>package</show>
               <source>8</source>
               <!-- todo:  must manually update the copyright dates here -->
-              <bottom>Copyright (c) 2013-2022 held jointly by the individual authors. Licensed under the &lt;a
+              <bottom>Copyright (c) 2013-2023 held jointly by the individual authors. Licensed under the &lt;a
               href="http://www.fsf.org/licensing/licenses/lgpl.html"&gt;GNU Lesser General Public License&lt;a&gt; (LGPL).
               </bottom>
             </configuration>
