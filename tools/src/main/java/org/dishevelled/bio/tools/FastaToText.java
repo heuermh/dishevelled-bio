@@ -32,8 +32,6 @@ import java.io.PrintWriter;
 
 import java.nio.file.Path;
 
-import java.util.Iterator;
-
 import java.util.concurrent.Callable;
 
 import org.biojava.bio.seq.Sequence;

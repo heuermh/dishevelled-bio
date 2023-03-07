@@ -170,13 +170,13 @@ public final class SplitBed extends AbstractSplit {
         }
     }
 
-    static final String getBaseName(final Path path) {
+    static String getBaseName(final Path path) {
         String baseName = getNameWithoutExtension(path);
         // trim trailing .bed if present after trimming compression extension
         return baseName.endsWith(".bed") ? baseName.substring(0, baseName.length() - 4) : baseName;
     }
 
-    static final String getFileExtensions(final Path path) {
+    static String getFileExtensions(final Path path) {
         String baseName = getNameWithoutExtension(path);
         String extension = getFileExtension(path);
         // add .bed to extension if present

@@ -180,13 +180,13 @@ public final class SplitPaf extends AbstractSplit {
         }
     }
 
-    static final String getBaseName(final Path path) {
+    static String getBaseName(final Path path) {
         String baseName = getNameWithoutExtension(path);
         // trim trailing .paf if present
         return baseName.endsWith(".paf") ? baseName.substring(0, baseName.length() - 4) : baseName;
     }
 
-    static final String getFileExtensions(final Path path) {
+    static String getFileExtensions(final Path path) {
         String baseName = getNameWithoutExtension(path);
         String extension = getFileExtension(path);
         // add .paf to extension if present

@@ -289,7 +289,7 @@ public final class SplitFasta extends AbstractSplit {
         }
     }
 
-    static final String getBaseName(final Path path) {
+    static String getBaseName(final Path path) {
         String baseName = getNameWithoutExtension(path);
         // trim trailing .fa or .fasta if present after trimming compression extension
         if (baseName.endsWith(".fa")) {
@@ -301,7 +301,7 @@ public final class SplitFasta extends AbstractSplit {
         return baseName;
     }
 
-    static final String getFileExtensions(final Path path) {
+    static String getFileExtensions(final Path path) {
         String baseName = getNameWithoutExtension(path);
         String extension = getFileExtension(path);
         // add .fa or .fasta to extension if present

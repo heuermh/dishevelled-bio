@@ -234,7 +234,7 @@ abstract class AbstractSplit implements Callable<Integer> {
     }
 
     static String getNameWithoutExtension(final Path path) {
-        if (path == null && path.getNameCount() == 0) {
+        if (path == null || path.getNameCount() == 0) {
             return "";
         }
         String fileName = path.getName(path.getNameCount() - 1).toString();
@@ -244,7 +244,7 @@ abstract class AbstractSplit implements Callable<Integer> {
     }
 
     static String getFileExtension(final Path path) {
-        if (path == null && path.getNameCount() == 0) {
+        if (path == null || path.getNameCount() == 0) {
             return "";
         }
         String fileName = path.getName(path.getNameCount() - 1).toString();

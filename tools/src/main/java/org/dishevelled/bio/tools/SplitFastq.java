@@ -184,7 +184,7 @@ public final class SplitFastq extends AbstractSplit {
         }
     }
 
-    static final String getBaseName(final Path path) {
+    static String getBaseName(final Path path) {
         String baseName = getNameWithoutExtension(path);
         // trim trailing .fq or .fastq if present after trimming compression extension
         if (baseName.endsWith(".fq")) {
@@ -196,7 +196,7 @@ public final class SplitFastq extends AbstractSplit {
         return baseName;
     }
 
-    static final String getFileExtensions(final Path path) {
+    static String getFileExtensions(final Path path) {
         String baseName = getNameWithoutExtension(path);
         String extension = getFileExtension(path);
         // add .fq or .fastq to extension if present

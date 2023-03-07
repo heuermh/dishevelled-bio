@@ -198,13 +198,13 @@ public final class SplitVcf extends AbstractSplit {
         }
     }
 
-    static final String getBaseName(final Path path) {
+    static String getBaseName(final Path path) {
         String baseName = getNameWithoutExtension(path);
         // trim trailing .vcf if present
         return baseName.endsWith(".vcf") ? baseName.substring(0, baseName.length() - 4) : baseName;
     }
 
-    static final String getFileExtensions(final Path path) {
+    static String getFileExtensions(final Path path) {
         String baseName = getNameWithoutExtension(path);
         String extension = getFileExtension(path);
         // add .vcf to extension if present

@@ -23,8 +23,6 @@
 */
 package org.dishevelled.bio.tools;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import static org.dishevelled.compress.Readers.reader;
 import static org.dishevelled.compress.Writers.writer;
 
@@ -73,7 +71,7 @@ public final class BinFastqQualityScores implements Callable<Integer> {
     /**
      * Bin quality scores from files in FASTQ format.
      *
-     * @param inputFastqFile input FASTQ file, if any
+     * @param inputFastqPath input FASTQ path, if any
      * @param outputFastqFile output FASTQ file, if any
      */
     public BinFastqQualityScores(final Path inputFastqPath, final File outputFastqFile) {
@@ -134,7 +132,7 @@ public final class BinFastqQualityScores implements Callable<Integer> {
      * @param quality quality scores to bin
      * @return the specified quality scores binned per Illumina technical note
      */
-    static final String bin(final String quality) {
+    static String bin(final String quality) {
         int size = quality.length();
         int[] qualityScores = new int[size];
         for (int i = 0; i < size; i++)

@@ -180,13 +180,13 @@ public final class SplitGaf extends AbstractSplit {
         }
     }
 
-    static final String getBaseName(final Path path) {
+    static String getBaseName(final Path path) {
         String baseName = getNameWithoutExtension(path);
         // trim trailing .gaf if present
         return baseName.endsWith(".gaf") ? baseName.substring(0, baseName.length() - 4) : baseName;
     }
 
-    static final String getFileExtensions(final Path path) {
+    static String getFileExtensions(final Path path) {
         String baseName = getNameWithoutExtension(path);
         String extension = getFileExtension(path);
         // add .gaf to extension if present

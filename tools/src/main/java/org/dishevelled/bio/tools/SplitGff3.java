@@ -180,13 +180,13 @@ public final class SplitGff3 extends AbstractSplit {
         }
     }
 
-    static final String getBaseName(final Path path) {
+    static String getBaseName(final Path path) {
         String baseName = getNameWithoutExtension(path);
         // trim trailing .gff3 if present
         return baseName.endsWith(".gff3") ? baseName.substring(0, baseName.length() - 5) : baseName;
     }
 
-    static final String getFileExtensions(final Path path) {
+    static String getFileExtensions(final Path path) {
         String baseName = getNameWithoutExtension(path);
         String extension = getFileExtension(path);
         // add .gff3 to extension if present
