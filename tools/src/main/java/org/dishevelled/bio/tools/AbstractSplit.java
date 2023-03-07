@@ -199,6 +199,7 @@ abstract class AbstractSplit implements Callable<Integer> {
      * long number of bytes.
      *
      * @param b byte string to parse, must not be null or empty
+     * @return the specified byte string parsed into a long number of bytes
      */
     static long toBytes(final String b) {
         checkNotNull(b);
