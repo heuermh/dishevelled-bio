@@ -26,7 +26,7 @@
   <parent>
     <groupId>org.dishevelled</groupId>
     <artifactId>dsh-parent</artifactId>
-    <version>35</version>
+    <version>36</version>
   </parent>
   <artifactId>dsh-bio</artifactId>
   <packaging>pom</packaging>
@@ -60,17 +60,16 @@
   </modules>
 
   <properties>
-    <aws-java-nio-spi-for-s3.version>1.2.1</aws-java-nio-spi-for-s3.version>
+    <aws-java-nio-spi-for-s3.version>1.2.2</aws-java-nio-spi-for-s3.version>
     <biojava.version>1.9.5</biojava.version>
     <commons-csv.version>1.10.0</commons-csv.version>
     <commons-codec.version>1.15</commons-codec.version>
-    <commons-io.version>2.11.0</commons-io.version>
     <commons-math3.version>3.6.1</commons-math3.version>
     <dsh-bitset.version>3.0</dsh-bitset.version>
     <dsh-commandline.version>1.2</dsh-commandline.version>
-    <dsh-compress.version>1.6.3</dsh-compress.version>
+    <dsh-compress.version>1.6.4</dsh-compress.version>
     <dsh-graph.version>1.0</dsh-graph.version>
-    <google-cloud.version>0.126.11</google-cloud.version>
+    <google-cloud.version>0.126.17</google-cloud.version>
     <htsjdk.version>3.0.5</htsjdk.version>
     <jdk.version>1.8</jdk.version>
     <jmh.version>1.36</jmh.version>
@@ -99,22 +98,6 @@
           <exclusion>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-jexl</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>commons-io</groupId>
-        <artifactId>commons-io</artifactId>
-        <version>${commons-io.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>de.javakaffee</groupId>
-        <artifactId>kryo-serializers</artifactId>
-        <version>${kryo-serializers.version}</version>
-        <exclusions>
-          <exclusion>
-            <groupId>com.esotericsoftware</groupId>
-            <artifactId>kryo</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
