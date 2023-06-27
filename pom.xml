@@ -31,7 +31,7 @@
   <artifactId>dsh-bio</artifactId>
   <packaging>pom</packaging>
   <name>dishevelled.org bio</name>
-  <version>2.3-SNAPSHOT</version>
+  <version>2.2.2</version>
   <description>dishevelled.org bio multimodule build.</description>
   <url>http://www.dishevelled.org/bio</url>
   <inceptionYear>2013</inceptionYear>
@@ -39,7 +39,7 @@
     <connection>scm:git:git@github.com:heuermh/dishevelled-bio.git</connection>
     <developerConnection>scm:git:git@github.com:heuermh/dishevelled-bio.git</developerConnection>
     <url>git@github.com:heuermh/dishevelled-bio.git</url>
-    <tag>HEAD</tag>
+    <tag>dsh-bio-2.2.2</tag>
   </scm>
   <issueManagement>
     <system>GitHub</system>
