@@ -9,7 +9,7 @@ dishevelled.org bio
 
 Install
 
- * JDK 11 or later, https://openjdk.java.net
+ * JDK 17 or later, https://openjdk.java.net
  * Apache Maven 3.8.5 or later, https://maven.apache.org
 
 To build
@@ -157,10 +157,11 @@ and Amazon Simple Storage Service (Amazon S3) (via `s3://` paths) are supported 
 ```
 $ dsh-bio list-filesystems
 Installed filesystem providers:
-  file	sun.nio.fs.MacOSXFileSystemProvider
-  jar	com.sun.nio.zipfs.ZipFileSystemProvider
-  gs	com.google.cloud.storage.contrib.nio.CloudStorageFileSystemProvider
-  s3	software.amazon.nio.spi.s3.S3FileSystemProvider
+  file  sun.nio.fs.MacOSXFileSystemProvider
+  jar   jdk.nio.zipfs.ZipFileSystemProvider
+  jrt   jdk.internal.jrtfs.JrtFileSystemProvider
+  gs    com.google.cloud.storage.contrib.nio.CloudStorageFileSystemProvider
+  s3    software.amazon.nio.spi.s3.S3FileSystemProvider
 ```
 
 
