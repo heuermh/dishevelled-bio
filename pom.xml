@@ -60,7 +60,7 @@
   </modules>
 
   <properties>
-    <aws-java-nio-spi-for-s3.version>1.2.4</aws-java-nio-spi-for-s3.version>
+    <aws-java-nio-spi-for-s3.version>2.0.0-rc-2</aws-java-nio-spi-for-s3.version>
     <biojava.version>1.9.7</biojava.version>
     <commons-csv.version>1.10.0</commons-csv.version>
     <commons-codec.version>1.16.1</commons-codec.version>
