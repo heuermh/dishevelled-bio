@@ -157,11 +157,12 @@ and Amazon Simple Storage Service (Amazon S3) (via `s3://` paths) are supported 
 ```
 $ dsh-bio list-filesystems
 Installed filesystem providers:
-  file  sun.nio.fs.MacOSXFileSystemProvider
-  jar   jdk.nio.zipfs.ZipFileSystemProvider
-  jrt   jdk.internal.jrtfs.JrtFileSystemProvider
-  gs    com.google.cloud.storage.contrib.nio.CloudStorageFileSystemProvider
-  s3    software.amazon.nio.spi.s3.S3FileSystemProvider
+  file	sun.nio.fs.MacOSXFileSystemProvider
+  jar	jdk.nio.zipfs.ZipFileSystemProvider
+  jrt	jdk.internal.jrtfs.JrtFileSystemProvider
+  gs	com.google.cloud.storage.contrib.nio.CloudStorageFileSystemProvider
+  s3	software.amazon.nio.spi.s3.S3FileSystemProvider
+  s3x	software.amazon.nio.spi.s3.S3XFileSystemProvider
 ```
 
 
