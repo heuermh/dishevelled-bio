@@ -44,7 +44,10 @@ import javax.annotation.concurrent.Immutable;
 /**
  * BED record.
  *
- * Supports the same BED formats as <a href="http://bedtools.readthedocs.org/en/latest/content/general-usage.html">bedtools2</a>.
+ * Supports the <a href="https://github.com/samtools/hts-specs/blob/master/BEDv1.pdf">
+ * Browser Extensible Data (BED) format specification version 1.0</a>, with exception that
+ * only tab characters are allowable as field separators.
+ *
  * <ul>
  *   <li>BED3: A BED file where each feature is described by chrom, start, and end.
  *       For example: <code>chr1          11873   14409</code></li>
@@ -67,7 +70,7 @@ public final class BedRecord {
     private final long start;
     private final long end;
     private final String name;
-    private final String score;
+    private final int score;
     private final String strand;
     private final long thickStart;
     private final long thickEnd;
@@ -81,7 +84,13 @@ public final class BedRecord {
     private static final long[] EMPTY = new long[0];
 
     /** R,G,B pattern. */
-    private static final Pattern RGB = Pattern.compile("^[0-9]+,[0-9]+,[0-9]+$");
+    private static final Pattern RGB = Pattern.compile("[0-9]{1,3},[0-9]{1,3},[0-9]{1,3}");
+
+    /** Valid chrom pattern. */
+    private static final Pattern CHROM = Pattern.compile("[A-Za-z0-9_]{1,255}");
+
+    /** Valid name pattern. */
+    private static final Pattern NAME = Pattern.compile("[\\x20-\\x7e]{1,255}");
 
 
     /**
@@ -91,17 +100,19 @@ public final class BedRecord {
      * @param chrom chrom, must not be null
      * @param start start, must be at least zero
      * @param end end, must be at least zero, and greater than or equal to start
-     * @param name name
-     * @param score score
+     * @param name name, if present, must not contain control characters
+     * @param score score, must be at least zero and less than or equal to 1000
      * @param strand strand, if present must be either <code>-</code> or <code>+</code>
-     * @param thickStart thick start, must be at least zero
-     * @param thickEnd thick end, must be at least zero and greater than or equal to thick start
+     * @param thickStart thick start, must be greater than or equal to start
+     *    and less than or equal to end
+     * @param thickEnd thick end, must be greater than or equal to thick start
+     *    and less than or equal to end
      * @param itemRgb item RGB, if present, must be in R,G,B format, e.g. <code>255,0,0</code>
-     * @param blockCount block count, must be at least zero
+     * @param blockCount block count, must be at least zero; if BED12+ format at least one
      * @param blockSizes block sizes, must be the same length as block count
      * @param blockStarts block starts, must be the same length as block count
      */
-    private BedRecord(final BedFormat format, final String chrom, final long start, final long end, final String name, final String score, final String strand,
+    private BedRecord(final BedFormat format, final String chrom, final long start, final long end, final String name, final int score, final String strand,
                      final long thickStart, final long thickEnd, final String itemRgb, final int blockCount, final long[] blockSizes, final long[] blockStarts) {
 
         checkNotNull(format);
@@ -109,26 +120,78 @@ public final class BedRecord {
         checkArgument(start >= 0L, "start must be at least zero");
         checkArgument(end >= 0L, "end must be at least zero");
         checkArgument(end >= start, "end must be greater than or equal to start");
-        checkArgument(thickStart >= 0L, "thickStart must be at least zero");
-        checkArgument(thickEnd >= 0L, "thickEnd must be at least zero");
+        checkArgument(score >= 0, "score must be at least zero");
+        checkArgument(score <= 1000, "score must be less than or equal to 1000");
+        checkArgument(thickStart >= start, "thickStart must be greater than or equal to start");
+        checkArgument(thickStart <= end, "thickStart must be less than or equal to end");
         checkArgument(thickEnd >= thickStart, "thickEnd must be greater than or equal to thickStart");
+        checkArgument(thickEnd <= end, "thickEnd must be less than or equal to end");
         checkArgument(blockCount >= 0, "blockCount must be at least zero");
         checkNotNull(blockSizes);
         checkNotNull(blockStarts);
         checkArgument(blockSizes.length == blockCount, "blockSizes must be the same length as blockCount");
         checkArgument(blockStarts.length == blockCount, "blockStarts must be the same length as blockCount");
 
-        if (strand != null) {
+        if (!CHROM.matcher(chrom).matches()) {
+            throw new IllegalArgumentException("invalid format for chrom, must include only word characters [A-Za-z0-9_]");
+        }
+
+        // allow "." if not specified
+        if (strand != null && !".".equals(strand)) {
             checkArgument("-".equals(strand) || "+".equals(strand), "if present, strand must be either - or +");
         }
-        /*
 
-          appears bedtools2 doesn't enforce this format restriction
-
-        if (itemRgb != null && !RGB.matcher(itemRgb).matches()) {
-            throw new IllegalArgumentException("if present, itemRgb must be in R,G,B format, e.g. 255,0,0");
+        String fixedItemRgb = itemRgb;
+        // allow "0" if not specified in R,G,B format
+        if (fixedItemRgb != null && !"0".equals(itemRgb)) {
+            // fixup to remove leading zeros
+            if (RGB.matcher(itemRgb).matches()) {
+                String[] tokens = itemRgb.split(",");
+                int r = Integer.parseInt(tokens[0]);
+                int g = Integer.parseInt(tokens[1]);
+                int b = Integer.parseInt(tokens[2]);
+                if (r > 255 || g > 255 || b > 255) {
+                    throw new IllegalArgumentException("invalid R,G,B format for itemRgb, color values range [0-255]");
+                }
+                fixedItemRgb = r + "," + g + "," + b;
+            }
+            else {
+                throw new IllegalArgumentException("if present, itemRgb must be in R,G,B format, e.g. 255,0,0");
+            }
         }
-        */
+
+        // validate name if at least BED4
+        if (format.isAtLeastBED4()) {
+            if (!NAME.matcher(name).matches()) {
+                throw new IllegalArgumentException("if BED4+, name must not contain control characters");
+            }
+        }
+
+        // validate blocks if at least BED12
+        if (format.isAtLeastBED12()) {
+            checkArgument(blockCount >= 1, "if BED12+, blockCount must be at least one");
+            checkArgument(blockStarts[0] == 0L, "first block must start at start");
+            checkArgument(start + blockStarts[blockCount - 1] + blockSizes[blockCount - 1] == end, "last block must end at end"); 
+
+            long lastStart = 0L;
+            long lastSize = 0L;
+            for (int i = 0; i < blockCount; i++) {
+                if (blockStarts[i] < lastStart) {
+                    throw new IllegalArgumentException("blocks must be sorted in ascending order");
+                }
+                if (start + blockStarts[i] + blockSizes[i] > end) {
+                    throw new IllegalArgumentException("start plus block extends beyond end");
+                }
+                if (lastStart + lastSize > blockStarts[i]) {
+                    throw new IllegalArgumentException("blocks must not overlap");
+                }
+                if (blockSizes[i] < 0) {
+                    throw new IllegalArgumentException("block size must be at least zero");
+                }
+                lastStart = blockStarts[i];
+                lastSize = blockSizes[i];
+            }
+        }
 
         this.format = format;
         this.chrom = chrom;
@@ -139,16 +202,10 @@ public final class BedRecord {
         this.strand = strand;
         this.thickStart = thickStart;
         this.thickEnd = thickEnd;
-        this.itemRgb = itemRgb;
+        this.itemRgb = fixedItemRgb;
         this.blockCount = blockCount;
-        if (blockCount > 0) {
-            this.blockSizes = blockSizes.clone();
-            this.blockStarts = blockStarts.clone();
-        }
-        else {
-            this.blockSizes = blockSizes;
-            this.blockStarts = blockStarts;
-        }
+        this.blockSizes = blockSizes.clone();
+        this.blockStarts = blockStarts.clone();
 
         hashCode = Objects.hash(this.format, this.chrom, this.start, this.end, this.name, this.score, this.strand, this.thickStart, this.thickEnd, this.itemRgb, this.blockCount, this.blockSizes, this.blockStarts);
     }
@@ -156,75 +213,72 @@ public final class BedRecord {
     /**
      * Create a new BED3 record.
      *
-     * @deprecated will be removed in version 3.0
      * @param chrom chrom, must not be null
      * @param start start, must be at least zero
      * @param end end, must be at least zero, and greater than or equal to start
      */
     public BedRecord(final String chrom, final long start, final long end) {
-        this(BedFormat.BED3, chrom, start, end, null, null, null, 0L, 0L, null, 0, EMPTY, EMPTY);
+        this(BedFormat.BED3, chrom, start, end, null, 0, null, start, end, null, 0, EMPTY, EMPTY);
     }
 
     /**
      * Create a new BED4 record.
      *
-     * @deprecated will be removed in version 3.0
      * @param chrom chrom, must not be null
      * @param start start, must be at least zero
      * @param end end, must be at least zero, and greater than or equal to start
-     * @param name name
+     * @param name name, if present, must not contain control characters
      */
     public BedRecord(final String chrom, final long start, final long end, final String name) {
-        this(BedFormat.BED4, chrom, start, end, name, null, null, 0L, 0L, null, 0, EMPTY, EMPTY);
+        this(BedFormat.BED4, chrom, start, end, name, 0, null, start, end, null, 0, EMPTY, EMPTY);
     }
 
     /**
      * Create a new BED5 record.
      *
-     * @deprecated will be removed in version 3.0
      * @param chrom chrom, must not be null
      * @param start start, must be at least zero
      * @param end end, must be at least zero, and greater than or equal to start
-     * @param name name
-     * @param score score
+     * @param name name, if present, must not contain control characters
+     * @param score score, must be at least zero and less than or equal to 1000
      */
-    public BedRecord(final String chrom, final long start, final long end, final String name, final String score) {
-        this(BedFormat.BED5, chrom, start, end, name, score, null, 0L, 0L, null, 0, EMPTY, EMPTY);
+    public BedRecord(final String chrom, final long start, final long end, final String name, final int score) {
+        this(BedFormat.BED5, chrom, start, end, name, score, null, start, end, null, 0, EMPTY, EMPTY);
     }
 
     /**
      * Create a new BED6 record.
      *
-     * @deprecated will be removed in version 3.0
      * @param chrom chrom, must not be null
      * @param start start, must be at least zero
      * @param end end, must be at least zero, and greater than or equal to start
-     * @param name name
-     * @param score score
+     * @param name name, if present, must not contain control characters
+     * @param score score, must be at least zero and less than or equal to 1000
      * @param strand strand, if present must be either <code>-</code> or <code>+</code>
      */
-    public BedRecord(final String chrom, final long start, final long end, final String name, final String score, final String strand) {
-        this(BedFormat.BED6, chrom, start, end, name, score, strand, 0L, 0L, null, 0, EMPTY, EMPTY);
+    public BedRecord(final String chrom, final long start, final long end, final String name, final int score, final String strand) {
+        this(BedFormat.BED6, chrom, start, end, name, score, strand, start, end, null, 0, EMPTY, EMPTY);
     }
 
     /**
      * Create a new BED12 record.
      *
-     * @deprecated will be removed in version 3.0
      * @param chrom chrom, must not be null
      * @param start start, must be at least zero
      * @param end end, must be at least zero, and greater than or equal to start
-     * @param name name
-     * @param score score
+     * @param name name, if present, must not contain control characters
+     * @param score score, must be at least zero and less than or equal to 1000
      * @param strand strand, if present must be either <code>-</code> or <code>+</code>
-     * @param thickStart thick start, must be at least zero
-     * @param thickEnd thick end, must be at least zero and greater than or equal to thick start
+     * @param thickStart thick start, must be greater than or equal to start
+     *    and less than or equal to end
+     * @param thickEnd thick end, must be greater than or equal to thick start
+     *    and less than or equal to end
      * @param itemRgb item RGB, if present, must be in R,G,B format, e.g. <code>255,0,0</code>
-     * @param blockCount block count, must be at least zero
+     * @param blockCount block count, must be at least one
      * @param blockSizes block sizes, must be the same length as block count
      * @param blockStarts block starts, must be the same length as block count
      */
-    public BedRecord(final String chrom, final long start, final long end, final String name, final String score, final String strand,
+    public BedRecord(final String chrom, final long start, final long end, final String name, final int score, final String strand,
                      final long thickStart, final long thickEnd, final String itemRgb, final int blockCount, final long[] blockSizes, final long[] blockStarts) {
         this(BedFormat.BED12, chrom, start, end, name, score, strand, thickStart, thickEnd, itemRgb, blockCount, blockSizes, blockStarts);
     }
@@ -267,12 +321,11 @@ public final class BedRecord {
     }
 
     /**
-     * Return the score for this BED record, if any.
+     * Return the score for this BED record.
      *
-     * @deprecated will be refactored to return <code>int</code> in version 3.0
-     * @return the score for this BED record, if any
+     * @return the score for this BED record
      */
-    public String getScore() {
+    public int getScore() {
         return score;
     }
 
@@ -400,7 +453,7 @@ public final class BedRecord {
                 break;
             case BED4:
                 sb.append("\t");
-                sb.append(name);
+                sb.append(name == null ? "." : name);
                 break;
             case BED5:
                 sb.append("\t");
@@ -410,25 +463,25 @@ public final class BedRecord {
                 break;
             case BED6:
                 sb.append("\t");
-                sb.append(name);
+                sb.append(name == null ? "." : name);
                 sb.append("\t");
                 sb.append(score);
                 sb.append("\t");
-                sb.append(strand);
+                sb.append(strand == null ? "." : strand);
                 break;
             case BED12:
                 sb.append("\t");
-                sb.append(name);
+                sb.append(name == null ? "." : name);
                 sb.append("\t");
                 sb.append(score);
                 sb.append("\t");
-                sb.append(strand);
+                sb.append(strand == null ? "." : strand);
                 sb.append("\t");
                 sb.append(thickStart);
                 sb.append("\t");
                 sb.append(thickEnd);
                 sb.append("\t");
-                sb.append(itemRgb);
+                sb.append(itemRgb == null ? "0" : itemRgb);
                 sb.append("\t");
                 sb.append(blockCount);
                 sb.append("\t");
@@ -442,6 +495,13 @@ public final class BedRecord {
         return sb.toString();
     }
 
+
+    /**
+     * Parse the specified value as an array of longs.
+     *
+     * @param value value to parse
+     * @return the specified value parsed as an array of longs
+     */
     private static long[] parseLongArray(final String value) {
         List<String> tokens = Splitter.on(",").trimResults().omitEmptyStrings().splitToList(value);
         long[] longs = new long[tokens.size()];
@@ -462,7 +522,7 @@ public final class BedRecord {
      */
     public static BedRecord valueOf(final String value) {
         checkNotNull(value);
-        List<String> tokens = Splitter.on("\t").trimResults().splitToList(value);
+        List<String> tokens = Splitter.on('\t').trimResults().splitToList(value);
         if (tokens.size() < 3) {
             throw new IllegalArgumentException("value must have at least three fields (chrom, start, end)");
         }
@@ -473,17 +533,17 @@ public final class BedRecord {
             return new BedRecord(chrom, start, end);
         }
         else {
-            String name = tokens.get(3);
+            String name = "".equals(tokens.get(3)) ? "." : tokens.get(3);
             if (tokens.size() == 4) {
                 return new BedRecord(chrom, start, end, name);
             }
             else {
-                String score = tokens.get(4);
+                int score = Integer.parseInt("".equals(tokens.get(4)) ? "0" : tokens.get(4));
                 if (tokens.size() == 5) {
                     return new BedRecord(chrom, start, end, name, score);
                 }
                 else {
-                    String strand = tokens.get(5);
+                    String strand = "".equals(tokens.get(5)) ? "." : tokens.get(5);
                     if (tokens.size() == 6) {
                         return new BedRecord(chrom, start, end, name, score, strand);
                     }
@@ -492,7 +552,7 @@ public final class BedRecord {
                     }
                     long thickStart = Long.parseLong(tokens.get(6));
                     long thickEnd = Long.parseLong(tokens.get(7));
-                    String itemRgb = tokens.get(8);
+                    String itemRgb = "".equals(tokens.get(8)) ? "0" : tokens.get(8);
                     int blockCount = Integer.parseInt(tokens.get(9));
                     long[] blockSizes = parseLongArray(tokens.get(10));
                     long[] blockStarts = parseLongArray(tokens.get(11));
