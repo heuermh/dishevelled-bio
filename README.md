@@ -177,12 +177,12 @@ to boolean true or false against a record, provided in the context as variable `
 with `dsh-filter-bed`, to filter BED records by chromosome and score
 
 ```javascript
-r.getChrom() == 1 && r.getScore() > 10.0
+r.getChrom() == 1 && r.getScore() > 10
 ```
 specified on the command line as
 
 ```bash
-$ dsh-bio filter-bed -i input.bed --script "r.getChrom() == 1 && r.getScore() > 10.0"
+$ dsh-bio filter-bed -i input.bed --script "r.getChrom() == 1 && r.getScore() > 10"
 ```
 
 

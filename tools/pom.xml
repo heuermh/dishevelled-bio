@@ -397,6 +397,10 @@
               <mainClass>org.dishevelled.bio.tools.Gfa1ToGfa2</mainClass>
             </program>
             <program>
+              <id>dsh-gff3-to-bed</id>
+              <mainClass>org.dishevelled.bio.tools.Gff3ToBed</mainClass>
+            </program>
+            <program>
               <id>dsh-identify-gfa1</id>
               <mainClass>org.dishevelled.bio.tools.IdentifyGfa1</mainClass>
             </program>

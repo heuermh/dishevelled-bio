@@ -210,7 +210,7 @@ public final class FilterBed extends AbstractFilter {
 
         @Override
         public boolean accept(final BedRecord record) {
-            return record.getScore() != null && Double.valueOf(record.getScore()) > score;
+            return Double.valueOf(record.getScore()) > score;
         }
     }
 
