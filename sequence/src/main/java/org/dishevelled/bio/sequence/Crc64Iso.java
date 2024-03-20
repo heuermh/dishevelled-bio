@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+/*
 
     dsh-bio-sequence  Sequences.
     Copyright (c) 2013-2024 held jointly by the individual authors.
@@ -21,28 +20,25 @@
     > http://www.fsf.org/licensing/licenses/lgpl.html
     > http://www.opensource.org/licenses/lgpl-license.php
 
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <packaging>jar</packaging>
-  <parent>
-    <groupId>org.dishevelled</groupId>
-    <artifactId>dsh-bio</artifactId>
-    <version>2.4-SNAPSHOT</version>
-  </parent>
-  <artifactId>dsh-bio-sequence</artifactId>
-  <name>dsh-bio-sequence</name>
-  <description>Sequences.</description>
-  <dependencies>
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-</project>
+*/
+package org.dishevelled.bio.sequence;
+
+/**
+ * CRC64 ISO implementation, ported from Jones <code>crc64.c</code>.
+ *
+ * @since 2.4
+ * @author  Michael Heuer
+ */
+final class Crc64Iso extends AbstractCrc64 {
+
+    /** Polynomial. */
+    private static long POLY64REV  = 0xd800000000000000L;
+
+    /** Initial CRC value. */
+    private static long INITIALCRC = 0x0000000000000000L;
+
+
+    Crc64Iso() {
+        super(POLY64REV, INITIALCRC);
+    }
+}
