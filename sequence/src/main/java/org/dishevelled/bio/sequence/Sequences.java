@@ -30,6 +30,12 @@ import java.io.IOException;
 
 import java.nio.ByteBuffer;
 
+import java.util.Arrays;
+
+import org.apache.commons.codec.binary.Base64;
+
+import org.apache.commons.codec.digest.DigestUtils;
+
 /**
  * Utility methods on sequences.
  *
@@ -484,5 +490,64 @@ public final class Sequences {
     // useful for debug
     static String formatBits(final byte b) {
         return String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0');
+    }
+
+    /**
+     * Return the CRC64 checksum for the specified DNA or protein sequence.
+     *
+     * May still be used in UniProtKB, https://www.uniprot.org/help/checksum  ?
+     *
+     * The checksum is computed as the sequence 64-bit Cyclic Redundancy Check value (CRC64)
+     * using the generator polynomial: <code>x^64 + x^4 + x^3 + x + 1</code>. The algorithm is
+     * described in the ISO 3309 standard.
+     *
+     * Press W.H., Flannery B.P., Teukolsky S.A. and Vetterling W.T. Cyclic redundancy and other
+     * checksums Numerical recipes in C 2nd ed., pp 896-902, Cambridge University Press (1993)
+     *
+     * @param sequence DNA or protein sequence, must not be null
+     * @return the CRC64 checksum for the specified DNA or protein sequence
+     */
+    public static String crc64(final String sequence) {
+        checkNotNull(sequence);
+        return "";
+    }
+
+    /**
+     * Return the improved CRC64 checksum for the specified DNA or protein sequence.
+     *
+     * The CRC64 algorithm employed in the SWISSPROT and TrEMBL data banks is shown to
+     * have a flaw which greatly increases the likelihood of duplicate key values being
+     * generated for pairs of sequences differing in only 2, 3 or 4 positions. A new CRC
+     * function has been implemented which behaves with better statistical properties when
+     * applied to a large set of similar but distinct protein sequences.
+     *
+     * Jones. An Improved 64-bit Cyclic Redundancy Check for Protein Sequences.
+     * http://www0.cs.ucl.ac.uk/staff/David.Jones/crcnote.pdf
+     *
+     * @param sequence DNA or protein sequence, must not be null
+     * @return the improved CRC64 checksum for the specified DNA or protein sequence
+     */
+    public static String improvedCrc64(final String sequence) {
+        checkNotNull(sequence);
+        return "";
+    }
+
+    /**
+     * Return the <code>sha512t24u</code> truncated digest for the specified DNA or protein sequence.
+     *
+     * The sha512t24u truncated digest algorithm computes an ASCII digest from binary data. The method
+     * uses two well-established standard algorithms, the SHA-512 hash function, which generates a binary
+     * digest from binary data, and Base64 URL encoding, which encodes binary data using printable characters.
+     *
+     * See https://vrs.ga4gh.org/en/1.0/impl-guide/computed_identifiers.html#truncated-digest
+     *
+     * @param sequence DNA or protein sequence, must not be null
+     * @return the <code>sha512t24u</code> truncated digest for the specified DNA or protein sequence
+     */
+    public static String sha512t24u(final String sequence) {
+        checkNotNull(sequence);
+        byte[] digest = DigestUtils.sha3_512(sequence);
+        byte[] truncated = Arrays.copyOf(digest, 24);
+        return Base64.encodeBase64URLSafeString(truncated);
     }
 }

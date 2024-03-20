@@ -23,12 +23,15 @@
 */
 package org.dishevelled.bio.sequence;
 
+import static org.dishevelled.bio.sequence.Sequences.crc64;
 import static org.dishevelled.bio.sequence.Sequences.decode;
 import static org.dishevelled.bio.sequence.Sequences.decodeWithNs;
 import static org.dishevelled.bio.sequence.Sequences.decodeWithAmbiguity;
 import static org.dishevelled.bio.sequence.Sequences.encode;
 import static org.dishevelled.bio.sequence.Sequences.encodeWithNs;
 import static org.dishevelled.bio.sequence.Sequences.encodeWithAmbiguity;
+import static org.dishevelled.bio.sequence.Sequences.improvedCrc64;
+import static org.dishevelled.bio.sequence.Sequences.sha512t24u;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -372,5 +375,65 @@ public final class SequencesTest {
     public void testEncodeWithAmbiguityInvalidSymbols() throws Exception {
         // all invalid symbols are mapped to `N`
         assertEquals("ATGCTNNNNN", decodeWithAmbiguity(encodeWithAmbiguity("ATGCT.zZ3#"), 10));
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testCrc64NullSequence() {
+        crc64(null);
+    }
+
+    @Test
+    public void testCrc64EmptySequence() {
+        crc64("");
+    }
+
+    @Test
+    public void testCrc64DnaSequence() {
+        crc64("ATCGATCGTAGCTAGCTGATCGATGCTAGCTGA");
+    }
+
+    @Test
+    public void testCrc64ProteinSequence() {
+        crc64("MNIIQGNLVGTGLKIGIVVGRFNDFITSKLLSG");
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testImprovedCrc64NullSequence() {
+        improvedCrc64(null);
+    }
+
+    @Test
+    public void testImprovedCrc64EmptySequence() {
+        improvedCrc64("");
+    }
+
+    @Test
+    public void testImprovedCrc64DnaSequence() {
+        improvedCrc64("ATCGATCGTAGCTAGCTGATCGATGCTAGCTGA");
+    }
+
+    @Test
+    public void testImprovedCrc64ProteinSequence() {
+        improvedCrc64("MNIIQGNLVGTGLKIGIVVGRFNDFITSKLLSG");
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testSha512t24uNullSequence() {
+        sha512t24u(null);
+    }
+
+    @Test
+    public void testSha512t24uEmptySequence() {
+        sha512t24u("");
+    }
+
+    @Test
+    public void testSha512t24uDnaSequence() {
+        sha512t24u("ATCGATCGTAGCTAGCTGATCGATGCTAGCTGA");
+    }
+
+    @Test
+    public void testSha512t24uProteinSequence() {
+        sha512t24u("MNIIQGNLVGTGLKIGIVVGRFNDFITSKLLSG");
     }
 }
