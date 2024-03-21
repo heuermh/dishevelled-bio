@@ -65,6 +65,7 @@
     <commons-csv.version>1.10.0</commons-csv.version>
     <commons-codec.version>1.16.1</commons-codec.version>
     <commons-math3.version>3.6.1</commons-math3.version>
+    <crc.version>1.1.0</crc.version>
     <dsh-bitset.version>3.0</dsh-bitset.version>
     <dsh-commandline.version>1.2</dsh-commandline.version>
     <dsh-compress.version>1.6.9</dsh-compress.version>
@@ -100,6 +101,11 @@
             <artifactId>commons-jexl</artifactId>
           </exclusion>
         </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>com.github.snksoft</groupId>
+        <artifactId>crc</artifactId>
+        <version>${crc.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>

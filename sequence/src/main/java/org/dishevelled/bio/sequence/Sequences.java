@@ -32,6 +32,8 @@ import java.nio.ByteBuffer;
 
 import java.util.Arrays;
 
+import com.github.snksoft.crc.CRC;
+
 import org.apache.commons.codec.binary.Base64;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -492,6 +494,15 @@ public final class Sequences {
         return String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0');
     }
 
+    /** Cached crc64iso implementation. */
+    private static final CRC CRC64ISO = new CRC(CRC.Parameters.CRC64ISO);
+
+    /** Cached crc64ref implementation. */
+    //private static final CRC CRC64REF = new CRC(new CRC.Parameters(64, 0xd800000000000000ULL, 0x0000000000000000ULL, true, true, 0x0));
+
+    /** Cached improved crc64 implementation. */
+    //private static final CRC IMPROVEDCRC64 = new CRC(new CRC.Parameters(64, 0x95AC9329AC4BC9B5ULL, 0xFFFFFFFFFFFFFFFFULL, true, true, 0x0));
+
     /**
      * Return the CRC64 checksum for the specified DNA or protein sequence.
      *
@@ -502,14 +513,17 @@ public final class Sequences {
      * described in the ISO 3309 standard.
      *
      * Press W.H., Flannery B.P., Teukolsky S.A. and Vetterling W.T. Cyclic redundancy and other
-     * checksums Numerical recipes in C 2nd ed., pp 896-902, Cambridge University Press (1993)
+     * checksums, Numerical recipes in C 2nd ed., pp 896-902, Cambridge University Press (1993).
      *
      * @param sequence DNA or protein sequence, must not be null
      * @return the CRC64 checksum for the specified DNA or protein sequence
      */
     public static String crc64(final String sequence) {
         checkNotNull(sequence);
-        return "";
+        // todo: encode string in UTF-8 first?
+        long crc = CRC64ISO.calculateCRC(sequence.getBytes());
+        // todo:  format this result?
+        return String.valueOf(crc);
     }
 
     /**
@@ -529,7 +543,8 @@ public final class Sequences {
      */
     public static String improvedCrc64(final String sequence) {
         checkNotNull(sequence);
-        return "";
+        long crc = CRC64ISO.calculateCRC(sequence.getBytes());
+        return String.valueOf(crc);
     }
 
     /**
