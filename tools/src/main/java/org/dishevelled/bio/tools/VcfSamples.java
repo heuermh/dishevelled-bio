@@ -64,6 +64,7 @@ public final class VcfSamples implements Callable<Integer> {
     /**
      * Extract samples from VCF format.
      *
+     * @deprecated will be removed in version 3.0
      * @param inputVcfFile input VCF file, if any
      * @param outputSampleFile output sample file, if any
      */

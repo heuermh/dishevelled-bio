@@ -60,6 +60,7 @@ public final class RenameGff3References extends AbstractRenameReferences {
     /**
      * Rename references in GFF3 files.
      *
+     * @deprecated will be removed in version 3.0
      * @param chr true to add "chr" to chromosome names
      * @param inputGff3File input GFF3 file, if any
      * @param outputGff3File output GFF3 file, if any

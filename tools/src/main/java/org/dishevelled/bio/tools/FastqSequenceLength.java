@@ -64,6 +64,7 @@ public final class FastqSequenceLength implements Callable<Integer> {
     /**
      * Output sequence lengths from DNA sequences in FASTQ format.
      *
+     * @deprecated will be removed in version 3.0
      * @param fastqFile input FASTQ file, if any
      * @param sequenceLengthFile output file of sequence lengths, if any
      */

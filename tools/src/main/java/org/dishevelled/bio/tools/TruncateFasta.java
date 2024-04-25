@@ -74,6 +74,7 @@ public final class TruncateFasta implements Callable<Integer> {
     /**
      * Truncate DNA or protein sequences in FASTA format.
      *
+     * @deprecated will be removed in version 3.0
      * @param inputFastaFile input FASTA file, if any
      * @param outputFastaFile output FASTA file, if any
      * @param length length, must be at least 0
@@ -100,6 +101,7 @@ public final class TruncateFasta implements Callable<Integer> {
      * Truncate DNA or protein sequences in FASTA format.
      *
      * @since 2.0
+     * @deprecated will be removed in version 3.0
      * @param inputFastaFile input FASTA file, if any
      * @param outputFastaFile output FASTA file, if any
      * @param length length, must be at least 0

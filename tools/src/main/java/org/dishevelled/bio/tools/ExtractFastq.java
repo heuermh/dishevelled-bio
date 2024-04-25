@@ -75,6 +75,7 @@ public final class ExtractFastq implements Callable<Integer> {
     /**
      * Extract matching DNA sequences in FASTQ format.
      *
+     * @deprecated will be removed in version 3.0
      * @param inputFastqFile input FASTQ file, if any
      * @param outputFastqFile output FASTQ file, if any
      * @param name exact sequence name to match, if any

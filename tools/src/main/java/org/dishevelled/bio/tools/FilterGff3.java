@@ -82,6 +82,7 @@ public final class FilterGff3 extends AbstractFilter {
     /**
      * Filter features in GFF3 format.
      *
+     * @deprecated will be removed in version 3.0
      * @param filters list of filters, must not be null
      * @param inputGff3File input GFF3 file, if any
      * @param outputGff3File output GFF3 file, if any

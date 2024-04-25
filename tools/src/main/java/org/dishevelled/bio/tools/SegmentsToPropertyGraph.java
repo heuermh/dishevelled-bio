@@ -62,6 +62,7 @@ public final class SegmentsToPropertyGraph implements Callable<Integer> {
     /**
      * Convert segments in GFA 1.0 format to property graph CSV format.
      *
+     * @deprecated will be removed in version 3.0
      * @param inputGfa1File input GFA 1.0 file, if any
      * @param outputNodesFile output nodes.csv file, if any
      */

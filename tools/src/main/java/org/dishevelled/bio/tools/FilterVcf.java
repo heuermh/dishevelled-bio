@@ -84,6 +84,7 @@ public final class FilterVcf extends AbstractFilter {
     /**
      * Filter variants in VCF format.
      *
+     * @deprecated will be removed in version 3.0
      * @param filters list of filters, must not be null
      * @param inputVcfFile input VCF file, if any
      * @param outputVcfFile output VCF file, if any

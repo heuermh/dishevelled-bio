@@ -66,6 +66,7 @@ public final class VcfPedigree implements Callable<Integer> {
     /**
      * Extract a pedigree from VCF format.
      *
+     * @deprecated will be removed in version 3.0
      * @param inputVcfFile input VCF file, if any
      * @param outputPedigreeFile output pedigree file, if any
      */

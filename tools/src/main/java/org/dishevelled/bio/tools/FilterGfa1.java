@@ -82,6 +82,7 @@ public final class FilterGfa1 extends AbstractFilter {
     /**
      * Filter assembly in GFA 1.0 format.
      *
+     * @deprecated will be removed in version 3.0
      * @param filters list of filters, must not be null
      * @param inputGfa1File input GFA 1.0 file, if any
      * @param outputGfa1File output GFA 1.0 file, if any

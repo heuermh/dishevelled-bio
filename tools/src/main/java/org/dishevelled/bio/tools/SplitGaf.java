@@ -62,6 +62,7 @@ public final class SplitGaf extends AbstractSplit {
     /**
      * Split GAF files.
      *
+     * @deprecated will be removed in version 3.0
      * @param inputFile input file, if any
      * @param bytes split the input file at next record after each n bytes, if any
      * @param records split the input file after each n records, if any
@@ -93,6 +94,7 @@ public final class SplitGaf extends AbstractSplit {
     /**
      * Split GAF files.
      *
+     * @deprecated will be removed in version 3.0
      * @param inputFile input file, if any
      * @param bytes split the input file at next record after each n bytes, if any
      * @param records split the input file after each n records, if any

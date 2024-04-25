@@ -78,6 +78,7 @@ public final class InterleavedFastqToBam extends WithReadGroup {
     /**
      * Convert DNA sequences in interleaved FASTQ format to unaligned BAM format.
      *
+     * @deprecated will be removed in version 3.0
      * @param fastqFile input interleaved FASTQ file, if any
      * @param bamFile output BAM file, if any
      * @param readGroupId read group id, if any

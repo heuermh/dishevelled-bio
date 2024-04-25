@@ -156,6 +156,7 @@ public final class BedRecord {
     /**
      * Create a new BED3 record.
      *
+     * @deprecated will be removed in version 3.0
      * @param chrom chrom, must not be null
      * @param start start, must be at least zero
      * @param end end, must be at least zero, and greater than or equal to start
@@ -167,6 +168,7 @@ public final class BedRecord {
     /**
      * Create a new BED4 record.
      *
+     * @deprecated will be removed in version 3.0
      * @param chrom chrom, must not be null
      * @param start start, must be at least zero
      * @param end end, must be at least zero, and greater than or equal to start
@@ -179,6 +181,7 @@ public final class BedRecord {
     /**
      * Create a new BED5 record.
      *
+     * @deprecated will be removed in version 3.0
      * @param chrom chrom, must not be null
      * @param start start, must be at least zero
      * @param end end, must be at least zero, and greater than or equal to start
@@ -192,6 +195,7 @@ public final class BedRecord {
     /**
      * Create a new BED6 record.
      *
+     * @deprecated will be removed in version 3.0
      * @param chrom chrom, must not be null
      * @param start start, must be at least zero
      * @param end end, must be at least zero, and greater than or equal to start
@@ -206,6 +210,7 @@ public final class BedRecord {
     /**
      * Create a new BED12 record.
      *
+     * @deprecated will be removed in version 3.0
      * @param chrom chrom, must not be null
      * @param start start, must be at least zero
      * @param end end, must be at least zero, and greater than or equal to start
@@ -264,6 +269,7 @@ public final class BedRecord {
     /**
      * Return the score for this BED record, if any.
      *
+     * @deprecated will be refactored to return <code>int</code> in version 3.0
      * @return the score for this BED record, if any
      */
     public String getScore() {

@@ -62,6 +62,7 @@ public final class CompressGaf implements Callable<Integer> {
      * Compress alignments in GAF format to splittable bgzf or bzip2 compression
      * codecs.
      *
+     * @deprecated will be removed in version 3.0
      * @param inputGafFile input GAF file, if any
      * @param outputGafFile output GAF file, if any
      */

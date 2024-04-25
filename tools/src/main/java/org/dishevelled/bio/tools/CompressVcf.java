@@ -68,6 +68,7 @@ public final class CompressVcf implements Callable<Integer> {
     /**
      * Compress variants or genotypes in VCF format to splittable bgzf or bzip2 compression codecs.
      *
+     * @deprecated will be removed in version 3.0
      * @param inputVcfFile input VCF file, if any
      * @param outputVcfFile output VCF file, if any
      */

@@ -67,6 +67,7 @@ public final class ExportSegments implements Callable<Integer> {
     /**
      * Export assembly segment sequences in GFA 1.0 format to FASTA format.
      *
+     * @deprecated will be removed in version 3.0
      * @param inputGfa1File input GFA 1.0 file, if any
      * @param outputFastaFile output FASTA file, if any
      * @param lineWidth line width

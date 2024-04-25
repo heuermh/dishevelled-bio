@@ -82,6 +82,7 @@ public final class FilterFastq extends AbstractFilter {
     /**
      * Filter sequences in FASTQ format.
      *
+     * @deprecated will be removed in version 3.0
      * @param filters list of filters, must not be null
      * @param inputFastqFile input FASTQ file, if any
      * @param outputFastqFile output FASTQ file, if any

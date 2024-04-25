@@ -71,6 +71,7 @@ public final class CompressFasta implements Callable<Integer> {
     /**
      * Compress sequences in FASTA format to splittable bgzf or bzip2 compression codecs.
      *
+     * @deprecated will be removed in version 3.0
      * @param inputFastaFile input FASTA file, if any
      * @param outputFastaFile output FASTA file, if any
      * @param lineWidth line width
@@ -95,6 +96,7 @@ public final class CompressFasta implements Callable<Integer> {
      * Compress sequences in FASTA format to splittable bgzf or bzip2 compression codecs.
      *
      * @since 2.0
+     * @deprecated will be removed in version 3.0
      * @param inputFastaFile input FASTA file, if any
      * @param outputFastaFile output FASTA file, if any
      * @param alphabet input FASTA file alphabet { dna, protein }, if any

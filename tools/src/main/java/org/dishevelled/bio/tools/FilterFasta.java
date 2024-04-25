@@ -83,6 +83,7 @@ public final class FilterFasta extends AbstractFilter {
     /**
      * Filter DNA or protein sequences in FASTA format.
      *
+     * @deprecated will be removed in version 3.0
      * @param filters list of filters, must not be null
      * @param inputFastaFile input FASTA file, if any
      * @param outputFastaFile output FASTA file, if any
@@ -112,6 +113,7 @@ public final class FilterFasta extends AbstractFilter {
      * Filter DNA or protein sequences in FASTA format.
      *
      * @since 2.0
+     * @deprecated will be removed in version 3.0
      * @param filters list of filters, must not be null
      * @param inputFastaFile input FASTA file, if any
      * @param outputFastaFile output FASTA file, if any

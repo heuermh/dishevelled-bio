@@ -92,6 +92,7 @@ public final class IntersectBed implements Callable<Integer> {
     /**
      * Similar to bedtools2 intersect -v.
      *
+     * @deprecated will be removed in version 3.0
      * @param aInputFile a input file, if any
      * @param bInputFile b input file, must not be null
      * @param outputFile output file, if any

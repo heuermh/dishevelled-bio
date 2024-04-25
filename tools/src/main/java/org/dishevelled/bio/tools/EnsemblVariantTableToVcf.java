@@ -68,6 +68,7 @@ public class EnsemblVariantTableToVcf implements Callable<Integer>  {
     /**
      * Convert Ensembl variant table to VCF format
      *
+     * @deprecated will be removed in version 3.0
      * @param inputEnsemblVariantTableFile input Ensembl variant table file, if any
      * @param outputVcfFile output VCF file, if any
      */

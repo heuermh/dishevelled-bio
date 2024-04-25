@@ -63,6 +63,7 @@ public final class CompressGfa2 implements Callable<Integer> {
     /**
      * Compress assembly in GFA 2.0 format to splittable bgzf or bzip2 compression codecs.
      *
+     * @deprecated will be removed in version 3.0
      * @param inputGfa2File input GFA 2.0 file, if any
      * @param outputGfa2File output GFA 2.0 file, if any
      */

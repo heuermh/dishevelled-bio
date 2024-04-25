@@ -65,6 +65,7 @@ public final class FastqToText implements Callable<Integer> {
     /**
      * Convert DNA sequences in FASTQ format to tab-separated values (tsv) text format.
      *
+     * @deprecated will be removed in version 3.0
      * @param fastqFile input FASTQ file, if any
      * @param textFile output text file, if any
      */
