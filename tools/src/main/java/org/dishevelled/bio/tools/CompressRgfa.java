@@ -64,6 +64,7 @@ public final class CompressRgfa implements Callable<Integer> {
     /**
      * Compress assembly in rGFA format to splittable bgzf or bzip2 compression codecs.
      *
+     * @deprecated will be removed in version 3.0
      * @param inputRgfaFile input rGFA file, if any
      * @param outputRgfaFile output rGFA file, if any
      */

@@ -64,6 +64,7 @@ public final class SplitInterleavedFastq extends AbstractSplit {
     /**
      * Split interleaved FASTQ files.
      *
+     * @deprecated will be removed in version 3.0
      * @param inputFile input file, if any
      * @param bytes split the input file at next pair of records after each n bytes, if any
      * @param records split the input file after each n records, respecting pairs, if any
@@ -97,6 +98,7 @@ public final class SplitInterleavedFastq extends AbstractSplit {
      * Split interleaved FASTQ files.
      *
      * @since 1.3.2
+     * @deprecated will be removed in version 3.0
      * @param inputFile input file, if any
      * @param bytes split the input file at next pair of records after each n bytes, if any
      * @param records split the input file after each n records, respecting pairs, if any

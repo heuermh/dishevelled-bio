@@ -62,6 +62,7 @@ public final class LinksToPropertyGraph implements Callable<Integer> {
     /**
      * Convert links in GFA 1.0 format to property graph CSV format.
      *
+     * @deprecated will be removed in version 3.0
      * @param inputGfa1File input GFA 1.0 file, if any
      * @param outputEdgesFile output link-edges.csv file, if any
      */

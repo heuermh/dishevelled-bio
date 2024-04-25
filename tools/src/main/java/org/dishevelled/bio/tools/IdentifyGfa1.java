@@ -75,6 +75,7 @@ public final class IdentifyGfa1 implements Callable<Integer> {
     /**
      * Add identifier annotation to records in GFA 1.0 format.
      *
+     * @deprecated will be removed in version 3.0
      * @param inputGfa1File input GFA 1.0 file, if any
      * @param outputGfa1File output GFA 1.0 file, if any
      */

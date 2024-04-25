@@ -63,6 +63,7 @@ public final class FastqToFasta implements Callable<Integer> {
     /**
      * Convert DNA sequences in FASTQ format to FASTA format.
      *
+     * @deprecated will be removed in version 3.0
      * @param fastqFile input FASTQ file, if any
      * @param fastaFile output FASTA file, if any
      */

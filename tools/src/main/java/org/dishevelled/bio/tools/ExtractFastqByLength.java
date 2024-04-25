@@ -72,6 +72,7 @@ public final class ExtractFastqByLength implements Callable<Integer> {
     /**
      * Extract DNA sequences in FASTQ format with a range of lengths.
      *
+     * @deprecated will be removed in version 3.0
      * @param inputFastqFile input FASTQ file, if any
      * @param outputFastqFile output FASTQ file, if any
      * @param minimumLength minimum sequence length, inclusive

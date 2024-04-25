@@ -80,6 +80,7 @@ public final class FilterGaf extends AbstractFilter {
     /**
      * Filter alignments in GAF format.
      *
+     * @deprecated will be removed in version 3.0
      * @param filters list of filters, must not be null
      * @param inputGafFile input GAF file, if any
      * @param outputGafFile output GAF file, if any

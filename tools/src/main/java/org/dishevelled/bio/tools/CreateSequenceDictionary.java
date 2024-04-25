@@ -70,6 +70,7 @@ public final class CreateSequenceDictionary implements Callable<Integer> {
     /**
      * Create a SequenceDictionary from DNA sequences in FASTA format.
      *
+     * @deprecated will be removed in version 3.0
      * @param inputFastaFile input FASTA file, if any
      * @param outputSequenceDictionaryFile output SequenceDictionary .dict file, if any
      */
@@ -92,6 +93,7 @@ public final class CreateSequenceDictionary implements Callable<Integer> {
      * Create a SequenceDictionary from DNA sequences in FASTA format with the specified URL.
      *
      * @since 2.1
+     * @deprecated will be removed in version 3.0
      * @param url URL, if any
      * @param inputFastaFile input FASTA file, if any
      * @param outputSequenceDictionaryFile output SequenceDictionary .dict file, if any

@@ -67,6 +67,7 @@ public final class CompressFastq implements Callable<Integer> {
     /**
      * Compress sequences in FASTQ format to splittable bgzf or bzip2 compression codecs.
      *
+     * @deprecated will be removed in version 3.0
      * @param inputFastqFile input FASTQ file, if any
      * @param outputFastqFile output FASTQ file, if any
      */

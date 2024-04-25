@@ -72,6 +72,7 @@ public final class ReassemblePaths implements Callable<Integer> {
     /**
      * Reassemble paths in GFA 1.0 format, recreating segments and overlaps fields from traversal records.
      *
+     * @deprecated will be removed in version 3.0
      * @param inputGfa1File input GFA 1.0 file, if any
      * @param outputGfa1File output GFA 1.0 file, if any
      */

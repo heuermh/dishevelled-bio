@@ -63,6 +63,7 @@ public final class CompressBed implements Callable<Integer> {
     /**
      * Compress features in BED format to splittable bgzf or bzip2 compression codecs.
      *
+     * @deprecated will be removed in version 3.0
      * @param inputBedFile input BED file, if any
      * @param outputBedFile output BED file, if any
      */

@@ -78,6 +78,7 @@ public final class DownsampleFastq implements Callable<Integer> {
     /**
      * Downsample DNA sequences from files in FASTQ format.
      *
+     * @deprecated will be removed in version 3.0
      * @param inputFastqFile input FASTQ file, if any
      * @param outputFastqFile output FASTQ file, if any
      * @param distribution binomial distribution, must not be null

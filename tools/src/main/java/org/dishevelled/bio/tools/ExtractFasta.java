@@ -77,6 +77,7 @@ public final class ExtractFasta implements Callable<Integer> {
     /**
      * Extract matching DNA or protein sequences in FASTA format.
      *
+     * @deprecated will be removed in version 3.0
      * @param inputFastaFile input FASTA file, if any
      * @param outputFastaFile output FASTA file, if any
      * @param name exact sequence name to match, if any
@@ -120,6 +121,7 @@ public final class ExtractFasta implements Callable<Integer> {
      * Extract matching DNA or protein sequences in FASTA format.
      *
      * @since 2.0
+     * @deprecated will be removed in version 3.0
      * @param inputFastaFile input FASTA file, if any
      * @param outputFastaFile output FASTA file, if any
      * @param name exact sequence name to match, if any

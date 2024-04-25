@@ -64,6 +64,7 @@ public final class CompressSam implements Callable<Integer> {
     /**
      * Compress alignments in SAM format to splittable bgzf or bzip2 compression codecs.
      *
+     * @deprecated will be removed in version 3.0
      * @param inputSamFile input SAM file, if any
      * @param outputSamFile output SAM file, if any
      */

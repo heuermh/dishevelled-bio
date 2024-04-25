@@ -63,6 +63,7 @@ public final class CompressGff3 implements Callable<Integer> {
     /**
      * Compress features in GFF3 format to splittable bgzf or bzip2 compression codecs.
      *
+     * @deprecated will be removed in version 3.0
      * @param inputGff3File input GFF3 file, if any
      * @param outputGff3File output GFF3 file, if any
      */

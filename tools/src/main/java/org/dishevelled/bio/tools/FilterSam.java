@@ -83,6 +83,7 @@ public final class FilterSam extends AbstractFilter {
     /**
      * Filter alignments in SAM format.
      *
+     * @deprecated will be removed in version 3.0
      * @param filters list of filters, must not be null
      * @param inputSamFile input SAM file, if any
      * @param outputSamFile output SAM file, if any

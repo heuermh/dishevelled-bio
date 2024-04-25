@@ -82,6 +82,7 @@ public final class FilterBed extends AbstractFilter {
     /**
      * Filter features in BED format.
      *
+     * @deprecated will be removed in version 3.0
      * @param filters list of filters, must not be null
      * @param inputBedFile input BED file, if any
      * @param outputBedFile output BED file, if any

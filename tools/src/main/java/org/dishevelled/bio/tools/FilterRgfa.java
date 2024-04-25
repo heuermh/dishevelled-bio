@@ -82,6 +82,7 @@ public final class FilterRgfa extends AbstractFilter {
     /**
      * Filter assembly in rGFA format.
      *
+     * @deprecated will be removed in version 3.0
      * @param filters list of filters, must not be null
      * @param inputRgfaFile input rGFA file, if any
      * @param outputRgfaFile output rGFA file, if any
