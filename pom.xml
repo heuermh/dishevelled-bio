@@ -26,7 +26,7 @@
   <parent>
     <groupId>org.dishevelled</groupId>
     <artifactId>dsh-parent</artifactId>
-    <version>43</version>
+    <version>44-SNAPSHOT</version>
   </parent>
   <artifactId>dsh-bio</artifactId>
   <packaging>pom</packaging>
@@ -62,8 +62,8 @@
   <properties>
     <aws-java-nio-spi-for-s3.version>2.0.1</aws-java-nio-spi-for-s3.version>
     <biojava.version>1.9.7</biojava.version>
-    <commons-csv.version>1.10.0</commons-csv.version>
-    <commons-codec.version>1.16.1</commons-codec.version>
+    <commons-csv.version>1.11.0</commons-csv.version>
+    <commons-codec.version>1.17.0</commons-codec.version>
     <commons-math3.version>3.6.1</commons-math3.version>
     <dsh-bitset.version>3.0</dsh-bitset.version>
     <dsh-commandline.version>1.2</dsh-commandline.version>
