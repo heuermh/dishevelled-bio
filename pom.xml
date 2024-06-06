@@ -69,7 +69,7 @@
     <dsh-commandline.version>1.2</dsh-commandline.version>
     <dsh-compress.version>1.6.11</dsh-compress.version>
     <dsh-graph.version>1.0</dsh-graph.version>
-    <duckdb.version>0.10.3</duckdb.version>
+    <duckdb.version>1.0.0</duckdb.version>
     <google-cloud.version>0.127.18</google-cloud.version>
     <htsjdk.version>4.1.0</htsjdk.version>
     <jdk.version>17</jdk.version>
