@@ -40,6 +40,8 @@ import java.sql.Statement;
 
 import java.util.concurrent.Callable;
 
+import com.google.common.annotations.Beta;
+
 import org.biojava.bio.seq.Sequence;
 import org.biojava.bio.seq.SequenceIterator;
 
@@ -64,9 +66,12 @@ import org.duckdb.DuckDBConnection;
 /**
  * Convert DNA or protein sequences in FASTA format to Parquet format.
  *
+ * Beta implementation to be merged into FastaToParquet after performance benchmarking.
+ *
  * @since 2.4
  * @author  Michael Heuer
  */
+@Beta
 @SuppressWarnings("deprecation")
 public final class FastaToParquet4 implements Callable<Integer> {
     private final Path fastaPath;

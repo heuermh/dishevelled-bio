@@ -40,6 +40,8 @@ import java.sql.Statement;
 
 import java.util.concurrent.Callable;
 
+import com.google.common.annotations.Beta;
+
 import org.biojava.bio.seq.Sequence;
 import org.biojava.bio.seq.SequenceIterator;
 
@@ -66,6 +68,7 @@ import org.duckdb.DuckDBConnection;
  * @since 2.4
  * @author  Michael Heuer
  */
+@Beta
 @SuppressWarnings("deprecation")
 public final class FastaToParquet implements Callable<Integer> {
     private final Path fastaPath;

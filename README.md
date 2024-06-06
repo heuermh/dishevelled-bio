@@ -49,6 +49,10 @@ commands:
   extract-fastq    extract matching DNA sequences in FASTQ format
   extract-fastq-by-length    extract DNA sequences in FASTQ format with a range of lengths
   fasta-to-fastq    convert DNA sequences in FASTA format to FASTQ format
+  fasta-to-parquet    (beta) convert DNA or protein sequences in FASTA format to Parquet format
+  fasta-to-parquet2    (beta) convert DNA or protein sequences in FASTA format to Parquet format, with transaction size
+  fasta-to-parquet3    (beta) convert DNA or protein sequences in FASTA format to Parquet format, with partition size
+  fasta-to-parquet4    (beta) convert DNA or protein sequences in FASTA format to Parquet format, with flush after
   fasta-to-text    convert DNA or protein sequences in FASTA format to tab-separated values (tsv) text format
   fastq-description    output description lines from DNA sequences in FASTQ format
   fastq-sequence-length    output sequence lengths from DNA sequences in FASTQ format
