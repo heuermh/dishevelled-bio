@@ -81,7 +81,13 @@ public final class BedRecord {
     private static final long[] EMPTY = new long[0];
 
     /** R,G,B pattern. */
-    private static final Pattern RGB = Pattern.compile("^[0-9]+,[0-9]+,[0-9]+$");
+    private static final Pattern RGB = Pattern.compile("[0,255],[0,255],[0,255]");
+
+    /** Valid chrom pattern. */
+    private static final Pattern CHROM = Pattern.compile("[A-Za-z0-9_]{1,255}");
+
+    /** Valid name pattern. */
+    private static final Pattern NAME = Pattern.compile("[\\x20-\\x7e]{1,255}");
 
 
     /**
@@ -123,6 +129,10 @@ public final class BedRecord {
         checkArgument(blockSizes.length == blockCount, "blockSizes must be the same length as blockCount");
         checkArgument(blockStarts.length == blockCount, "blockStarts must be the same length as blockCount");
 
+        if (!CHROM.matcher(chrom).matches()) {
+            throw new IllegalArgumentException("invalid format for chrom, must include only word characters [A-Za-z0-9_]");
+        }
+
         // allow "." if not specified
         if (strand != null && !".".equals(strand)) {
             checkArgument("-".equals(strand) || "+".equals(strand), "if present, strand must be either - or +");
@@ -131,6 +141,13 @@ public final class BedRecord {
         // allow "0" if not specified in R,G,B format
         if (itemRgb != null && !"0".equals(itemRgb) && !RGB.matcher(itemRgb).matches()) {
             throw new IllegalArgumentException("if present, itemRgb must be in R,G,B format, e.g. 255,0,0");
+        }
+
+        // validate name if at least BED4
+        if (format.isAtLeastBED4()) {
+            if (!NAME.matcher(name).matches()) {
+                throw new IllegalArgumentException("name must not contain control characters");
+            }
         }
 
         // validate blocks if at least BED12
@@ -151,6 +168,9 @@ public final class BedRecord {
                 }
                 if (lastStart + lastSize > blockStarts[i]) {
                     throw new IllegalArgumentException("blocks must not overlap");
+                }
+                if (blockSizes[i] < 0) {
+                    throw new IllegalArgumentException("block size must be at least zero");
                 }
                 lastStart = blockStarts[i];
                 lastSize = blockSizes[i];
@@ -479,7 +499,7 @@ public final class BedRecord {
      */
     public static BedRecord valueOf(final String value) {
         checkNotNull(value);
-        List<String> tokens = Splitter.on("\t").trimResults().splitToList(value);
+        List<String> tokens = Splitter.on('\t').trimResults().splitToList(value);
         if (tokens.size() < 3) {
             throw new IllegalArgumentException("value must have at least three fields (chrom, start, end)");
         }
