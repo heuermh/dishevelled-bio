@@ -81,7 +81,7 @@ public final class BedRecord {
     private static final long[] EMPTY = new long[0];
 
     /** R,G,B pattern. */
-    private static final Pattern RGB = Pattern.compile("[0,255],[0,255],[0,255]");
+    private static final Pattern RGB = Pattern.compile("[0-9]{1,3},[0-9]{1,3},[0-9]{1,3}");
 
     /** Valid chrom pattern. */
     private static final Pattern CHROM = Pattern.compile("[A-Za-z0-9_]{1,255}");
@@ -138,9 +138,23 @@ public final class BedRecord {
             checkArgument("-".equals(strand) || "+".equals(strand), "if present, strand must be either - or +");
         }
 
+        String fixedItemRgb = itemRgb;
         // allow "0" if not specified in R,G,B format
-        if (itemRgb != null && !"0".equals(itemRgb) && !RGB.matcher(itemRgb).matches()) {
-            throw new IllegalArgumentException("if present, itemRgb must be in R,G,B format, e.g. 255,0,0");
+        if (fixedItemRgb != null && !"0".equals(itemRgb)) {
+            // fixup to remove leading zeros
+            if (RGB.matcher(itemRgb).matches()) {
+                String[] tokens = itemRgb.split(",");
+                int r = Integer.parseInt(tokens[0]);
+                int g = Integer.parseInt(tokens[1]);
+                int b = Integer.parseInt(tokens[2]);
+                if (r > 255 || g > 255 || b > 255) {
+                    throw new IllegalArgumentException("invalid R,G,B format for itemRgb, color values range [0-255]");
+                }
+                fixedItemRgb = r + "," + g + "," + b;
+            }
+            else {
+                throw new IllegalArgumentException("if present, itemRgb must be in R,G,B format, e.g. 255,0,0");
+            }
         }
 
         // validate name if at least BED4
@@ -186,7 +200,7 @@ public final class BedRecord {
         this.strand = strand;
         this.thickStart = thickStart;
         this.thickEnd = thickEnd;
-        this.itemRgb = itemRgb;
+        this.itemRgb = fixedItemRgb;
         this.blockCount = blockCount;
         this.blockSizes = blockSizes.clone();
         this.blockStarts = blockStarts.clone();

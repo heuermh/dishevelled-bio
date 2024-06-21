@@ -285,4 +285,21 @@ public final class BedRecordTest {
         BedRecord record = valueOf("chr1\t11873\t14409\tuc001aaa.3\t0\t+\t11873\t11873\t\t3\t354,109,1189,\t0,739,1347,");
         assertEquals("0", record.getItemRgb());
     }
+
+    @Test
+    public void testValueOfBED12ValidItemRgb() {
+        BedRecord record = valueOf("chr19\t250275\t250322\tname7\t902\t-\t250276\t250321\t128,128,0\t2\t10,10\t0,37");
+        assertEquals("128,128,0", record.getItemRgb());
+    }
+
+    @Test
+    public void testValueOfBed12LeadingZerosItemRgb() {
+        BedRecord record = valueOf("chr19\t250131\t250167\tname3\t914\t-\t250132\t250166\t000,000,000\t2\t10,10\t0,26");
+        assertEquals("0,0,0", record.getItemRgb());
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testValueOfBed12InvalidItemRgb() {
+        valueOf("chr19\t250000\t250036\tname1\t889\t+\t250001\t250035\t256,128,0\t2\t10,10\t0,26");
+    }
 }
