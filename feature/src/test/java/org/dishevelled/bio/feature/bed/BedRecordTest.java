@@ -81,6 +81,16 @@ public final class BedRecordTest {
     }
 
     @Test(expected=IllegalArgumentException.class)
+    public void testValueOfThickStartLessThanStart() {
+        valueOf("chr1\t11873\t14409\tuc001aaa.3\t0\t+\t10873\t11873\t0\t3\t354,109,1189,\t0,739,1347,");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testValueOfThickStartGreaterThanEnd() {
+        valueOf("chr1\t11873\t14409\tuc001aaa.3\t0\t+\t15409\t11873\t0\t3\t354,109,1189,\t0,739,1347,");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
     public void testValueOfThickEndLessThanZero() {
         valueOf("chr1\t11873\t14409\tuc001aaa.3\t0\t+\t11873\t-1\t0\t3\t354,109,1189,\t0,739,1347,");
     }
@@ -118,6 +128,51 @@ public final class BedRecordTest {
     @Test(expected=IllegalArgumentException.class)
     public void testValueOfTooManyBlockStarts() {
         valueOf("chr1\t11873\t14409\tuc001aaa.3\t0\t+\t11873\t11873\t0\t3\t354,109,1189,\t0,739,1347,42,");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testScoreTooLow() {
+        valueOf("chr1\t11873\t14409\tuc001aaa.3\t-1\t+\t11873\t11873\t0\t3\t354,109,1189,\t0,739,1347,");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testScoreTooHigh() {
+        valueOf("chr1\t11873\t14409\tuc001aaa.3\t1001\t+\t11873\t11873\t0\t3\t354,109,1189,\t0,739,1347,");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testScoreInvalid() {
+        valueOf("chr1\t11873\t14409\tuc001aaa.3\tinvalid\t+\t11873\t11873\t0\t3\t354,109,1189,\t0,739,1347,");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testItemRgbInvalid() {
+        valueOf("chr1\t11873\t14409\tuc001aaa.3\t0\t+\t11873\t11873\tinvalid\t3\t354,109,1189,\t0,739,1347,");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBED12BlockCountZero() {
+        valueOf("chr1\t11873\t14409\tuc001aaa.3\t0\t+\t11873\t11873\t0\t0\t\t");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBED12FirstBlockStart() {
+        valueOf("chr1\t11873\t14409\tuc001aaa.3\t0\t+\t11873\t11873\t0\t3\t353,109,1189,\t1,739,1347,");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBED12LastBlockEnd() {
+        valueOf("chr1\t11873\t14409\tuc001aaa.3\t0\t+\t11873\t11873\t0\t3\t354,109,1188,\t0,739,1347,");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBED12BlockOverlap() {
+        valueOf("chr1\t11873\t14409\tuc001aaa.3\t0\t+\t11873\t11873\t0\t3\t354,109,1689,\t0,739,847,");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBED12BlocksOutOfOrder() {
+        valueOf("chr1\t11873\t14409\tuc001aaa.3\t0\t+\t11873\t11873\t0\t4\t354,100,100,1189,\t0,900,700,1347,");
     }
 
     @Test
@@ -161,7 +216,7 @@ public final class BedRecordTest {
         assertEquals(11873L, record.getStart());
         assertEquals(14409L, record.getEnd());
         assertEquals("uc001aaa.3", record.getName());
-        assertEquals("0", record.getScore());
+        assertEquals(0, record.getScore());
         assertEquals(BedFormat.BED5, record.getFormat());
         assertEquals(Range.closedOpen(11873L, 14409L), record.toRange());
         assertEquals("chr1\t11873\t14409\tuc001aaa.3\t0", record.toString());
@@ -174,7 +229,7 @@ public final class BedRecordTest {
         assertEquals(11873L, record.getStart());
         assertEquals(14409L, record.getEnd());
         assertEquals("uc001aaa.3", record.getName());
-        assertEquals("0", record.getScore());
+        assertEquals(0, record.getScore());
         assertEquals("+", record.getStrand());
         assertEquals(BedFormat.BED6, record.getFormat());
         assertEquals(Range.closedOpen(11873L, 14409L), record.toRange());
@@ -188,7 +243,7 @@ public final class BedRecordTest {
         assertEquals(11873L, record.getStart());
         assertEquals(14409L, record.getEnd());
         assertEquals("uc001aaa.3", record.getName());
-        assertEquals("0", record.getScore());
+        assertEquals(0, record.getScore());
         assertEquals("+", record.getStrand());
         assertEquals(11873L, record.getThickStart());
         assertEquals(11873L, record.getThickEnd());
@@ -205,5 +260,46 @@ public final class BedRecordTest {
         assertEquals(BedFormat.BED12, record.getFormat());
         assertEquals(Range.closedOpen(11873L, 14409L), record.toRange());
         assertEquals("chr1\t11873\t14409\tuc001aaa.3\t0\t+\t11873\t11873\t0\t3\t354,109,1189\t0,739,1347", record.toString());
+    }
+
+    @Test
+    public void testValueOfBED12DefaultName() {
+        BedRecord record = valueOf("chr1\t11873\t14409\t\t0\t+\t11873\t11873\t0\t3\t354,109,1189,\t0,739,1347,");
+        assertEquals(".", record.getName());
+    }
+
+    @Test
+    public void testValueOfBED12DefaultStrand() {
+        BedRecord record = valueOf("chr1\t11873\t14409\tuc001aaa.3\t0\t\t11873\t11873\t0\t3\t354,109,1189,\t0,739,1347,");
+        assertEquals(".", record.getStrand());
+    }
+
+    @Test
+    public void testValueOfBED12DefaultScore() {
+        BedRecord record = valueOf("chr1\t11873\t14409\tuc001aaa.3\t\t+\t11873\t11873\t0\t3\t354,109,1189,\t0,739,1347,");
+        assertEquals(0, record.getScore());
+    }
+
+    @Test
+    public void testValueOfBED12DefaultItemRgb() {
+        BedRecord record = valueOf("chr1\t11873\t14409\tuc001aaa.3\t0\t+\t11873\t11873\t\t3\t354,109,1189,\t0,739,1347,");
+        assertEquals("0", record.getItemRgb());
+    }
+
+    @Test
+    public void testValueOfBED12ValidItemRgb() {
+        BedRecord record = valueOf("chr19\t250275\t250322\tname7\t902\t-\t250276\t250321\t128,128,0\t2\t10,10\t0,37");
+        assertEquals("128,128,0", record.getItemRgb());
+    }
+
+    @Test
+    public void testValueOfBed12LeadingZerosItemRgb() {
+        BedRecord record = valueOf("chr19\t250131\t250167\tname3\t914\t-\t250132\t250166\t000,000,000\t2\t10,10\t0,26");
+        assertEquals("0,0,0", record.getItemRgb());
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testValueOfBed12InvalidItemRgb() {
+        valueOf("chr19\t250000\t250036\tname1\t889\t+\t250001\t250035\t256,128,0\t2\t10,10\t0,26");
     }
 }

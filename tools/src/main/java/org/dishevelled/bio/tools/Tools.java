@@ -173,6 +173,7 @@ public final class Tools implements Callable<Integer> {
         .put("filter-sam", new Command("filter-sam", "filter alignments in SAM format", FilterSam.class))
         .put("filter-vcf", new Command("filter-vcf", "filter variants in VCF format", FilterVcf.class))
         .put("gfa1-to-gfa2", new Command("gfa1-to-gfa2", "convert GFA 1.0 format to GFA 2.0 format", Gfa1ToGfa2.class))
+        .put("gff3-to-bed", new Command("gff3-to-bed", "convert transcript features in GFF3 format to BED format", Gff3ToBed.class))
         .put("identify-gfa1", new Command("identify-gfa1", "add identifier annotation to records in GFA 1.0 format", IdentifyGfa1.class))
         .put("interleave-fastq", new Command("interleave-fastq", "convert first and second DNA sequence files in FASTQ format to interleaved FASTQ format", InterleaveFastq.class))
         .put("interleaved-fastq-to-bam", new Command("interleaved-fastq-to-bam", "convert DNA sequences in interleaved FASTQ format to unaligned BAM format", InterleavedFastqToBam.class))

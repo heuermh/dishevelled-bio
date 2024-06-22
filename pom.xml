@@ -273,7 +273,7 @@
         <plugins>
           <plugin>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>3.5.0</version>
+            <version>3.6.3</version>
             <configuration>
               <detectLinks>true</detectLinks>
               <show>package</show>
