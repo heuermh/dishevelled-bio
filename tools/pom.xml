@@ -297,6 +297,10 @@
               <mainClass>org.dishevelled.bio.tools.ExportSegments</mainClass>
             </program>
             <program>
+              <id>dsh-extract-fasta-kmers</id>
+              <mainClass>org.dishevelled.bio.tools.ExtractFastaKmers</mainClass>
+            </program>
+            <program>
               <id>dsh-extract-fastq</id>
               <mainClass>org.dishevelled.bio.tools.ExtractFastq</mainClass>
             </program>

@@ -148,6 +148,7 @@ public final class Tools implements Callable<Integer> {
         .put("downsample-interleaved-fastq", new Command("downsample-interleaved-fastq", "downsample DNA sequences from a file in interleaved FASTQ format", DownsampleInterleavedFastq.class))
         .put("export-segments", new Command("export-segments", "export assembly segment sequences in GFA 1.0 format to FASTA format", ExportSegments.class))
         .put("extract-fasta", new Command("extract-fasta", "extract matching DNA or protein sequences in FASTA format", ExtractFasta.class))
+        .put("extract-fasta-kmers", new Command("extract-fasta-kmers", "extract kmers from DNA or protein sequences in FASTA format", ExtractFastaKmers.class))
         .put("extract-fastq", new Command("extract-fastq", "extract matching DNA sequences in FASTQ format", ExtractFastq.class))
         .put("extract-fastq-by-length", new Command("extract-fastq-by-length", "extract DNA sequences in FASTQ format with a range of lengths", ExtractFastqByLength.class))
         .put("fasta-to-fastq", new Command("fasta-to-fastq", "convert DNA sequences in FASTA format to FASTQ format", FastaToFastq.class))
