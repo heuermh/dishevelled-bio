@@ -65,6 +65,9 @@ public final class ExtractFastaKmers implements Callable<Integer> {
     private final File outputKmerFile;
     private final String alphabet;
     private final int kmerLength;
+    private final boolean includeNs;
+    private final int upstreamLength;
+    private final int downstreamLength;
     static final String DEFAULT_ALPHABET = "dna";
     private static final String USAGE = "dsh-extract-fasta-kmers [args]";
 
@@ -76,19 +79,29 @@ public final class ExtractFastaKmers implements Callable<Integer> {
      * @param outputKmerFile output kmer file, if any
      * @param alphabet input FASTA file alphabet { dna, protein }, if any
      * @param kmerLength kmer length, must be at least 1
-     * @param lineWidth line width
+     * @param includeNs for DNA sequences, include kmers containing Ns
+     * @param upstreamLength upstream reference sequence length to include, default 0
+     * @param downstreamLength downstream reference sequence length to include, default 0
      */
     public ExtractFastaKmers(final Path inputFastaPath,
                              final File outputKmerFile,
                              final String alphabet,
-                             final int kmerLength) {
+                             final int kmerLength,
+                             final boolean includeNs,
+                             final int upstreamLength,
+                             final int downstreamLength) {
 
-        checkArgument(kmerLength > 1, "kmer length must be at least 1");
+        checkArgument(kmerLength >= 1, "kmer length must be at least 1");
+        checkArgument(upstreamLength >= 0, "upstream length must be at least 0");
+        checkArgument(downstreamLength >= 0, "downstream length must be at least 0");
 
         this.inputFastaPath = inputFastaPath;
         this.outputKmerFile = outputKmerFile;
         this.alphabet = alphabet;
         this.kmerLength = kmerLength;
+        this.includeNs = includeNs;
+        this.upstreamLength = upstreamLength;
+        this.downstreamLength = downstreamLength;
     }
 
 
@@ -105,17 +118,45 @@ public final class ExtractFastaKmers implements Callable<Integer> {
 
                 if (sequence.length() > kmerLength) {
                     String name = sequence.getName();
-                    int lastStart = Math.max(1, sequence.length() - kmerLength);
 
-                    for (int start = 1; start <= lastStart; start++) {
-                        int end = start + kmerLength;
+                    // 0-based half-open coordinates
+                    int lastStart = Math.max(0, sequence.length() - kmerLength);
+                    for (int start = 0; start <= lastStart; start++) {
 
-                        writer.print(sequence.subStr(start, end));
-                        writer.print("\t");
-                        writer.print(name);
-                        writer.print("\t");
-                        // use 0-based coordinates
-                        writer.println(start - 1);
+                        // 1-based fully closed coordinates
+                        int kmerStart = start + 1;
+                        int kmerEnd = start + kmerLength;
+                        String kmer = sequence.subStr(kmerStart, kmerEnd);
+
+                        if (includeNs || !kmer.contains("n")) {
+                            writer.print(kmer);
+                            writer.print("\t");
+                            writer.print(name);
+                            writer.print("\t");
+
+                            // output 0-based half-open coordinates
+                            writer.print(start);
+
+                            if (upstreamLength > 0) {
+                                // 1-based fully closed coordinates
+                                int upstreamStart = Math.max(1, start - upstreamLength);
+                                int upstreamEnd = start;
+                                writer.print("\t");
+                                if (upstreamEnd >= upstreamStart) {
+                                    writer.print(sequence.subStr(upstreamStart, upstreamEnd));
+                                }
+                            }
+                            if (downstreamLength > 0) {
+                                // 1-based fully closed coordinates
+                                int downstreamStart = Math.min(kmerEnd + 1, sequence.length() + 1);
+                                int downstreamEnd = Math.min(kmerEnd + downstreamLength, sequence.length());
+                                writer.print("\t");
+                                if (downstreamEnd >= downstreamStart) {
+                                    writer.print(sequence.subStr(downstreamStart, downstreamEnd));
+                                }
+                            }
+                            writer.print("\n");
+                        }
                     }
                 }
             }
@@ -149,14 +190,26 @@ public final class ExtractFastaKmers implements Callable<Integer> {
      * @param args command line args
      */
     public static void main(final String[] args) {
+
+        // install a signal handler to exit on SIGPIPE
+        sun.misc.Signal.handle(new sun.misc.Signal("PIPE"), new sun.misc.SignalHandler() {
+                @Override
+                public void handle(final sun.misc.Signal signal) {
+                    System.exit(0);
+                }
+            });
+
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
         PathArgument inputFastaPath = new PathArgument("i", "input-fasta-path", "input FASTA path, default stdin", false);
         FileArgument outputKmerFile = new FileArgument("o", "output-kmer-file", "output kmer file, default stdout", false);
         StringArgument alphabet = new StringArgument("e", "alphabet", "input FASTA alphabet { dna, protein }, default dna", false);
         IntegerArgument kmerLength = new IntegerArgument("k", "kmer-length", "kmer length", true);
+        Switch includeNs = new Switch("n", "include-ns", "for DNA sequences, include kmers containing Ns");
+        IntegerArgument upstreamLength = new IntegerArgument("u", "upstream-length", "upstream length, default 0", false);
+        IntegerArgument downstreamLength = new IntegerArgument("d", "downstream-length", "downstream length, default 0", false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputFastaPath, outputKmerFile, alphabet, kmerLength);
+        ArgumentList arguments = new ArgumentList(about, help, inputFastaPath, outputKmerFile, alphabet, kmerLength, includeNs, upstreamLength, downstreamLength);
         CommandLine commandLine = new CommandLine(args);
 
         ExtractFastaKmers extractFastaKmers = null;
@@ -171,7 +224,7 @@ public final class ExtractFastaKmers implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            extractFastaKmers = new ExtractFastaKmers(inputFastaPath.getValue(), outputKmerFile.getValue(), alphabet.getValue(DEFAULT_ALPHABET), kmerLength.getValue());
+            extractFastaKmers = new ExtractFastaKmers(inputFastaPath.getValue(), outputKmerFile.getValue(), alphabet.getValue(DEFAULT_ALPHABET), kmerLength.getValue(), includeNs.wasFound(), upstreamLength.getValue(0), downstreamLength.getValue(0));
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);
