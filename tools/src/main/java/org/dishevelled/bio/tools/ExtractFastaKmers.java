@@ -139,7 +139,7 @@ public final class ExtractFastaKmers implements Callable<Integer> {
 
                             if (upstreamLength > 0) {
                                 // 1-based fully closed coordinates
-                                int upstreamStart = Math.max(1, start - upstreamLength);
+                                int upstreamStart = Math.max(1, start + 1 - upstreamLength);
                                 int upstreamEnd = start;
                                 writer.print("\t");
                                 if (upstreamEnd >= upstreamStart) {
