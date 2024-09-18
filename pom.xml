@@ -26,7 +26,7 @@
   <parent>
     <groupId>org.dishevelled</groupId>
     <artifactId>dsh-parent</artifactId>
-    <version>46</version>
+    <version>47</version>
   </parent>
   <artifactId>dsh-bio</artifactId>
   <packaging>pom</packaging>
@@ -60,18 +60,18 @@
   </modules>
 
   <properties>
-    <aws-java-nio-spi-for-s3.version>2.0.4</aws-java-nio-spi-for-s3.version>
+    <aws-java-nio-spi-for-s3.version>2.0.5</aws-java-nio-spi-for-s3.version>
     <biojava.version>1.9.7</biojava.version>
     <commons-csv.version>1.11.0</commons-csv.version>
     <commons-codec.version>1.17.1</commons-codec.version>
     <commons-math3.version>3.6.1</commons-math3.version>
     <dsh-bitset.version>3.0</dsh-bitset.version>
     <dsh-commandline.version>1.2</dsh-commandline.version>
-    <dsh-compress.version>1.6.13</dsh-compress.version>
+    <dsh-compress.version>1.6.14</dsh-compress.version>
     <dsh-graph.version>1.0</dsh-graph.version>
-    <duckdb.version>1.0.0</duckdb.version>
-    <google-cloud.version>0.127.22</google-cloud.version>
-    <htsjdk.version>4.1.1</htsjdk.version>
+    <duckdb.version>1.1.0</duckdb.version>
+    <google-cloud.version>0.127.23</google-cloud.version>
+    <htsjdk.version>4.1.2</htsjdk.version>
     <jdk.version>17</jdk.version>
     <jmh.version>1.37</jmh.version>
     <maven.enforcer.maven-version>[3.6.3,)</maven.enforcer.maven-version>
