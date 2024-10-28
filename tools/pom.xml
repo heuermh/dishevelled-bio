@@ -277,6 +277,10 @@
               <mainClass>org.dishevelled.bio.tools.CompressSam</mainClass>
             </program>
             <program>
+              <id>dsh-count-fastq</id>
+              <mainClass>org.dishevelled.bio.tools.CountFastq</mainClass>
+            </program>
+            <program>
               <id>dsh-create-sequence-dictionary</id>
               <mainClass>org.dishevelled.bio.tools.CreateSequenceDictionary</mainClass>
             </program>
@@ -299,6 +303,14 @@
             <program>
               <id>dsh-extract-fasta-kmers</id>
               <mainClass>org.dishevelled.bio.tools.ExtractFastaKmers</mainClass>
+            </program>
+            <program>
+              <id>dsh-extract-fasta-kmers-to-parquet</id>
+              <mainClass>org.dishevelled.bio.tools.ExtractFastaKmersToParquet</mainClass>
+            </program>
+            <program>
+              <id>dsh-extract-fasta-kmers-to-parquet3</id>
+              <mainClass>org.dishevelled.bio.tools.ExtractFastaKmersToParquet3</mainClass>
             </program>
             <program>
               <id>dsh-extract-fastq</id>
