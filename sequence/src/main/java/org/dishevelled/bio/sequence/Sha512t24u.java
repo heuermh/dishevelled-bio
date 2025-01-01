@@ -41,22 +41,16 @@ import java.util.Base64;
  */
 final class Sha512t24u {
 
-    /** SHA-512 message digest. */
-    private final MessageDigest sha512;
+    String sha512t24u(final String sequence) {
+        checkNotNull(sequence);
 
-
-    Sha512t24u() {
+        MessageDigest sha512 = null;
         try {
             sha512 = MessageDigest.getInstance("SHA-512");
         }
         catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
-    }
-
-
-    String sha512t24u(final String sequence) {
-        checkNotNull(sequence);
         byte[] bytes = sequence.getBytes(StandardCharsets.UTF_8);
         byte[] digest = sha512.digest(bytes);
         byte[] truncated = Arrays.copyOf(digest, 24);
