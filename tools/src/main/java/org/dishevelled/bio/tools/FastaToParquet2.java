@@ -80,8 +80,8 @@ public final class FastaToParquet2 implements Callable<Integer> {
     private final int rowGroupSize;
     private final long transactionSize;
     static final String DEFAULT_ALPHABET = "dna";
-    static final int DEFAULT_ROW_GROUP_SIZE = 100000;
-    static final long DEFAULT_TRANSACTION_SIZE = 204800L;
+    static final int DEFAULT_ROW_GROUP_SIZE = 122880;
+    static final long DEFAULT_TRANSACTION_SIZE = DEFAULT_ROW_GROUP_SIZE * 10L;
     private static final String CREATE_TABLE_SQL = "CREATE TABLE s (name VARCHAR, seq VARCHAR)";
     private static final String CREATE_VIEW_SQL = "CREATE VIEW sequences AS SELECT name, upper(seq) AS sequence, length(sequence) AS length, '%s' AS alphabet FROM s";
     private static final String COPY_SQL = "COPY sequences TO '%s' (FORMAT 'parquet', COMPRESSION 'zstd', OVERWRITE_OR_IGNORE 1, ROW_GROUP_SIZE %d)";

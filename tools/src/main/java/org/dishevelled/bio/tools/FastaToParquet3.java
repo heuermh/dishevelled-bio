@@ -80,8 +80,8 @@ public final class FastaToParquet3 implements Callable<Integer> {
     private final int rowGroupSize;
     private final long partitionSize;
     static final String DEFAULT_ALPHABET = "dna";
-    static final int DEFAULT_ROW_GROUP_SIZE = 100000;
-    static final long DEFAULT_PARTITION_SIZE = 1000000L;
+    static final int DEFAULT_ROW_GROUP_SIZE = 122880;
+    static final long DEFAULT_PARTITION_SIZE = DEFAULT_ROW_GROUP_SIZE * 10L;
     private static final String CREATE_TABLE_SQL = "CREATE TABLE s%d (name VARCHAR, seq VARCHAR)";
     private static final String CREATE_VIEW_SQL = "CREATE OR REPLACE VIEW sequences AS SELECT name, upper(seq) AS sequence, length(sequence) AS length, '%s' AS alphabet FROM s%d";
     private static final String DROP_TABLE_SQL = "DROP TABLE s%d";
