@@ -341,6 +341,14 @@
               <mainClass>org.dishevelled.bio.tools.FastaToParquet4</mainClass>
             </program>
             <program>
+              <id>dsh-fasta-to-parquet5</id>
+              <mainClass>org.dishevelled.bio.tools.FastaToParquet5</mainClass>
+            </program>
+            <program>
+              <id>dsh-fasta-to-parquet6</id>
+              <mainClass>org.dishevelled.bio.tools.FastaToParquet6</mainClass>
+            </program>
+            <program>
               <id>dsh-fasta-to-text</id>
               <mainClass>org.dishevelled.bio.tools.FastaToText</mainClass>
             </program>

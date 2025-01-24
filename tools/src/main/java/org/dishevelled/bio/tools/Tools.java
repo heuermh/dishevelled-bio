@@ -159,6 +159,8 @@ public final class Tools implements Callable<Integer> {
         .put("fasta-to-parquet2", new Command("fasta-to-parquet2", "(beta) convert DNA or protein sequences in FASTA format to Parquet format, with transaction size", FastaToParquet2.class))
         .put("fasta-to-parquet3", new Command("fasta-to-parquet3", "(beta) convert DNA or protein sequences in FASTA format to Parquet format, with partition size", FastaToParquet3.class))
         .put("fasta-to-parquet4", new Command("fasta-to-parquet4", "(beta) convert DNA or protein sequences in FASTA format to Parquet format, with flush after", FastaToParquet4.class))
+        .put("fasta-to-parquet5", new Command("fasta-to-parquet5", "(beta) convert DNA or protein sequences in FASTA format to Parquet format, per thread output", FastaToParquet5.class))
+        .put("fasta-to-parquet6", new Command("fasta-to-parquet6", "(beta) convert DNA or protein sequences in FASTA format to Parquet format, per thread output, no view", FastaToParquet6.class))
         .put("fasta-to-text", new Command("fasta-to-text", "convert DNA or protein sequences in FASTA format to tab-separated values (tsv) text format", FastaToText.class))
         .put("fastq-description", new Command("fastq-description", "output description lines from DNA sequences in FASTQ format", FastqDescription.class))
         .put("fastq-sequence-length", new Command("fastq-sequence-length", "output sequence lengths from DNA sequences in FASTQ format", FastqSequenceLength.class))
