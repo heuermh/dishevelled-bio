@@ -325,6 +325,22 @@
               <mainClass>org.dishevelled.bio.tools.FastaToFastq</mainClass>
             </program>
             <program>
+              <id>dsh-fasta-to-pangenome</id>
+              <mainClass>org.dishevelled.bio.tools.FastaToPangenome</mainClass>
+            </program>
+            <program>
+              <id>dsh-fasta-to-pangenome-tree</id>
+              <mainClass>org.dishevelled.bio.tools.FastaToPangenomeTree</mainClass>
+            </program>
+            <program>
+              <id>dsh-fasta-index-to-pangenome</id>
+              <mainClass>org.dishevelled.bio.tools.FastaIndexToPangenome</mainClass>
+            </program>
+            <program>
+              <id>dsh-fasta-index-to-pangenome-tree</id>
+              <mainClass>org.dishevelled.bio.tools.FastaIndexToPangenomeTree</mainClass>
+            </program>
+            <program>
               <id>dsh-fasta-to-parquet</id>
               <mainClass>org.dishevelled.bio.tools.FastaToParquet</mainClass>
             </program>

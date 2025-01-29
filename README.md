@@ -27,6 +27,7 @@ $ dsh-bio --help
 usage:
 dsh-bio [command] [args]
 
+
 commands:
   bin-fastq-quality-scores    bin quality scores from files in FASTQ format
   compress-bed    compress features in BED format to splittable bgzf or bzip2 compression codecs
@@ -40,19 +41,29 @@ commands:
   compress-rgfa    compress assembly in rGFA format to splittable bgzf or bzip2 compression codecs
   compress-sam    compress alignments in SAM format to splittable bgzf or bzip2 compression codecs
   compress-vcf    compress variants and genotypes in VCF format to splittable bgzf or bzip2 compression codecs
+  count-fastq    count DNA sequences in FASTQ format
   create-sequence-dictionary    create a SequenceDictionary from DNA sequences in FASTA format
   disinterleave-fastq    convert interleaved FASTQ format into first and second DNA sequence files in FASTQ format
   downsample-fastq    downsample DNA sequences from files in FASTQ format
   downsample-interleaved-fastq    downsample DNA sequences from a file in interleaved FASTQ format
   export-segments    export assembly segment sequences in GFA 1.0 format to FASTA format
   extract-fasta    extract matching DNA or protein sequences in FASTA format
+  extract-fasta-kmers    extract kmers from DNA or protein sequences in FASTA format
+  extract-fasta-kmers-to-parquet    (beta) extract kmers from DNA or protein sequences in FASTA format to Parquet format
+  extract-fasta-kmers-to-parquet3    (beta) extract kmers from DNA or protein sequences in FASTA format to Parquet format
   extract-fastq    extract matching DNA sequences in FASTQ format
   extract-fastq-by-length    extract DNA sequences in FASTQ format with a range of lengths
+  fasta-index-to-pangenome    convert DNA sequences in FASTA index (.fai) format to pangenome text format
+  fasta-index-to-pangenome-tree    convert DNA sequences in FASTA index (.fai) format to pangenome tree format
   fasta-to-fastq    convert DNA sequences in FASTA format to FASTQ format
+  fasta-to-pangenome    convert DNA sequences in FASTA format to pangenome text format
+  fasta-to-pangenome-tree    convert DNA sequences in FASTA format to pangenome tree format
   fasta-to-parquet    (beta) convert DNA or protein sequences in FASTA format to Parquet format
   fasta-to-parquet2    (beta) convert DNA or protein sequences in FASTA format to Parquet format, with transaction size
   fasta-to-parquet3    (beta) convert DNA or protein sequences in FASTA format to Parquet format, with partition size
   fasta-to-parquet4    (beta) convert DNA or protein sequences in FASTA format to Parquet format, with flush after
+  fasta-to-parquet5    (beta) convert DNA or protein sequences in FASTA format to Parquet format, per thread output
+  fasta-to-parquet6    (beta) convert DNA or protein sequences in FASTA format to Parquet format, per thread output, no view
   fasta-to-text    convert DNA or protein sequences in FASTA format to tab-separated values (tsv) text format
   fastq-description    output description lines from DNA sequences in FASTQ format
   fastq-sequence-length    output sequence lengths from DNA sequences in FASTQ format
@@ -71,6 +82,7 @@ commands:
   filter-sam    filter alignments in SAM format
   filter-vcf    filter variants in VCF format
   gfa1-to-gfa2    convert GFA 1.0 format to GFA 2.0 format
+  gff3-to-bed    convert transcript features in GFF3 format to BED format
   identify-gfa1    add identifier annotation to records in GFA 1.0 format
   interleave-fastq    convert first and second DNA sequence files in FASTQ format to interleaved FASTQ format
   interleaved-fastq-to-bam    convert DNA sequences in interleaved FASTQ format to unaligned BAM format

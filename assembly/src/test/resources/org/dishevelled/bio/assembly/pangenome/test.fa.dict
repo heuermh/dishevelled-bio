@@ -1,0 +1,5 @@
+@HD	VN:1.6
+@SQ	SN:sample1#1#scaffold1	LN:4	M5:6063921c8960cb385f9476a94357c9cf	UR:file:///src/test/resources/org/dishevelled/bio/assembly/pangenome/test.fa
+@SQ	SN:sample1#1#scaffold2	LN:6	M5:61ebda6ac4215606a517bb6d6c576078	UR:file:///src/test/resources/org/dishevelled/bio/assembly/pangenome/test.fa
+@SQ	SN:sample1#2#scaffold3	LN:8	M5:719476596e0da2ff50f227a00cbe87a7	UR:file:///src/test/resources/org/dishevelled/bio/assembly/pangenome/test.fa
+@SQ	SN:sample2#1#scaffold4	LN:12	M5:d580a9b8b5e1759adf026989de66f4c3	UR:file:///src/test/resources/org/dishevelled/bio/assembly/pangenome/test.fa
