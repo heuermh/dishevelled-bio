@@ -26,7 +26,7 @@
   <parent>
     <groupId>org.dishevelled</groupId>
     <artifactId>dsh-parent</artifactId>
-    <version>48</version>
+    <version>49</version>
   </parent>
   <artifactId>dsh-bio</artifactId>
   <packaging>pom</packaging>
@@ -67,7 +67,7 @@
     <commons-math3.version>3.6.1</commons-math3.version>
     <dsh-bitset.version>3.0</dsh-bitset.version>
     <dsh-commandline.version>1.2</dsh-commandline.version>
-    <dsh-compress.version>1.6.15</dsh-compress.version>
+    <dsh-compress.version>1.6.16</dsh-compress.version>
     <dsh-graph.version>1.0</dsh-graph.version>
     <duckdb.version>1.2.0</duckdb.version>
     <google-cloud.version>0.127.30</google-cloud.version>
