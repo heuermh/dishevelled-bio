@@ -39,6 +39,13 @@ public final class HaplotypeTest {
         new Haplotype(1, null);
     }
 
+    @Test(expected=IllegalArgumentException.class)
+    public void testConstructorNegativeIdentifier() {
+        Pangenome pangenome = new Pangenome();
+        Sample sample = new Sample("sample", pangenome);
+        new Haplotype(-1, sample);
+    }
+
     @Test
     public void testConstructor() {
         Pangenome pangenome = new Pangenome();

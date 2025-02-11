@@ -23,6 +23,7 @@
 */
 package org.dishevelled.bio.assembly.pangenome;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.HashMap;
@@ -48,11 +49,12 @@ public final class Haplotype {
     /**
      * Create a new haplotype.
      *
-     * @param identifier identifier for this haplotype
+     * @param identifier identifier for this haplotype, must be at least zero
      * @param sample sample for this haplotype, must not be null
      */
     Haplotype(final int identifier, final Sample sample) {
         checkNotNull(sample);
+        checkArgument(identifier >= 0, "identifier must be at least zero");
         this.identifier = identifier;
         this.sample = sample;
     }
