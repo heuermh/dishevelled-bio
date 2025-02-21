@@ -23,8 +23,12 @@
 */
 package org.dishevelled.bio.sequence;
 
+import static org.dishevelled.bio.sequence.Alphabets.dayhoff ;
+import static org.dishevelled.bio.sequence.Alphabets.dayhoff6;
 import static org.dishevelled.bio.sequence.Alphabets.gbmr4;
 import static org.dishevelled.bio.sequence.Alphabets.gbmr7;
+import static org.dishevelled.bio.sequence.Alphabets.hp ;
+import static org.dishevelled.bio.sequence.Alphabets.hp2;
 import static org.dishevelled.bio.sequence.Alphabets.hsdm17;
 import static org.dishevelled.bio.sequence.Alphabets.mmseqs12;
 import static org.dishevelled.bio.sequence.Alphabets.sdm12;
@@ -269,5 +273,105 @@ public final class AlphabetsTest {
     @Test
     public void testGbmr4Dvl1() {
         assertEquals("YAAAAYYYYYAAAAAPYYYAYPYAPAAYAYAAYAAYYAAAPYYAYAYYYAAYAAAYGYYA", gbmr4(DVL1_HUMAN));
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testHp2NullProtein() {
+        hp2(null);
+    }
+
+    @Test
+    public void testHp2EmptyProtein() {
+        assertEquals("", hp2(""));
+    }
+
+    @Test
+    public void testHp2() {
+        assertEquals("ANNNNNNNNAAAAAANANAANNXXX", hp2("ADKERNTSQYFLIVMCWHGPUOBZX"));
+    }
+
+    @Test
+    public void testHp2NotInTranslationTable() {
+        assertEquals("ANNNNNNNNAAAAAANANAANNXXX", hp2("ADKERNTSQYFLIVMCWHGPUOBZX1234567890abcdefghij-._"));
+    }
+
+    @Test
+    public void testHp2Dvl1() {
+        assertEquals("AANNNAAANANNNNNAAAANAAAAANNANAANANNAANNNAANAANAAANNANNNAAAAN", hp2(DVL1_HUMAN));
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testDayhoff6NullProtein() {
+        dayhoff6(null);
+    }
+
+    @Test
+    public void testDayhoff6EmptyProtein() {
+        assertEquals("", dayhoff6(""));
+    }
+
+    @Test
+    public void testDayhoff6() {
+        assertEquals("ADHDHDAADFFIIIICFHAACHXXX", dayhoff6("ADKERNTSQYFLIVMCWHGPUOBZX"));
+    }
+
+    @Test
+    public void testDayhoff6NotInTranslationTable() {
+        assertEquals("ADHDHDAADFFIIIICFHAACHXXX", dayhoff6("ADKERNTSQYFLIVMCWHGPUOBZX1234567890abcdefghij-._"));
+    }
+
+    @Test
+    public void testDayhoff6Dvl1() {
+        assertEquals("IADAHIIFHIDDDDAAFIIHIAIAADHIAIADFHDIIADHAIHAFHFFFHAIDDDFAIIH", dayhoff6(DVL1_HUMAN));
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testHpNullProtein() {
+        hp(null);
+    }
+
+    @Test
+    public void testHpEmptyProtein() {
+        assertEquals("", hp(""));
+    }
+
+    @Test
+    public void testHp() {
+        assertEquals("hpppppppphhhhhhphphhppxxx", hp("ADKERNTSQYFLIVMCWHGPUOBZX"));
+    }
+
+    @Test
+    public void testHpNotInTranslationTable() {
+        assertEquals("hpppppppphhhhhhphphhppxxx", hp("ADKERNTSQYFLIVMCWHGPUOBZX1234567890abcdefghij-._"));
+    }
+
+    @Test
+    public void testHpDvl1() {
+        assertEquals("hhppphhhphppppphhhhphhhhhpphphhphpphhppphhphhphhhpphppphhhhp", hp(DVL1_HUMAN));
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testDayhoffNullProtein() {
+        dayhoff(null);
+    }
+
+    @Test
+    public void testDayhoffEmptyProtein() {
+        assertEquals("", dayhoff(""));
+    }
+
+    @Test
+    public void testDayhoff() {
+        assertEquals("bcdcdcbbcffeeeeafdbbadxxx", dayhoff("ADKERNTSQYFLIVMCWHGPUOBZX"));
+    }
+
+    @Test
+    public void testDayhoffNotInTranslationTable() {
+        assertEquals("bcdcdcbbcffeeeeafdbbadxxx", dayhoff("ADKERNTSQYFLIVMCWHGPUOBZX1234567890abcdefghij-._"));
+    }
+
+    @Test
+    public void testDayhoffDvl1() {
+        assertEquals("ebcbdeefdeccccbbfeedebebbcdebebcfdceebcdbedbfdfffdbecccfbeed", dayhoff(DVL1_HUMAN));
     }
 }

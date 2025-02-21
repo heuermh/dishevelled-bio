@@ -92,7 +92,18 @@ public final class Alphabets {
     // Solis AD, Rackovsky S. Optimized representations and maximal information in proteins.
     //
     // MMSEQS12
-    // Steinegger M, Soding J. Mmseqs2 enables sensitive protein sequence searching for the analysis of massive data sets.
+    // Steinegger M, Soding J. Mmseqs2 enables sensitive protein sequence searching for the analysis
+    // of massive data sets.
+    //
+    // HP2
+    // Phillips, R., Kondev, J., Theriot, J. Physical Biology of the Cell.
+    //
+    // DAYHOFF6
+    // Peris, P., López, D., & Campos, M. IgTM: An algorithm to predict transmembrane domains and
+    // topology in proteins. https://doi.org/10.1186/1471-2105-9-367
+    //
+    // Dayhoff M. O., Schwartz R. M., Orcutt B. C. A model of evolutionary change in proteins, in
+    // Atlas of Protein Sequence and Structure
     //
 
     // todo: J ambiguity symbol, ILE+LEU ?
@@ -124,9 +135,25 @@ public final class Alphabets {
     /** wwmj5 translation table, <code>CMFILVWY ATH GP DE SNQRK</code>. */
     static final Map<Character, Character> WWMJ5 = createTranslationTable("CMFILVWYATHGPDESNQRKUOBZX", "CCCCCCCCAAAGGDDSSSSSCSXXX");
 
+    /** hp2 translation table, <code>AFGILMPVWY NCSTDERHKQ</code>. */
+    static final Map<Character, Character> HP2 = createTranslationTable("AFGILMPVWYNCSTDERHKQUOBZX", "AAAAAAAAAANNNNNNNNNNNNXXX");
+
+    /** dayhoff6 translation table, <code>C AGPST DENQ HKR ILMV FWY</code>. */
+    static final Map<Character, Character> DAYHOFF6 = createTranslationTable("CAGPSTDENQHKRILMVFWYUOBZX", "CAAAAADDDDHHHIIIIFFFCHXXX");
+
+    /** hp translation table, <code>AFGILMPVWY NCSTDERHKQ</code> to <code>h p</code>. */
+    static final Map<Character, Character> HP = createTranslationTable("AFGILMPVWYNCSTDERHKQUOBZX", "hhhhhhhhhhppppppppppppxxx");
+
+    /** dayhoff translation table, <code>C AGPST DENQ HKR ILMV FWY</code> to <code>a b c d e f</code>. **/
+    static final Map<Character, Character> DAYHOFF = createTranslationTable("CAGPSTDENQHKRILMVFWYUOBZX", "abbbbbccccdddeeeefffadxxx");
+
 
     /**
      * Return the specified protein sequence translated to the <code>gbmr4</code> reduced amino acid alphabet.
+     *
+     * <p>
+     * <code>ADKERNTSQ YFLIVMCWH G P</code>
+     * </p>
      *
      * @param protein protein sequence, must not be null
      * @return the specified protein sequence translated to the <code>gbmr4</code> reduced amino acid alphabet
@@ -138,6 +165,10 @@ public final class Alphabets {
     /**
      * Return the specified protein sequence translated to the <code>gbmr7</code> reduced amino acid alphabet.
      *
+     * <p>
+     * <code>DN AEFIKLMQRVWY CH T S G P</code>
+     * </p>
+     *
      * @param protein protein sequence, must not be null
      * @return the specified protein sequence translated to the <code>gbmr7</code> reduced amino acid alphabet
      */
@@ -147,6 +178,10 @@ public final class Alphabets {
 
     /**
      * Return the specified protein sequence translated to the <code>hsdm17</code> reduced amino acid alphabet.
+     *
+     * <p>
+     * <code>A D KE R N T S Q Y F LIV M C W H G P</code>
+     * </p>
      *
      * @param protein protein sequence, must not be null
      * @return the specified protein sequence translated to the <code>hsdm17</code> reduced amino acid alphabet
@@ -158,6 +193,10 @@ public final class Alphabets {
     /**
      * Return the specified protein sequence translated to the <code>mmseqs12</code> reduced amino acid alphabet.
      *
+     * <p>
+     * <code>AST LM IV KR EQ ND FY C G H P W</code>
+     * </p>
+     *
      * @param protein protein sequence, must not be null
      * @return the specified protein sequence translated to the <code>mmseqs12</code> reduced amino acid alphabet
      */
@@ -167,6 +206,10 @@ public final class Alphabets {
 
     /**
      * Return the specified protein sequence translated to the <code>uniprot18</code> reduced amino acid alphabet.
+     *
+     * <p>
+     * <code>A R N D C Q EP G HL I K M F S T W Y V</code>
+     * </p>
      *
      * @param protein protein sequence, must not be null
      * @return the specified protein sequence translated to the <code>uniprot18</code> reduced amino acid alphabet
@@ -178,6 +221,10 @@ public final class Alphabets {
     /**
      * Return the specified protein sequence translated to the <code>uniprot20</code> reduced amino acid alphabet.
      *
+     * <p>
+     * <code>A R N D C Q E G H I L K M F P S T W Y V</code>
+     * </p>
+     *
      * @param protein protein sequence, must not be null
      * @return the specified protein sequence translated to the <code>uniprot20</code> reduced amino acid alphabet
      */
@@ -187,6 +234,10 @@ public final class Alphabets {
 
     /**
      * Return the specified protein sequence translated to the <code>sdm12</code> reduced amino acid alphabet.
+     *
+     * <p>
+     * <code>A D KER N TSQ YF LIVM C W H G P</code>
+     * </p>
      *
      * @param protein protein sequence, must not be null
      * @return the specified protein sequence translated to the <code>sdm12</code> reduced amino acid alphabet
@@ -198,6 +249,10 @@ public final class Alphabets {
     /**
      * Return the specified protein sequence translated to the <code>wass14</code> reduced amino acid alphabet.
      *
+     * <p>
+     * <code>WM DI P C AV K T RE G L Y SH F NQ</code>
+     * </p>
+     *
      * @param protein protein sequence, must not be null
      * @return the specified protein sequence translated to the <code>wass14</code> reduced amino acid alphabet
      */
@@ -208,10 +263,78 @@ public final class Alphabets {
     /**
      * Return the specified protein sequence translated to the <code>wwmj5</code> reduced amino acid alphabet.
      *
+     * <p>
+     * <code>CMFILVWY ATH GP DE SNQRK</code>
+     * </p>
+     *
      * @param protein protein sequence, must not be null
      * @return the specified protein sequence translated to the <code>wwmj5</code> reduced amino acid alphabet
      */
     public static String wwmj5(final String protein) {
         return translate(protein, WWMJ5);
+    }
+
+    /**
+     * Return the specified protein sequence translated to the <code>hp2</code> reduced amino acid alphabet.
+     *
+     * <p>
+     * <code>AFGILMPVWY NCSTDERHKQ</code>
+     * </p>
+     *
+     * @param protein protein sequence, must not be null
+     * @return the specified protein sequence translated to the <code>hp2</code> reduced amino acid alphabet
+     */
+    public static String hp2(final String protein) {
+        return translate(protein, HP2);
+    }
+
+    /**
+     * Return the specified protein sequence translated to the <code>dayhoff6</code> reduced amino acid alphabet.
+     *
+     * <p>
+     * <code>C AGPST DENQ HKR ILMV FWY</code>
+     * </p>
+     *
+     * @param protein protein sequence, must not be null
+     * @return the specified protein sequence translated to the <code>dayhoff6</code> reduced amino acid alphabet
+     */
+    public static String dayhoff6(final String protein) {
+        return translate(protein, DAYHOFF6);
+    }
+
+    /**
+     * Return the specified protein sequence translated to the <code>hp</code> alphabet.
+     *
+     * <p>
+     * <code>{ AFGILMPVWY NCSTDERHKQ }</code> to <code>{ h p }</code>
+     * </p>
+     *
+     * <p>
+     * <b>Note:</b> the result is not a valid amino acid sequence.
+     * </p>
+     *
+     * @param protein protein sequence, must not be null
+     * @return the specified protein sequence translated to the <code>hp</code> alphabet
+     */
+    public static String hp(final String protein) {
+        return translate(protein, HP);
+    }
+
+    /**
+     * Return the specified protein sequence translated to the <code>dayhoff</code> alphabet.
+     *
+     * <p>
+     * <code>{ C AGPST DENQ HKR ILMV FWY }</code> to <code>{ a b c d e f }</code>
+     * </p>
+     *
+     * <p>
+     * <b>Note:</b> the result is not a valid amino acid sequence.
+     * </p>
+     *
+     * @param protein protein sequence, must not be null
+     * @return the specified protein sequence translated to the <code>dayhoff</code> alphabet
+     */
+    public static String dayhoff(final String protein) {
+        return translate(protein, DAYHOFF);
     }
 }
