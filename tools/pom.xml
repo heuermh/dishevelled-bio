@@ -57,6 +57,11 @@
       </dependency>
       <dependency>
         <groupId>org.dishevelled</groupId>
+        <artifactId>dsh-bio-protein</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.dishevelled</groupId>
         <artifactId>dsh-bio-range</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -156,6 +161,11 @@
     <dependency>
       <groupId>org.dishevelled</groupId>
       <artifactId>dsh-bio-feature</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.dishevelled</groupId>
+      <artifactId>dsh-bio-protein</artifactId>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -535,6 +545,10 @@
             <program>
               <id>dsh-split-vcf</id>
               <mainClass>org.dishevelled.bio.tools.SplitVcf</mainClass>
+            </program>
+            <program>
+              <id>dsh-summarize-uniprot-entries</id>
+              <mainClass>org.dishevelled.bio.tools.SummarizeUniprotEntries</mainClass>
             </program>
             <program>
               <id>dsh-text-to-fasta</id>
