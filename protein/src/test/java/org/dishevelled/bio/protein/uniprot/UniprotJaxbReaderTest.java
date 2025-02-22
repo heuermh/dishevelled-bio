@@ -1,0 +1,95 @@
+/*
+
+    dsh-bio-protein  Protein sequences and metadata.
+    Copyright (c) 2013-2025 held jointly by the individual authors.
+
+    This library is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as published
+    by the Free Software Foundation; either version 3 of the License, or (at
+    your option) any later version.
+
+    This library is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; with out even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+    License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this library;  if not, write to the Free Software Foundation,
+    Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA.
+
+    > http://www.fsf.org/licensing/licenses/lgpl.html
+    > http://www.opensource.org/licenses/lgpl-license.php
+
+*/
+package org.dishevelled.bio.protein.uniprot;
+
+import static org.dishevelled.bio.protein.uniprot.UniprotJaxbReader.read;
+
+import static org.dishevelled.compress.Readers.reader;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.io.File;
+import java.io.IOException;
+
+import com.google.common.io.Files;
+import com.google.common.io.Resources;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import org.uniprot.uniprot.Uniprot;
+
+/**
+ * Unit test for UniprotJaxbReader.
+ *
+ * @author  Michael Heuer
+ */
+public final class UniprotJaxbReaderTest {
+    private File uniprotXmlFile;
+
+    @Before
+    public void setUp() throws IOException {
+        uniprotXmlFile = File.createTempFile("uniprotJaxbReaderTest", ".xml");
+    }
+
+    @After
+    public void tearDown() {
+        uniprotXmlFile.delete();
+    }
+
+    @Test(expected=NullPointerException.class)
+    public void testReadNullReader() throws Exception {
+        read(null);
+    }
+
+    @Test
+    public void testReadEmpty() throws Exception {
+        copyResource("uniprot_sprot_empty.xml", uniprotXmlFile);
+        Uniprot uniprot = read(reader(uniprotXmlFile));
+        assertNotNull(uniprot);
+        assertNotNull(uniprot.getCopyright());
+        assertEquals(0, uniprot.getEntry().size());
+    }
+
+    @Test
+    public void testReadOneEntry() throws Exception {
+        copyResource("uniprot_sprot_entry.xml", uniprotXmlFile);
+        Uniprot uniprot = read(reader(uniprotXmlFile));
+        assertNotNull(uniprot);
+        assertNotNull(uniprot.getCopyright());
+        assertEquals(1, uniprot.getEntry().size());
+    }
+
+    @Test(expected=IOException.class)
+    public void testReadError() throws Exception {
+        copyResource("uniprot_sprot_error.xml", uniprotXmlFile);
+        read(reader(uniprotXmlFile));
+    }
+
+    private static void copyResource(final String name, final File file) throws Exception {
+        Files.write(Resources.toByteArray(UniprotJaxbReaderTest.class.getResource(name)), file);
+    }
+}

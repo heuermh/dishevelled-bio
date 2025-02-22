@@ -225,3 +225,10 @@ $ docker pull quay.io/biocontainers/dsh-bio:{tag}
 ```
 
 Find `{tag}` on the tag search page, https://quay.io/repository/biocontainers/dsh-bio?tab=tags
+
+
+### Acknowledgments
+
+This repository contains test data copyrighted by the UniProt Consortium, see https://www.uniprot.org/terms.
+
+These test data distributed under the Creative Commons Attribution (CC BY 4.0) License.
