@@ -209,6 +209,7 @@ public final class Tools implements Callable<Integer> {
         .put("split-sam", new Command("split-sam", "split files in SAM format", SplitSam.class))
         .put("split-vcf", new Command("split-vcf", "split files in VCF format", SplitVcf.class))
         .put("summarize-uniprot-entries", new Command("summarize-uniprot-entries", "summarize UniProt entries in XML format", SummarizeUniprotEntries.class))
+        .put("summarize-uniprot-entries-to-parquet", new Command("summarize-uniprot-entries-to-parquet", "summarize UniProt entries in XML format to Parquet format", SummarizeUniprotEntriesToParquet.class))
         .put("text-to-fasta", new Command("text-to-fasta", "convert DNA or protein sequences in tab-separated values (tsv) text format to FASTA format", TextToFasta.class))
         .put("text-to-fastq", new Command("text-to-fastq", "convert DNA sequences in tab-separated values (tsv) text format to FASTQ format", TextToFastq.class))
         .put("traversals-to-cytoscape-edges", new Command("traversals-to-cytoscape-edges", "convert traversals in GFA 1.0 format to edges.txt format for Cytoscape", TraversalsToCytoscapeEdges.class))

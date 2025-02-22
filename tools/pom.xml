@@ -551,6 +551,10 @@
               <mainClass>org.dishevelled.bio.tools.SummarizeUniprotEntries</mainClass>
             </program>
             <program>
+              <id>dsh-summarize-uniprot-entries-to-parquet</id>
+              <mainClass>org.dishevelled.bio.tools.SummarizeUniprotEntriesToParquet</mainClass>
+            </program>
+            <program>
               <id>dsh-text-to-fasta</id>
               <mainClass>org.dishevelled.bio.tools.TextToFasta</mainClass>
             </program>

@@ -107,6 +107,7 @@ commands:
   split-sam    split files in SAM format
   split-vcf    split files in VCF format
   summarize-uniprot-entries    summarize UniProt entries in XML format
+  summarize-uniprot-entries-to-parquet    summarize UniProt entries in XML format to Parquet format
   text-to-fasta    convert DNA or protein sequences in tab-separated values (tsv) text format to FASTA format
   text-to-fastq    convert DNA sequences in tab-separated values (tsv) text format to FASTQ format
   traversals-to-cytoscape-edges    convert traversals in GFA 1.0 format to edges.txt format for Cytoscape
