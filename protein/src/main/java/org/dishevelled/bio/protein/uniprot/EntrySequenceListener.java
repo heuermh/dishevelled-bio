@@ -24,18 +24,18 @@
 package org.dishevelled.bio.protein.uniprot;
 
 /**
- * Entry summary listener.
+ * Entry sequence listener.
  *
  * @since 2.5
  * @author  Michael Heuer
  */
-public interface EntrySummaryListener {
+public interface EntrySequenceListener {
 
     /**
-     * Notify this listener of the entry summary has been read.
+     * Notify this listener of the entry sequence has been read.
      *
-     * @param entrySummary entry summary, must not be null
+     * @param entrySequence entry sequence, must not be null
      * @return true to continue reading
      */
-    public boolean entrySummary(EntrySummary entrySummary);
+    public boolean entrySequence(EntrySequence entrySequence);
 }

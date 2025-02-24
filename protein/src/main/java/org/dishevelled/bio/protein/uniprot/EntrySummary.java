@@ -23,6 +23,8 @@
 */
 package org.dishevelled.bio.protein.uniprot;
 
+import javax.annotation.Nullable;
+
 import javax.annotation.concurrent.Immutable;
 
 /**
@@ -41,10 +43,22 @@ public final class EntrySummary {
     private final boolean unreviewed;
     private final boolean hasStructure;
 
-    EntrySummary(final String organism,
-                 final String organismId,
-                 final String lineage,
-                 final String type,
+
+    /**
+     * Create a new entry summary.
+     *
+     * @param organism organism, if any
+     * @param organismId organism id, if any
+     * @param lineage lineage, if any
+     * @param type type, if any
+     * @param reviewed reviewed
+     * @param unreviewed unreviewed
+     * @param hasStructure has structure
+     */
+    EntrySummary(@Nullable final String organism,
+                 @Nullable final String organismId,
+                 @Nullable final String lineage,
+                 @Nullable final String type,
                  final boolean reviewed,
                  final boolean unreviewed,
                  final boolean hasStructure) {
@@ -56,6 +70,7 @@ public final class EntrySummary {
         this.unreviewed = unreviewed;
         this.hasStructure = hasStructure;
     }
+
 
     /**
      * Return the organism for this entry summary, may be null.
