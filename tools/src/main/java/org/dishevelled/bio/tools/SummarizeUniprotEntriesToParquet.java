@@ -29,12 +29,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static org.dishevelled.bio.protein.uniprot.UniprotEntrySummaryReader.stream;
 
 import static org.dishevelled.compress.Readers.reader;
-import static org.dishevelled.compress.Writers.writer;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
 
 import java.nio.file.Path;
 
@@ -43,8 +40,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import java.util.concurrent.Callable;
-
-import com.google.common.base.Joiner;
 
 import org.dishevelled.bio.protein.uniprot.EntrySummary;
 import org.dishevelled.bio.protein.uniprot.EntrySummaryListener;
@@ -86,7 +81,7 @@ public final class SummarizeUniprotEntriesToParquet implements Callable<Integer>
      * Summarize UniProt entries in XML format to Parquet format.
      *
      * @param uniprotXmlPath UniProt XML path, if any
-     * @param summaryFile summary Parquet file, must not be null
+     * @param summaryParquetFile summary Parquet file, must not be null
      * @param rowGroupSize row group size, must be greater than zero
      * @param partitionSize partition size, in number of rows per partitioned Parquet file, must be greater than zero
      */

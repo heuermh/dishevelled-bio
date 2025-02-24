@@ -23,12 +23,15 @@
 */
 package org.dishevelled.bio.protein.uniprot;
 
+import javax.annotation.concurrent.Immutable;
+
 /**
  * Entry summary.
  *
  * @since 2.5
  * @author  Michael Heuer
  */
+@Immutable
 public final class EntrySummary {
     private final String organism;
     private final String organismId;

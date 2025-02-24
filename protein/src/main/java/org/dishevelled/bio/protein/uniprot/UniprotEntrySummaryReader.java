@@ -31,6 +31,8 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.concurrent.Immutable;
+
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -54,7 +56,16 @@ import org.xml.sax.ContentHandler;
  * @since 2.5
  * @author  Michael Heuer
  */
+@Immutable
 public final class UniprotEntrySummaryReader {
+
+    /**
+     * Private no-arg constructor.
+     */
+    private UniprotEntrySummaryReader() {
+        // empty
+    }
+
 
     /**
      * Stream UniProt XML from the specified reader and extract entry summaries.
@@ -117,7 +128,7 @@ public final class UniprotEntrySummaryReader {
      * Uniprot handler.
      */
     private static final class UniprotHandler extends StAXContentHandlerBase {
-        private EntryHandler entryHandler;
+        private final EntryHandler entryHandler;
 
         /**
          * Create a new uniprot handler with the specified callback.
@@ -162,7 +173,7 @@ public final class UniprotEntrySummaryReader {
             }
 
             @Override
-            public void startTree(final StAXContext context) throws SAXException {
+            public void startTree(final StAXContext context) {
                 reviewed = false;
                 unreviewed = false;
                 hasStructure = false;
@@ -186,7 +197,7 @@ public final class UniprotEntrySummaryReader {
             }
 
             @Override
-            public void endElement(final String nsURI, final String localName, final String qName, final Object result, final StAXContext context) throws SAXException {
+            public void endElement(final String nsURI, final String localName, final String qName, final Object result, final StAXContext context) {
                 if ("lineage".equals(qName)) {
                     lineage = (String) result;
                     type = classifyOrganism(lineage);
@@ -205,7 +216,7 @@ public final class UniprotEntrySummaryReader {
             }
 
             @Override
-            public Object endTree(final StAXContext context) throws SAXException {
+            public Object endTree(final StAXContext context) {
                 // todo: end parsing if rv is false?
                 callback.entrySummary(new EntrySummary(organism, organismId, lineage, type, reviewed, unreviewed, hasStructure));
                 return null;
@@ -219,7 +230,7 @@ public final class UniprotEntrySummaryReader {
                 private final StringElementHandler taxonHandler = new StringElementHandler();
 
                 @Override
-                public void startTree(final StAXContext context) throws SAXException {
+                public void startTree(final StAXContext context) {
                     lineage.clear();
                 }
                 
@@ -231,14 +242,14 @@ public final class UniprotEntrySummaryReader {
                 }
 
                 @Override
-                public void endElement(final String nsURI, final String localName, final String qName, final Object result, final StAXContext context) throws SAXException {
+                public void endElement(final String nsURI, final String localName, final String qName, final Object result, final StAXContext context) {
                     if ("taxon".equals(qName)) {
                         lineage.add((String) result);
                     }
                 }
 
                 @Override
-                public Object endTree(final StAXContext context) throws SAXException {
+                public Object endTree(final StAXContext context) {
                     return Joiner.on("; ").join(lineage);
                 }
             }
@@ -251,13 +262,13 @@ public final class UniprotEntrySummaryReader {
                 private boolean hasStructure;
 
                 @Override
-                public void startTree(final StAXContext context) throws SAXException {
+                public void startTree(final StAXContext context) {
                     taxonId = null;
                     hasStructure = false;
                 }
                 
                 @Override
-                public void startElement(final String nsURI, final String localName, final String qName, final Attributes attrs, final StAXDelegationContext dctx) throws SAXException {
+                public void startElement(final String nsURI, final String localName, final String qName, final Attributes attrs, final StAXDelegationContext dctx) {
                     if ("PDB".equals(attrs.getValue("type"))) {
                         hasStructure = true;
                     }
@@ -267,7 +278,7 @@ public final class UniprotEntrySummaryReader {
                 }
 
                 @Override
-                public Object endTree(final StAXContext context) throws SAXException {
+                public Object endTree(final StAXContext context) {
                     return taxonId;
                 }
 
@@ -284,25 +295,25 @@ public final class UniprotEntrySummaryReader {
                 private final StringBuffer data = new StringBuffer();
 
                 @Override
-                public void startTree(final StAXContext context) throws SAXException {
+                public void startTree(final StAXContext context) {
                     scientificName = false;
                     data.delete(0, data.length());
                 }
                 
                 @Override
-                public void startElement(final String nsURI, final String localName, final String qName, final Attributes attrs, final StAXDelegationContext dctx) throws SAXException {
+                public void startElement(final String nsURI, final String localName, final String qName, final Attributes attrs, final StAXDelegationContext dctx) {
                     if ("scientific".equals(attrs.getValue("type"))) {
                         scientificName = true;
                     }
                 }
 
                 @Override
-                public final void characters(final char[] ch, final int start, final int length, final StAXContext ctx) throws SAXException {
+                public void characters(final char[] ch, final int start, final int length, final StAXContext ctx) {
                     data.append(ch, start, length);
                 }
 
                 @Override
-                public Object endTree(final StAXContext context) throws SAXException {
+                public Object endTree(final StAXContext context) {
                     if (scientificName) {
                         return data.substring(0);
                     }

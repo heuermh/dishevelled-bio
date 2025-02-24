@@ -49,7 +49,6 @@ import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.PathArgument;
-import org.dishevelled.commandline.argument.StringArgument;
 
 /**
  * Convert DNA sequences in FASTA index (.fai) format to pangenome samples, haplotypes,

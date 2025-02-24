@@ -47,6 +47,14 @@ import com.google.common.base.Joiner;
 public final class PangenomeWriter {
 
     /**
+     * Private no-arg constructor.
+     */
+    private PangenomeWriter() {
+        // empty
+    }
+
+
+    /**
      * Write the specified pangenome using the specified writer.
      *
      * @param pangenome pangenome to write, must not be null

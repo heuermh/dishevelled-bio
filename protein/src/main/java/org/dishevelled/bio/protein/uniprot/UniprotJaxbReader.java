@@ -28,6 +28,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.IOException;
 import java.io.Reader;
 
+import javax.annotation.concurrent.Immutable;
+
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 
@@ -42,6 +44,7 @@ import org.uniprot.uniprot.Uniprot;
  * @since 2.5
  * @author  Michael Heuer
  */
+@Immutable
 public final class UniprotJaxbReader {
 
     /** Logger. */
@@ -49,7 +52,7 @@ public final class UniprotJaxbReader {
 
 
     /**
-     * Default no-arg constructor.
+     * Private no-arg constructor.
      */
     private UniprotJaxbReader() {
         // empty
@@ -60,7 +63,7 @@ public final class UniprotJaxbReader {
      * Read UniProt XML from the specified reader via JAXB.
      *
      * @param reader reader to read UniProt XML from, must not be null
-     * @return UniProt XML read from the specifed reader via JAXB
+     * @return UniProt XML read from the specified reader via JAXB
      * @throws IOException if an I/O error occurs
      */
     public static Uniprot read(final Reader reader) throws IOException {

@@ -23,6 +23,8 @@
 */
 package org.dishevelled.bio.assembly.pangenome;
 
+import javax.annotation.concurrent.Immutable;
+
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -35,6 +37,7 @@ import java.util.Map;
  * @since 3.0
  * @author  Michael Heuer
  */
+@Immutable
 public final class Haplotype {
     /** Identifier for this haplotype. */
     private final int identifier;
