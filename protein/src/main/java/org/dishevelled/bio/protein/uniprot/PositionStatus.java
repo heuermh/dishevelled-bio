@@ -25,8 +25,6 @@ package org.dishevelled.bio.protein.uniprot;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import javax.annotation.Nullable;
-
 import com.google.common.collect.ImmutableMap;
 
 /**
@@ -86,7 +84,7 @@ public enum PositionStatus {
      * @param symbol symbol, must not be null
      * @param description description, must not be null
      */
-    private PositionStatus(final String symbol, final String description) {
+    PositionStatus(final String symbol, final String description) {
         checkNotNull(symbol);
         checkNotNull(description);
         this.symbol = symbol;

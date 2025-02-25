@@ -73,42 +73,93 @@ public final class EntrySequence {
     }
 
 
+    /**
+     * Return the accession for this entry sequence.
+     *
+     * @return the accession for this entry sequence
+     */
     public String getAccession() {
         return accession;
     }
 
+    /**
+     * Return the length for this entry sequence.
+     *
+     * @return the length for this entry sequence
+     */
     public int getLength() {
         return length;
     }
 
+    /**
+     * Return the mass for this entry sequence.
+     *
+     * @return the mass for this entry sequence
+     */
     public int getMass() {
         return mass;
     }
 
+    /**
+     * Return the checksum for this entry sequence.
+     *
+     * @return the checksum for this entry sequence
+     */
     public String getChecksum() {
         return checksum;
     }
 
+    /**
+     * Return the last modified date for this entry sequence.
+     *
+     * @return the last modified date for this entry sequence
+     */
     public String getModified() {
         return modified;
     }
 
+    /**
+     * Return the version for this entry sequence.
+     *
+     * @return the version for this entry sequence
+     */
     public int getVersion() {
         return version;
     }
 
+    /**
+     * Return true if this entry sequence is a precursor.
+     *
+     * @return true if this entry sequence is a precursor
+     */
     public boolean isPrecursor() {
         return precursor;
     }
 
+    /**
+     * Return the fragment for this entry sequence, may be null.
+     *
+     * @return the fragment for this entry sequence, may be null
+     */
     public String getFragment() {
         return fragment;
     }
 
+    /**
+     * Return the sequence for this entry sequence.
+     *
+     * @return the sequence for this entry sequence
+     */
     public String getSequence() {
         return sequence;
     }
 
+    /**
+     * Return this entry sequence with the specified accession.
+     *
+     * @param accession accession, must not be null
+     * @return this entry sequence with the specified accession
+     */
     // late initialization, unfortunately
     EntrySequence withAccession(final String accession) {
         checkNotNull(accession);

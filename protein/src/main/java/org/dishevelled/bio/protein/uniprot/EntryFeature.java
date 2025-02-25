@@ -189,7 +189,7 @@ public final class EntryFeature {
      * Return this entry feature with the specified accession.
      *
      * @param accession accession, must not be null
-     * @retun this entry feature with the specified accession
+     * @return this entry feature with the specified accession
      */
     // late initialization, unfortunately
     EntryFeature withAccession(final String accession) {

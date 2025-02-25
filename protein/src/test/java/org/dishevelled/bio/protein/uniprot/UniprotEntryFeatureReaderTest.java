@@ -27,7 +27,6 @@ import static org.dishevelled.bio.protein.uniprot.UniprotEntryFeatureReader.stre
 
 import static org.dishevelled.compress.Readers.reader;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
@@ -40,8 +39,6 @@ import com.google.common.io.Resources;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import org.uniprot.uniprot.Uniprot;
 
 /**
  * Unit test for UniprotEntryFeatureReader.

@@ -43,7 +43,6 @@ import java.util.concurrent.Callable;
 
 import org.dishevelled.bio.protein.uniprot.EntryFeature;
 import org.dishevelled.bio.protein.uniprot.EntryFeatureListener;
-import org.dishevelled.bio.protein.uniprot.Location;
 
 import org.dishevelled.commandline.ArgumentList;
 import org.dishevelled.commandline.CommandLine;
@@ -129,6 +128,7 @@ public final class ExtractUniprotFeaturesToParquet implements Callable<Integer> 
                                 a.append(f.getVariations());
                                 a.append((f.getLocation().getBegin() == null) ? null : f.getLocation().getBegin().getStatus().getSymbol());
 
+                                // ick.
                                 Integer begin = (f.getLocation().getBegin() == null) ? null : f.getLocation().getBegin().getPosition();
                                 if (begin != null) {
                                     a.append(begin);

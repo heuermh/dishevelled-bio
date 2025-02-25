@@ -28,15 +28,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.IOException;
 import java.io.Reader;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.concurrent.Immutable;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
-
-import com.google.common.base.Joiner;
 
 import net.sf.stax.SAX2StAXAdaptor;
 import net.sf.stax.StAXContentHandlerBase;
@@ -172,7 +167,6 @@ public final class UniprotEntrySequenceReader {
                 private int version;
                 private boolean precursor;
                 private String fragment;
-                private String sequence;
                 private final StringBuffer data = new StringBuffer();
 
                 @Override
@@ -189,7 +183,7 @@ public final class UniprotEntrySequenceReader {
                     checksum = attrs.getValue("checksum");
                     modified = attrs.getValue("modified");
                     version = Integer.parseInt(attrs.getValue("version"));
-                    precursor = (attrs.getValue("precursor") == null) ? false : Boolean.parseBoolean(attrs.getValue("precursor"));
+                    precursor = attrs.getValue("precursor") != null && Boolean.parseBoolean(attrs.getValue("precursor"));
                     fragment = attrs.getValue("fragment");
                 }
 

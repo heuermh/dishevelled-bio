@@ -118,7 +118,7 @@ public final class UniprotEntryFeatureReader {
          */
         private static final class EntryHandler extends StAXContentHandlerBase {
             private String accession;
-            private List<EntryFeature> entryFeatures = new ArrayList<EntryFeature>();
+            private final List<EntryFeature> entryFeatures = new ArrayList<EntryFeature>();
 
             private final EntryFeatureListener callback;
             private final StringElementHandler accessionHandler = new StringElementHandler();
@@ -180,7 +180,7 @@ public final class UniprotEntryFeatureReader {
                 private String ref;
                 private String type;
                 private String original;
-                private List<String> variations = new ArrayList<String>();
+                private final List<String> variations = new ArrayList<String>();
                 private Location location;
                 private String ligand;
                 private String ligandPart;
@@ -207,7 +207,7 @@ public final class UniprotEntryFeatureReader {
                     if ("feature".equals(qName)) {
                         id = attrs.getValue("id");
                         description = attrs.getValue("description");
-                        evidence = attrs.getValue("evidence"); // .toString()?  or joiner
+                        evidence = attrs.getValue("evidence");
                         ref = attrs.getValue("ref");
                         type = attrs.getValue("type");
                     }
@@ -338,7 +338,7 @@ public final class UniprotEntryFeatureReader {
                         }
 
                         @Override
-                        public void startElement(final String nsURI, final String localName, final String qName, final Attributes attrs, final StAXDelegationContext dctx) throws SAXException {
+                        public void startElement(final String nsURI, final String localName, final String qName, final Attributes attrs, final StAXDelegationContext dctx) {
                             position = (attrs.getValue("position") == null) ? null : Integer.parseInt(attrs.getValue("position"));
                             status = (attrs.getValue("status") == null) ? PositionStatus.CERTAIN : PositionStatus.fromDescription(attrs.getValue("status"));
                         }
