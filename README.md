@@ -53,6 +53,9 @@ commands:
   extract-fasta-kmers-to-parquet3    (beta) extract kmers from DNA or protein sequences in FASTA format to Parquet format
   extract-fastq    extract matching DNA sequences in FASTQ format
   extract-fastq-by-length    extract DNA sequences in FASTQ format with a range of lengths
+  extract-uniprot-features    extract protein features from UniProt XML format
+  extract-uniprot-features-to-parquet    extract protein features from UniProt XML format in Parquet format
+  extract-uniprot-sequences    extract protein sequences from UniProt XML format
   fasta-index-to-pangenome    convert DNA sequences in FASTA index (.fai) format to pangenome text format
   fasta-index-to-pangenome-tree    convert DNA sequences in FASTA index (.fai) format to pangenome tree format
   fasta-to-fastq    convert DNA sequences in FASTA format to FASTQ format
