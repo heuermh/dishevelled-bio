@@ -54,7 +54,7 @@ commands:
   extract-fastq    extract matching DNA sequences in FASTQ format
   extract-fastq-by-length    extract DNA sequences in FASTQ format with a range of lengths
   extract-uniprot-features    extract protein features from UniProt XML format
-  extract-uniprot-features-to-parquet    extract protein features from UniProt XML format in Parquet format
+  extract-uniprot-features-to-parquet    extract protein features from UniProt XML format to Parquet format
   extract-uniprot-sequences    extract protein sequences from UniProt XML format
   fasta-index-to-pangenome    convert DNA sequences in FASTA index (.fai) format to pangenome text format
   fasta-index-to-pangenome-tree    convert DNA sequences in FASTA index (.fai) format to pangenome tree format

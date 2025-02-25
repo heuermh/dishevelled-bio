@@ -75,11 +75,11 @@ public final class ExtractUniprotFeaturesToParquet implements Callable<Integer> 
     static final long DEFAULT_PARTITION_SIZE = DEFAULT_ROW_GROUP_SIZE * 10L;
     private static final String CREATE_TABLE_SQL = "CREATE TABLE features (accession VARCHAR, description VARCHAR, evidence VARCHAR, ref VARCHAR, \"type\" VARCHAR, original VARCHAR, variations VARCHAR, begin_status CHAR, begin INT, end_status CHAR, \"end\" INT, position_status CHAR, position INT, location_sequence VARCHAR, ligand VARCHAR, ligand_part VARCHAR)";
     private static final String COPY_SQL = "COPY features TO '%s' (FORMAT 'parquet', COMPRESSION 'zstd', OVERWRITE_OR_IGNORE 1, ROW_GROUP_SIZE %d, PER_THREAD_OUTPUT)";;
-    private static final String USAGE = "dsh-extract-uniprot-features [args]";
+    private static final String USAGE = "dsh-extract-uniprot-features-to-parquet [args]";
 
 
     /**
-     * Extract protein features from UniProt entries in XML format.
+     * Extract protein features from UniProt entries in XML format to Parquet format.
      *
      * @param uniprotXmlPath UniProt XML path, if any
      * @param featureParquetFile feature Parquet file, must not be null

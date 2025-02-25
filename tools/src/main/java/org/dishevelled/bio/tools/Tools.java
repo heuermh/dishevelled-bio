@@ -155,7 +155,7 @@ public final class Tools implements Callable<Integer> {
         .put("extract-fastq", new Command("extract-fastq", "extract matching DNA sequences in FASTQ format", ExtractFastq.class))
         .put("extract-fastq-by-length", new Command("extract-fastq-by-length", "extract DNA sequences in FASTQ format with a range of lengths", ExtractFastqByLength.class))
         .put("extract-uniprot-features", new Command("extract-uniprot-features", "extract protein features from UniProt XML format", ExtractUniprotFeatures.class))
-        .put("extract-uniprot-features-to-parquet", new Command("extract-uniprot-features-to-parquet", "extract protein features from UniProt XML format in Parquet format", ExtractUniprotFeaturesToParquet.class))
+        .put("extract-uniprot-features-to-parquet", new Command("extract-uniprot-features-to-parquet", "extract protein features from UniProt XML format to Parquet format", ExtractUniprotFeaturesToParquet.class))
         .put("extract-uniprot-sequences", new Command("extract-uniprot-sequences", "extract protein sequences from UniProt XML format", ExtractUniprotSequences.class))
         .put("fasta-to-fastq", new Command("fasta-to-fastq", "convert DNA sequences in FASTA format to FASTQ format", FastaToFastq.class))
         .put("fasta-to-pangenome", new Command("fasta-to-pangenome", "convert DNA sequences in FASTA format to pangenome text format", FastaToPangenome.class))

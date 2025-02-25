@@ -190,7 +190,7 @@ public final class SummarizeUniprotEntriesToParquet implements Callable<Integer>
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
         PathArgument uniprotXmlPath = new PathArgument("i", "input-uniprot-xml-path", "input UniProt XML path, default stdin", false);
-        FileArgument summaryParquetFile = new FileArgument("o", "output-summary-parquet-file", "output summary parquet file", true);
+        FileArgument summaryParquetFile = new FileArgument("o", "output-summary-parquet-file", "output summary Parquet file", true);
         IntegerArgument rowGroupSize = new IntegerArgument("g", "row-group-size", "row group size, default " + DEFAULT_ROW_GROUP_SIZE, false);
         LongArgument partitionSize = new LongArgument("p", "partition-size", "partition size, default " + DEFAULT_PARTITION_SIZE, false);
 
