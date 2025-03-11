@@ -53,7 +53,6 @@ import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
-import org.dishevelled.commandline.argument.LongArgument;
 import org.dishevelled.commandline.argument.PathArgument;
 
 import org.duckdb.DuckDBAppender;
@@ -69,9 +68,7 @@ public final class SummarizeUniprotEntriesToParquet implements Callable<Integer>
     private final Path uniprotXmlPath;
     private final File summaryParquetFile;
     private final int rowGroupSize;
-    private final long partitionSize;
     static final int DEFAULT_ROW_GROUP_SIZE = 122880;
-    static final long DEFAULT_PARTITION_SIZE = DEFAULT_ROW_GROUP_SIZE * 10L;
     private static final String CREATE_TABLE_SQL = "CREATE TABLE summary (organism VARCHAR, organism_id VARCHAR, lineage VARCHAR, \"type\" VARCHAR, reviewed BOOLEAN, unreviewed BOOLEAN, has_structure BOOLEAN)";
     private static final String COPY_SQL = "COPY summary TO '%s' (FORMAT 'parquet', COMPRESSION 'zstd', OVERWRITE_OR_IGNORE 1, ROW_GROUP_SIZE %d, PER_THREAD_OUTPUT)";
     private static final String USAGE = "dsh-summarize-uniprot-entries-to-parquet [args]";
@@ -83,16 +80,13 @@ public final class SummarizeUniprotEntriesToParquet implements Callable<Integer>
      * @param uniprotXmlPath UniProt XML path, if any
      * @param summaryParquetFile summary Parquet file, must not be null
      * @param rowGroupSize row group size, must be greater than zero
-     * @param partitionSize partition size, in number of rows per partitioned Parquet file, must be greater than zero
      */
-    public SummarizeUniprotEntriesToParquet(final Path uniprotXmlPath, final File summaryParquetFile, final int rowGroupSize, final long partitionSize) {
+    public SummarizeUniprotEntriesToParquet(final Path uniprotXmlPath, final File summaryParquetFile, final int rowGroupSize) {
         checkNotNull(summaryParquetFile);
         checkArgument(rowGroupSize > 0, "row group size must be greater than zero");
-        checkArgument(partitionSize > 0, "partition size must be greater than zero");
         this.uniprotXmlPath = uniprotXmlPath;
         this.summaryParquetFile = summaryParquetFile;
         this.rowGroupSize = rowGroupSize;
-        this.partitionSize = partitionSize;
     }
 
 
@@ -192,9 +186,8 @@ public final class SummarizeUniprotEntriesToParquet implements Callable<Integer>
         PathArgument uniprotXmlPath = new PathArgument("i", "input-uniprot-xml-path", "input UniProt XML path, default stdin", false);
         FileArgument summaryParquetFile = new FileArgument("o", "output-summary-parquet-file", "output summary Parquet file", true);
         IntegerArgument rowGroupSize = new IntegerArgument("g", "row-group-size", "row group size, default " + DEFAULT_ROW_GROUP_SIZE, false);
-        LongArgument partitionSize = new LongArgument("p", "partition-size", "partition size, default " + DEFAULT_PARTITION_SIZE, false);
 
-        ArgumentList arguments = new ArgumentList(about, help, uniprotXmlPath, summaryParquetFile, rowGroupSize, partitionSize);
+        ArgumentList arguments = new ArgumentList(about, help, uniprotXmlPath, summaryParquetFile, rowGroupSize);
         CommandLine commandLine = new CommandLine(args);
 
         SummarizeUniprotEntriesToParquet summarizeUniprotEntriesToParquet = null;
@@ -209,7 +202,7 @@ public final class SummarizeUniprotEntriesToParquet implements Callable<Integer>
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            summarizeUniprotEntriesToParquet = new SummarizeUniprotEntriesToParquet(uniprotXmlPath.getValue(), summaryParquetFile.getValue(), rowGroupSize.getValue(DEFAULT_ROW_GROUP_SIZE), partitionSize.getValue(DEFAULT_PARTITION_SIZE));
+            summarizeUniprotEntriesToParquet = new SummarizeUniprotEntriesToParquet(uniprotXmlPath.getValue(), summaryParquetFile.getValue(), rowGroupSize.getValue(DEFAULT_ROW_GROUP_SIZE));
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);

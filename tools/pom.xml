@@ -339,6 +339,10 @@
               <mainClass>org.dishevelled.bio.tools.ExtractUniprotFeaturesToParquet</mainClass>
             </program>
             <program>
+              <id>dsh-extract-uniprot-features-to-partitioned-parquet</id>
+              <mainClass>org.dishevelled.bio.tools.ExtractUniprotFeaturesToPartitionedParquet</mainClass>
+            </program>
+            <program>
               <id>dsh-extract-uniprot-sequences</id>
               <mainClass>org.dishevelled.bio.tools.ExtractUniprotSequences</mainClass>
             </program>

@@ -53,7 +53,6 @@ import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
-import org.dishevelled.commandline.argument.LongArgument;
 import org.dishevelled.commandline.argument.PathArgument;
 
 import org.duckdb.DuckDBAppender;
@@ -69,9 +68,7 @@ public final class ExtractUniprotFeaturesToParquet implements Callable<Integer> 
     private final Path uniprotXmlPath;
     private final File featureParquetFile;
     private final int rowGroupSize;
-    private final long partitionSize;
     static final int DEFAULT_ROW_GROUP_SIZE = 122880;
-    static final long DEFAULT_PARTITION_SIZE = DEFAULT_ROW_GROUP_SIZE * 10L;
     private static final String CREATE_TABLE_SQL = "CREATE TABLE features (accession VARCHAR, description VARCHAR, evidence VARCHAR, ref VARCHAR, \"type\" VARCHAR, original VARCHAR, variations VARCHAR, begin_status CHAR, begin INT, end_status CHAR, \"end\" INT, position_status CHAR, position INT, location_sequence VARCHAR, ligand VARCHAR, ligand_part VARCHAR)";
     private static final String COPY_SQL = "COPY features TO '%s' (FORMAT 'parquet', COMPRESSION 'zstd', OVERWRITE_OR_IGNORE 1, ROW_GROUP_SIZE %d, PER_THREAD_OUTPUT)";;
     private static final String USAGE = "dsh-extract-uniprot-features-to-parquet [args]";
@@ -83,16 +80,13 @@ public final class ExtractUniprotFeaturesToParquet implements Callable<Integer> 
      * @param uniprotXmlPath UniProt XML path, if any
      * @param featureParquetFile feature Parquet file, must not be null
      * @param rowGroupSize row group size, must be greater than zero
-     * @param partitionSize partition size, in number of rows per partitioned Parquet file, must be greater than zero
      */
-    public ExtractUniprotFeaturesToParquet(final Path uniprotXmlPath, final File featureParquetFile, final int rowGroupSize, final long partitionSize) {
+    public ExtractUniprotFeaturesToParquet(final Path uniprotXmlPath, final File featureParquetFile, final int rowGroupSize) {
         checkNotNull(featureParquetFile);
         checkArgument(rowGroupSize > 0, "row group size must be greater than zero");
-        checkArgument(partitionSize > 0, "partition size must be greater than zero");
         this.uniprotXmlPath = uniprotXmlPath;
         this.featureParquetFile = featureParquetFile;
         this.rowGroupSize = rowGroupSize;
-        this.partitionSize = partitionSize;
     }
 
 
@@ -224,9 +218,8 @@ public final class ExtractUniprotFeaturesToParquet implements Callable<Integer> 
         PathArgument uniprotXmlPath = new PathArgument("i", "input-uniprot-xml-path", "input UniProt XML path, default stdin", false);
         FileArgument featureParquetFile = new FileArgument("o", "output-feature-file", "output feature Parquet file", true);
         IntegerArgument rowGroupSize = new IntegerArgument("g", "row-group-size", "row group size, default " + DEFAULT_ROW_GROUP_SIZE, false);
-        LongArgument partitionSize = new LongArgument("p", "partition-size", "partition size, default " + DEFAULT_PARTITION_SIZE, false);
 
-        ArgumentList arguments = new ArgumentList(about, help, uniprotXmlPath, featureParquetFile, rowGroupSize, partitionSize);
+        ArgumentList arguments = new ArgumentList(about, help, uniprotXmlPath, featureParquetFile, rowGroupSize);
         CommandLine commandLine = new CommandLine(args);
 
         ExtractUniprotFeaturesToParquet extractUniprotFeaturesToParquet = null;
@@ -241,7 +234,7 @@ public final class ExtractUniprotFeaturesToParquet implements Callable<Integer> 
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            extractUniprotFeaturesToParquet = new ExtractUniprotFeaturesToParquet(uniprotXmlPath.getValue(), featureParquetFile.getValue(), rowGroupSize.getValue(DEFAULT_ROW_GROUP_SIZE), partitionSize.getValue(DEFAULT_PARTITION_SIZE));
+            extractUniprotFeaturesToParquet = new ExtractUniprotFeaturesToParquet(uniprotXmlPath.getValue(), featureParquetFile.getValue(), rowGroupSize.getValue(DEFAULT_ROW_GROUP_SIZE));
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);
