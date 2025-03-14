@@ -26,6 +26,6 @@
  * PanSN-spec: Pangenome Sequence Naming support.
  *
  * See
- * <url>https://github.com/pangenome/PanSN-spec</url>.
+ * <a href="https://github.com/pangenome/PanSN-spec">https://github.com/pangenome/PanSN-spec</a>
  */
 package org.dishevelled.bio.assembly.pangenome;
