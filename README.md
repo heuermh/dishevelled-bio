@@ -3,7 +3,7 @@ dishevelled.org bio
 
 [![Build Status](https://travis-ci.org/heuermh/dishevelled-bio.svg?branch=master)](https://travis-ci.org/heuermh/dishevelled-bio)
 [![Maven Central](https://img.shields.io/maven-central/v/org.dishevelled/dsh-bio.svg?maxAge=600)](http://search.maven.org/#search%7Cga%7C1%7Corg.dishevelled)
-
+[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.15027131-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.15027131)
 
 ### Hacking dishevelled-bio
 
