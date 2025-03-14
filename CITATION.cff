@@ -10,5 +10,6 @@ keywords:
   - bioinformatics
 license: LGPL-3.0
 repository-code: https://github.com/heuermh/dishevelled-bio
-date-released: 2025-03-14
-version: dsh-bio-3.0
+date-released: '2025-03-14'
+version: '3.0'
+doi: 10.5281/zenodo.15027132
