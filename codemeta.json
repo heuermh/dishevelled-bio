@@ -1,0 +1,29 @@
+{
+  "name": "dishevelled-bio",
+  "@context": "https://w3id.org/codemeta/3.0",
+  "author": [
+    {
+      "familyName": "Heuer",
+      "id": "https://orcid.org/0000-0002-9052-6000",
+      "givenName": "Michael",
+      "type": "Person"
+    }
+  ],
+  "codeRepository": "https://github.com/heuermh/dishevelled-bio",
+  "dateCreated": "2015-06-23",
+  "dateModified": "2025-03-14",
+  "datePublished": "2025-03-14",
+  "description": "dishevelled.org bio",
+  "downloadUrl": "https://github.com/heuermh/dishevelled-bio/releases/tag/dsh-bio-3.0",
+  "issueTracker": "https://github.com/heuermh/dishevelled-bio/issues",
+  "keywords": [
+    "bioinformatics"
+  ],
+  "license": "https://spdx.org/licenses/LGPL-3.0",
+  "programmingLanguage": [
+    "Java"
+  ],
+  "schema:releaseNotes": "## Compatibility notes\r\n* Deprecated code has been removed in version 3.0, introducing binary incompatibilities compared to version 2.4\r\n* BED format support was improved in version 3.0, introducing binary incompatibilities compared to version 2.4\r\n* Multiple implementations of `FastaToParquet` and other Parquet-writing tools are annotated as **Beta** in this release; after further performance benchmarking the multiple implementations will be merged into one or two e.g. `FastaToParquet` tool implementation(s)\r\n\r\n## What's Changed\r\n* Added UniProt XML format support and tools\r\n* Added PanSN-spec: Pangenome Sequence Naming support and tools\r\n* improve BED support per hts-specs version 1.0 specification by @heuermh in https://github.com/heuermh/dishevelled-bio/pull/60\r\n\r\n\r\n**Full Changelog**: https://github.com/heuermh/dishevelled-bio/compare/dsh-bio-2.4...dsh-bio-3.0",
+  "version": "dsh-bio-3.0",
+  "type": "SoftwareSourceCode"
+}
