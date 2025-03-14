@@ -28,7 +28,7 @@
   <parent>
     <groupId>org.dishevelled</groupId>
     <artifactId>dsh-bio</artifactId>
-    <version>3.0-SNAPSHOT</version>
+    <version>3.0</version>
   </parent>
   <artifactId>dsh-bio-sequence</artifactId>
   <name>dsh-bio-sequence</name>
