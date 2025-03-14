@@ -27,7 +27,6 @@ $ dsh-bio --help
 usage:
 dsh-bio [command] [args]
 
-
 commands:
   bin-fastq-quality-scores    bin quality scores from files in FASTQ format
   compress-bed    compress features in BED format to splittable bgzf or bzip2 compression codecs
@@ -55,6 +54,7 @@ commands:
   extract-fastq-by-length    extract DNA sequences in FASTQ format with a range of lengths
   extract-uniprot-features    extract protein features from UniProt XML format
   extract-uniprot-features-to-parquet    extract protein features from UniProt XML format to Parquet format
+  extract-uniprot-features-to-partitioned-parquet    extract protein features from UniProt XML format to partitioned Parquet format
   extract-uniprot-sequences    extract protein sequences from UniProt XML format
   fasta-index-to-pangenome    convert DNA sequences in FASTA index (.fai) format to pangenome text format
   fasta-index-to-pangenome-tree    convert DNA sequences in FASTA index (.fai) format to pangenome tree format
