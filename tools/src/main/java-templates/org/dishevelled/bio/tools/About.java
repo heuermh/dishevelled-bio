@@ -36,6 +36,7 @@ final class About {
     private static final String COMMIT = "${git.commit.id}";
     private static final String COPYRIGHT = "Copyright (c) 2013-2025 held jointly by the individual authors.";
     private static final String LICENSE = "Licensed GNU Lesser General Public License (LGPL), version 3 or later.";
+    private static final String DOI = "10.5281/zenodo.15027131";
     private static final String VERSION = "${project.version}";
 
 
@@ -85,6 +86,15 @@ final class About {
     }
 
     /**
+     * Return the DOI.
+     *
+     * @return the DOI
+     */
+    public String doi() {
+        return DOI;
+    }
+
+    /**
      * Return the version.
      *
      * @return the version
@@ -104,6 +114,9 @@ final class About {
         sb.append(commit());
         sb.append("  Build: ");
         sb.append(buildTimestamp());
+        sb.append("\n");
+        sb.append("Please cite: ");
+        sb.append(doi());
         sb.append("\n");
         sb.append(copyright());
         sb.append("\n");
