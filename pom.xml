@@ -69,7 +69,7 @@
     <commons-math3.version>3.6.1</commons-math3.version>
     <dsh-bitset.version>3.0</dsh-bitset.version>
     <dsh-commandline.version>1.2</dsh-commandline.version>
-    <dsh-compress.version>1.8-SNAPSHOT</dsh-compress.version>
+    <dsh-compress.version>1.7.1</dsh-compress.version>
     <dsh-graph.version>1.0</dsh-graph.version>
     <duckdb.version>1.2.2.0</duckdb.version>
     <google-cloud.version>0.127.34</google-cloud.version>
