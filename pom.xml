@@ -61,7 +61,7 @@
   </modules>
 
   <properties>
-    <aws-java-nio-spi-for-s3.version>2.2.0</aws-java-nio-spi-for-s3.version>
+    <aws-java-nio-spi-for-s3.version>2.2.1</aws-java-nio-spi-for-s3.version>
     <bind-api.version>4.0.2</bind-api.version>
     <biojava.version>1.9.7</biojava.version>
     <commons-csv.version>1.14.0</commons-csv.version>
@@ -71,9 +71,9 @@
     <dsh-commandline.version>1.2</dsh-commandline.version>
     <dsh-compress.version>1.7.2</dsh-compress.version>
     <dsh-graph.version>1.0</dsh-graph.version>
-    <duckdb.version>1.3.0.0</duckdb.version>
-    <google-cloud.version>0.127.36</google-cloud.version>
-    <htsjdk.version>4.2.0</htsjdk.version>
+    <duckdb.version>1.3.1.0</duckdb.version>
+    <google-cloud.version>0.127.37</google-cloud.version>
+    <htsjdk.version>4.3.0</htsjdk.version>
     <jaxb-impl.version>4.0.5</jaxb-impl.version>
     <jaxb-maven-plugin.version>4.0.8</jaxb-maven-plugin.version>
     <jdk.version>17</jdk.version>
