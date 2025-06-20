@@ -153,6 +153,7 @@ public final class FastaToFastq implements Callable<Integer> {
         }
     }
 
+
     /**
      * Main.
      *

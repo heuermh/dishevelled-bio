@@ -503,6 +503,10 @@
               <mainClass>org.dishevelled.bio.tools.ListFilesystems</mainClass>
             </program>
             <program>
+              <id>dsh-parquet-reads-to-fastq</id>
+              <mainClass>org.dishevelled.bio.tools.ParquetReadsToFastq</mainClass>
+            </program>
+            <program>
               <id>dsh-reassemble-paths</id>
               <mainClass>org.dishevelled.bio.tools.ReassemblePaths</mainClass>
             </program>
