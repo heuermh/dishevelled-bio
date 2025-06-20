@@ -39,11 +39,6 @@ import java.sql.Statement;
 
 import java.util.concurrent.Callable;
 
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.AtomicReference;
-
-import com.google.common.annotations.Beta;
-
 import org.biojava.bio.program.fastq.Fastq;
 import org.biojava.bio.program.fastq.FastqReader;
 import org.biojava.bio.program.fastq.SangerFastqReader;
@@ -58,7 +53,6 @@ import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
-import org.dishevelled.commandline.argument.LongArgument;
 import org.dishevelled.commandline.argument.PathArgument;
 
 import org.duckdb.DuckDBAppender;
@@ -67,25 +61,18 @@ import org.duckdb.DuckDBConnection;
 /**
  * Convert DNA sequences in FASTQ format to Parquet format.
  *
- * Beta implementation to be merged into FastqToParquet after performance benchmarking.
- *
- * @since 2.4
+ * @since 3.1
  * @author  Michael Heuer
  */
-@Beta
-public final class FastqToParquet3 implements Callable<Integer> {
+public final class FastqToParquet implements Callable<Integer> {
     private final Path fastqPath;
     private final File parquetFile;
     private final int rowGroupSize;
-    private final long partitionSize;
     private final FastqReader fastqReader = new SangerFastqReader();
     static final int DEFAULT_ROW_GROUP_SIZE = 122880;
-    static final long DEFAULT_PARTITION_SIZE = DEFAULT_ROW_GROUP_SIZE * 10L;
-    private static final String CREATE_TABLE_SQL = "CREATE TABLE s%d (name VARCHAR, seq VARCHAR, qual VARCHAR)";
-    private static final String CREATE_VIEW_SQL = "CREATE OR REPLACE VIEW reads AS SELECT name, upper(seq) AS sequence, qual AS quality, length(sequence) AS length FROM s%d";
-    private static final String DROP_TABLE_SQL = "DROP TABLE s%d";
-    private static final String COPY_SQL = "COPY reads TO '%s/part-%d-%d.parquet' (FORMAT 'parquet', COMPRESSION 'zstd', OVERWRITE_OR_IGNORE 1, ROW_GROUP_SIZE %d)";
-    private static final String USAGE = "dsh-fastq-to-parquet3 [args]";
+    private static final String CREATE_TABLE_SQL = "CREATE TABLE reads (name VARCHAR, sequence VARCHAR, quality VARCHAR)";
+    private static final String COPY_SQL = "COPY reads TO '%s' (FORMAT 'parquet', COMPRESSION 'zstd', OVERWRITE_OR_IGNORE 1, ROW_GROUP_SIZE %d, PER_THREAD_OUTPUT)";
+    private static final String USAGE = "dsh-fastq-to-parquet [args]";
 
 
     /**
@@ -94,103 +81,87 @@ public final class FastqToParquet3 implements Callable<Integer> {
      * @param fastqPath input FASTQ path, if any
      * @param parquetFile output Parquet file, will be created as a directory, overwriting if necessary
      * @param rowGroupSize row group size, must be greater than zero
-     * @param partitionSize partition size, in number of rows per partitioned Parquet file, must be greater than zero
      */
-    public FastqToParquet3(final Path fastqPath, final File parquetFile, final int rowGroupSize, final long partitionSize) {
+    public FastqToParquet(final Path fastqPath, final File parquetFile, final int rowGroupSize) {
         checkNotNull(parquetFile);
         checkArgument(rowGroupSize > 0, "row group size must be greater than zero");
-        checkArgument(partitionSize > 0, "partition size must be greater than zero");
         this.fastqPath = fastqPath;
         this.parquetFile = parquetFile;
         this.rowGroupSize = rowGroupSize;
-        this.partitionSize = partitionSize;
     }
 
 
     @Override
     public Integer call() throws Exception {
         BufferedReader reader = null;
-        final AtomicLong rows = new AtomicLong();
-        final AtomicLong firstRow = new AtomicLong();
-        final AtomicReference<Statement> statement = new AtomicReference<Statement>();
-        final AtomicReference<DuckDBAppender> appender = new AtomicReference<DuckDBAppender>();
-        final AtomicReference<DuckDBConnection> connection = new AtomicReference<DuckDBConnection>();
+        DuckDBConnection connection = null;
+        Statement statement = null;
         try {
             reader = reader(fastqPath);
-            parquetFile.mkdirs();
 
-            connection.set((DuckDBConnection) DriverManager.getConnection("jdbc:duckdb:"));
-            statement.set(connection.get().createStatement());
+            connection = (DuckDBConnection) DriverManager.getConnection("jdbc:duckdb:");
+            statement = connection.createStatement();
 
+            statement.execute(CREATE_TABLE_SQL);
+            DuckDBAppender appender = null;
             try {
-                statement.get().execute(String.format(CREATE_TABLE_SQL, firstRow.get()));
-                appender.set(connection.get().createAppender(DuckDBConnection.DEFAULT_SCHEMA, String.format("s%d", firstRow.get())));
+                appender = connection.createAppender(DuckDBConnection.DEFAULT_SCHEMA, "reads");
 
+                final DuckDBAppender a = appender;
                 fastqReader.stream(reader, new StreamListener() {
-                    @Override
-                    public void fastq(final Fastq fastq) {
-                        try {
-                            appender.get().beginRow();
-                            appender.get().append(fastq.getDescription());
-                            appender.get().append(fastq.getSequence());
-                            appender.get().append(fastq.getQuality());
-                            appender.get().endRow();
-
-                            rows.incrementAndGet();
-                            if ((rows.get() % partitionSize) == 0) {
-                                try {
-                                    appender.get().close();
-                                }
-                                catch (Exception e) {
-                                    // ignore
-                                }
-                                statement.get().execute(String.format(CREATE_VIEW_SQL, firstRow.get()));
-                                statement.get().execute(String.format(COPY_SQL, parquetFile, firstRow.get(), rows.get(), rowGroupSize));
-                                statement.get().execute(String.format(DROP_TABLE_SQL, firstRow.get()));
-
-                                firstRow.set(rows.get() + 1);
-                                statement.get().execute(String.format(CREATE_TABLE_SQL, firstRow.get()));
-                                appender.set(connection.get().createAppender(DuckDBConnection.DEFAULT_SCHEMA, String.format("s%d", firstRow.get())));
+                        @Override
+                        public void fastq(final Fastq fastq) {
+                            try {
+                                a.beginRow();
+                                a.append(fastq.getDescription());
+                                a.append(fastq.getSequence());
+                                a.append(fastq.getQuality());
+                                a.endRow();
+                            }
+                            catch (SQLException e) {
+                                throw new RuntimeException("could not append " + fastq.getDescription(), e);
                             }
                         }
-                        catch (SQLException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                });
+                    });
             }
             catch (Exception e) {
                 throw e;
             }
             finally {
                 try {
-                    appender.get().close();
+                    if (appender != null) {
+                        appender.close();
+                    }
                 }
                 catch (Exception e) {
                     // ignore
                 }
             }
-
-            statement.get().execute(String.format(CREATE_VIEW_SQL, firstRow.get()));
-            statement.get().execute(String.format(COPY_SQL, parquetFile, firstRow.get(), rows.get(), rowGroupSize));
+            statement.execute(String.format(COPY_SQL, parquetFile, rowGroupSize));
 
             return 0;
         }
         finally {
             try {
-                reader.close();
+                if (reader != null) {
+                    reader.close();
+                }
             }
             catch (Exception e) {
                 // ignore
             }
             try {
-                statement.get().close();
+                if (statement != null) {
+                    statement.close();
+                }
             }
             catch (Exception e) {
                 // ignore
             }
             try {
-                connection.get().close();
+                if (connection != null) {
+                    connection.close();
+                }
             }
             catch (Exception e) {
                 // ignore
@@ -209,14 +180,13 @@ public final class FastqToParquet3 implements Callable<Integer> {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
         PathArgument fastqPath = new PathArgument("i", "input-fastq-path", "input FASTQ path, default stdin", false);
-        FileArgument parquetFile = new FileArgument("o", "output-parquet-file", "output Parquet file, will be created as a directory, overwriting if necessary", true);
+        FileArgument parquetFile = new FileArgument("o", "output-parquet-file", "output Parquet file", true);
         IntegerArgument rowGroupSize = new IntegerArgument("g", "row-group-size", "row group size, default " + DEFAULT_ROW_GROUP_SIZE, false);
-        LongArgument partitionSize = new LongArgument("p", "partition-size", "partition size, default " + DEFAULT_PARTITION_SIZE, false);
 
-        ArgumentList arguments = new ArgumentList(about, help, fastqPath, parquetFile, rowGroupSize, partitionSize);
+        ArgumentList arguments = new ArgumentList(about, help, fastqPath, parquetFile, rowGroupSize);
         CommandLine commandLine = new CommandLine(args);
 
-        FastqToParquet3 fastqToParquet = null;
+        FastqToParquet fastqToParquet = null;
         try
         {
             CommandLineParser.parse(commandLine, arguments);
@@ -228,7 +198,7 @@ public final class FastqToParquet3 implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            fastqToParquet = new FastqToParquet3(fastqPath.getValue(), parquetFile.getValue(), rowGroupSize.getValue(DEFAULT_ROW_GROUP_SIZE), partitionSize.getValue(DEFAULT_PARTITION_SIZE));
+            fastqToParquet = new FastqToParquet(fastqPath.getValue(), parquetFile.getValue(), rowGroupSize.getValue(DEFAULT_ROW_GROUP_SIZE));
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);

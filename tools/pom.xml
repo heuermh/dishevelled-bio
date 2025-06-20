@@ -411,12 +411,12 @@
               <mainClass>org.dishevelled.bio.tools.FastqToFasta</mainClass>
             </program>
             <program>
-              <id>dsh-fastq-to-parquet3</id>
-              <mainClass>org.dishevelled.bio.tools.FastqToParquet3</mainClass>
+              <id>dsh-fastq-to-parquet</id>
+              <mainClass>org.dishevelled.bio.tools.FastqToParquet</mainClass>
             </program>
             <program>
-              <id>dsh-fastq-to-parquet6</id>
-              <mainClass>org.dishevelled.bio.tools.FastqToParquet6</mainClass>
+              <id>dsh-fastq-to-partitioned-parquet</id>
+              <mainClass>org.dishevelled.bio.tools.FastqToPartitionedParquet</mainClass>
             </program>
             <program>
               <id>dsh-fastq-to-text</id>

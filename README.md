@@ -72,6 +72,8 @@ commands:
   fastq-sequence-length    output sequence lengths from DNA sequences in FASTQ format
   fastq-to-bam    convert DNA sequences in FASTQ format to unaligned BAM format
   fastq-to-fasta    convert DNA sequences in FASTQ format to FASTA format
+  fastq-to-parquet    convert DNA sequences in FASTQ format to Parquet format
+  fastq-to-partitioned-parquet    convert DNA sequences in FASTQ format to partitioned Parquet format
   fastq-to-text    convert DNA sequences in FASTQ format to tab-separated values (tsv) text format
   filter-bed    filter features in BED format
   filter-fasta    filter sequences in FASTA format
