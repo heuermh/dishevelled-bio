@@ -24,14 +24,12 @@
 package org.dishevelled.bio.tools;
 
 import static org.dishevelled.compress.Readers.reader;
-import static org.dishevelled.compress.Writers.writer;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.PrintWriter;
 
 import java.nio.file.Path;
 
@@ -58,7 +56,6 @@ import org.dishevelled.commandline.Usage;
 import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
 import org.dishevelled.commandline.argument.PathArgument;
-import org.dishevelled.commandline.argument.StringArgument;
 
 import org.duckdb.DuckDBAppender;
 import org.duckdb.DuckDBConnection;
