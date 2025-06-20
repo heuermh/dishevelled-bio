@@ -174,6 +174,7 @@ public final class Tools implements Callable<Integer> {
         .put("fastq-sequence-length", new Command("fastq-sequence-length", "output sequence lengths from DNA sequences in FASTQ format", FastqSequenceLength.class))
         .put("fastq-to-bam", new Command("fastq-to-bam", "convert DNA sequences in FASTQ format to unaligned BAM format", FastqToBam.class))
         .put("fastq-to-fasta", new Command("fastq-to-fasta", "convert DNA sequences in FASTQ format to FASTA format", FastqToFasta.class))
+        .put("fastq-to-parquet3", new Command("fastq-to-parquet3", "(beta) convert DNA sequences in FASTQ format to Parquet format, with partition size", FastqToParquet3.class))
         .put("fastq-to-text", new Command("fastq-to-text", "convert DNA sequences in FASTQ format to tab-separated values (tsv) text format", FastqToText.class))
         .put("filter-bed", new Command("filter-bed", "filter features in BED format", FilterBed.class))
         .put("filter-fasta", new Command("filter-fasta", "filter sequences in FASTA format", FilterFasta.class))

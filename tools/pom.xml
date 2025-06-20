@@ -411,6 +411,10 @@
               <mainClass>org.dishevelled.bio.tools.FastqToFasta</mainClass>
             </program>
             <program>
+              <id>dsh-fastq-to-parquet3</id>
+              <mainClass>org.dishevelled.bio.tools.FastqToParquet3</mainClass>
+            </program>
+            <program>
               <id>dsh-fastq-to-text</id>
               <mainClass>org.dishevelled.bio.tools.FastqToText</mainClass>
             </program>
