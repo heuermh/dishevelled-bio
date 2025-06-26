@@ -33,7 +33,6 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 import java.util.concurrent.Callable;
@@ -63,8 +62,7 @@ import org.dishevelled.commandline.argument.StringArgument;
 public final class ParquetReadsToFastq implements Callable<Integer> {
     private final String parquetPath;
     private final File fastqFile;
-    // todo: flag for sorting first?
-    private static final String READ_SQL = "SELECT name, sequence, quality FROM read_parquet('%s')";
+    private static final String READ_SQL = "SELECT description, sequence, quality FROM read_parquet('%s')";
     private static final String USAGE = "dsh-parquet-reads-to-fastq [args]";
 
     /**
@@ -87,6 +85,7 @@ public final class ParquetReadsToFastq implements Callable<Integer> {
             Class.forName("org.duckdb.DuckDBDriver");
             try (Connection connection = DriverManager.getConnection("jdbc:duckdb:")) {
                 try (Statement statement = connection.createStatement()) {
+                    // todo: if parquetPath starts with s3 load httpfs and credentials
                     try (ResultSet resultSet = statement.executeQuery(String.format(READ_SQL, parquetPath))) {
                         while (resultSet.next()) {
                             Fastq fastq = fastqBuilder

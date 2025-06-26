@@ -42,8 +42,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
-import com.google.common.annotations.Beta;
-
 import org.biojava.bio.program.fastq.Fastq;
 import org.biojava.bio.program.fastq.FastqReader;
 import org.biojava.bio.program.fastq.SangerFastqReader;
@@ -78,7 +76,7 @@ public final class FastqToPartitionedParquet implements Callable<Integer> {
     private final FastqReader fastqReader = new SangerFastqReader();
     static final int DEFAULT_ROW_GROUP_SIZE = 122880;
     static final long DEFAULT_PARTITION_SIZE = DEFAULT_ROW_GROUP_SIZE * 10L;
-    private static final String CREATE_TABLE_SQL = "CREATE TABLE s%d (name VARCHAR, sequence VARCHAR, quality VARCHAR)";
+    private static final String CREATE_TABLE_SQL = "CREATE TABLE s%d (description VARCHAR, sequence VARCHAR, quality VARCHAR)";
     private static final String DROP_TABLE_SQL = "DROP TABLE s%d";
     private static final String COPY_SQL = "COPY s%d TO '%s/part-%d-%d.parquet' (FORMAT 'parquet', COMPRESSION 'zstd', OVERWRITE_OR_IGNORE 1, ROW_GROUP_SIZE %d)";
     private static final String USAGE = "dsh-fastq-to-partitioned-parquet [args]";
