@@ -227,6 +227,7 @@ public final class Tools implements Callable<Integer> {
         .put("variant-table-to-vcf", new Command("variant-table-to-vcf", "convert Ensembl variant table to VCF format", EnsemblVariantTableToVcf.class))
         .put("vcf-pedigree", new Command("vcf-pedigree", "extract a pedigree from VCF format", VcfPedigree.class))
         .put("vcf-samples", new Command("vcf-samples", "extract samples from VCF format", VcfSamples.class))
+        .put("vcf-to-parquet", new Command("vcf-to-parquet", "convert variants in VCF format to Parquet format", VcfToParquet.class))
         .build();
 
     /**

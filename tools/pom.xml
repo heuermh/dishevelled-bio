@@ -627,6 +627,10 @@
               <mainClass>org.dishevelled.bio.tools.VcfSamples</mainClass>
             </program>
             <program>
+              <id>dsh-vcf-to-parquet</id>
+              <mainClass>org.dishevelled.bio.tools.VcfToParquet</mainClass>
+            </program>
+            <program>
               <id>dsh-bio</id>
               <mainClass>org.dishevelled.bio.tools.Tools</mainClass>
             </program>
