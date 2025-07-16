@@ -94,6 +94,7 @@ commands:
   links-to-cytoscape-edges    convert links in GFA 1.0 format to edges.txt format for Cytoscape
   links-to-property-graph    convert links in GFA 1.0 format to property graph CSV format
   list-filesystems    list filesystem providers
+  parquet-reads-to-fastq    convert reads in Parquet format to FASTQ format
   reassemble-paths    reassemble paths in GFA 1.0 format from traversal records
   remap-dbsnp    remap DB Type=String flags in VCF format to DB Type=Flag and dbsnp Type=String fields
   remap-phase-set    remap PS Type=String phase set ids in VCF format to PS Type=Integer
@@ -123,6 +124,7 @@ commands:
   variant-table-to-vcf    convert Ensembl variant table to VCF format
   vcf-pedigree    extract a pedigree from VCF format
   vcf-samples    extract samples from VCF format
+  vcf-to-parquet    convert variants in VCF format to Parquet format
 
 arguments:
    -a, --about  display about message [optional]
