@@ -65,7 +65,7 @@
     <bind-api.version>4.0.2</bind-api.version>
     <biojava.version>1.9.7</biojava.version>
     <commons-csv.version>1.14.0</commons-csv.version>
-    <commons-codec.version>1.18.0</commons-codec.version>
+    <commons-codec.version>1.19.0</commons-codec.version>
     <commons-math3.version>3.6.1</commons-math3.version>
     <dsh-bitset.version>3.0</dsh-bitset.version>
     <dsh-commandline.version>1.2</dsh-commandline.version>
