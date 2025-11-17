@@ -111,6 +111,7 @@ public final class VcfToPartitionedParquet implements Callable<Integer> {
         final AtomicReference<DuckDBConnection> connection = new AtomicReference<DuckDBConnection>();
         try {
             reader = reader(vcfPath);
+            parquetFile.mkdirs();
 
             connection.set((DuckDBConnection) DriverManager.getConnection("jdbc:duckdb:"));
             statement.set(connection.get().createStatement());
