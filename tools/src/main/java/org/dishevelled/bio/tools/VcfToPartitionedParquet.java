@@ -116,7 +116,7 @@ public final class VcfToPartitionedParquet implements Callable<Integer> {
             statement.set(connection.get().createStatement());
 
             try {
-                statement.get().execute(CREATE_TABLE_SQL);
+                statement.get().execute(String.format(CREATE_TABLE_SQL, firstRow.get()));
                 appender.set(connection.get().createAppender(DuckDBConnection.DEFAULT_SCHEMA, String.format("v%d", firstRow.get())));
 
                 VcfParser.parse(reader, new VcfParseAdapter() {
