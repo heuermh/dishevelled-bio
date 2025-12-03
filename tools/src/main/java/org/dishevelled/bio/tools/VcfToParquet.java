@@ -38,6 +38,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import java.util.concurrent.Callable;
 
 import com.google.common.base.Joiner;
@@ -55,6 +59,7 @@ import org.dishevelled.commandline.Usage;
 import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
 import org.dishevelled.commandline.argument.PathArgument;
+import org.dishevelled.commandline.argument.StringListArgument;
 
 import org.duckdb.DuckDBAppender;
 import org.duckdb.DuckDBConnection;
@@ -69,8 +74,13 @@ public final class VcfToParquet implements Callable<Integer> {
     private final Path vcfPath;
     private final File parquetFile;
     private final int rowGroupSize;
+    private final List<String> infoFields;
+    private final List<String> samples;
+    private final List<String> formatFields;
     static final int DEFAULT_ROW_GROUP_SIZE = 122880;
-    private static final String CREATE_TABLE_SQL = "CREATE TABLE variants (chrom VARCHAR, pos LONG, ref VARCHAR, alt VARCHAR, qual DOUBLE)";
+    static final List<String> EMPTY_LIST = Collections.emptyList();
+    private static final String CREATE_TABLE_SQL_PREFIX = "CREATE TABLE variants (chrom VARCHAR, pos LONG, ref VARCHAR, alt VARCHAR, qual DOUBLE, filters_applied BOOLEAN, filters_passed BOOLEAN, filters_failed VARCHAR[]";
+    private static final String CREATE_TABLE_SQL_SUFFIX = ")";
     private static final String COPY_SQL = "COPY variants TO '%s' (FORMAT 'parquet', COMPRESSION 'zstd', OVERWRITE_OR_IGNORE 1, ROW_GROUP_SIZE %d, PER_THREAD_OUTPUT)";
     private static final String USAGE = "dsh-vcf-to-parquet [args]";
 
@@ -83,13 +93,74 @@ public final class VcfToParquet implements Callable<Integer> {
      * @param rowGroupSize row group size, must be greater than zero
      */
     public VcfToParquet(final Path vcfPath, final File parquetFile, final int rowGroupSize) {
+        this(vcfPath, parquetFile, EMPTY_LIST, EMPTY_LIST, EMPTY_LIST, rowGroupSize);
+    }
+
+    /**
+     * Convert variants in VCF format to Parquet format.
+     *
+     * @since 3.2
+     * @param vcfPath input VCF path, if any
+     * @param parquetFile output Parquet file, will be created as a directory, overwriting if necessary
+     * @param infoFields list of INFO fields, may be empty but must not be null
+     * @param samples list of samples, may be empty but must not be null
+     * @param formatFields list of FORMAT fields, may be empty but must not be null
+     * @param rowGroupSize row group size, must be greater than zero
+     */
+    public VcfToParquet(final Path vcfPath,
+                        final File parquetFile,
+                        final List<String> infoFields,
+                        final List<String> samples,
+                        final List<String> formatFields,
+                        final int rowGroupSize) {
         checkNotNull(parquetFile);
+        checkNotNull(infoFields);
+        checkNotNull(samples);
+        checkNotNull(formatFields);
         checkArgument(rowGroupSize > 0, "row group size must be greater than zero");
         this.vcfPath = vcfPath;
         this.parquetFile = parquetFile;
+        this.infoFields = infoFields;
+        this.samples = samples;
+        this.formatFields = formatFields;
         this.rowGroupSize = rowGroupSize;
     }
 
+
+    /**
+     * Create and return the CREATE TABLE SQL.
+     *
+     * @return the CREATE TABLE SQL
+     */
+    private String createTableSql() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(CREATE_TABLE_SQL_PREFIX);
+        for (String infoField : infoFields) {
+            sb.append(", ");
+            sb.append(infoField.toLowerCase());
+            sb.append(" VARCHAR[]");
+        }
+        for (String sample : samples) {
+            for (String formatField : formatFields) {
+                sb.append(", ");
+                sb.append(sample.toLowerCase());
+                sb.append("_");
+                sb.append(formatField.toLowerCase());
+                sb.append(" VARCHAR[]");
+            }
+        }
+        sb.append(CREATE_TABLE_SQL_SUFFIX);
+        return sb.toString();
+    }
+
+    /**
+     * Create and return the COPY SQL.
+     *
+     * @return the COPY SQL
+     */
+    private String copySql() {
+        return String.format(COPY_SQL, parquetFile, rowGroupSize);
+    }
 
     @Override
     public Integer call() throws Exception {
@@ -102,7 +173,7 @@ public final class VcfToParquet implements Callable<Integer> {
             connection = (DuckDBConnection) DriverManager.getConnection("jdbc:duckdb:");
             statement = connection.createStatement();
 
-            statement.execute(CREATE_TABLE_SQL);
+            statement.execute(createTableSql());
             DuckDBAppender appender = null;
             try {
                 appender = connection.createAppender(DuckDBConnection.DEFAULT_SCHEMA, "variants");
@@ -160,7 +231,7 @@ public final class VcfToParquet implements Callable<Integer> {
                                     a.append(alt[0]);
                                 }
                                 else {
-                                    a.append(Joiner.on(",").join(alt));
+                                    throw new IOException("multiallelic variants not supported, found alternate alleles " + alt);
                                 }
                             }
                             catch (SQLException e) {
@@ -182,7 +253,37 @@ public final class VcfToParquet implements Callable<Integer> {
                             catch (SQLException e) {
                                 throw new IOException(e);
                             }
+                        }
 
+                        @Override
+                        public void filter(final String... filter) throws IOException {
+                            try {
+                                if (filter.length == 0) {
+                                    a.append(false);
+                                    a.append(false);
+                                    a.append(EMPTY_LIST);
+                                }
+                                else if (filter.length == 1) {
+                                    if ("PASS".equals(filter[0])) {
+                                        a.append(true);
+                                        a.append(true);
+                                        a.append(EMPTY_LIST);
+                                    }
+                                    else {
+                                        a.append(true);
+                                        a.append(false);
+                                        a.append(Arrays.asList(filter));
+                                    }
+                                }
+                                else {
+                                    a.append(true);
+                                    a.append(false);
+                                    a.append(Arrays.asList(filter));
+                                }
+                            }
+                            catch (SQLException e) {
+                                throw new IOException(e);
+                            }
                         }
 
                         @Override
@@ -210,7 +311,7 @@ public final class VcfToParquet implements Callable<Integer> {
                     // ignore
                 }
             }
-            statement.execute(String.format(COPY_SQL, parquetFile, rowGroupSize));
+            statement.execute(copySql());
 
             return 0;
         }
@@ -254,9 +355,12 @@ public final class VcfToParquet implements Callable<Integer> {
         Switch help = new Switch("h", "help", "display help message");
         PathArgument vcfPath = new PathArgument("i", "input-vcf-path", "input VCF path, default stdin", false);
         FileArgument parquetFile = new FileArgument("o", "output-parquet-file", "output Parquet file", true);
+        StringListArgument infoFields = new StringListArgument("n", "info-fields", "list of INFO fields to include", false);
+        StringListArgument samples = new StringListArgument("s", "samples", "list of samples to include", false);
+        StringListArgument formatFields = new StringListArgument("f", "format-fields", "list of FORMAT fields to include", false);
         IntegerArgument rowGroupSize = new IntegerArgument("g", "row-group-size", "row group size, default " + DEFAULT_ROW_GROUP_SIZE, false);
 
-        ArgumentList arguments = new ArgumentList(about, help, vcfPath, parquetFile, rowGroupSize);
+        ArgumentList arguments = new ArgumentList(about, help, vcfPath, parquetFile, infoFields, samples, formatFields, rowGroupSize);
         CommandLine commandLine = new CommandLine(args);
 
         VcfToParquet vcfToParquet = null;
@@ -271,7 +375,7 @@ public final class VcfToParquet implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            vcfToParquet = new VcfToParquet(vcfPath.getValue(), parquetFile.getValue(), rowGroupSize.getValue(DEFAULT_ROW_GROUP_SIZE));
+            vcfToParquet = new VcfToParquet(vcfPath.getValue(), parquetFile.getValue(), infoFields.getValue(EMPTY_LIST), samples.getValue(EMPTY_LIST), formatFields.getValue(EMPTY_LIST), rowGroupSize.getValue(DEFAULT_ROW_GROUP_SIZE));
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);
