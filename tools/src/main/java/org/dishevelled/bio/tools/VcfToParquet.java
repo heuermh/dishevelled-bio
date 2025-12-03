@@ -40,7 +40,9 @@ import java.sql.Statement;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import java.util.concurrent.Callable;
 
@@ -180,9 +182,12 @@ public final class VcfToParquet implements Callable<Integer> {
 
                 final DuckDBAppender a = appender;
                 VcfParser.parse(reader, new VcfParseAdapter() {
+                        private Map<String, String[]> infoValues = new HashMap<String, String[]>();
+
                         @Override
                         public void lineNumber(final long lineNumber) throws IOException {
                             try {
+                                infoValues.clear();
                                 a.beginRow();
                             }
                             catch (SQLException e) {
@@ -244,7 +249,7 @@ public final class VcfToParquet implements Callable<Integer> {
                         public void qual(final Double qual) throws IOException {
                             try {
                                 if (qual == null) {
-                                    a.append((String) null);
+                                    a.append((Double) null);
                                 }
                                 else {
                                     a.append(qual);
@@ -287,8 +292,23 @@ public final class VcfToParquet implements Callable<Integer> {
                         }
 
                         @Override
+                        public void info(final String infoId, final String... values) throws IOException {
+                            if (infoFields.contains(infoId)) {
+                                infoValues.put(infoId, values);
+                            }
+                        }
+
+                        @Override
                         public boolean complete() throws IOException {
                             try {
+                                for (String infoField : infoFields) {
+                                    if (infoValues.containsKey(infoField)) {
+                                        a.append(Arrays.asList(infoValues.get(infoField)));
+                                    }
+                                    else {
+                                        a.append(EMPTY_LIST);
+                                    }
+                                }
                                 a.endRow();
                             }
                             catch (SQLException e) {
