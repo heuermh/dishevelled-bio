@@ -79,18 +79,20 @@ import org.duckdb.DuckDBConnection;
 public final class VcfToParquet implements Callable<Integer> {
     private final Path vcfPath;
     private final File parquetFile;
-    private final int rowGroupSize;
+    private final boolean multiallelic;
     private final List<String> infoFields;
     private final String infoPrefix;
     private final List<String> samples;
     private final String samplePrefix;
     private final List<String> formatFields;
     private final boolean lowercase;
+    private final int rowGroupSize;
     static final int DEFAULT_ROW_GROUP_SIZE = 122880;
     static final String DEFAULT_INFO_PREFIX = "";
     static final String DEFAULT_SAMPLE_PREFIX = "";
     static final List<String> EMPTY_LIST = Collections.emptyList();
     private static final String CREATE_TABLE_SQL_PREFIX = "CREATE TABLE variants (chrom VARCHAR, pos LONG, ref VARCHAR, alt VARCHAR, qual DOUBLE, filters_applied BOOLEAN, filters_passed BOOLEAN, filters_failed VARCHAR[]";
+    private static final String CREATE_TABLE_SQL_PREFIX_MULTIALLELIC = "CREATE TABLE variants (chrom VARCHAR, pos LONG, ref VARCHAR, alt VARCHAR[], qual DOUBLE, filters_applied BOOLEAN, filters_passed BOOLEAN, filters_failed VARCHAR[]";
     private static final String CREATE_TABLE_SQL_SUFFIX = ")";
     private static final String COPY_SQL = "COPY variants TO '%s' (FORMAT 'parquet', COMPRESSION 'zstd', OVERWRITE_OR_IGNORE 1, ROW_GROUP_SIZE %d, PER_THREAD_OUTPUT)";
     private static final String USAGE = "dsh-vcf-to-parquet [args]";
@@ -104,7 +106,7 @@ public final class VcfToParquet implements Callable<Integer> {
      * @param rowGroupSize row group size, must be greater than zero
      */
     public VcfToParquet(final Path vcfPath, final File parquetFile, final int rowGroupSize) {
-        this(vcfPath, parquetFile, EMPTY_LIST, DEFAULT_INFO_PREFIX, EMPTY_LIST, DEFAULT_SAMPLE_PREFIX, EMPTY_LIST, true, rowGroupSize);
+        this(vcfPath, parquetFile, false, EMPTY_LIST, DEFAULT_INFO_PREFIX, EMPTY_LIST, DEFAULT_SAMPLE_PREFIX, EMPTY_LIST, true, rowGroupSize);
     }
 
     /**
@@ -113,6 +115,7 @@ public final class VcfToParquet implements Callable<Integer> {
      * @since 3.2
      * @param vcfPath input VCF path, if any
      * @param parquetFile output Parquet file, will be created as a directory, overwriting if necessary
+     * @param multiallelic true to allow multiallelic records
      * @param infoFields list of INFO fields, may be empty but must not be null
      * @param infoPrefix info prefix, may be empty but must not be null
      * @param samples list of samples, may be empty but must not be null
@@ -123,6 +126,7 @@ public final class VcfToParquet implements Callable<Integer> {
      */
     public VcfToParquet(final Path vcfPath,
                         final File parquetFile,
+                        final boolean multiallelic,
                         final List<String> infoFields,
                         final String infoPrefix,
                         final List<String> samples,
@@ -139,6 +143,7 @@ public final class VcfToParquet implements Callable<Integer> {
         checkArgument(rowGroupSize > 0, "row group size must be greater than zero");
         this.vcfPath = vcfPath;
         this.parquetFile = parquetFile;
+        this.multiallelic = multiallelic;
         this.infoFields = infoFields;
         this.infoPrefix = infoPrefix;
         this.samples = samples;
@@ -156,7 +161,7 @@ public final class VcfToParquet implements Callable<Integer> {
      */
     private String createTableSql() {
         StringBuilder sb = new StringBuilder();
-        sb.append(CREATE_TABLE_SQL_PREFIX);
+        sb.append(multiallelic ? CREATE_TABLE_SQL_PREFIX_MULTIALLELIC : CREATE_TABLE_SQL_PREFIX);
         for (String infoField : infoFields) {
             sb.append(", ");
             sb.append(infoPrefix);
@@ -253,20 +258,24 @@ public final class VcfToParquet implements Callable<Integer> {
                         @Override
                         public void alt(final String... alt) throws IOException {
                             try {
-                                if (alt.length == 0) {
-                                    a.append("");
-                                }
-                                else if (alt.length == 1) {
-                                    a.append(alt[0]);
+                                if (multiallelic) {
+                                    a.append(Arrays.asList(alt));
                                 }
                                 else {
-                                    throw new IOException("multiallelic variants not supported, found alternate alleles " + alt);
+                                    if (alt.length == 0) {
+                                        a.append("");
+                                    }
+                                    else if (alt.length == 1) {
+                                        a.append(alt[0]);
+                                    }
+                                    else {
+                                        throw new IOException("multiallelic variants not supported, found alternate alleles " + alt);
+                                    }
                                 }
                             }
                             catch (SQLException e) {
                                 throw new IOException(e);
                             }
-                                
                         }
 
                         @Override
@@ -416,6 +425,7 @@ public final class VcfToParquet implements Callable<Integer> {
         Switch help = new Switch("h", "help", "display help message");
         PathArgument vcfPath = new PathArgument("i", "input-vcf-path", "input VCF path, default stdin", false);
         FileArgument parquetFile = new FileArgument("o", "output-parquet-file", "output Parquet file", true);
+        Switch multiallelic = new Switch("m", "multiallelic", "allow multiallelic records");
         StringListArgument infoFields = new StringListArgument("n", "info-fields", "list of INFO fields to include", false);
         StringArgument infoPrefix = new StringArgument("p", "info-prefix", "info prefix, default \"\"", false);
         StringListArgument samples = new StringListArgument("s", "samples", "list of samples to include", false);
@@ -424,7 +434,7 @@ public final class VcfToParquet implements Callable<Integer> {
         Switch lowercase = new Switch("w", "lowercase", "lowercase fields and samples for column names");
         IntegerArgument rowGroupSize = new IntegerArgument("g", "row-group-size", "row group size, default " + DEFAULT_ROW_GROUP_SIZE, false);
 
-        ArgumentList arguments = new ArgumentList(about, help, vcfPath, parquetFile, infoFields, infoPrefix, samples, samplePrefix, formatFields, lowercase, rowGroupSize);
+        ArgumentList arguments = new ArgumentList(about, help, vcfPath, parquetFile, multiallelic, infoFields, infoPrefix, samples, samplePrefix, formatFields, lowercase, rowGroupSize);
         CommandLine commandLine = new CommandLine(args);
 
         VcfToParquet vcfToParquet = null;
@@ -439,7 +449,7 @@ public final class VcfToParquet implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            vcfToParquet = new VcfToParquet(vcfPath.getValue(), parquetFile.getValue(), infoFields.getValue(EMPTY_LIST), infoPrefix.getValue(DEFAULT_INFO_PREFIX), samples.getValue(EMPTY_LIST), samplePrefix.getValue(DEFAULT_SAMPLE_PREFIX), formatFields.getValue(EMPTY_LIST), lowercase.wasFound(), rowGroupSize.getValue(DEFAULT_ROW_GROUP_SIZE));
+            vcfToParquet = new VcfToParquet(vcfPath.getValue(), parquetFile.getValue(), multiallelic.wasFound(), infoFields.getValue(EMPTY_LIST), infoPrefix.getValue(DEFAULT_INFO_PREFIX), samples.getValue(EMPTY_LIST), samplePrefix.getValue(DEFAULT_SAMPLE_PREFIX), formatFields.getValue(EMPTY_LIST), lowercase.wasFound(), rowGroupSize.getValue(DEFAULT_ROW_GROUP_SIZE));
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);
