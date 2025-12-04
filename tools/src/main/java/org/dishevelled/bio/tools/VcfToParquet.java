@@ -81,10 +81,13 @@ public final class VcfToParquet implements Callable<Integer> {
     private final File parquetFile;
     private final int rowGroupSize;
     private final List<String> infoFields;
+    private final String infoPrefix;
     private final List<String> samples;
     private final String samplePrefix;
     private final List<String> formatFields;
+    private final boolean lowercase;
     static final int DEFAULT_ROW_GROUP_SIZE = 122880;
+    static final String DEFAULT_INFO_PREFIX = "";
     static final String DEFAULT_SAMPLE_PREFIX = "";
     static final List<String> EMPTY_LIST = Collections.emptyList();
     private static final String CREATE_TABLE_SQL_PREFIX = "CREATE TABLE variants (chrom VARCHAR, pos LONG, ref VARCHAR, alt VARCHAR, qual DOUBLE, filters_applied BOOLEAN, filters_passed BOOLEAN, filters_failed VARCHAR[]";
@@ -101,7 +104,7 @@ public final class VcfToParquet implements Callable<Integer> {
      * @param rowGroupSize row group size, must be greater than zero
      */
     public VcfToParquet(final Path vcfPath, final File parquetFile, final int rowGroupSize) {
-        this(vcfPath, parquetFile, EMPTY_LIST, EMPTY_LIST, DEFAULT_SAMPLE_PREFIX, EMPTY_LIST, rowGroupSize);
+        this(vcfPath, parquetFile, EMPTY_LIST, DEFAULT_INFO_PREFIX, EMPTY_LIST, DEFAULT_SAMPLE_PREFIX, EMPTY_LIST, true, rowGroupSize);
     }
 
     /**
@@ -111,20 +114,25 @@ public final class VcfToParquet implements Callable<Integer> {
      * @param vcfPath input VCF path, if any
      * @param parquetFile output Parquet file, will be created as a directory, overwriting if necessary
      * @param infoFields list of INFO fields, may be empty but must not be null
+     * @param infoPrefix info prefix, may be empty but must not be null
      * @param samples list of samples, may be empty but must not be null
      * @param samplePrefix sample prefix, may be empty but must not be null
      * @param formatFields list of FORMAT fields, may be empty but must not be null
+     * @param lowercase true to lowercase fields and samples for column names
      * @param rowGroupSize row group size, must be greater than zero
      */
     public VcfToParquet(final Path vcfPath,
                         final File parquetFile,
                         final List<String> infoFields,
+                        final String infoPrefix,
                         final List<String> samples,
                         final String samplePrefix,
                         final List<String> formatFields,
+                        final boolean lowercase,
                         final int rowGroupSize) {
         checkNotNull(parquetFile);
         checkNotNull(infoFields);
+        checkNotNull(infoPrefix);
         checkNotNull(samples);
         checkNotNull(samplePrefix);
         checkNotNull(formatFields);
@@ -132,9 +140,11 @@ public final class VcfToParquet implements Callable<Integer> {
         this.vcfPath = vcfPath;
         this.parquetFile = parquetFile;
         this.infoFields = infoFields;
+        this.infoPrefix = infoPrefix;
         this.samples = samples;
         this.samplePrefix = samplePrefix;
         this.formatFields = formatFields;
+        this.lowercase = lowercase;
         this.rowGroupSize = rowGroupSize;
     }
 
@@ -149,16 +159,17 @@ public final class VcfToParquet implements Callable<Integer> {
         sb.append(CREATE_TABLE_SQL_PREFIX);
         for (String infoField : infoFields) {
             sb.append(", ");
-            sb.append(infoField.toLowerCase());
+            sb.append(infoPrefix);
+            sb.append(lowercase ? infoField.toLowerCase() : infoField);
             sb.append(" VARCHAR[]");
         }
         for (String sample : samples) {
             for (String formatField : formatFields) {
                 sb.append(", ");
                 sb.append(samplePrefix);
-                sb.append(sample.toLowerCase());
+                sb.append(lowercase ? sample.toLowerCase() : sample);
                 sb.append("_");
-                sb.append(formatField.toLowerCase());
+                sb.append(lowercase ? formatField.toLowerCase() : formatField);
                 sb.append(" VARCHAR[]");
             }
         }
@@ -406,12 +417,14 @@ public final class VcfToParquet implements Callable<Integer> {
         PathArgument vcfPath = new PathArgument("i", "input-vcf-path", "input VCF path, default stdin", false);
         FileArgument parquetFile = new FileArgument("o", "output-parquet-file", "output Parquet file", true);
         StringListArgument infoFields = new StringListArgument("n", "info-fields", "list of INFO fields to include", false);
+        StringArgument infoPrefix = new StringArgument("p", "info-prefix", "info prefix, default \"\"", false);
         StringListArgument samples = new StringListArgument("s", "samples", "list of samples to include", false);
-        StringArgument samplePrefix = new StringArgument("p", "sample-prefix", "sample prefix, default \"\"", false);
+        StringArgument samplePrefix = new StringArgument("x", "sample-prefix", "sample prefix, default \"\"", false);
         StringListArgument formatFields = new StringListArgument("f", "format-fields", "list of FORMAT fields to include", false);
+        Switch lowercase = new Switch("w", "lowercase", "lowercase fields and samples for column names");
         IntegerArgument rowGroupSize = new IntegerArgument("g", "row-group-size", "row group size, default " + DEFAULT_ROW_GROUP_SIZE, false);
 
-        ArgumentList arguments = new ArgumentList(about, help, vcfPath, parquetFile, infoFields, samples, samplePrefix, formatFields, rowGroupSize);
+        ArgumentList arguments = new ArgumentList(about, help, vcfPath, parquetFile, infoFields, infoPrefix, samples, samplePrefix, formatFields, lowercase, rowGroupSize);
         CommandLine commandLine = new CommandLine(args);
 
         VcfToParquet vcfToParquet = null;
@@ -426,7 +439,7 @@ public final class VcfToParquet implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            vcfToParquet = new VcfToParquet(vcfPath.getValue(), parquetFile.getValue(), infoFields.getValue(EMPTY_LIST), samples.getValue(EMPTY_LIST), samplePrefix.getValue(DEFAULT_SAMPLE_PREFIX), formatFields.getValue(EMPTY_LIST), rowGroupSize.getValue(DEFAULT_ROW_GROUP_SIZE));
+            vcfToParquet = new VcfToParquet(vcfPath.getValue(), parquetFile.getValue(), infoFields.getValue(EMPTY_LIST), infoPrefix.getValue(DEFAULT_INFO_PREFIX), samples.getValue(EMPTY_LIST), samplePrefix.getValue(DEFAULT_SAMPLE_PREFIX), formatFields.getValue(EMPTY_LIST), lowercase.wasFound(), rowGroupSize.getValue(DEFAULT_ROW_GROUP_SIZE));
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);
