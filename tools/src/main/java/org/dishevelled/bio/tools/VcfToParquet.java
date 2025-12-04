@@ -48,6 +48,9 @@ import java.util.concurrent.Callable;
 
 import com.google.common.base.Joiner;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
+
 import org.dishevelled.bio.variant.vcf.VcfParseAdapter;
 import org.dishevelled.bio.variant.vcf.VcfParser;
 
@@ -183,11 +186,13 @@ public final class VcfToParquet implements Callable<Integer> {
                 final DuckDBAppender a = appender;
                 VcfParser.parse(reader, new VcfParseAdapter() {
                         private Map<String, String[]> infoValues = new HashMap<String, String[]>();
+                        private Table<String, String, String[]> formatValues = HashBasedTable.create();
 
                         @Override
                         public void lineNumber(final long lineNumber) throws IOException {
                             try {
                                 infoValues.clear();
+                                formatValues.clear();
                                 a.beginRow();
                             }
                             catch (SQLException e) {
@@ -299,6 +304,13 @@ public final class VcfToParquet implements Callable<Integer> {
                         }
 
                         @Override
+                        public void genotype(final String sampleId, final String formatId, final String... values) {
+                            if (samples.contains(sampleId) && formatFields.contains(formatId)) {
+                                formatValues.put(sampleId, formatId, values);
+                            }
+                        }
+
+                        @Override
                         public boolean complete() throws IOException {
                             try {
                                 for (String infoField : infoFields) {
@@ -307,6 +319,16 @@ public final class VcfToParquet implements Callable<Integer> {
                                     }
                                     else {
                                         a.append(EMPTY_LIST);
+                                    }
+                                }
+                                for (String sample : samples) {
+                                    for (String formatField : formatFields) {
+                                        if (formatValues.contains(sample, formatField)) {
+                                            a.append(Arrays.asList(formatValues.get(sample, formatField)));
+                                        }
+                                        else {
+                                            a.append(EMPTY_LIST);
+                                        }
                                     }
                                 }
                                 a.endRow();
