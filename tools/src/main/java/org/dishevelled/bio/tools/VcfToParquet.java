@@ -64,6 +64,7 @@ import org.dishevelled.commandline.Usage;
 import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
 import org.dishevelled.commandline.argument.PathArgument;
+import org.dishevelled.commandline.argument.StringArgument;
 import org.dishevelled.commandline.argument.StringListArgument;
 
 import org.duckdb.DuckDBAppender;
@@ -81,8 +82,10 @@ public final class VcfToParquet implements Callable<Integer> {
     private final int rowGroupSize;
     private final List<String> infoFields;
     private final List<String> samples;
+    private final String samplePrefix;
     private final List<String> formatFields;
     static final int DEFAULT_ROW_GROUP_SIZE = 122880;
+    static final String DEFAULT_SAMPLE_PREFIX = "";
     static final List<String> EMPTY_LIST = Collections.emptyList();
     private static final String CREATE_TABLE_SQL_PREFIX = "CREATE TABLE variants (chrom VARCHAR, pos LONG, ref VARCHAR, alt VARCHAR, qual DOUBLE, filters_applied BOOLEAN, filters_passed BOOLEAN, filters_failed VARCHAR[]";
     private static final String CREATE_TABLE_SQL_SUFFIX = ")";
@@ -98,7 +101,7 @@ public final class VcfToParquet implements Callable<Integer> {
      * @param rowGroupSize row group size, must be greater than zero
      */
     public VcfToParquet(final Path vcfPath, final File parquetFile, final int rowGroupSize) {
-        this(vcfPath, parquetFile, EMPTY_LIST, EMPTY_LIST, EMPTY_LIST, rowGroupSize);
+        this(vcfPath, parquetFile, EMPTY_LIST, EMPTY_LIST, DEFAULT_SAMPLE_PREFIX, EMPTY_LIST, rowGroupSize);
     }
 
     /**
@@ -109,6 +112,7 @@ public final class VcfToParquet implements Callable<Integer> {
      * @param parquetFile output Parquet file, will be created as a directory, overwriting if necessary
      * @param infoFields list of INFO fields, may be empty but must not be null
      * @param samples list of samples, may be empty but must not be null
+     * @param samplePrefix sample prefix, may be empty but must not be null
      * @param formatFields list of FORMAT fields, may be empty but must not be null
      * @param rowGroupSize row group size, must be greater than zero
      */
@@ -116,17 +120,20 @@ public final class VcfToParquet implements Callable<Integer> {
                         final File parquetFile,
                         final List<String> infoFields,
                         final List<String> samples,
+                        final String samplePrefix,
                         final List<String> formatFields,
                         final int rowGroupSize) {
         checkNotNull(parquetFile);
         checkNotNull(infoFields);
         checkNotNull(samples);
+        checkNotNull(samplePrefix);
         checkNotNull(formatFields);
         checkArgument(rowGroupSize > 0, "row group size must be greater than zero");
         this.vcfPath = vcfPath;
         this.parquetFile = parquetFile;
         this.infoFields = infoFields;
         this.samples = samples;
+        this.samplePrefix = samplePrefix;
         this.formatFields = formatFields;
         this.rowGroupSize = rowGroupSize;
     }
@@ -148,6 +155,7 @@ public final class VcfToParquet implements Callable<Integer> {
         for (String sample : samples) {
             for (String formatField : formatFields) {
                 sb.append(", ");
+                sb.append(samplePrefix);
                 sb.append(sample.toLowerCase());
                 sb.append("_");
                 sb.append(formatField.toLowerCase());
@@ -399,10 +407,11 @@ public final class VcfToParquet implements Callable<Integer> {
         FileArgument parquetFile = new FileArgument("o", "output-parquet-file", "output Parquet file", true);
         StringListArgument infoFields = new StringListArgument("n", "info-fields", "list of INFO fields to include", false);
         StringListArgument samples = new StringListArgument("s", "samples", "list of samples to include", false);
+        StringArgument samplePrefix = new StringArgument("p", "sample-prefix", "sample prefix, default \"\"", false);
         StringListArgument formatFields = new StringListArgument("f", "format-fields", "list of FORMAT fields to include", false);
         IntegerArgument rowGroupSize = new IntegerArgument("g", "row-group-size", "row group size, default " + DEFAULT_ROW_GROUP_SIZE, false);
 
-        ArgumentList arguments = new ArgumentList(about, help, vcfPath, parquetFile, infoFields, samples, formatFields, rowGroupSize);
+        ArgumentList arguments = new ArgumentList(about, help, vcfPath, parquetFile, infoFields, samples, samplePrefix, formatFields, rowGroupSize);
         CommandLine commandLine = new CommandLine(args);
 
         VcfToParquet vcfToParquet = null;
@@ -417,7 +426,7 @@ public final class VcfToParquet implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            vcfToParquet = new VcfToParquet(vcfPath.getValue(), parquetFile.getValue(), infoFields.getValue(EMPTY_LIST), samples.getValue(EMPTY_LIST), formatFields.getValue(EMPTY_LIST), rowGroupSize.getValue(DEFAULT_ROW_GROUP_SIZE));
+            vcfToParquet = new VcfToParquet(vcfPath.getValue(), parquetFile.getValue(), infoFields.getValue(EMPTY_LIST), samples.getValue(EMPTY_LIST), samplePrefix.getValue(DEFAULT_SAMPLE_PREFIX), formatFields.getValue(EMPTY_LIST), rowGroupSize.getValue(DEFAULT_ROW_GROUP_SIZE));
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);
