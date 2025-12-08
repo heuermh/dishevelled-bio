@@ -106,7 +106,7 @@ public final class VcfToParquet implements Callable<Integer> {
      * @param rowGroupSize row group size, must be greater than zero
      */
     public VcfToParquet(final Path vcfPath, final File parquetFile, final int rowGroupSize) {
-        this(vcfPath, parquetFile, false, EMPTY_LIST, DEFAULT_INFO_PREFIX, EMPTY_LIST, DEFAULT_SAMPLE_PREFIX, EMPTY_LIST, true, rowGroupSize);
+        this(vcfPath, parquetFile, EMPTY_LIST, DEFAULT_INFO_PREFIX, EMPTY_LIST, DEFAULT_SAMPLE_PREFIX, EMPTY_LIST, true, false, rowGroupSize);
     }
 
     /**
@@ -115,24 +115,24 @@ public final class VcfToParquet implements Callable<Integer> {
      * @since 3.2
      * @param vcfPath input VCF path, if any
      * @param parquetFile output Parquet file, will be created as a directory, overwriting if necessary
-     * @param multiallelic true to allow multiallelic records
      * @param infoFields list of INFO fields, may be empty but must not be null
      * @param infoPrefix info prefix, may be empty but must not be null
      * @param samples list of samples, may be empty but must not be null
      * @param samplePrefix sample prefix, may be empty but must not be null
      * @param formatFields list of FORMAT fields, may be empty but must not be null
      * @param lowercase true to lowercase fields and samples for column names
+     * @param multiallelic true to allow multiallelic records
      * @param rowGroupSize row group size, must be greater than zero
      */
     public VcfToParquet(final Path vcfPath,
                         final File parquetFile,
-                        final boolean multiallelic,
                         final List<String> infoFields,
                         final String infoPrefix,
                         final List<String> samples,
                         final String samplePrefix,
                         final List<String> formatFields,
                         final boolean lowercase,
+                        final boolean multiallelic,
                         final int rowGroupSize) {
         checkNotNull(parquetFile);
         checkNotNull(infoFields);
@@ -143,13 +143,13 @@ public final class VcfToParquet implements Callable<Integer> {
         checkArgument(rowGroupSize > 0, "row group size must be greater than zero");
         this.vcfPath = vcfPath;
         this.parquetFile = parquetFile;
-        this.multiallelic = multiallelic;
         this.infoFields = infoFields;
         this.infoPrefix = infoPrefix;
         this.samples = samples;
         this.samplePrefix = samplePrefix;
         this.formatFields = formatFields;
         this.lowercase = lowercase;
+        this.multiallelic = multiallelic;
         this.rowGroupSize = rowGroupSize;
     }
 
@@ -180,15 +180,6 @@ public final class VcfToParquet implements Callable<Integer> {
         }
         sb.append(CREATE_TABLE_SQL_SUFFIX);
         return sb.toString();
-    }
-
-    /**
-     * Create and return the COPY SQL.
-     *
-     * @return the COPY SQL
-     */
-    private String copySql() {
-        return String.format(COPY_SQL, parquetFile, rowGroupSize);
     }
 
     @Override
@@ -381,7 +372,7 @@ public final class VcfToParquet implements Callable<Integer> {
                     // ignore
                 }
             }
-            statement.execute(copySql());
+            statement.execute(String.format(COPY_SQL, parquetFile, rowGroupSize));
 
             return 0;
         }
@@ -425,16 +416,16 @@ public final class VcfToParquet implements Callable<Integer> {
         Switch help = new Switch("h", "help", "display help message");
         PathArgument vcfPath = new PathArgument("i", "input-vcf-path", "input VCF path, default stdin", false);
         FileArgument parquetFile = new FileArgument("o", "output-parquet-file", "output Parquet file", true);
-        Switch multiallelic = new Switch("m", "multiallelic", "allow multiallelic records");
         StringListArgument infoFields = new StringListArgument("n", "info-fields", "list of INFO fields to include", false);
         StringArgument infoPrefix = new StringArgument("p", "info-prefix", "info prefix, default \"\"", false);
         StringListArgument samples = new StringListArgument("s", "samples", "list of samples to include", false);
         StringArgument samplePrefix = new StringArgument("x", "sample-prefix", "sample prefix, default \"\"", false);
         StringListArgument formatFields = new StringListArgument("f", "format-fields", "list of FORMAT fields to include", false);
         Switch lowercase = new Switch("w", "lowercase", "lowercase fields and samples for column names");
+        Switch multiallelic = new Switch("m", "multiallelic", "allow multiallelic records");
         IntegerArgument rowGroupSize = new IntegerArgument("g", "row-group-size", "row group size, default " + DEFAULT_ROW_GROUP_SIZE, false);
 
-        ArgumentList arguments = new ArgumentList(about, help, vcfPath, parquetFile, multiallelic, infoFields, infoPrefix, samples, samplePrefix, formatFields, lowercase, rowGroupSize);
+        ArgumentList arguments = new ArgumentList(about, help, vcfPath, parquetFile, infoFields, infoPrefix, samples, samplePrefix, formatFields, lowercase, multiallelic, rowGroupSize);
         CommandLine commandLine = new CommandLine(args);
 
         VcfToParquet vcfToParquet = null;
@@ -449,7 +440,7 @@ public final class VcfToParquet implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            vcfToParquet = new VcfToParquet(vcfPath.getValue(), parquetFile.getValue(), multiallelic.wasFound(), infoFields.getValue(EMPTY_LIST), infoPrefix.getValue(DEFAULT_INFO_PREFIX), samples.getValue(EMPTY_LIST), samplePrefix.getValue(DEFAULT_SAMPLE_PREFIX), formatFields.getValue(EMPTY_LIST), lowercase.wasFound(), rowGroupSize.getValue(DEFAULT_ROW_GROUP_SIZE));
+            vcfToParquet = new VcfToParquet(vcfPath.getValue(), parquetFile.getValue(), infoFields.getValue(EMPTY_LIST), infoPrefix.getValue(DEFAULT_INFO_PREFIX), samples.getValue(EMPTY_LIST), samplePrefix.getValue(DEFAULT_SAMPLE_PREFIX), formatFields.getValue(EMPTY_LIST), lowercase.wasFound(), multiallelic.wasFound(), rowGroupSize.getValue(DEFAULT_ROW_GROUP_SIZE));
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);
