@@ -79,13 +79,13 @@ import org.duckdb.DuckDBConnection;
 public final class VcfToParquet implements Callable<Integer> {
     private final Path vcfPath;
     private final File parquetFile;
-    private final boolean multiallelic;
     private final List<String> infoFields;
     private final String infoPrefix;
     private final List<String> samples;
     private final String samplePrefix;
     private final List<String> formatFields;
     private final boolean lowercase;
+    private final boolean multiallelic;
     private final int rowGroupSize;
     static final int DEFAULT_ROW_GROUP_SIZE = 122880;
     static final String DEFAULT_INFO_PREFIX = "";
@@ -189,6 +189,7 @@ public final class VcfToParquet implements Callable<Integer> {
         Statement statement = null;
         try {
             reader = reader(vcfPath);
+            parquetFile.mkdirs();
 
             connection = (DuckDBConnection) DriverManager.getConnection("jdbc:duckdb:");
             statement = connection.createStatement();
@@ -415,9 +416,9 @@ public final class VcfToParquet implements Callable<Integer> {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
         PathArgument vcfPath = new PathArgument("i", "input-vcf-path", "input VCF path, default stdin", false);
-        FileArgument parquetFile = new FileArgument("o", "output-parquet-file", "output Parquet file", true);
+        FileArgument parquetFile = new FileArgument("o", "output-parquet-file", "output Parquet file, will be created as a directory, overwriting if necessary", true);
         StringListArgument infoFields = new StringListArgument("n", "info-fields", "list of INFO fields to include", false);
-        StringArgument infoPrefix = new StringArgument("p", "info-prefix", "info prefix, default \"\"", false);
+        StringArgument infoPrefix = new StringArgument("r", "info-prefix", "info prefix, default \"\"", false);
         StringListArgument samples = new StringListArgument("s", "samples", "list of samples to include", false);
         StringArgument samplePrefix = new StringArgument("x", "sample-prefix", "sample prefix, default \"\"", false);
         StringListArgument formatFields = new StringListArgument("f", "format-fields", "list of FORMAT fields to include", false);
