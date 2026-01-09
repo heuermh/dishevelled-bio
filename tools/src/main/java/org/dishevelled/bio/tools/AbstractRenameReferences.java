@@ -42,7 +42,7 @@ abstract class AbstractRenameReferences implements Callable<Integer> {
     protected final File outputFile;
     private static final Pattern AUTOSOMAL = Pattern.compile("^([0-9]+)$");
     private static final Pattern SEX = Pattern.compile("^([XYZW])$");
-    private static final Pattern MITOCHONDRIAL = Pattern.compile("^[chrM,MT]$");
+    private static final Pattern MITOCHONDRIAL = Pattern.compile("^chrM|MT$");
     private static final Pattern CHR = Pattern.compile("^chr(.+)$");
     private static final Pattern CHRUN_ = Pattern.compile("^chrUn_(.+)$");
     private static final Pattern V = Pattern.compile("([0-9]+)v([0-9]+)");
