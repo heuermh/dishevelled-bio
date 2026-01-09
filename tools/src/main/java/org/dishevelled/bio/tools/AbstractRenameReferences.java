@@ -72,6 +72,8 @@ abstract class AbstractRenameReferences implements Callable<Integer> {
     protected static String addChr(final String referenceName) {
         String result = referenceName;
 
+        // 123v1 --> 123.1
+        result = V.matcher(result).replaceAll("$1.$2");
         // 1 --> chr1
         result = AUTOSOMAL.matcher(result).replaceAll("chr$1");
         // X --> chrX
