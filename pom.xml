@@ -71,7 +71,7 @@
     <dsh-commandline.version>1.2</dsh-commandline.version>
     <dsh-compress.version>1.8.1</dsh-compress.version>
     <dsh-graph.version>1.0</dsh-graph.version>
-    <duckdb.version>1.4.3.0</duckdb.version>
+    <duckdb.version>1.4.4.0</duckdb.version>
     <google-cloud.version>0.128.8</google-cloud.version>
     <htsjdk.version>4.3.0</htsjdk.version>
     <jaxb-impl.version>4.0.6</jaxb-impl.version>
