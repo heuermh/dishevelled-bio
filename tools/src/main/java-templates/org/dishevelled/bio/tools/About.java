@@ -1,7 +1,7 @@
 /*
 
     dsh-bio-tools  Command line tools.
-    Copyright (c) 2013-2025 held jointly by the individual authors.
+    Copyright (c) 2013-2026 held jointly by the individual authors.
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Lesser General Public License as published
@@ -34,7 +34,7 @@ final class About {
     private static final String ARTIFACT_ID = "${project.artifactId}";
     private static final String BUILD_TIMESTAMP = "${build-helper-maven-plugin.build.timestamp}";
     private static final String COMMIT = "${git.commit.id}";
-    private static final String COPYRIGHT = "Copyright (c) 2013-2025 held jointly by the individual authors.";
+    private static final String COPYRIGHT = "Copyright (c) 2013-2026 held jointly by the individual authors.";
     private static final String LICENSE = "Licensed GNU Lesser General Public License (LGPL), version 3 or later.";
     private static final String DOI = "10.5281/zenodo.15027131";
     private static final String VERSION = "${project.version}";
