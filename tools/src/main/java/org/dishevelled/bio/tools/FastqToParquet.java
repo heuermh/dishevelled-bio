@@ -70,7 +70,7 @@ public final class FastqToParquet implements Callable<Integer> {
     private final int rowGroupSize;
     private final FastqReader fastqReader = new SangerFastqReader();
     static final int DEFAULT_ROW_GROUP_SIZE = 122880;
-    private static final String CREATE_TABLE_SQL = "CREATE TABLE reads (description VARCHAR, sequence VARCHAR, quality VARCHAR)";
+    private static final String CREATE_TABLE_SQL = "CREATE TABLE reads (description VARCHAR, sequence VARCHAR, quality VARCHAR, length INTEGER)";
     private static final String COPY_SQL = "COPY reads TO '%s' (FORMAT 'parquet', COMPRESSION 'zstd', OVERWRITE_OR_IGNORE 1, ROW_GROUP_SIZE %d, PER_THREAD_OUTPUT)";
     private static final String USAGE = "dsh-fastq-to-parquet [args]";
 
@@ -116,6 +116,7 @@ public final class FastqToParquet implements Callable<Integer> {
                                 a.append(fastq.getDescription());
                                 a.append(fastq.getSequence());
                                 a.append(fastq.getQuality());
+                                a.append(fastq.getSequence().length());
                                 a.endRow();
                             }
                             catch (SQLException e) {

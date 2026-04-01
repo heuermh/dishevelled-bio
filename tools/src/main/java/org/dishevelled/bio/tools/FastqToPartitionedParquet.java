@@ -76,7 +76,7 @@ public final class FastqToPartitionedParquet implements Callable<Integer> {
     private final FastqReader fastqReader = new SangerFastqReader();
     static final int DEFAULT_ROW_GROUP_SIZE = 122880;
     static final long DEFAULT_PARTITION_SIZE = DEFAULT_ROW_GROUP_SIZE * 10L;
-    private static final String CREATE_TABLE_SQL = "CREATE TABLE s%d (description VARCHAR, sequence VARCHAR, quality VARCHAR)";
+    private static final String CREATE_TABLE_SQL = "CREATE TABLE s%d (description VARCHAR, sequence VARCHAR, quality VARCHAR, length BIGINT)";
     private static final String DROP_TABLE_SQL = "DROP TABLE s%d";
     private static final String COPY_SQL = "COPY s%d TO '%s/part-%d-%d.parquet' (FORMAT 'parquet', COMPRESSION 'zstd', OVERWRITE_OR_IGNORE 1, ROW_GROUP_SIZE %d)";
     private static final String USAGE = "dsh-fastq-to-partitioned-parquet [args]";
@@ -128,6 +128,7 @@ public final class FastqToPartitionedParquet implements Callable<Integer> {
                             appender.get().append(fastq.getDescription());
                             appender.get().append(fastq.getSequence());
                             appender.get().append(fastq.getQuality());
+                            appender.get().append(fastq.getSequence().length());
                             appender.get().endRow();
 
                             rows.incrementAndGet();
