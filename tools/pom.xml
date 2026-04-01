@@ -507,6 +507,10 @@
               <mainClass>org.dishevelled.bio.tools.ParquetReadsToFastq</mainClass>
             </program>
             <program>
+              <id>dsh-parquet-sequences-to-fasta</id>
+              <mainClass>org.dishevelled.bio.tools.ParquetSequencesToFasta</mainClass>
+            </program>
+            <program>
               <id>dsh-reassemble-paths</id>
               <mainClass>org.dishevelled.bio.tools.ReassemblePaths</mainClass>
             </program>

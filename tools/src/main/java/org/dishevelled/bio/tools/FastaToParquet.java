@@ -77,8 +77,9 @@ public final class FastaToParquet implements Callable<Integer> {
     private final int rowGroupSize;
     static final String DEFAULT_ALPHABET = "dna";
     static final int DEFAULT_ROW_GROUP_SIZE = 122880;
-    private static final String CREATE_TABLE_SQL = "CREATE TABLE s (name VARCHAR, seq VARCHAR)";
-    private static final String CREATE_VIEW_SQL = "CREATE VIEW sequences AS SELECT name, upper(seq) AS sequence, length(sequence) AS length, '%s' AS alphabet FROM s";
+    static final String DESCRIPTION_LINE = "description_line";
+    private static final String CREATE_TABLE_SQL = "CREATE TABLE s (name VARCHAR, description VARCHAR, seq VARCHAR)";
+    private static final String CREATE_VIEW_SQL = "CREATE VIEW sequences AS SELECT name, description, upper(seq) AS sequence, length(sequence) AS length, '%s' AS alphabet FROM s";
     private static final String COPY_SQL = "COPY sequences TO '%s' (FORMAT 'parquet', COMPRESSION 'zstd', OVERWRITE_OR_IGNORE 1, ROW_GROUP_SIZE %d)";
     private static final String USAGE = "dsh-fasta-to-parquet [args]";
 
@@ -122,6 +123,7 @@ public final class FastaToParquet implements Callable<Integer> {
 
                     appender.beginRow();
                     appender.append(sequence.getName());
+                    appender.append(describeSequence(sequence));
                     appender.append(sequence.seqString());
                     appender.endRow();
                 }
@@ -174,6 +176,10 @@ public final class FastaToParquet implements Callable<Integer> {
         return alphabet != null && (alphabet.equalsIgnoreCase("protein") || alphabet.equalsIgnoreCase("aa"));
     }
 
+    static String describeSequence(final Sequence sequence) {
+        return sequence.getAnnotation().containsProperty(DESCRIPTION_LINE) ?
+            (String) sequence.getAnnotation().getProperty(DESCRIPTION_LINE) : (String) sequence.getName();
+    }
 
     /**
      * Main.
