@@ -40,7 +40,8 @@ import java.sql.Statement;
 
 import java.util.concurrent.Callable;
 
-import com.google.common.annotations.Beta;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.biojava.bio.seq.Sequence;
 import org.biojava.bio.seq.SequenceIterator;
@@ -56,6 +57,7 @@ import org.dishevelled.commandline.Usage;
 
 import org.dishevelled.commandline.argument.FileArgument;
 import org.dishevelled.commandline.argument.IntegerArgument;
+import org.dishevelled.commandline.argument.LongArgument;
 import org.dishevelled.commandline.argument.StringArgument;
 import org.dishevelled.commandline.argument.PathArgument;
 
@@ -63,85 +65,92 @@ import org.duckdb.DuckDBAppender;
 import org.duckdb.DuckDBConnection;
 
 /**
- * Extract kmers from DNA or protein sequences in FASTA format.
- *
- * Beta implementation to be merged into ExtractFastaKmersToParquet after performance benchmarking.
+ * Extract kmers from DNA or protein sequences in FASTA format to partitioned Parquet format.
  *
  * @since 3.0
  * @author  Michael Heuer
  */
-@Beta
 @SuppressWarnings("deprecation")
-public final class ExtractFastaKmersToParquet3 implements Callable<Integer> {
-    private final Path inputFastaPath;
-    private final File outputKmerFile;
+public final class ExtractFastaKmersToPartitionedParquet implements Callable<Integer> {
+    private final Path fastaPath;
+    private final File parquetFile;
     private final String alphabet;
     private final int kmerLength;
     private final boolean includeNs;
     private final int upstreamLength;
     private final int downstreamLength;
+    private final int rowGroupSize;
+    private final long partitionSize;
     static final String DEFAULT_ALPHABET = "dna";
     static final int DEFAULT_ROW_GROUP_SIZE = 122880;
-    static final long DEFAULT_PARTITION_SIZE = DEFAULT_ROW_GROUP_SIZE * 200L;
-    private static final String CREATE_TABLE_SQL = "CREATE TABLE kmers%d (kmer VARCHAR, reference VARCHAR, start LONG, upstream VARCHAR, downstream VARCHAR)";
+    static final long DEFAULT_PARTITION_SIZE = DEFAULT_ROW_GROUP_SIZE * 100L;
+    private static final String CREATE_TABLE_SQL = "CREATE TABLE kmers%d (kmer VARCHAR, reference VARCHAR, start LONG, upstream VARCHAR, downstream VARCHAR, length INTEGER, alphabet VARCHAR)";
     private static final String DROP_TABLE_SQL = "DROP TABLE kmers%d";
     private static final String COPY_SQL = "COPY kmers%d TO '%s/part-%d-%d.parquet' (FORMAT 'parquet', COMPRESSION 'zstd', OVERWRITE_OR_IGNORE 1, ROW_GROUP_SIZE %d)";
-    private static final String USAGE = "dsh-extract-fasta-kmers-to-parquet3 [args]";
+    private static final String USAGE = "dsh-extract-fasta-kmers-to-partitioned-parquet [args]";
 
 
     /**
-     * Extract kmers from DNA or protein sequences in FASTA format.
+     * Extract kmers from DNA or protein sequences in FASTA format to partitioned Parquet format.
      *
-     * @param inputFastaPath input FASTA path, if any
-     * @param outputKmerFile output kmer file
-     * @param alphabet input FASTA file alphabet { dna, protein }, if any
+     * @param fastaPath input FASTA path, if any
+     * @param parquetFile output Parquet file, must not be null; created as a directory, overwriting if necessary
+     * @param alphabet input FASTA file alphabet { dna, protein }, must not be null
      * @param kmerLength kmer length, must be at least 1
      * @param includeNs for DNA sequences, include kmers containing Ns
      * @param upstreamLength upstream reference sequence length to include, default 0
      * @param downstreamLength downstream reference sequence length to include, default 0
+     * @param rowGroupSize row group size, must be greater than zero
+     * @param partitionSize partition size, in number of rows per partitioned Parquet file, must be greater than zero
      */
-    public ExtractFastaKmersToParquet3(final Path inputFastaPath,
-                                       final File outputKmerFile,
-                                       final String alphabet,
-                                       final int kmerLength,
-                                       final boolean includeNs,
-                                       final int upstreamLength,
-                                       final int downstreamLength) {
+    public ExtractFastaKmersToPartitionedParquet(final Path fastaPath,
+                                                 final File parquetFile,
+                                                 final String alphabet,
+                                                 final int kmerLength,
+                                                 final boolean includeNs,
+                                                 final int upstreamLength,
+                                                 final int downstreamLength,
+                                                 final int rowGroupSize,
+                                                 final long partitionSize) {
 
-        checkNotNull(outputKmerFile);
+        checkNotNull(parquetFile);
+        checkNotNull(alphabet);
         checkArgument(kmerLength >= 1, "kmer length must be at least 1");
         checkArgument(upstreamLength >= 0, "upstream length must be at least 0");
         checkArgument(downstreamLength >= 0, "downstream length must be at least 0");
-
-        this.inputFastaPath = inputFastaPath;
-        this.outputKmerFile = outputKmerFile;
+        checkArgument(rowGroupSize > 0, "row group size must be greater than zero");
+        checkArgument(partitionSize > 0, "partition size must be greater than zero");
+        this.fastaPath = fastaPath;
+        this.parquetFile = parquetFile;
         this.alphabet = alphabet;
         this.kmerLength = kmerLength;
         this.includeNs = includeNs;
         this.upstreamLength = upstreamLength;
         this.downstreamLength = downstreamLength;
+        this.rowGroupSize = rowGroupSize;
+        this.partitionSize = partitionSize;
     }
 
 
     @Override
     public Integer call() throws Exception {
         BufferedReader reader = null;
-        DuckDBConnection connection = null;
-        Statement statement = null;
-        long rows = 0L;
-        long firstRow = 0L;
+        final AtomicLong rows = new AtomicLong();
+        final AtomicLong firstRow = new AtomicLong();
+        final AtomicReference<Statement> statement = new AtomicReference<Statement>();
+        final AtomicReference<DuckDBAppender> appender = new AtomicReference<DuckDBAppender>();
+        final AtomicReference<DuckDBConnection> connection = new AtomicReference<DuckDBConnection>();
+
         try {
-            reader = reader(inputFastaPath);
-            outputKmerFile.mkdirs();
+            reader = reader(fastaPath);
+            parquetFile.mkdirs();
 
-            connection = (DuckDBConnection) DriverManager.getConnection("jdbc:duckdb:");
-            statement = connection.createStatement();
+            connection.set((DuckDBConnection) DriverManager.getConnection("jdbc:duckdb:"));
+            statement.set(connection.get().createStatement());
 
-            DuckDBAppender appender = null;
             try {
-
-                statement.execute(String.format(CREATE_TABLE_SQL, firstRow));
-                appender = connection.createAppender(DuckDBConnection.DEFAULT_SCHEMA, String.format("kmers%d", firstRow));
+                statement.get().execute(String.format(CREATE_TABLE_SQL, firstRow.get()));
+                appender.set(connection.get().createAppender(DuckDBConnection.DEFAULT_SCHEMA, String.format("kmers%d", firstRow.get())));
 
                 for (SequenceIterator sequences = isProteinAlphabet() ? SeqIOTools.readFastaProtein(reader) : SeqIOTools.readFastaDNA(reader); sequences.hasNext(); ) {
                     Sequence sequence = sequences.nextSequence();
@@ -159,21 +168,21 @@ public final class ExtractFastaKmersToParquet3 implements Callable<Integer> {
                             String kmer = sequence.subStr(kmerStart, kmerEnd).toUpperCase();
 
                             if (includeNs || !kmer.contains("N")) {
-                                appender.beginRow();
-                                appender.append(kmer);
-                                appender.append(name);
+                                appender.get().beginRow();
+                                appender.get().append(kmer);
+                                appender.get().append(name);
                                 // output 0-based half-open coordinates
-                                appender.append(start);
+                                appender.get().append((long) start);
 
                                 if (upstreamLength > 0) {
                                     // 1-based fully closed coordinates
                                     int upstreamStart = Math.max(1, start + 1 - upstreamLength);
                                     int upstreamEnd = start;
                                     if (upstreamEnd >= upstreamStart) {
-                                        appender.append(sequence.subStr(upstreamStart, upstreamEnd).toUpperCase());
+                                        appender.get().append(sequence.subStr(upstreamStart, upstreamEnd).toUpperCase());
                                     }
                                     else {
-                                        appender.append("");
+                                        appender.get().append("");
                                     }
                                 }
                                 if (downstreamLength > 0) {
@@ -181,30 +190,30 @@ public final class ExtractFastaKmersToParquet3 implements Callable<Integer> {
                                     int downstreamStart = Math.min(kmerEnd + 1, sequence.length() + 1);
                                     int downstreamEnd = Math.min(kmerEnd + downstreamLength, sequence.length());
                                     if (downstreamEnd >= downstreamStart) {
-                                        appender.append(sequence.subStr(downstreamStart, downstreamEnd).toUpperCase());
+                                        appender.get().append(sequence.subStr(downstreamStart, downstreamEnd).toUpperCase());
                                     }
                                     else {
-                                        appender.append("");
+                                        appender.get().append("");
                                     }
                                 }
-                                appender.endRow();
+                                appender.get().append(kmer.length());
+                                appender.get().append(alphabet);
+                                appender.get().endRow();
 
-                                rows++;
-                                if ((rows % DEFAULT_PARTITION_SIZE) == 0) {
+                                rows.incrementAndGet();
+                                if ((rows.get() % partitionSize) == 0) {
                                     try {
-                                        if (appender != null) {
-                                            appender.close();
-                                        }
+                                        appender.get().close();
                                     }
                                     catch (Exception e) {
                                         // ignore
                                     }
-                                    statement.execute(String.format(COPY_SQL, firstRow, outputKmerFile, firstRow, rows, DEFAULT_ROW_GROUP_SIZE));
-                                    statement.execute(String.format(DROP_TABLE_SQL, firstRow));
+                                    statement.get().execute(String.format(COPY_SQL, firstRow.get(), parquetFile, firstRow.get(), rows.get(), rowGroupSize));
+                                    statement.get().execute(String.format(DROP_TABLE_SQL, firstRow.get()));
 
-                                    firstRow = rows + 1;
-                                    statement.execute(String.format(CREATE_TABLE_SQL, firstRow));
-                                    appender = connection.createAppender(DuckDBConnection.DEFAULT_SCHEMA, String.format("kmers%d", firstRow));
+                                    firstRow.set(rows.get() + 1);
+                                    statement.get().execute(String.format(CREATE_TABLE_SQL, firstRow.get()));
+                                    appender.set(connection.get().createAppender(DuckDBConnection.DEFAULT_SCHEMA, String.format("kmers%d", firstRow.get())));
                                 }
                             }
                         }
@@ -216,15 +225,13 @@ public final class ExtractFastaKmersToParquet3 implements Callable<Integer> {
             }
             finally {
                 try {
-                    if (appender != null) {
-                        appender.close();
-                    }
+                    appender.get().close();
                 }
                 catch (Exception e) {
                     // ignore
                 }
             }
-            statement.execute(String.format(COPY_SQL, firstRow, outputKmerFile, firstRow, rows, DEFAULT_ROW_GROUP_SIZE));
+            statement.get().execute(String.format(COPY_SQL, firstRow.get(), parquetFile, firstRow.get(), rows.get(), rowGroupSize));
 
             return 0;
         }
@@ -236,17 +243,13 @@ public final class ExtractFastaKmersToParquet3 implements Callable<Integer> {
                 // ignore
             }   
             try {
-                if (statement != null) {
-                    statement.close();
-                }
+                statement.get().close();
             }
             catch (Exception e) {
                 // ignore
             }
             try {
-                if (connection != null) {
-                    connection.close();
-                }
+                connection.get().close();
             }
             catch (Exception e) {
                 // ignore
@@ -276,18 +279,20 @@ public final class ExtractFastaKmersToParquet3 implements Callable<Integer> {
 
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
-        PathArgument inputFastaPath = new PathArgument("i", "input-fasta-path", "input FASTA path, default stdin", false);
-        FileArgument outputKmerFile = new FileArgument("o", "output-kmer-file", "output kmer file", true);
+        PathArgument fastaPath = new PathArgument("i", "input-fasta-path", "input FASTA path, default stdin", false);
+        FileArgument parquetFile = new FileArgument("o", "output-parquet-file", "output Parquet file, will be created as a directory, overwriting if necessary", true);
         StringArgument alphabet = new StringArgument("e", "alphabet", "input FASTA alphabet { dna, protein }, default dna", false);
         IntegerArgument kmerLength = new IntegerArgument("k", "kmer-length", "kmer length", true);
         Switch includeNs = new Switch("n", "include-ns", "for DNA sequences, include kmers containing Ns");
         IntegerArgument upstreamLength = new IntegerArgument("u", "upstream-length", "upstream length, default 0", false);
         IntegerArgument downstreamLength = new IntegerArgument("d", "downstream-length", "downstream length, default 0", false);
+        IntegerArgument rowGroupSize = new IntegerArgument("g", "row-group-size", "row group size, default " + DEFAULT_ROW_GROUP_SIZE, false);
+        LongArgument partitionSize = new LongArgument("p", "partition-size", "partition size, default " + DEFAULT_PARTITION_SIZE, false);
 
-        ArgumentList arguments = new ArgumentList(about, help, inputFastaPath, outputKmerFile, alphabet, kmerLength, includeNs, upstreamLength, downstreamLength);
+        ArgumentList arguments = new ArgumentList(about, help, fastaPath, parquetFile, alphabet, kmerLength, includeNs, upstreamLength, downstreamLength, rowGroupSize, partitionSize);
         CommandLine commandLine = new CommandLine(args);
 
-        ExtractFastaKmersToParquet3 extractFastaKmersToParquet3 = null;
+        ExtractFastaKmersToPartitionedParquet extractFastaKmersToPartitionedParquet = null;
         try
         {
             CommandLineParser.parse(commandLine, arguments);
@@ -299,14 +304,14 @@ public final class ExtractFastaKmersToParquet3 implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            extractFastaKmersToParquet3 = new ExtractFastaKmersToParquet3(inputFastaPath.getValue(), outputKmerFile.getValue(), alphabet.getValue(DEFAULT_ALPHABET), kmerLength.getValue(), includeNs.wasFound(), upstreamLength.getValue(0), downstreamLength.getValue(0));
+            extractFastaKmersToPartitionedParquet = new ExtractFastaKmersToPartitionedParquet(fastaPath.getValue(), parquetFile.getValue(), alphabet.getValue(DEFAULT_ALPHABET), kmerLength.getValue(), includeNs.wasFound(), upstreamLength.getValue(0), downstreamLength.getValue(0), rowGroupSize.getValue(DEFAULT_ROW_GROUP_SIZE), partitionSize.getValue(DEFAULT_PARTITION_SIZE));
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);
             System.exit(-1);
         }
         try {
-            System.exit(extractFastaKmersToParquet3.call());
+            System.exit(extractFastaKmersToPartitionedParquet.call());
         }
         catch (Exception e) {
             e.printStackTrace();
