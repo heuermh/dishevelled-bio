@@ -24,14 +24,12 @@
 package org.dishevelled.bio.tools;
 
 import static org.dishevelled.compress.Readers.reader;
-import static org.dishevelled.compress.Writers.writer;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.PrintWriter;
 
 import java.nio.file.Path;
 
@@ -147,7 +145,9 @@ public final class FastaToParquet implements Callable<Integer> {
         }
         finally {
             try {
-                reader.close();
+                if (reader != null) {
+                    reader.close();
+                }
             }
             catch (Exception e) {
                 // ignore

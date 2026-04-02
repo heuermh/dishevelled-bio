@@ -112,13 +112,17 @@ public final class FastqToText implements Callable<Integer> {
         }
         finally {
             try {
-                reader.close();
+                if (reader != null) {
+                    reader.close();
+                }
             }
             catch (Exception e) {
                 // ignore
             }
             try {
-                writer.close();
+                if (writer != null) {
+                    writer.close();
+                }
             }
             catch (Exception e) {
                 // ignore

@@ -30,8 +30,6 @@ import static org.dishevelled.compress.Readers.reader;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
 
 import java.nio.file.Path;
 
@@ -209,7 +207,9 @@ public final class ExtractFastaKmersToParquet implements Callable<Integer> {
         }
         finally {
             try {
-                reader.close();
+                if (reader != null) {
+                    reader.close();
+                }
             }
             catch (Exception e) {
                 // ignore

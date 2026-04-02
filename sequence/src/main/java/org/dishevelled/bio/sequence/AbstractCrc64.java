@@ -36,7 +36,7 @@ import java.nio.charset.StandardCharsets;
 abstract class AbstractCrc64 {
 
     /** Checksum table. */
-    private long[] CRC_TABLE = new long[256];
+    private final long[] CRC_TABLE = new long[256];
 
     /** Polynomial. */
     private final long poly64Rev;

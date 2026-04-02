@@ -46,8 +46,6 @@ import java.util.Map;
 
 import java.util.concurrent.Callable;
 
-import com.google.common.base.Joiner;
-
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
@@ -201,8 +199,8 @@ public final class VcfToParquet implements Callable<Integer> {
 
                 final DuckDBAppender a = appender;
                 VcfParser.parse(reader, new VcfParseAdapter() {
-                        private Map<String, String[]> infoValues = new HashMap<String, String[]>();
-                        private Table<String, String, String[]> formatValues = HashBasedTable.create();
+                        private final Map<String, String[]> infoValues = new HashMap<String, String[]>();
+                        private final Table<String, String, String[]> formatValues = HashBasedTable.create();
 
                         @Override
                         public void lineNumber(final long lineNumber) throws IOException {

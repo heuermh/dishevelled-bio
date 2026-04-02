@@ -23,8 +23,6 @@
 */
 package org.dishevelled.bio.sequence;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.nio.charset.StandardCharsets;
 
 import com.google.common.hash.Hashing;

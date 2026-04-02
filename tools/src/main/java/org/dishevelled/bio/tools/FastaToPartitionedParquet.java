@@ -34,7 +34,6 @@ import java.io.File;
 import java.nio.file.Path;
 
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.biojava.bio.seq.Sequence;
@@ -172,7 +171,9 @@ public final class FastaToPartitionedParquet implements Callable<Integer> {
         }
         finally {
             try {
-                reader.close();
+                if (reader != null) {
+                    reader.close();
+                }
             }
             catch (Exception e) {
                 // ignore

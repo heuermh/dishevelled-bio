@@ -32,10 +32,10 @@ package org.dishevelled.bio.sequence;
 final class Crc64Iso extends AbstractCrc64 {
 
     /** Polynomial. */
-    private static long POLY64REV  = 0xd800000000000000L;
+    private static final long POLY64REV  = 0xd800000000000000L;
 
     /** Initial CRC value. */
-    private static long INITIALCRC = 0x0000000000000000L;
+    private static final long INITIALCRC = 0x0000000000000000L;
 
 
     Crc64Iso() {

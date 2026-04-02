@@ -170,7 +170,9 @@ public final class FastqToPartitionedParquet implements Callable<Integer> {
         }
         finally {
             try {
-                reader.close();
+                if (reader != null) {
+                    reader.close();
+                }
             }
             catch (Exception e) {
                 // ignore

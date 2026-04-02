@@ -49,8 +49,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
-import com.google.common.base.Joiner;
-
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
@@ -215,8 +213,8 @@ public final class VcfToPartitionedParquet implements Callable<Integer> {
                 appender.set(connection.get().createAppender(DuckDBConnection.DEFAULT_SCHEMA, String.format("v%d", firstRow.get())));
 
                 VcfParser.parse(reader, new VcfParseAdapter() {
-                        private Map<String, String[]> infoValues = new HashMap<String, String[]>();
-                        private Table<String, String, String[]> formatValues = HashBasedTable.create();
+                        private final Map<String, String[]> infoValues = new HashMap<String, String[]>();
+                        private final Table<String, String, String[]> formatValues = HashBasedTable.create();
 
                         @Override
                         public void lineNumber(final long lineNumber) throws IOException {
