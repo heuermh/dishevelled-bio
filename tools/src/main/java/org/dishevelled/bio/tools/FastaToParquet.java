@@ -40,8 +40,6 @@ import java.sql.Statement;
 
 import java.util.concurrent.Callable;
 
-import com.google.common.annotations.Beta;
-
 import org.biojava.bio.seq.Sequence;
 import org.biojava.bio.seq.SequenceIterator;
 
@@ -68,7 +66,6 @@ import org.duckdb.DuckDBConnection;
  * @since 2.4
  * @author  Michael Heuer
  */
-@Beta
 @SuppressWarnings("deprecation")
 public final class FastaToParquet implements Callable<Integer> {
     private final Path fastaPath;
@@ -78,9 +75,8 @@ public final class FastaToParquet implements Callable<Integer> {
     static final String DEFAULT_ALPHABET = "dna";
     static final int DEFAULT_ROW_GROUP_SIZE = 122880;
     static final String DESCRIPTION_LINE = "description_line";
-    private static final String CREATE_TABLE_SQL = "CREATE TABLE s (name VARCHAR, description VARCHAR, seq VARCHAR)";
-    private static final String CREATE_VIEW_SQL = "CREATE VIEW sequences AS SELECT name, description, upper(seq) AS sequence, length(sequence) AS length, '%s' AS alphabet FROM s";
-    private static final String COPY_SQL = "COPY sequences TO '%s' (FORMAT 'parquet', COMPRESSION 'zstd', OVERWRITE_OR_IGNORE 1, ROW_GROUP_SIZE %d)";
+    private static final String CREATE_TABLE_SQL = "CREATE TABLE sequences (name VARCHAR, description VARCHAR, sequence VARCHAR, length INTEGER, alphabet VARCHAR)";
+    private static final String COPY_SQL = "COPY sequences TO '%s' (FORMAT 'parquet', COMPRESSION 'zstd', OVERWRITE_OR_IGNORE 1, ROW_GROUP_SIZE %d, PER_THREAD_OUTPUT)";
     private static final String USAGE = "dsh-fasta-to-parquet [args]";
 
 
@@ -88,12 +84,13 @@ public final class FastaToParquet implements Callable<Integer> {
      * Convert DNA or protein sequences in FASTA format to Parquet format.
      *
      * @param fastaPath input FASTA path, if any
-     * @param parquetFile output Parquet file
-     * @param alphabet input FASTA file alphabet { dna, protein }, if any
+     * @param parquetFile output Parquet file, must not be null; created as a directory, overwriting if necessary
+     * @param alphabet input FASTA path alphabet { dna, protein }, must not be null
      * @param rowGroupSize row group size, must be greater than zero
      */
     public FastaToParquet(final Path fastaPath, final File parquetFile, final String alphabet, final int rowGroupSize) {
         checkNotNull(parquetFile);
+        checkNotNull(alphabet);
         checkArgument(rowGroupSize > 0, "row group size must be greater than zero");
         this.fastaPath = fastaPath;
         this.parquetFile = parquetFile;
@@ -109,6 +106,7 @@ public final class FastaToParquet implements Callable<Integer> {
         Statement statement = null;
         try {
             reader = reader(fastaPath);
+            parquetFile.mkdirs();
 
             connection = (DuckDBConnection) DriverManager.getConnection("jdbc:duckdb:");
             statement = connection.createStatement();
@@ -116,7 +114,7 @@ public final class FastaToParquet implements Callable<Integer> {
             statement.execute(CREATE_TABLE_SQL);
             DuckDBAppender appender = null;
             try {
-                appender = connection.createAppender(DuckDBConnection.DEFAULT_SCHEMA, "s");
+                appender = connection.createAppender(DuckDBConnection.DEFAULT_SCHEMA, "sequences");
 
                 for (SequenceIterator sequences = isProteinAlphabet() ? SeqIOTools.readFastaProtein(reader) : SeqIOTools.readFastaDNA(reader); sequences.hasNext(); ) {
                     Sequence sequence = sequences.nextSequence();
@@ -124,7 +122,9 @@ public final class FastaToParquet implements Callable<Integer> {
                     appender.beginRow();
                     appender.append(sequence.getName());
                     appender.append(describeSequence(sequence));
-                    appender.append(sequence.seqString());
+                    appender.append(sequence.seqString().toUpperCase());
+                    appender.append(sequence.length());
+                    appender.append(isProteinAlphabet() ? "protein" : "dna");
                     appender.endRow();
                 }
             }
@@ -141,7 +141,6 @@ public final class FastaToParquet implements Callable<Integer> {
                     // ignore
                 }
             }
-            statement.execute(String.format(CREATE_VIEW_SQL, isProteinAlphabet() ? "protein" : "dna"));
             statement.execute(String.format(COPY_SQL, parquetFile, rowGroupSize));
 
             return 0;
@@ -191,7 +190,7 @@ public final class FastaToParquet implements Callable<Integer> {
         Switch about = new Switch("a", "about", "display about message");
         Switch help = new Switch("h", "help", "display help message");
         PathArgument fastaPath = new PathArgument("i", "input-fasta-path", "input FASTA path, default stdin", false);
-        FileArgument parquetFile = new FileArgument("o", "output-parquet-file", "output Parquet file", true);
+        FileArgument parquetFile = new FileArgument("o", "output-parquet-file", "output Parquet file, will be created as a directory, overwriting if necessary", true);
         StringArgument alphabet = new StringArgument("e", "alphabet", "input FASTA alphabet { dna, protein }, default dna", false);
         IntegerArgument rowGroupSize = new IntegerArgument("g", "row-group-size", "row group size, default " + DEFAULT_ROW_GROUP_SIZE, false);
 

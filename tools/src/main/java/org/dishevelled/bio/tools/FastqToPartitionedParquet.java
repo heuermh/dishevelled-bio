@@ -86,7 +86,7 @@ public final class FastqToPartitionedParquet implements Callable<Integer> {
      * Convert DNA sequences in FASTQ format to partitioned Parquet format.
      *
      * @param fastqPath input FASTQ path, if any
-     * @param parquetFile output Parquet file, will be created as a directory, overwriting if necessary
+     * @param parquetFile output Parquet file, must not be null; created as a directory, overwriting if necessary
      * @param rowGroupSize row group size, must be greater than zero
      * @param partitionSize partition size, in number of rows per partitioned Parquet file, must be greater than zero
      */

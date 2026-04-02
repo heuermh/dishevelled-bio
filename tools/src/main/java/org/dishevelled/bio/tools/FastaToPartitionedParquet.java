@@ -24,28 +24,28 @@
 package org.dishevelled.bio.tools;
 
 import static org.dishevelled.compress.Readers.reader;
-import static org.dishevelled.compress.Writers.writer;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.PrintWriter;
 
 import java.nio.file.Path;
 
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.sql.Statement;
-
-import java.util.concurrent.Callable;
-
-import com.google.common.annotations.Beta;
 
 import org.biojava.bio.seq.Sequence;
 import org.biojava.bio.seq.SequenceIterator;
 
 import org.biojava.bio.seq.io.SeqIOTools;
+
+import java.util.concurrent.Callable;
+
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.dishevelled.commandline.ArgumentList;
 import org.dishevelled.commandline.CommandLine;
@@ -64,16 +64,13 @@ import org.duckdb.DuckDBAppender;
 import org.duckdb.DuckDBConnection;
 
 /**
- * Convert DNA or protein sequences in FASTA format to Parquet format.
+ * Convert DNA or protein sequences in FASTA format to partitioned Parquet format.
  *
- * Beta implementation to be merged into FastaToParquet after performance benchmarking.
- *
- * @since 2.4
+ * @since 3.1
  * @author  Michael Heuer
  */
-@Beta
 @SuppressWarnings("deprecation")
-public final class FastaToParquet3 implements Callable<Integer> {
+public final class FastaToPartitionedParquet implements Callable<Integer> {
     private final Path fastaPath;
     private final File parquetFile;
     private final String alphabet;
@@ -82,24 +79,25 @@ public final class FastaToParquet3 implements Callable<Integer> {
     static final String DEFAULT_ALPHABET = "dna";
     static final int DEFAULT_ROW_GROUP_SIZE = 122880;
     static final long DEFAULT_PARTITION_SIZE = DEFAULT_ROW_GROUP_SIZE * 10L;
-    private static final String CREATE_TABLE_SQL = "CREATE TABLE s%d (name VARCHAR, seq VARCHAR)";
-    private static final String CREATE_VIEW_SQL = "CREATE OR REPLACE VIEW sequences AS SELECT name, upper(seq) AS sequence, length(sequence) AS length, '%s' AS alphabet FROM s%d";
+    static final String DESCRIPTION_LINE = "description_line";
+    private static final String CREATE_TABLE_SQL = "CREATE TABLE s%d (name VARCHAR, description VARCHAR, sequence VARCHAR, length INTEGER, alphabet VARCHAR)";
     private static final String DROP_TABLE_SQL = "DROP TABLE s%d";
-    private static final String COPY_SQL = "COPY sequences TO '%s/part-%d-%d.parquet' (FORMAT 'parquet', COMPRESSION 'zstd', OVERWRITE_OR_IGNORE 1, ROW_GROUP_SIZE %d)";
-    private static final String USAGE = "dsh-fasta-to-parquet3 [args]";
+    private static final String COPY_SQL = "COPY s%d TO '%s/part-%d-%d.parquet' (FORMAT 'parquet', COMPRESSION 'zstd', OVERWRITE_OR_IGNORE 1, ROW_GROUP_SIZE %d)";
+    private static final String USAGE = "dsh-fasta-to-partitioned-parquet [args]";
 
 
     /**
-     * Convert DNA or protein sequences in FASTA format to Parquet format.
+     * Convert DNA sequences in FASTA format to partitioned Parquet format.
      *
      * @param fastaPath input FASTA path, if any
-     * @param parquetFile output Parquet file, will be created as a directory, overwriting if necessary
-     * @param alphabet input FASTA file alphabet { dna, protein }, if any
+     * @param parquetFile output Parquet file, must not be null; will be created as a directory, overwriting if necessary
+     * @param alphabet input FASTA path alphabet { dna, protein }, must not be null
      * @param rowGroupSize row group size, must be greater than zero
      * @param partitionSize partition size, in number of rows per partitioned Parquet file, must be greater than zero
      */
-    public FastaToParquet3(final Path fastaPath, final File parquetFile, final String alphabet, final int rowGroupSize, final long partitionSize) {
+    public FastaToPartitionedParquet(final Path fastaPath, final File parquetFile, final String alphabet, final int rowGroupSize, final long partitionSize) {
         checkNotNull(parquetFile);
+        checkNotNull(alphabet);
         checkArgument(rowGroupSize > 0, "row group size must be greater than zero");
         checkArgument(partitionSize > 0, "partition size must be greater than zero");
         this.fastaPath = fastaPath;
@@ -113,48 +111,47 @@ public final class FastaToParquet3 implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         BufferedReader reader = null;
-        DuckDBConnection connection = null;
-        Statement statement = null;
-        long rows = 0L;
-        long firstRow = 0L;
+        final AtomicLong rows = new AtomicLong();
+        final AtomicLong firstRow = new AtomicLong();
+        final AtomicReference<Statement> statement = new AtomicReference<Statement>();
+        final AtomicReference<DuckDBAppender> appender = new AtomicReference<DuckDBAppender>();
+        final AtomicReference<DuckDBConnection> connection = new AtomicReference<DuckDBConnection>();
         try {
             reader = reader(fastaPath);
             parquetFile.mkdirs();
 
-            connection = (DuckDBConnection) DriverManager.getConnection("jdbc:duckdb:");
-            statement = connection.createStatement();
+            connection.set((DuckDBConnection) DriverManager.getConnection("jdbc:duckdb:"));
+            statement.set(connection.get().createStatement());
 
-            DuckDBAppender appender = null;
             try {
-
-                statement.execute(String.format(CREATE_TABLE_SQL, firstRow));
-                appender = connection.createAppender(DuckDBConnection.DEFAULT_SCHEMA, String.format("s%d", firstRow));
+                statement.get().execute(String.format(CREATE_TABLE_SQL, firstRow.get()));
+                appender.set(connection.get().createAppender(DuckDBConnection.DEFAULT_SCHEMA, String.format("s%d", firstRow.get())));
 
                 for (SequenceIterator sequences = isProteinAlphabet() ? SeqIOTools.readFastaProtein(reader) : SeqIOTools.readFastaDNA(reader); sequences.hasNext(); ) {
                     Sequence sequence = sequences.nextSequence();
 
-                    appender.beginRow();
-                    appender.append(sequence.getName());
-                    appender.append(sequence.seqString());
-                    appender.endRow();
+                    appender.get().beginRow();
+                    appender.get().append(sequence.getName());
+                    appender.get().append(describeSequence(sequence));
+                    appender.get().append(sequence.seqString().toUpperCase());
+                    appender.get().append(sequence.length());
+                    appender.get().append(isProteinAlphabet() ? "protein" : "dna");
+                    appender.get().endRow();
 
-                    rows++;
-                    if ((rows % partitionSize) == 0) {
+                    rows.incrementAndGet();
+                    if ((rows.get() % partitionSize) == 0) {
                         try {
-                            if (appender != null) {
-                                appender.close();
-                            }
+                            appender.get().close();
                         }
                         catch (Exception e) {
                             // ignore
                         }
-                        statement.execute(String.format(CREATE_VIEW_SQL, isProteinAlphabet() ? "protein" : "dna", firstRow));
-                        statement.execute(String.format(COPY_SQL, parquetFile, firstRow, rows, rowGroupSize));
-                        statement.execute(String.format(DROP_TABLE_SQL, firstRow));
+                        statement.get().execute(String.format(COPY_SQL, firstRow.get(), parquetFile, firstRow.get(), rows.get(), rowGroupSize));
+                        statement.get().execute(String.format(DROP_TABLE_SQL, firstRow.get()));
 
-                        firstRow = rows + 1;
-                        statement.execute(String.format(CREATE_TABLE_SQL, firstRow));
-                        appender = connection.createAppender(DuckDBConnection.DEFAULT_SCHEMA, String.format("s%d", firstRow));
+                        firstRow.set(rows.get() + 1);
+                        statement.get().execute(String.format(CREATE_TABLE_SQL, firstRow.get()));
+                        appender.set(connection.get().createAppender(DuckDBConnection.DEFAULT_SCHEMA, String.format("s%d", firstRow.get())));
                     }
                 }
             }
@@ -163,17 +160,13 @@ public final class FastaToParquet3 implements Callable<Integer> {
             }
             finally {
                 try {
-                    if (appender != null) {
-                        appender.close();
-                    }
+                    appender.get().close();
                 }
                 catch (Exception e) {
                     // ignore
                 }
             }
-
-            statement.execute(String.format(CREATE_VIEW_SQL, isProteinAlphabet() ? "protein" : "dna", firstRow));
-            statement.execute(String.format(COPY_SQL, parquetFile, firstRow, rows, rowGroupSize));
+            statement.get().execute(String.format(COPY_SQL, firstRow.get(), parquetFile, firstRow.get(), rows.get(), rowGroupSize));
 
             return 0;
         }
@@ -185,17 +178,13 @@ public final class FastaToParquet3 implements Callable<Integer> {
                 // ignore
             }
             try {
-                if (statement != null) {
-                    statement.close();
-                }
+                statement.get().close();
             }
             catch (Exception e) {
                 // ignore
             }
             try {
-                if (connection != null) {
-                    connection.close();
-                }
+                connection.get().close();
             }
             catch (Exception e) {
                 // ignore
@@ -205,6 +194,11 @@ public final class FastaToParquet3 implements Callable<Integer> {
 
     boolean isProteinAlphabet() {
         return alphabet != null && (alphabet.equalsIgnoreCase("protein") || alphabet.equalsIgnoreCase("aa"));
+    }
+
+    static String describeSequence(final Sequence sequence) {
+        return sequence.getAnnotation().containsProperty(DESCRIPTION_LINE) ?
+            (String) sequence.getAnnotation().getProperty(DESCRIPTION_LINE) : (String) sequence.getName();
     }
 
 
@@ -226,7 +220,7 @@ public final class FastaToParquet3 implements Callable<Integer> {
         ArgumentList arguments = new ArgumentList(about, help, fastaPath, parquetFile, alphabet, rowGroupSize, partitionSize);
         CommandLine commandLine = new CommandLine(args);
 
-        FastaToParquet3 fastaToParquet = null;
+        FastaToPartitionedParquet fastaToPartitionedParquet = null;
         try
         {
             CommandLineParser.parse(commandLine, arguments);
@@ -238,14 +232,14 @@ public final class FastaToParquet3 implements Callable<Integer> {
                 Usage.usage(USAGE, null, commandLine, arguments, System.out);
                 System.exit(0);
             }
-            fastaToParquet = new FastaToParquet3(fastaPath.getValue(), parquetFile.getValue(), alphabet.getValue(DEFAULT_ALPHABET), rowGroupSize.getValue(DEFAULT_ROW_GROUP_SIZE), partitionSize.getValue(DEFAULT_PARTITION_SIZE));
+            fastaToPartitionedParquet = new FastaToPartitionedParquet(fastaPath.getValue(), parquetFile.getValue(), alphabet.getValue(DEFAULT_ALPHABET), rowGroupSize.getValue(DEFAULT_ROW_GROUP_SIZE), partitionSize.getValue(DEFAULT_PARTITION_SIZE));
         }
         catch (CommandLineParseException e) {
             Usage.usage(USAGE, e, commandLine, arguments, System.err);
             System.exit(-1);
         }
         try {
-            System.exit(fastaToParquet.call());
+            System.exit(fastaToPartitionedParquet.call());
         }
         catch (Exception e) {
             e.printStackTrace();

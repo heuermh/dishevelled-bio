@@ -102,7 +102,7 @@ public final class VcfToParquet implements Callable<Integer> {
      * Convert variants in VCF format to Parquet format.
      *
      * @param vcfPath input VCF path, if any
-     * @param parquetFile output Parquet file, will be created as a directory, overwriting if necessary
+     * @param parquetFile output Parquet file, must not be null; created as a directory, overwriting if necessary
      * @param rowGroupSize row group size, must be greater than zero
      */
     public VcfToParquet(final Path vcfPath, final File parquetFile, final int rowGroupSize) {
@@ -114,7 +114,7 @@ public final class VcfToParquet implements Callable<Integer> {
      *
      * @since 3.2
      * @param vcfPath input VCF path, if any
-     * @param parquetFile output Parquet file, will be created as a directory, overwriting if necessary
+     * @param parquetFile output Parquet file, must not be null; created as a directory, overwriting if necessary
      * @param infoFields list of INFO fields, may be empty but must not be null
      * @param infoPrefix info prefix, may be empty but must not be null
      * @param samples list of samples, may be empty but must not be null

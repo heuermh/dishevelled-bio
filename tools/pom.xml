@@ -371,24 +371,8 @@
               <mainClass>org.dishevelled.bio.tools.FastaToParquet</mainClass>
             </program>
             <program>
-              <id>dsh-fasta-to-parquet2</id>
-              <mainClass>org.dishevelled.bio.tools.FastaToParquet2</mainClass>
-            </program>
-            <program>
-              <id>dsh-fasta-to-parquet3</id>
-              <mainClass>org.dishevelled.bio.tools.FastaToParquet3</mainClass>
-            </program>
-            <program>
-              <id>dsh-fasta-to-parquet4</id>
-              <mainClass>org.dishevelled.bio.tools.FastaToParquet4</mainClass>
-            </program>
-            <program>
-              <id>dsh-fasta-to-parquet5</id>
-              <mainClass>org.dishevelled.bio.tools.FastaToParquet5</mainClass>
-            </program>
-            <program>
-              <id>dsh-fasta-to-parquet6</id>
-              <mainClass>org.dishevelled.bio.tools.FastaToParquet6</mainClass>
+              <id>dsh-fasta-to-partitioned-parquet</id>
+              <mainClass>org.dishevelled.bio.tools.FastaToPartitionedParquet</mainClass>
             </program>
             <program>
               <id>dsh-fasta-to-text</id>
