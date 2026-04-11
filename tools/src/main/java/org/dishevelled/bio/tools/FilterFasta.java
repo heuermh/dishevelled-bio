@@ -83,22 +83,6 @@ public final class FilterFasta extends AbstractFilter {
     /**
      * Filter DNA or protein sequences in FASTA format.
      *
-     * @deprecated will be removed in version 3.0
-     * @param filters list of filters, must not be null
-     * @param inputFastaFile input FASTA file, if any
-     * @param outputFastaFile output FASTA file, if any
-     * @param lineWidth line width
-     */
-    public FilterFasta(final List<Filter> filters, final File inputFastaFile, final File outputFastaFile, final int lineWidth) {
-        this(filters,
-             inputFastaFile == null ? null : inputFastaFile.toPath(),
-             outputFastaFile,
-             lineWidth);
-    }
-
-    /**
-     * Filter DNA or protein sequences in FASTA format.
-     *
      * @since 2.1
      * @param filters list of filters, must not be null
      * @param inputFastaPath input FASTA path, if any
@@ -107,30 +91,6 @@ public final class FilterFasta extends AbstractFilter {
      */
     public FilterFasta(final List<Filter> filters, final Path inputFastaPath, final File outputFastaFile, final int lineWidth) {
         this(filters, inputFastaPath, outputFastaFile, DEFAULT_ALPHABET, lineWidth);
-    }
-
-    /**
-     * Filter DNA or protein sequences in FASTA format.
-     *
-     * @since 2.0
-     * @deprecated will be removed in version 3.0
-     * @param filters list of filters, must not be null
-     * @param inputFastaFile input FASTA file, if any
-     * @param outputFastaFile output FASTA file, if any
-     * @param alphabet input FASTA file alphabet { dna, protein }, if any
-     * @param lineWidth line width
-     */
-    public FilterFasta(final List<Filter> filters,
-                       final File inputFastaFile,
-                       final File outputFastaFile,
-                       final String alphabet,
-                       final int lineWidth) {
-
-        this(filters,
-             inputFastaFile == null ? null : inputFastaFile.toPath(),
-             outputFastaFile,
-             alphabet,
-             lineWidth);
     }
 
     /**

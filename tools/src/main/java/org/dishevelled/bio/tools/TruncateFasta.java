@@ -71,18 +71,6 @@ public final class TruncateFasta implements Callable<Integer> {
     static final String DESCRIPTION_LINE = "description_line";
     private static final String USAGE = "dsh-truncate-fasta -l 1000 [args]";
 
-    /**
-     * Truncate DNA or protein sequences in FASTA format.
-     *
-     * @deprecated will be removed in version 3.0
-     * @param inputFastaFile input FASTA file, if any
-     * @param outputFastaFile output FASTA file, if any
-     * @param length length, must be at least 0
-     * @param lineWidth line width
-     */
-    public TruncateFasta(final File inputFastaFile, final File outputFastaFile, final int length, final int lineWidth) {
-        this(inputFastaFile == null ? null : inputFastaFile.toPath(), outputFastaFile, length, lineWidth);
-    }
 
     /**
      * Truncate DNA or protein sequences in FASTA format.
@@ -95,30 +83,6 @@ public final class TruncateFasta implements Callable<Integer> {
      */
     public TruncateFasta(final Path inputFastaPath, final File outputFastaFile, final int length, final int lineWidth) {
         this(inputFastaPath, outputFastaFile, length, DEFAULT_ALPHABET, lineWidth);
-    }
-
-    /**
-     * Truncate DNA or protein sequences in FASTA format.
-     *
-     * @since 2.0
-     * @deprecated will be removed in version 3.0
-     * @param inputFastaFile input FASTA file, if any
-     * @param outputFastaFile output FASTA file, if any
-     * @param length length, must be at least 0
-     * @param alphabet input FASTA file alphabet { dna, protein }, if any
-     * @param lineWidth line width
-     */
-    public TruncateFasta(final File inputFastaFile,
-                         final File outputFastaFile,
-                         final int length,
-                         final String alphabet,
-                         final int lineWidth) {
-
-        this(inputFastaFile == null ? null : inputFastaFile.toPath(),
-             outputFastaFile,
-             length,
-             alphabet,
-             lineWidth);
     }
 
     /**

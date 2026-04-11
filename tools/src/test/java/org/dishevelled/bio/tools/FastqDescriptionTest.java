@@ -27,6 +27,8 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 
+import java.nio.file.Path;
+
 import org.junit.Test;
 
 /**
@@ -35,7 +37,7 @@ import org.junit.Test;
  * @author  Michael Heuer
  */
 public final class FastqDescriptionTest {
-    private File fastqFile;
+    private Path fastqFile;
     private File descriptionFile;
 
     @Test

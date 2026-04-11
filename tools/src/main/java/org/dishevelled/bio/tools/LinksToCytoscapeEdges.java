@@ -63,18 +63,6 @@ public final class LinksToCytoscapeEdges implements Callable<Integer> {
     /**
      * Convert links in GFA 1.0 format to edges.txt format for Cytoscape.
      *
-     * @deprecated will be removed in version 3.0
-     * @param inputGfa1File input GFA 1.0 file, if any
-     * @param outputEdgesFile output edges.txt file, if any
-     */
-    public LinksToCytoscapeEdges(final File inputGfa1File,
-                                 final File outputEdgesFile) {
-        this(inputGfa1File == null ? null : inputGfa1File.toPath(), outputEdgesFile);
-    }
-
-    /**
-     * Convert links in GFA 1.0 format to edges.txt format for Cytoscape.
-     *
      * @since 2.1
      * @param inputGfa1Path input GFA 1.0 path, if any
      * @param outputEdgesFile output edges.txt file, if any

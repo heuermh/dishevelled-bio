@@ -60,18 +60,6 @@ public final class RenameBedReferences extends AbstractRenameReferences {
     /**
      * Rename references in BED files.
      *
-     * @deprecated will be removed in version 3.0
-     * @param chr true to add "chr" to chromosome names
-     * @param inputBedFile input BED file, if any
-     * @param outputBedFile output BED file, if any
-     */
-    public RenameBedReferences(final boolean chr, final File inputBedFile, final File outputBedFile) {
-        this(chr, inputBedFile == null ? null : inputBedFile.toPath(), outputBedFile);
-    }
-
-    /**
-     * Rename references in BED files.
-     *
      * @since 2.1
      * @param chr true to add "chr" to chromosome names
      * @param inputBedPath input BED path, if any

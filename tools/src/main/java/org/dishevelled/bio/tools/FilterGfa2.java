@@ -75,18 +75,6 @@ public final class FilterGfa2 extends AbstractFilter {
     /**
      * Filter assembly in GFA2 format.
      *
-     * @deprecated will be removed in version 3.0
-     * @param filters list of filters, must not be null
-     * @param inputGfa2File input GFA2 file, if any
-     * @param outputGfa2File output GFA2 file, if any
-     */
-    public FilterGfa2(final List<Filter> filters, final File inputGfa2File, final File outputGfa2File) {
-        this(filters, inputGfa2File == null ? null : inputGfa2File.toPath(), outputGfa2File);
-    }
-
-    /**
-     * Filter assembly in GFA2 format.
-     *
      * @since 2.1
      * @param filters list of filters, must not be null
      * @param inputGfa2Path input GFA2 path, if any

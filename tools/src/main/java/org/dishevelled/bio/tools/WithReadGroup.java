@@ -50,6 +50,7 @@ abstract class WithReadGroup implements Callable<Integer> {
     private final Integer readGroupInsertSize;
     private final List<String> readGroupBarcodes;
 
+
     /**
      * Create a new callable with a read group with the specified annotations.
      *

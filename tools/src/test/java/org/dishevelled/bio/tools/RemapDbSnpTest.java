@@ -30,6 +30,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 
+import java.nio.file.Path;
+
 import org.dishevelled.bio.variant.vcf.VcfHeader;
 import org.dishevelled.bio.variant.vcf.VcfReader;
 import org.dishevelled.bio.variant.vcf.VcfRecord;
@@ -49,7 +51,7 @@ import com.google.common.io.Resources;
  * @author  Michael Heuer
  */
 public final class RemapDbSnpTest {
-    private File inputVcfFile;
+    private Path inputVcfFile;
     private File outputVcfFile;
     private RemapDbSnp remapDbSnp;
 
@@ -107,10 +109,10 @@ public final class RemapDbSnpTest {
         }
     }
 
-    private static File createFile(final String name) throws IOException {
+    private static Path createFile(final String name) throws IOException {
         File file = File.createTempFile("remapDbSnpTest", ".vcf");
         Files.write(Resources.toByteArray(RemapDbSnpTest.class.getResource(name)), file);
         file.deleteOnExit();
-        return file;
+        return file.toPath();
     }
 }

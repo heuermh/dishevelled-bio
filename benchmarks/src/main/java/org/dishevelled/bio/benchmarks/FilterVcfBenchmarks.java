@@ -27,6 +27,8 @@ import static org.dishevelled.bio.benchmarks.Utils.copyResource;
 
 import java.io.File;
 
+import java.nio.file.Path;
+
 import com.google.common.collect.ImmutableList;
 
 import org.dishevelled.bio.tools.FilterVcf;
@@ -46,12 +48,12 @@ import org.openjdk.jmh.annotations.TearDown;
  */
 @State(Scope.Thread)
 public class FilterVcfBenchmarks {
-    private File inputVcfFile;
+    private Path inputVcfFile;
     private File outputVcfFile;
 
     @Setup(Level.Invocation)
     public void setUp() throws Exception {
-        inputVcfFile = File.createTempFile("filterVcfBenchmarks", ".vcf.gz");
+        inputVcfFile = File.createTempFile("filterVcfBenchmarks", ".vcf.gz").toPath();
         outputVcfFile = File.createTempFile("filterVcfBenchmarks", ".vcf.gz");
 
         copyResource("HG001_GRCh38_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-10X-SOLID_CHROM1-X_v.3.3.2_highconf_PGandRTGphasetransfer.10k.0.vcf.gz", inputVcfFile);
@@ -59,7 +61,7 @@ public class FilterVcfBenchmarks {
 
     @TearDown(Level.Invocation)
     public void tearDown() {
-        inputVcfFile.delete();
+        inputVcfFile.toFile().delete();
         outputVcfFile.delete();
     }
 

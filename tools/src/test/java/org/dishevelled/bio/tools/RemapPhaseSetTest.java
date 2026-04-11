@@ -27,6 +27,8 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 
+import java.nio.file.Path;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,7 +38,7 @@ import org.junit.Test;
  * @author  Michael Heuer
  */
 public final class RemapPhaseSetTest {
-    private File inputVcfFile;
+    private Path inputVcfFile;
     private File outputVcfFile;
     private RemapPhaseSet remapPhaseSet;
 

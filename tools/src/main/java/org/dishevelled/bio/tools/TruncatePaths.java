@@ -68,17 +68,6 @@ public final class TruncatePaths implements Callable<Integer> {
     /**
      * Truncate paths in GFA 1.0 format, removing segments and overlaps fields.
      *
-     * @deprecated will be removed in version 3.0
-     * @param inputGfa1File input GFA 1.0 file, if any
-     * @param outputGfa1File output GFA 1.0 file, if any
-     */
-    public TruncatePaths(final File inputGfa1File, final File outputGfa1File) {
-        this(inputGfa1File == null ? null : inputGfa1File.toPath(), outputGfa1File);
-    }
-
-    /**
-     * Truncate paths in GFA 1.0 format, removing segments and overlaps fields.
-     *
      * @since 2.1
      * @param inputGfa1Path input GFA 1.0 path, if any
      * @param outputGfa1File output GFA 1.0 file, if any

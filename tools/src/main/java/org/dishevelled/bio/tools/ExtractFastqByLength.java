@@ -69,18 +69,6 @@ public final class ExtractFastqByLength implements Callable<Integer> {
     private final FastqWriter fastqWriter = new SangerFastqWriter();
     private static final String USAGE = "dsh-extract-fastq-by-length [args]";
 
-    /**
-     * Extract DNA sequences in FASTQ format with a range of lengths.
-     *
-     * @deprecated will be removed in version 3.0
-     * @param inputFastqFile input FASTQ file, if any
-     * @param outputFastqFile output FASTQ file, if any
-     * @param minimumLength minimum sequence length, inclusive
-     * @param maximumLength maximum sequence length, exclusive
-     */
-    public ExtractFastqByLength(final File inputFastqFile, final File outputFastqFile, final int minimumLength, final int maximumLength) {
-        this(inputFastqFile == null ? null : inputFastqFile.toPath(), outputFastqFile, minimumLength, maximumLength);
-    }
 
     /**
      * Extract DNA sequences in FASTQ format with a range of lengths.

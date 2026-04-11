@@ -59,17 +59,6 @@ public final class SegmentsToPropertyGraph implements Callable<Integer> {
     private static final String HEADER = "~id,sequence:String,length:Long,readCount:Int,fragmentCount:Int,kmerCount:Int,sequenceChecksum:String,sequenceUri:String";
     private static final String USAGE = "dsh-segments-to-property-graph -i input.gfa.gz -o nodes.csv.gz";
 
-    /**
-     * Convert segments in GFA 1.0 format to property graph CSV format.
-     *
-     * @deprecated will be removed in version 3.0
-     * @param inputGfa1File input GFA 1.0 file, if any
-     * @param outputNodesFile output nodes.csv file, if any
-     */
-    public SegmentsToPropertyGraph(final File inputGfa1File,
-                                   final File outputNodesFile) {
-        this(inputGfa1File == null ? null : inputGfa1File.toPath(), outputNodesFile);
-    }
 
     /**
      * Convert segments in GFA 1.0 format to property graph CSV format.

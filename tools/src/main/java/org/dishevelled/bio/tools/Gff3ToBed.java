@@ -64,6 +64,14 @@ public final class Gff3ToBed implements Callable<Integer> {
     private final File outputBedFile;
     private static final String USAGE = "dsh-gff3-to-bed [args]";
 
+
+    /**
+     * Convert transcript features in GFF3 format to BED format.
+     *
+     * @param inputGff3Path input GFF3 path, if any
+     * @param outputBedFile output BED file, if any
+     *
+     */
     public Gff3ToBed(final Path inputGff3Path, final File outputBedFile) {
         this.inputGff3Path = inputGff3Path;
         this.outputBedFile = outputBedFile;

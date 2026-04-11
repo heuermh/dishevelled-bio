@@ -67,18 +67,6 @@ public final class VcfHeader implements Callable<Integer> {
     /**
      * Extract and validate header lines from VCF format.
      *
-     * @deprecated will be removed in version 3.0
-     * @param inputVcfFile input VCF file, if any
-     * @param outputVcfHeaderFile output VCF header file, if any
-     * @param validate true to validate
-     */
-    public VcfHeader(final File inputVcfFile, final File outputVcfHeaderFile, final boolean validate) {
-        this(inputVcfFile == null ? null : inputVcfFile.toPath(), outputVcfHeaderFile, validate);
-    }
-
-    /**
-     * Extract and validate header lines from VCF format.
-     *
      * @since 2.1
      * @param inputVcfPath input VCF path, if any
      * @param outputVcfHeaderFile output VCF header file, if any

@@ -66,17 +66,6 @@ public final class TextToFastq implements Callable<Integer> {
     /**
      * Convert DNA sequences in tab-separated values (tsv) text format to FASTQ format.
      *
-     * @deprecated will be removed in version 3.0
-     * @param textFile input text file, if any
-     * @param fastqFile output FASTQ file, if any
-     */
-    public TextToFastq(final File textFile, final File fastqFile) {
-        this(textFile == null ? null : textFile.toPath(), fastqFile);
-    }
-
-    /**
-     * Convert DNA sequences in tab-separated values (tsv) text format to FASTQ format.
-     *
      * @since 2.1
      * @param textPath input text path, if any
      * @param fastqFile output FASTQ file, if any

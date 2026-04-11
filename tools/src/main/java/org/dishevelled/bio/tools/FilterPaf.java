@@ -80,18 +80,6 @@ public final class FilterPaf extends AbstractFilter {
     /**
      * Filter alignments in PAF format.
      *
-     * @deprecated will be removed in version 3.0
-     * @param filters list of filters, must not be null
-     * @param inputPafFile input PAF file, if any
-     * @param outputPafFile output PAF file, if any
-     */
-    public FilterPaf(final List<Filter> filters, final File inputPafFile, final File outputPafFile) {
-        this(filters, inputPafFile == null ? null : inputPafFile.toPath(), outputPafFile);
-    }
-
-    /**
-     * Filter alignments in PAF format.
-     *
      * @since 2.1
      * @param filters list of filters, must not be null
      * @param inputPafPath input PAF path, if any

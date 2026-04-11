@@ -68,18 +68,6 @@ public final class RenameVcfReferences extends AbstractRenameReferences {
     /**
      * Rename references in VCF files.
      *
-     * @deprecated will be removed in version 3.0
-     * @param chr true to add "chr" to chromosome names
-     * @param inputVcfFile input VCF file, if any
-     * @param outputVcfFile output VCF file, if any
-     */
-    public RenameVcfReferences(final boolean chr, final File inputVcfFile, final File outputVcfFile) {
-        this(chr, inputVcfFile == null ? null : inputVcfFile.toPath(), outputVcfFile);
-    }
-
-    /**
-     * Rename references in VCF files.
-     *
      * @since 2.1
      * @param chr true to add "chr" to chromosome names
      * @param inputVcfPath input VCF path, if any

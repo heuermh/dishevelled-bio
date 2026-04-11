@@ -74,29 +74,6 @@ public final class ExtractFasta implements Callable<Integer> {
     static final String DESCRIPTION_LINE = "description_line";
     private static final String USAGE = "dsh-extract-fasta [args]";
 
-    /**
-     * Extract matching DNA or protein sequences in FASTA format.
-     *
-     * @deprecated will be removed in version 3.0
-     * @param inputFastaFile input FASTA file, if any
-     * @param outputFastaFile output FASTA file, if any
-     * @param name exact sequence name to match, if any
-     * @param description FASTA description line regex pattern to match, if any
-     * @param lineWidth line width
-     */
-    public ExtractFasta(final File inputFastaFile,
-                        final File outputFastaFile,
-                        final String name,
-                        final String description,
-                        final int lineWidth) {
-
-        this(inputFastaFile == null ? null : inputFastaFile.toPath(),
-             outputFastaFile,
-             name,
-             description,
-             DEFAULT_ALPHABET,
-             lineWidth);
-    }
 
     /**
      * Extract matching DNA or protein sequences in FASTA format.
@@ -115,33 +92,6 @@ public final class ExtractFasta implements Callable<Integer> {
                         final int lineWidth) {
 
         this(inputFastaPath, outputFastaFile, name, description, DEFAULT_ALPHABET, lineWidth);
-    }
-
-    /**
-     * Extract matching DNA or protein sequences in FASTA format.
-     *
-     * @since 2.0
-     * @deprecated will be removed in version 3.0
-     * @param inputFastaFile input FASTA file, if any
-     * @param outputFastaFile output FASTA file, if any
-     * @param name exact sequence name to match, if any
-     * @param description FASTA description line regex pattern to match, if any
-     * @param alphabet input FASTA file alphabet { dna, protein }, if any
-     * @param lineWidth line width
-     */
-    public ExtractFasta(final File inputFastaFile,
-                        final File outputFastaFile,
-                        final String name,
-                        final String description,
-                        final String alphabet,
-                        final int lineWidth) {
-
-        this(inputFastaFile == null ? null : inputFastaFile.toPath(),
-             outputFastaFile,
-             name,
-             description,
-             alphabet,
-             lineWidth);
     }
 
     /**

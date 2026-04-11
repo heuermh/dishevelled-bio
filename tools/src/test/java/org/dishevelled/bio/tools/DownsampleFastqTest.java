@@ -27,6 +27,8 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 
+import java.nio.file.Path;
+
 import org.apache.commons.math3.distribution.BinomialDistribution;
 
 import org.apache.commons.math3.random.MersenneTwister;
@@ -40,7 +42,7 @@ import org.junit.Before;
  * @author  Michael Heuer
  */
 public final class DownsampleFastqTest {
-    private File inputFastqFile;
+    private Path inputFastqFile;
     private File outputFastqFile;
     private BinomialDistribution distribution;
 

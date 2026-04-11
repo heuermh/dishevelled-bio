@@ -63,7 +63,7 @@ public class FilterVcfHtsjdkBenchmarks {
         inputVcfFile = File.createTempFile("filterVcfHtsjdkBenchmarks", ".vcf.gz");
         outputVcfFile = File.createTempFile("filterVcfHtsjdkBenchmarks", ".vcf.gz");
 
-        copyResource("HG001_GRCh38_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-10X-SOLID_CHROM1-X_v.3.3.2_highconf_PGandRTGphasetransfer.10k.0.vcf.gz", inputVcfFile);
+        copyResource("HG001_GRCh38_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-10X-SOLID_CHROM1-X_v.3.3.2_highconf_PGandRTGphasetransfer.10k.0.vcf.gz", inputVcfFile.toPath());
     }
 
     @TearDown(Level.Invocation)

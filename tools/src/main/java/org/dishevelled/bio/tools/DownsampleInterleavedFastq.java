@@ -77,18 +77,6 @@ public final class DownsampleInterleavedFastq implements Callable<Integer> {
     /**
      * Downsample DNA sequences from a file in interleaved FASTQ format.
      *
-     * @deprecated will be removed in version 3.0
-     * @param inputFastqFile input interleaved FASTQ file, if any
-     * @param outputFastqFile output interleaved FASTQ file, if any
-     * @param distribution binomial distribution, must not be null
-     */
-    public DownsampleInterleavedFastq(final File inputFastqFile, final File outputFastqFile, final BinomialDistribution distribution) {
-        this(inputFastqFile == null ? null : inputFastqFile.toPath(), outputFastqFile, distribution);
-    }
-
-    /**
-     * Downsample DNA sequences from a file in interleaved FASTQ format.
-     *
      * @since 2.1
      * @param inputFastqPath input interleaved FASTQ path, if any
      * @param outputFastqFile output interleaved FASTQ file, if any

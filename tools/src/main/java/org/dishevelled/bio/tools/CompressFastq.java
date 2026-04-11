@@ -64,16 +64,6 @@ public final class CompressFastq implements Callable<Integer> {
     private final File outputFastqFile;
     private static final String USAGE = "dsh-compress-fastq [args]";
 
-    /**
-     * Compress sequences in FASTQ format to splittable bgzf or bzip2 compression codecs.
-     *
-     * @deprecated will be removed in version 3.0
-     * @param inputFastqFile input FASTQ file, if any
-     * @param outputFastqFile output FASTQ file, if any
-     */
-    public CompressFastq(final File inputFastqFile, final File outputFastqFile) {
-        this(inputFastqFile == null ? null : inputFastqFile.toPath(), outputFastqFile);
-    }
 
     /**
      * Compress sequences in FASTQ format to splittable bgzf or bzip2 compression codecs.

@@ -27,6 +27,8 @@ import static org.dishevelled.bio.benchmarks.Utils.copyResource;
 
 import java.io.File;
 
+import java.nio.file.Path;
+
 import com.google.common.collect.ImmutableList;
 
 import org.dishevelled.bio.tools.FilterGaf;
@@ -47,12 +49,12 @@ import org.openjdk.jmh.annotations.TearDown;
  */
 @State(Scope.Thread)
 public class FilterGafBenchmarks {
-    private File inputGafFile;
+    private Path inputGafFile;
     private File outputGafFile;
 
     @Setup(Level.Invocation)
     public void setUp() throws Exception {
-        inputGafFile = File.createTempFile("filterGafBenchmarks", ".gaf.gz");
+        inputGafFile = File.createTempFile("filterGafBenchmarks", ".gaf.gz").toPath();
         outputGafFile = File.createTempFile("filterGafBenchmarks", ".gaf.gz");
 
         //copyResource("100k.gaf.gz", inputGafFile);
@@ -61,7 +63,7 @@ public class FilterGafBenchmarks {
 
     @TearDown(Level.Invocation)
     public void tearDown() {
-        inputGafFile.delete();
+        inputGafFile.toFile().delete();
         outputGafFile.delete();
     }
 

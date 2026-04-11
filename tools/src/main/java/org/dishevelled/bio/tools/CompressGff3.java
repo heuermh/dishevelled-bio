@@ -60,16 +60,6 @@ public final class CompressGff3 implements Callable<Integer> {
     private final File outputGff3File;
     private static final String USAGE = "dsh-compress-gff3 [args]";
 
-    /**
-     * Compress features in GFF3 format to splittable bgzf or bzip2 compression codecs.
-     *
-     * @deprecated will be removed in version 3.0
-     * @param inputGff3File input GFF3 file, if any
-     * @param outputGff3File output GFF3 file, if any
-     */
-    public CompressGff3(final File inputGff3File, final File outputGff3File) {
-        this(inputGff3File == null ? null : inputGff3File.toPath(), outputGff3File);
-    }
 
     /**
      * Compress features in GFF3 format to splittable bgzf or bzip2 compression codecs.

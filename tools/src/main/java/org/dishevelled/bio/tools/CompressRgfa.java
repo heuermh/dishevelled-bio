@@ -61,16 +61,6 @@ public final class CompressRgfa implements Callable<Integer> {
     private final File outputRgfaFile;
     private static final String USAGE = "dsh-compress-rgfa [args]";
 
-    /**
-     * Compress assembly in rGFA format to splittable bgzf or bzip2 compression codecs.
-     *
-     * @deprecated will be removed in version 3.0
-     * @param inputRgfaFile input rGFA file, if any
-     * @param outputRgfaFile output rGFA file, if any
-     */
-    public CompressRgfa(final File inputRgfaFile, final File outputRgfaFile) {
-        this(inputRgfaFile == null ? null : inputRgfaFile.toPath(), outputRgfaFile);
-    }
 
     /**
      * Compress assembly in rGFA format to splittable bgzf or bzip2 compression codecs.

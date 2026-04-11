@@ -64,17 +64,6 @@ public final class VcfSamples implements Callable<Integer> {
     /**
      * Extract samples from VCF format.
      *
-     * @deprecated will be removed in version 3.0
-     * @param inputVcfFile input VCF file, if any
-     * @param outputSampleFile output sample file, if any
-     */
-    public VcfSamples(final File inputVcfFile, final File outputSampleFile) {
-        this(inputVcfFile == null ? null : inputVcfFile.toPath(), outputSampleFile);
-    }
-
-    /**
-     * Extract samples from VCF format.
-     *
      * @since 2.1
      * @param inputVcfPath input VCF path, if any
      * @param outputSampleFile output sample file, if any

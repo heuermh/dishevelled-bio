@@ -471,10 +471,6 @@
               <mainClass>org.dishevelled.bio.tools.InterleavedFastqToBam</mainClass>
             </program>
             <program>
-              <id>dsh-intersect-bed</id>
-              <mainClass>org.dishevelled.bio.tools.IntersectBed</mainClass>
-            </program>
-            <program>
               <id>dsh-links-to-cytoscape-edges</id>
               <mainClass>org.dishevelled.bio.tools.LinksToCytoscapeEdges</mainClass>
             </program>

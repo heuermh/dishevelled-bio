@@ -69,31 +69,6 @@ public final class SplitFasta extends AbstractSplit {
     /**
      * Split FASTA files.
      *
-     * @deprecated will be removed in version 3.0
-     * @param inputFile input file, if any
-     * @param bytes split the input file at next record after each n bytes, if any
-     * @param records split the input file after each n records, if any
-     * @param prefix output file prefix, must not be null
-     * @param suffix output file suffix, must not be null
-     * @param lineWidth line width
-     */
-    public SplitFasta(final File inputFile,
-                      final Long bytes,
-                      final Long records,
-                      final String prefix,
-                      final String suffix,
-                      final int lineWidth) {
-        this(inputFile == null ? null : inputFile.toPath(),
-             bytes,
-             records,
-             prefix,
-             suffix,
-             lineWidth);
-    }
-
-    /**
-     * Split FASTA files.
-     *
      * @since 2.1
      * @param inputPath input path, if any
      * @param bytes split the input path at next record after each n bytes, if any
@@ -109,35 +84,6 @@ public final class SplitFasta extends AbstractSplit {
                       final String suffix,
                       final int lineWidth) {
         this(inputPath, DEFAULT_ALPHABET, bytes, records, prefix, -1, suffix, lineWidth);
-    }
-
-    /**
-     * Split FASTA files.
-     *
-     * @since 1.3.2
-     * @deprecated will be removed in version 3.0
-     * @param inputFile input file, if any
-     * @param bytes split the input file at next record after each n bytes, if any
-     * @param records split the input file after each n records, if any
-     * @param prefix output file prefix, must not be null
-     * @param leftPad left pad split index in output file name
-     * @param suffix output file suffix, must not be null
-     * @param lineWidth line width
-     */
-    public SplitFasta(final File inputFile,
-                      final Long bytes,
-                      final Long records,
-                      final String prefix,
-                      final int leftPad,
-                      final String suffix,
-                      final int lineWidth) {
-        this(inputFile == null ? null : inputFile.toPath(),
-             bytes,
-             records,
-             prefix,
-             leftPad,
-             suffix,
-             lineWidth);
     }
 
     /**
@@ -160,37 +106,6 @@ public final class SplitFasta extends AbstractSplit {
                       final String suffix,
                       final int lineWidth) {
         this(inputPath, DEFAULT_ALPHABET, bytes, records, prefix, leftPad, suffix, lineWidth);
-    }
-
-    /**
-     * Split FASTA files.
-     *
-     * @since 2.0
-     * @param inputFile input file, if any
-     * @param alphabet input file alphabet { dna, protein }, if any
-     * @param bytes split the input file at next record after each n bytes, if any
-     * @param records split the input file after each n records, if any
-     * @param prefix output file prefix, must not be null
-     * @param leftPad left pad split index in output file name
-     * @param suffix output file suffix, must not be null
-     * @param lineWidth line width
-     */
-    public SplitFasta(final File inputFile,
-                      final String alphabet,
-                      final Long bytes,
-                      final Long records,
-                      final String prefix,
-                      final int leftPad,
-                      final String suffix,
-                      final int lineWidth) {
-        this(inputFile == null ? null : inputFile.toPath(),
-             alphabet,
-             bytes,
-             records,
-             prefix,
-             leftPad,
-             suffix,
-             lineWidth);
     }
 
     /**

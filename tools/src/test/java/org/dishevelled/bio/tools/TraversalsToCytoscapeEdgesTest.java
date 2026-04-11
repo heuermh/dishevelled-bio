@@ -28,6 +28,8 @@ import static org.junit.Assert.assertNotNull;
 import java.io.File;
 import java.io.IOException;
 
+import java.nio.file.Path;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,18 +40,18 @@ import org.junit.Test;
  * @author  Michael Heuer
  */
 public final class TraversalsToCytoscapeEdgesTest {
-    private File inputGfa1File;
+    private Path inputGfa1File;
     private File outputEdgesFile;
 
     @Before
     public void setUp() throws IOException {
-        inputGfa1File = File.createTempFile("traversalsToCytoscapeEdgesTest", ".gfa");
+        inputGfa1File = File.createTempFile("traversalsToCytoscapeEdgesTest", ".gfa").toPath();
         outputEdgesFile = File.createTempFile("traversalsToCytoscapeEdgesTest", ".edges.txt");
     }
 
     @After
     public void tearDown() {
-        inputGfa1File.delete();
+        inputGfa1File.toFile().delete();
         outputEdgesFile.delete();
     }
 
@@ -60,7 +62,7 @@ public final class TraversalsToCytoscapeEdgesTest {
 
     @Test
     public void testConstructorNullInputGfa1File() {
-        assertNotNull(new TraversalsToCytoscapeEdges((File) null, outputEdgesFile));
+        assertNotNull(new TraversalsToCytoscapeEdges(null, outputEdgesFile));
     }
 
     @Test

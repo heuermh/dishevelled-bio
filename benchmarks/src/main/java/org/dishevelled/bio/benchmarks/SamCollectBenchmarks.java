@@ -29,6 +29,8 @@ import static org.dishevelled.bio.benchmarks.Utils.copyResource;
 
 import java.io.File;
 
+import java.nio.file.Path;
+
 import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -63,7 +65,7 @@ public class SamCollectBenchmarks {
     public void setUp() throws Exception {
         inputSamFile = File.createTempFile("samCollectBenchmarks", ".sam");
 
-        copyResource("CEUTrio.HiSeq.WGS.b37.NA12878.20.21.10k.sam", inputSamFile);
+        copyResource("CEUTrio.HiSeq.WGS.b37.NA12878.20.21.10k.sam", inputSamFile.toPath());
         //copyResource("CEUTrio.HiSeq.WGS.b37.NA12878.20.21.sam", inputSamFile);
     }
 

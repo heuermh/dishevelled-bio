@@ -59,17 +59,6 @@ public final class LinksToPropertyGraph implements Callable<Integer> {
     private static final String HEADER = "~id,~source,~target,sourceOrientation:String,targetOrientation:String,interaction:String,overlap:String,mappingQuality:Int,mismatchCount:Int";
     private static final String USAGE = "dsh-links-to-property-graph -i input.gfa.gz -o link-edges.csv.gz";
 
-    /**
-     * Convert links in GFA 1.0 format to property graph CSV format.
-     *
-     * @deprecated will be removed in version 3.0
-     * @param inputGfa1File input GFA 1.0 file, if any
-     * @param outputEdgesFile output link-edges.csv file, if any
-     */
-    public LinksToPropertyGraph(final File inputGfa1File,
-                                 final File outputEdgesFile) {
-        this(inputGfa1File == null ? null : inputGfa1File.toPath(), outputEdgesFile);
-    }
 
     /**
      * Convert links in GFA 1.0 format to property graph CSV format.

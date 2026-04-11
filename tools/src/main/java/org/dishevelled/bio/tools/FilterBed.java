@@ -82,18 +82,6 @@ public final class FilterBed extends AbstractFilter {
     /**
      * Filter features in BED format.
      *
-     * @deprecated will be removed in version 3.0
-     * @param filters list of filters, must not be null
-     * @param inputBedFile input BED file, if any
-     * @param outputBedFile output BED file, if any
-     */
-    public FilterBed(final List<Filter> filters, final File inputBedFile, final File outputBedFile) {
-        this(filters, inputBedFile == null ? null : inputBedFile.toPath(), outputBedFile);
-    }
-
-    /**
-     * Filter features in BED format.
-     *
      * @since 2.1
      * @param filters list of filters, must not be null
      * @param inputBedPath input BED path, if any

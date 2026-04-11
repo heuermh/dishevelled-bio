@@ -56,7 +56,7 @@ public class FilterSamHtsjdkBenchmarks {
         inputSamFile = File.createTempFile("filterSamHtsjdkBenchmarks", ".sam");
         outputSamFile = File.createTempFile("filterSamHtsjdkBenchmarks", ".sam");
 
-        copyResource("CEUTrio.HiSeq.WGS.b37.NA12878.20.21.10k.sam", inputSamFile);
+        copyResource("CEUTrio.HiSeq.WGS.b37.NA12878.20.21.10k.sam", inputSamFile.toPath());
     }
 
     @TearDown(Level.Invocation)

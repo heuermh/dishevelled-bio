@@ -27,6 +27,8 @@ import static org.dishevelled.bio.benchmarks.Utils.copyResource;
 
 import java.io.File;
 
+import java.nio.file.Path;
+
 import org.dishevelled.bio.tools.InterleaveFastq;
 
 import org.openjdk.jmh.annotations.Benchmark;
@@ -43,15 +45,15 @@ import org.openjdk.jmh.annotations.TearDown;
  */
 @State(Scope.Thread)
 public class InterleaveFastqBenchmarks {
-    private File firstFastqFile;
-    private File secondFastqFile;
+    private Path firstFastqFile;
+    private Path secondFastqFile;
     private File pairedFile;
     private File unpairedFile;
 
     @Setup(Level.Invocation)
     public void setUp() throws Exception {
-        firstFastqFile = File.createTempFile("interleaveFastqBenchmarks", ".fq.gz");
-        secondFastqFile = File.createTempFile("interleaveFastqBenchmarks", ".fq.gz");
+        firstFastqFile = File.createTempFile("interleaveFastqBenchmarks", ".fq.gz").toPath();
+        secondFastqFile = File.createTempFile("interleaveFastqBenchmarks", ".fq.gz").toPath();
         pairedFile = File.createTempFile("interleaveFastqBenchmarks", ".ifq.gz");
         unpairedFile = File.createTempFile("interleaveFastqBenchmarks", ".fq.gz");
 
@@ -61,8 +63,8 @@ public class InterleaveFastqBenchmarks {
 
     @TearDown(Level.Invocation)
     public void tearDown() {
-        firstFastqFile.delete();
-        secondFastqFile.delete();
+        firstFastqFile.toFile().delete();
+        secondFastqFile.toFile().delete();
         pairedFile.delete();
         unpairedFile.delete();
     }

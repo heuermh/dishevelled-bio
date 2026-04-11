@@ -67,16 +67,6 @@ public final class CreateSequenceDictionary implements Callable<Integer> {
     private final File outputSequenceDictionaryFile;
     private static final String USAGE = "dsh-create-sequence-dictionary [args]";
 
-    /**
-     * Create a SequenceDictionary from DNA sequences in FASTA format.
-     *
-     * @deprecated will be removed in version 3.0
-     * @param inputFastaFile input FASTA file, if any
-     * @param outputSequenceDictionaryFile output SequenceDictionary .dict file, if any
-     */
-    public CreateSequenceDictionary(final File inputFastaFile, final File outputSequenceDictionaryFile) {
-        this(null, inputFastaFile == null ? null : inputFastaFile.toPath(), outputSequenceDictionaryFile);
-    }
 
     /**
      * Create a SequenceDictionary from DNA sequences in FASTA format.
@@ -87,24 +77,6 @@ public final class CreateSequenceDictionary implements Callable<Integer> {
      */
     public CreateSequenceDictionary(final Path inputFastaPath, final File outputSequenceDictionaryFile) {
         this(null, inputFastaPath, outputSequenceDictionaryFile);
-    }
-
-    /**
-     * Create a SequenceDictionary from DNA sequences in FASTA format with the specified URL.
-     *
-     * @since 2.1
-     * @deprecated will be removed in version 3.0
-     * @param url URL, if any
-     * @param inputFastaFile input FASTA file, if any
-     * @param outputSequenceDictionaryFile output SequenceDictionary .dict file, if any
-     */
-    public CreateSequenceDictionary(final URL url,
-                                    final File inputFastaFile,
-                                    final File outputSequenceDictionaryFile) {
-
-        this(url,
-             inputFastaFile == null ? null : inputFastaFile.toPath(),
-             outputSequenceDictionaryFile);
     }
 
     /**

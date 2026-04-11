@@ -64,17 +64,6 @@ public final class ExportSegments implements Callable<Integer> {
     static final int DEFAULT_LINE_WIDTH = 70;
     private static final String USAGE = "dsh-export-segments [args]";
 
-    /**
-     * Export assembly segment sequences in GFA 1.0 format to FASTA format.
-     *
-     * @deprecated will be removed in version 3.0
-     * @param inputGfa1File input GFA 1.0 file, if any
-     * @param outputFastaFile output FASTA file, if any
-     * @param lineWidth line width
-     */
-    public ExportSegments(final File inputGfa1File, final File outputFastaFile, final int lineWidth) {
-        this(inputGfa1File == null ? null : inputGfa1File.toPath(), outputFastaFile, lineWidth);
-    }
 
     /**
      * Export assembly segment sequences in GFA 1.0 format to FASTA format.

@@ -61,16 +61,6 @@ public final class CompressSam implements Callable<Integer> {
     private final File outputSamFile;
     private static final String USAGE = "dsh-compress-sam [args]";
 
-    /**
-     * Compress alignments in SAM format to splittable bgzf or bzip2 compression codecs.
-     *
-     * @deprecated will be removed in version 3.0
-     * @param inputSamFile input SAM file, if any
-     * @param outputSamFile output SAM file, if any
-     */
-    public CompressSam(final File inputSamFile, final File outputSamFile) {
-        this(inputSamFile == null ? null : inputSamFile.toPath(), outputSamFile);
-    }
 
     /**
      * Compress alignments in SAM format to splittable bgzf or bzip2 compression codecs.

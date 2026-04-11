@@ -60,16 +60,6 @@ public final class FastqToFasta implements Callable<Integer> {
     private final FastqReader fastqReader = new SangerFastqReader();
     private static final String USAGE = "dsh-fastq-to-fasta [args]";
 
-    /**
-     * Convert DNA sequences in FASTQ format to FASTA format.
-     *
-     * @deprecated will be removed in version 3.0
-     * @param fastqFile input FASTQ file, if any
-     * @param fastaFile output FASTA file, if any
-     */
-    public FastqToFasta(final File fastqFile, final File fastaFile) {
-        this(fastqFile == null ? null : fastqFile.toPath(), fastaFile);
-    }
 
     /**
      * Convert DNA sequences in FASTQ format to FASTA format.

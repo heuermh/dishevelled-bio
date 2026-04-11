@@ -73,17 +73,6 @@ public final class RemapPhaseSet implements Callable<Integer> {
     /**
      * Remap Type=String PS phase set ids in VCF format to Type=Integer.
      *
-     * @deprecated will be removed in version 3.0
-     * @param inputVcfFile input VCF file, if any
-     * @param outputVcfFile output VCF file, if any
-     */
-    public RemapPhaseSet(final File inputVcfFile, final File outputVcfFile) {
-        this(inputVcfFile == null ? null : inputVcfFile.toPath(), outputVcfFile);
-    }
-
-    /**
-     * Remap Type=String PS phase set ids in VCF format to Type=Integer.
-     *
      * @since 2.1
      * @param inputVcfPath input VCF path, if any
      * @param outputVcfFile output VCF file, if any

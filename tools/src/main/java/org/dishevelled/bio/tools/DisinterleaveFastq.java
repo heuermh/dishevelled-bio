@@ -75,22 +75,6 @@ public final class DisinterleaveFastq implements Callable<Integer> {
     /**
      * Convert interleaved FASTQ format into first and second DNA sequence files in FASTQ format.
      *
-     * @deprecated will be removed in version 3.0
-     * @param pairedFile input interleaved paired FASTQ file, must not be null
-     * @param unpairedFile input unpaired FASTQ file, if any
-     * @param firstFastqFile first FASTQ output file, must not be null
-     * @param secondFastqFile second FASTQ output file, must not be null
-     */
-    public DisinterleaveFastq(final File pairedFile, final File unpairedFile, final File firstFastqFile, final File secondFastqFile) {
-        this(pairedFile == null ? null : pairedFile.toPath(),
-             unpairedFile == null ? null : unpairedFile.toPath(),
-             firstFastqFile,
-             secondFastqFile);
-    }
-
-    /**
-     * Convert interleaved FASTQ format into first and second DNA sequence files in FASTQ format.
-     *
      * @since 2.1
      * @param pairedPath input interleaved paired FASTQ path, must not be null
      * @param unpairedPath input unpaired FASTQ file, if any

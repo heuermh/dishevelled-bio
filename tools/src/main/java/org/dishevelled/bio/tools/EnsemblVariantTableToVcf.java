@@ -65,16 +65,6 @@ public class EnsemblVariantTableToVcf implements Callable<Integer>  {
     private final File outputVcfFile;
     private static final String USAGE = "dsh-variant-table-to-vcf [args]";
 
-    /**
-     * Convert Ensembl variant table to VCF format
-     *
-     * @deprecated will be removed in version 3.0
-     * @param inputEnsemblVariantTableFile input Ensembl variant table file, if any
-     * @param outputVcfFile output VCF file, if any
-     */
-    public EnsemblVariantTableToVcf(final File inputEnsemblVariantTableFile, final File outputVcfFile) {
-        this(inputEnsemblVariantTableFile == null ? null : inputEnsemblVariantTableFile.toPath(), outputVcfFile);
-    }
 
     /**
      * Convert Ensembl variant table to VCF format

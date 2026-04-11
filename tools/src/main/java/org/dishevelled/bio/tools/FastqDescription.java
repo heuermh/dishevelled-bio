@@ -64,17 +64,6 @@ public final class FastqDescription implements Callable<Integer> {
     /**
      * Output description lines from DNA sequences in FASTQ format.
      *
-     * @deprecated will be removed in version 3.0
-     * @param fastqFile input FASTQ file, if any
-     * @param descriptionFile output file of description lines, if any
-     */
-    public FastqDescription(final File fastqFile, final File descriptionFile) {
-        this(fastqFile == null ? null : fastqFile.toPath(), descriptionFile);
-    }
-
-    /**
-     * Output description lines from DNA sequences in FASTQ format.
-     *
      * @since 2.1
      * @param fastqPath input FASTQ path, if any
      * @param descriptionFile output file of description lines, if any

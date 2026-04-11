@@ -74,17 +74,6 @@ public final class Gfa1ToGfa2 implements Callable<Integer> {
     /**
      * Convert GFA 1.0 format to GFA 2.0 format.
      *
-     * @deprecated will be removed in version 3.0
-     * @param inputGfa1File input GFA 1.0 file, if any
-     * @param outputGfa2File output GFA 2.0 file, if any
-     */
-    public Gfa1ToGfa2(final File inputGfa1File, final File outputGfa2File) {
-        this(inputGfa1File == null ? null : inputGfa1File.toPath(), outputGfa2File);
-    }
-
-    /**
-     * Convert GFA 1.0 format to GFA 2.0 format.
-     *
      * @since 2.1
      * @param inputGfa1Path input GFA 1.0 path, if any
      * @param outputGfa2File output GFA 2.0 file, if any

@@ -61,16 +61,6 @@ public final class FastqSequenceLength implements Callable<Integer> {
     private final FastqReader fastqReader = new SangerFastqReader();
     private static final String USAGE = "dsh-fastq-sequence-length [args]";
 
-    /**
-     * Output sequence lengths from DNA sequences in FASTQ format.
-     *
-     * @deprecated will be removed in version 3.0
-     * @param fastqFile input FASTQ file, if any
-     * @param sequenceLengthFile output file of sequence lengths, if any
-     */
-    public FastqSequenceLength(final File fastqFile, final File sequenceLengthFile) {
-        this(fastqFile == null ? null : fastqFile.toPath(), sequenceLengthFile);
-    }
 
     /**
      * Output sequence lengths from DNA sequences in FASTQ format.

@@ -60,16 +60,6 @@ public final class CompressBed implements Callable<Integer> {
     private final File outputBedFile;
     private static final String USAGE = "dsh-compress-bed [args]";
 
-    /**
-     * Compress features in BED format to splittable bgzf or bzip2 compression codecs.
-     *
-     * @deprecated will be removed in version 3.0
-     * @param inputBedFile input BED file, if any
-     * @param outputBedFile output BED file, if any
-     */
-    public CompressBed(final File inputBedFile, final File outputBedFile) {
-        this(inputBedFile == null ? null : inputBedFile.toPath(), outputBedFile);
-    }
 
     /**
      * Compress features in BED format to splittable bgzf or bzip2 compression codecs.

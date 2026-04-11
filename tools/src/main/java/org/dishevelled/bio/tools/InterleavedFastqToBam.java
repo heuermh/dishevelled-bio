@@ -78,38 +78,6 @@ public final class InterleavedFastqToBam extends WithReadGroup {
     /**
      * Convert DNA sequences in interleaved FASTQ format to unaligned BAM format.
      *
-     * @deprecated will be removed in version 3.0
-     * @param fastqFile input interleaved FASTQ file, if any
-     * @param bamFile output BAM file, if any
-     * @param readGroupId read group id, if any
-     * @param readGroupSample read group sample, if any
-     * @param readGroupLibrary read group library, if any
-     * @param readGroupPlatformUnit read group platform unit, if any
-     * @param readGroupInsertSize read group insert size, if any
-     * @param readGroupBarcodes read group barcodes, if any
-     */
-    public InterleavedFastqToBam(@Nullable final File fastqFile,
-                                 @Nullable final File bamFile,
-                                 @Nullable final String readGroupId,
-                                 @Nullable final String readGroupSample,
-                                 @Nullable final String readGroupLibrary,
-                                 @Nullable final String readGroupPlatformUnit,
-                                 @Nullable final Integer readGroupInsertSize,
-                                 @Nullable final List<String> readGroupBarcodes) {
-
-        this(fastqFile == null ? null : fastqFile.toPath(),
-             bamFile,
-             readGroupId,
-             readGroupSample,
-             readGroupLibrary,
-             readGroupPlatformUnit,
-             readGroupInsertSize,
-             readGroupBarcodes);
-    }
-
-    /**
-     * Convert DNA sequences in interleaved FASTQ format to unaligned BAM format.
-     *
      * @since 2.1
      * @param fastqPath input interleaved FASTQ path, if any
      * @param bamFile output BAM file, if any

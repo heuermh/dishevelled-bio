@@ -63,23 +63,6 @@ import org.dishevelled.compress.Compress;
 public final class SplitVcf extends AbstractSplit {
     private static final String USAGE = "dsh-split-vcf -r 100 -i foo.vcf.bgz";
 
-    /**
-     * Split VCF files.
-     *
-     * @deprecated will be removed in version 3.0
-     * @param inputFile input file, if any
-     * @param bytes split the input file at next record after each n bytes, if any
-     * @param records split the input file after each n records, if any
-     * @param prefix output file prefix, must not be null
-     * @param suffix output file suffix, must not be null
-     */
-    public SplitVcf(final File inputFile, final Long bytes, final Long records, final String prefix, final String suffix) {
-        this(inputFile == null ? null : inputFile.toPath(),
-             bytes,
-             records,
-             prefix,
-             suffix);
-    }
 
     /**
      * Split VCF files.
@@ -93,27 +76,6 @@ public final class SplitVcf extends AbstractSplit {
      */
     public SplitVcf(final Path inputPath, final Long bytes, final Long records, final String prefix, final String suffix) {
         this(inputPath, bytes, records, prefix, -1, suffix);
-    }
-
-    /**
-     * Split VCF files.
-     *
-     * @since 1.3.2
-     * @deprecated will be removed in version 3.0
-     * @param inputFile input file, if any
-     * @param bytes split the input file at next record after each n bytes, if any
-     * @param records split the input file after each n records, if any
-     * @param prefix output file prefix, must not be null
-     * @param leftPad left pad split index in output file name
-     * @param suffix output file suffix, must not be null
-     */
-    public SplitVcf(final File inputFile, final Long bytes, final Long records, final String prefix, final int leftPad, final String suffix) {
-        this(inputFile == null ? null : inputFile.toPath(),
-             bytes,
-             records,
-             prefix,
-             leftPad,
-             suffix);
     }
 
     /**

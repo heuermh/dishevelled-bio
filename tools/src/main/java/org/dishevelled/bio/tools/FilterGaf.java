@@ -80,18 +80,6 @@ public final class FilterGaf extends AbstractFilter {
     /**
      * Filter alignments in GAF format.
      *
-     * @deprecated will be removed in version 3.0
-     * @param filters list of filters, must not be null
-     * @param inputGafFile input GAF file, if any
-     * @param outputGafFile output GAF file, if any
-     */
-    public FilterGaf(final List<Filter> filters, final File inputGafFile, final File outputGafFile) {
-        this(filters, inputGafFile == null ? null : inputGafFile.toPath(), outputGafFile);
-    }
-
-    /**
-     * Filter alignments in GAF format.
-     *
      * @since 2.1
      * @param filters list of filters, must not be null
      * @param inputGafPath input GAF path, if any

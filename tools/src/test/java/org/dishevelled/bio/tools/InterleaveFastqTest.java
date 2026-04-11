@@ -31,6 +31,8 @@ import static org.junit.Assert.assertNotNull;
 import java.io.File;
 import java.io.IOException;
 
+import java.nio.file.Path;
+
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
 
@@ -48,23 +50,23 @@ import org.junit.Test;
  * @author  Michael Heuer
  */
 public final class InterleaveFastqTest {
-    private File firstFastqFile;
-    private File secondFastqFile;
+    private Path firstFastqFile;
+    private Path secondFastqFile;
     private File pairedFile;
     private File unpairedFile;
 
     @Before
     public void setUp() throws IOException {
-        firstFastqFile = File.createTempFile("interleaveFastqTest", ".fq.gz");
-        secondFastqFile = File.createTempFile("interleaveFastqTest", ".fq.gz");
+        firstFastqFile = File.createTempFile("interleaveFastqTest", ".fq.gz").toPath();
+        secondFastqFile = File.createTempFile("interleaveFastqTest", ".fq.gz").toPath();
         pairedFile = File.createTempFile("interleaveFastqTest", ".fq");
         unpairedFile = File.createTempFile("interleaveFastqTest", ".fq");
     }
 
     @After
     public void tearDown() {
-        firstFastqFile.delete();
-        secondFastqFile.delete();
+        firstFastqFile.toFile().delete();
+        secondFastqFile.toFile().delete();
         pairedFile.delete();
         unpairedFile.delete();
     }
@@ -133,7 +135,7 @@ public final class InterleaveFastqTest {
         return count;
     }
 
-    private static void copyResource(final String name, final File file) throws Exception {
-        Files.write(Resources.toByteArray(InterleaveFastqTest.class.getResource(name)), file);
+    private static void copyResource(final String name, final Path file) throws Exception {
+        Files.write(Resources.toByteArray(InterleaveFastqTest.class.getResource(name)), file.toFile());
     }
 }

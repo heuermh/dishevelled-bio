@@ -27,6 +27,8 @@ import static org.dishevelled.bio.benchmarks.Utils.copyResource;
 
 import java.io.File;
 
+import java.nio.file.Path;
+
 import com.google.common.collect.ImmutableList;
 
 import org.dishevelled.bio.tools.FilterSam;
@@ -47,12 +49,12 @@ import org.openjdk.jmh.annotations.TearDown;
  */
 @State(Scope.Thread)
 public class FilterSamBenchmarks {
-    private File inputSamFile;
+    private Path inputSamFile;
     private File outputSamFile;
 
     @Setup(Level.Invocation)
     public void setUp() throws Exception {
-        inputSamFile = File.createTempFile("filterSamBenchmarks", ".sam");
+        inputSamFile = File.createTempFile("filterSamBenchmarks", ".sam").toPath();
         outputSamFile = File.createTempFile("filterSamBenchmarks", ".sam");
 
         copyResource("CEUTrio.HiSeq.WGS.b37.NA12878.20.21.10k.sam", inputSamFile);
@@ -60,7 +62,7 @@ public class FilterSamBenchmarks {
 
     @TearDown(Level.Invocation)
     public void tearDown() {
-        inputSamFile.delete();
+        inputSamFile.toFile().delete();
         outputSamFile.delete();
     }
 

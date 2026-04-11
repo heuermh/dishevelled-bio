@@ -25,7 +25,7 @@ package org.dishevelled.bio.tools;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.io.File;
+import java.nio.file.Path;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -36,7 +36,7 @@ import org.junit.Test;
  * @author  Michael Heuer
  */
 public final class SplitGff3Test {
-    private File inputFile;
+    private Path inputFile;
     private Long bytes;
     private Long records;
     private String prefix;

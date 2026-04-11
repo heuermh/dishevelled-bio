@@ -71,17 +71,6 @@ public final class RemapDbSnp implements Callable<Integer> {
     /**
      * Remap DB Type=String flags in VCF format to DB Type=Flag and dbsnp Type=String fields.
      *
-     * @deprecated will be removed in version 3.0
-     * @param inputVcfFile input VCF file, if any
-     * @param outputVcfFile output VCF file, if any
-     */
-    public RemapDbSnp(final File inputVcfFile, final File outputVcfFile) {
-        this(inputVcfFile == null ? null : inputVcfFile.toPath(), outputVcfFile);
-    }
-
-    /**
-     * Remap DB Type=String flags in VCF format to DB Type=Flag and dbsnp Type=String fields.
-     *
      * @since 2.1
      * @param inputVcfPath input VCF path, if any
      * @param outputVcfFile output VCF file, if any

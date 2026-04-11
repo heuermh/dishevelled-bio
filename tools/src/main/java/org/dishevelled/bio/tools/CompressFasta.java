@@ -68,17 +68,6 @@ public final class CompressFasta implements Callable<Integer> {
     static final String DESCRIPTION_LINE = "description_line";
     private static final String USAGE = "dsh-compress-fasta [args]";
 
-    /**
-     * Compress sequences in FASTA format to splittable bgzf or bzip2 compression codecs.
-     *
-     * @deprecated will be removed in version 3.0
-     * @param inputFastaFile input FASTA file, if any
-     * @param outputFastaFile output FASTA file, if any
-     * @param lineWidth line width
-     */
-    public CompressFasta(final File inputFastaFile, final File outputFastaFile, final int lineWidth) {
-        this(inputFastaFile == null ? null : inputFastaFile.toPath(), outputFastaFile, DEFAULT_ALPHABET, lineWidth);
-    }
 
     /**
      * Compress sequences in FASTA format to splittable bgzf or bzip2 compression codecs.
@@ -90,20 +79,6 @@ public final class CompressFasta implements Callable<Integer> {
      */
     public CompressFasta(final Path inputFastaPath, final File outputFastaFile, final int lineWidth) {
         this(inputFastaPath, outputFastaFile, DEFAULT_ALPHABET, lineWidth);
-    }
-
-    /**
-     * Compress sequences in FASTA format to splittable bgzf or bzip2 compression codecs.
-     *
-     * @since 2.0
-     * @deprecated will be removed in version 3.0
-     * @param inputFastaFile input FASTA file, if any
-     * @param outputFastaFile output FASTA file, if any
-     * @param alphabet input FASTA file alphabet { dna, protein }, if any
-     * @param lineWidth line width
-     */
-    public CompressFasta(final File inputFastaFile, final File outputFastaFile, final String alphabet, final int lineWidth) {
-        this(inputFastaFile == null ? null : inputFastaFile.toPath(), outputFastaFile, alphabet, lineWidth);
     }
 
     /**

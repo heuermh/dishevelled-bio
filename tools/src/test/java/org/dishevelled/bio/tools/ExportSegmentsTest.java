@@ -31,6 +31,8 @@ import java.io.IOException;
 
 import java.nio.charset.Charset;
 
+import java.nio.file.Path;
+
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
 
@@ -44,18 +46,18 @@ import org.junit.Test;
  * @author  Michael Heuer
  */
 public final class ExportSegmentsTest {
-    private File inputGfa1File;
+    private Path inputGfa1File;
     private File outputFastaFile;
 
     @Before
     public void setUp() throws IOException {
-        inputGfa1File = File.createTempFile("exportSegmentsTest", ".gfa");
+        inputGfa1File = File.createTempFile("exportSegmentsTest", ".gfa").toPath();
         outputFastaFile = File.createTempFile("exportSegmentsTest", "fa");
     }
 
     @After
     public void tearDown() {
-        inputGfa1File.delete();
+        inputGfa1File.toFile().delete();
         outputFastaFile.delete();
     }
 
@@ -73,7 +75,7 @@ public final class ExportSegmentsTest {
         assertEquals(">2 LN:i:2\tRC:i:50\tFC:i:100\tKC:i:0\tzz:Z:Test", description);
     }
 
-    private static void copyResource(final String name, final File file) throws Exception {
-        Files.write(Resources.toByteArray(ExportSegmentsTest.class.getResource(name)), file);
+    private static void copyResource(final String name, final Path file) throws Exception {
+        Files.write(Resources.toByteArray(ExportSegmentsTest.class.getResource(name)), file.toFile());
     }
 }

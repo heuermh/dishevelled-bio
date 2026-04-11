@@ -58,17 +58,6 @@ public final class CompressPaf implements Callable<Integer> {
     private final File outputPafFile;
     private static final String USAGE = "dsh-compress-paf [args]";
 
-    /**
-     * Compress alignments in PAF format to splittable bgzf or bzip2 compression
-     * codecs.
-     *
-     * @deprecated will be removed in version 3.0
-     * @param inputPafFile input PAF file, if any
-     * @param outputPafFile output PAF file, if any
-     */
-    public CompressPaf(final File inputPafFile, final File outputPafFile) {
-        this(inputPafFile == null ? null : inputPafFile.toPath(), outputPafFile);
-    }
 
     /**
      * Compress alignments in PAF format to splittable bgzf or bzip2 compression

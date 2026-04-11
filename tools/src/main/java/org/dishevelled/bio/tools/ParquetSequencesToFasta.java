@@ -62,6 +62,7 @@ public final class ParquetSequencesToFasta implements Callable<Integer> {
     private static final String READ_SQL = "SELECT description, sequence FROM read_parquet('%s')";
     private static final String USAGE = "dsh-parquet-sequences-to-fasta [args]";
 
+
     /**
      * Convert DNA or protein sequences in Parquet format to FASTA format.
      *

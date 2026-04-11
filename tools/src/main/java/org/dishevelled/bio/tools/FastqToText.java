@@ -62,16 +62,6 @@ public final class FastqToText implements Callable<Integer> {
     private final FastqReader fastqReader = new SangerFastqReader();
     private static final String USAGE = "dsh-fastq-to-text [args]";
 
-    /**
-     * Convert DNA sequences in FASTQ format to tab-separated values (tsv) text format.
-     *
-     * @deprecated will be removed in version 3.0
-     * @param fastqFile input FASTQ file, if any
-     * @param textFile output text file, if any
-     */
-    public FastqToText(final File fastqFile, final File textFile) {
-        this(fastqFile == null ? null : fastqFile.toPath(), textFile);
-    }
 
     /**
      * Convert DNA sequences in FASTQ format to tab-separated values (tsv) text format.

@@ -28,6 +28,8 @@ import static org.junit.Assert.assertNotNull;
 import java.io.File;
 import java.io.IOException;
 
+import java.nio.file.Path;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,18 +40,18 @@ import org.junit.Test;
  * @author  Michael Heuer
  */
 public final class SegmentsToPropertyGraphTest {
-    private File inputGfa1File;
+    private Path inputGfa1File;
     private File outputNodesFile;
 
     @Before
     public void setUp() throws IOException {
-        inputGfa1File = File.createTempFile("segmentsToPropertyGraphTest", ".gfa");
+        inputGfa1File = File.createTempFile("segmentsToPropertyGraphTest", ".gfa").toPath();
         outputNodesFile = File.createTempFile("segmentsToPropertyGraphTest", ".nodes.csv");
     }
 
     @After
     public void tearDown() {
-        inputGfa1File.delete();
+        inputGfa1File.toFile().delete();
         outputNodesFile.delete();
     }
 
@@ -60,7 +62,7 @@ public final class SegmentsToPropertyGraphTest {
 
     @Test
     public void testConstructorNullInputGfa1File() {
-        assertNotNull(new SegmentsToPropertyGraph((File) null, outputNodesFile));
+        assertNotNull(new SegmentsToPropertyGraph(null, outputNodesFile));
     }
 
     @Test

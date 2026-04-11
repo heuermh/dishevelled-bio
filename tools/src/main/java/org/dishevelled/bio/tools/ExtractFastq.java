@@ -72,18 +72,6 @@ public final class ExtractFastq implements Callable<Integer> {
     private final FastqWriter fastqWriter = new SangerFastqWriter();
     private static final String USAGE = "dsh-extract-fastq [args]";
 
-    /**
-     * Extract matching DNA sequences in FASTQ format.
-     *
-     * @deprecated will be removed in version 3.0
-     * @param inputFastqFile input FASTQ file, if any
-     * @param outputFastqFile output FASTQ file, if any
-     * @param name exact sequence name to match, if any
-     * @param description FASTQ description regex pattern to match, if any
-     */
-    public ExtractFastq(final File inputFastqFile, final File outputFastqFile, final String name, final String description) {
-        this(inputFastqFile == null ? null : inputFastqFile.toPath(), outputFastqFile, name, description);
-    }
 
     /**
      * Extract matching DNA sequences in FASTQ format.

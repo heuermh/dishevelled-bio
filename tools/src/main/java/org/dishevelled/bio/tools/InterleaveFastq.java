@@ -70,22 +70,6 @@ public final class InterleaveFastq implements Callable<Integer> {
     /**
      * Convert first and second DNA sequence files in FASTQ format to interleaved FASTQ format.
      *
-     * @deprecated will be removed in version 3.0
-     * @param firstFastqFile first FASTQ input file, must not be null
-     * @param secondFastqFile second FASTQ input file, must not be null
-     * @param pairedFile output interleaved paired FASTQ file, must not be null
-     * @param unpairedFile output unpaired FASTQ file, must not be null
-     */
-    public InterleaveFastq(final File firstFastqFile, final File secondFastqFile, final File pairedFile, final File unpairedFile) {
-        this(firstFastqFile == null ? null : firstFastqFile.toPath(),
-             secondFastqFile == null ? null : secondFastqFile.toPath(),
-             pairedFile,
-             unpairedFile);
-    }
-
-    /**
-     * Convert first and second DNA sequence files in FASTQ format to interleaved FASTQ format.
-     *
      * @since 2.1
      * @param firstFastqPath first FASTQ input path, must not be null
      * @param secondFastqPath second FASTQ input path, must not be null

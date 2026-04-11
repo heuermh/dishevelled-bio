@@ -60,16 +60,6 @@ public final class CompressGfa2 implements Callable<Integer> {
     private final File outputGfa2File;
     private static final String USAGE = "dsh-compress-gfa2 [args]";
 
-    /**
-     * Compress assembly in GFA 2.0 format to splittable bgzf or bzip2 compression codecs.
-     *
-     * @deprecated will be removed in version 3.0
-     * @param inputGfa2File input GFA 2.0 file, if any
-     * @param outputGfa2File output GFA 2.0 file, if any
-     */
-    public CompressGfa2(final File inputGfa2File, final File outputGfa2File) {
-        this(inputGfa2File == null ? null : inputGfa2File.toPath(), outputGfa2File);
-    }
 
     /**
      * Compress assembly in GFA 2.0 format to splittable bgzf or bzip2 compression codecs.

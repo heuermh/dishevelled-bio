@@ -82,18 +82,6 @@ public final class FilterGfa1 extends AbstractFilter {
     /**
      * Filter assembly in GFA 1.0 format.
      *
-     * @deprecated will be removed in version 3.0
-     * @param filters list of filters, must not be null
-     * @param inputGfa1File input GFA 1.0 file, if any
-     * @param outputGfa1File output GFA 1.0 file, if any
-     */
-    public FilterGfa1(final List<Filter> filters, final File inputGfa1File, final File outputGfa1File) {
-        this(filters, inputGfa1File == null ? null : inputGfa1File.toPath(), outputGfa1File);
-    }
-
-    /**
-     * Filter assembly in GFA 1.0 format.
-     *
      * @since 2.1
      * @param filters list of filters, must not be null
      * @param inputGfa1Path input GFA 1.0 path, if any

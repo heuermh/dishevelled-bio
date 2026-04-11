@@ -27,6 +27,8 @@ import static org.dishevelled.bio.benchmarks.Utils.copyResource;
 
 import java.io.File;
 
+import java.nio.file.Path;
+
 import org.dishevelled.bio.tools.DisinterleaveFastq;
 
 import org.openjdk.jmh.annotations.Benchmark;
@@ -43,13 +45,13 @@ import org.openjdk.jmh.annotations.TearDown;
  */
 @State(Scope.Thread)
 public class DisinterleaveFastqBenchmarks {
-    private File pairedFile;
+    private Path pairedFile;
     private File firstFastqFile;
     private File secondFastqFile;
 
     @Setup(Level.Invocation)
     public void setUp() throws Exception {
-        pairedFile = File.createTempFile("disinterleaveFastqBenchmarks", ".ifq.gz");
+        pairedFile = File.createTempFile("disinterleaveFastqBenchmarks", ".ifq.gz").toPath();
         firstFastqFile = File.createTempFile("disinterleaveFastqBenchmarks", ".fq.gz");
         secondFastqFile = File.createTempFile("disinterleaveFastqBenchmarks", ".fq.gz");
 
@@ -58,7 +60,7 @@ public class DisinterleaveFastqBenchmarks {
 
     @TearDown(Level.Invocation)
     public void tearDown() {
-        pairedFile.delete();
+        pairedFile.toFile().delete();
         firstFastqFile.delete();
         secondFastqFile.delete();
     }

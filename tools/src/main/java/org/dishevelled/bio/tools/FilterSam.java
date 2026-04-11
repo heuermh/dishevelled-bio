@@ -83,18 +83,6 @@ public final class FilterSam extends AbstractFilter {
     /**
      * Filter alignments in SAM format.
      *
-     * @deprecated will be removed in version 3.0
-     * @param filters list of filters, must not be null
-     * @param inputSamFile input SAM file, if any
-     * @param outputSamFile output SAM file, if any
-     */
-    public FilterSam(final List<Filter> filters, final File inputSamFile, final File outputSamFile) {
-        this(filters, inputSamFile == null ? null : inputSamFile.toPath(), outputSamFile);
-    }
-
-    /**
-     * Filter alignments in SAM format.
-     *
      * @since 2.1
      * @param filters list of filters, must not be null
      * @param inputSamPath input SAM path, if any

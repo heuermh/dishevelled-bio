@@ -65,16 +65,6 @@ public final class CompressVcf implements Callable<Integer> {
     private final File outputVcfFile;
     private static final String USAGE = "dsh-compress-vcf [args]";
 
-    /**
-     * Compress variants or genotypes in VCF format to splittable bgzf or bzip2 compression codecs.
-     *
-     * @deprecated will be removed in version 3.0
-     * @param inputVcfFile input VCF file, if any
-     * @param outputVcfFile output VCF file, if any
-     */
-    public CompressVcf(final File inputVcfFile, final File outputVcfFile) {
-        this(inputVcfFile == null ? null : inputVcfFile.toPath(), outputVcfFile);
-    }
 
     /**
      * Compress variants or genotypes in VCF format to splittable bgzf or bzip2 compression codecs.

@@ -65,6 +65,7 @@ public final class ParquetReadsToFastq implements Callable<Integer> {
     private static final String READ_SQL = "SELECT description, sequence, quality FROM read_parquet('%s')";
     private static final String USAGE = "dsh-parquet-reads-to-fastq [args]";
 
+
     /**
      * Convert reads in Parquet format to FASTQ format.
      *

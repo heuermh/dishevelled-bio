@@ -27,6 +27,8 @@ import static org.dishevelled.bio.benchmarks.Utils.copyResource;
 
 import java.io.File;
 
+import java.nio.file.Path;
+
 import com.google.common.collect.ImmutableList;
 
 import org.dishevelled.bio.tools.FilterPaf;
@@ -47,12 +49,12 @@ import org.openjdk.jmh.annotations.TearDown;
  */
 @State(Scope.Thread)
 public class FilterPafBenchmarks {
-    private File inputPafFile;
+    private Path inputPafFile;
     private File outputPafFile;
 
     @Setup(Level.Invocation)
     public void setUp() throws Exception {
-        inputPafFile = File.createTempFile("filterPafBenchmarks", ".paf.gz");
+        inputPafFile = File.createTempFile("filterPafBenchmarks", ".paf.gz").toPath();
         outputPafFile = File.createTempFile("filterPafBenchmarks", ".paf.gz");
 
         copyResource("A-3105.fa.gz.pggb-s3000-p70-n10-a70-K11-k8-w10000-j5000-W0-e5000.paf.gz", inputPafFile);
@@ -60,7 +62,7 @@ public class FilterPafBenchmarks {
 
     @TearDown(Level.Invocation)
     public void tearDown() {
-        inputPafFile.delete();
+        inputPafFile.toFile().delete();
         outputPafFile.delete();
     }
 

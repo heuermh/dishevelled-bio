@@ -27,6 +27,8 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 
+import java.nio.file.Path;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,7 +43,7 @@ import org.dishevelled.bio.variant.vcf.VcfRecord;
  */
 public final class FilterVcfTest {
     private FilterVcf.Filter filter;
-    private File inputVcfFile;
+    private Path inputVcfFile;
     private File outputVcfFile;
 
     @Before

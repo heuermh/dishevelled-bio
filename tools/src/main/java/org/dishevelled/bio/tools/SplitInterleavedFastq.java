@@ -61,23 +61,6 @@ public final class SplitInterleavedFastq extends AbstractSplit {
     private final FastqWriter fastqWriter = new SangerFastqWriter();
     private static final String USAGE = "dsh-split-interleaved-fastq -r 100 -i foo.ifq.gz";
 
-    /**
-     * Split interleaved FASTQ files.
-     *
-     * @deprecated will be removed in version 3.0
-     * @param inputFile input file, if any
-     * @param bytes split the input file at next pair of records after each n bytes, if any
-     * @param records split the input file after each n records, respecting pairs, if any
-     * @param prefix output file prefix, must not be null
-     * @param suffix output file suffix, must not be null
-     */
-    public SplitInterleavedFastq(final File inputFile, final Long bytes, final Long records, final String prefix, final String suffix) {
-        this(inputFile == null ? null : inputFile.toPath(),
-             bytes,
-             records,
-             prefix,
-             suffix);
-    }
 
     /**
      * Split interleaved FASTQ files.
@@ -92,27 +75,6 @@ public final class SplitInterleavedFastq extends AbstractSplit {
     public SplitInterleavedFastq(final Path inputPath, final Long bytes, final Long records, final String prefix, final String suffix) {
 
         this(inputPath, bytes, records, prefix, -1, suffix);
-    }
-
-    /**
-     * Split interleaved FASTQ files.
-     *
-     * @since 1.3.2
-     * @deprecated will be removed in version 3.0
-     * @param inputFile input file, if any
-     * @param bytes split the input file at next pair of records after each n bytes, if any
-     * @param records split the input file after each n records, respecting pairs, if any
-     * @param prefix output file prefix, must not be null
-     * @param leftPad left pad split index in output file name
-     * @param suffix output file suffix, must not be null
-     */
-    public SplitInterleavedFastq(final File inputFile, final Long bytes, final Long records, final String prefix, final int leftPad, final String suffix) {
-        this(inputFile == null ? null : inputFile.toPath(),
-             bytes,
-             records,
-             prefix,
-             leftPad,
-             suffix);
     }
 
     /**

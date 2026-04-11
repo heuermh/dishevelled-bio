@@ -23,8 +23,9 @@
 */
 package org.dishevelled.bio.benchmarks;
 
-import java.io.File;
 import java.io.IOException;
+
+import java.nio.file.Path;
 
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
@@ -38,13 +39,13 @@ import com.google.common.io.Resources;
 final class Utils {
 
     /**
-     * Copy a classpath resource to a file.
+     * Copy a classpath resource to a path.
      *
      * @param name classpath resource name
-     * @param file file to copy classpath resource to
+     * @param path path to copy classpath resource to
      * @throws IOException if an I/O error occurs
      */
-    static void copyResource(final String name, final File file) throws IOException {
-        Files.write(Resources.toByteArray(Utils.class.getResource(name)), file);
+    static void copyResource(final String name, final Path path) throws IOException {
+        Files.write(Resources.toByteArray(Utils.class.getResource(name)), path.toFile());
     }
 }

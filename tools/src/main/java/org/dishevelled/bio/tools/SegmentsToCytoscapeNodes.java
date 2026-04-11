@@ -59,17 +59,6 @@ public final class SegmentsToCytoscapeNodes implements Callable<Integer> {
     private static final String HEADER = "name\tsequence\tlength\treadCount\tfragmentCount\tkmerCount\tsequenceChecksum\tsequenceUri";
     private static final String USAGE = "dsh-segments-to-cytoscape-nodes -i input.gfa.gz -o nodes.txt.gz";
 
-    /**
-     * Convert segments in GFA 1.0 format to nodes.txt format for Cytoscape.
-     *
-     * @deprecated will be removed in version 3.0
-     * @param inputGfa1File input GFA 1.0 file, if any
-     * @param outputNodesFile output nodes.txt file, if any
-     */
-    public SegmentsToCytoscapeNodes(final File inputGfa1File,
-                                    final File outputNodesFile) {
-        this(inputGfa1File == null ? null : inputGfa1File.toPath(), outputNodesFile);
-    }
 
     /**
      * Convert segments in GFA 1.0 format to nodes.txt format for Cytoscape.

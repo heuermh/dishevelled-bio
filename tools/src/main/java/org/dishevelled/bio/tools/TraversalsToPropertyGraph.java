@@ -63,18 +63,6 @@ public final class TraversalsToPropertyGraph implements Callable<Integer> {
     /**
      * Convert traversals in GFA 1.0 format to property graph CSV format.
      *
-     * @deprecated will be removed in version 3.0
-     * @param inputGfa1File input GFA 1.0 file, if any
-     * @param outputEdgesFile output traversal-edges.csv file, if any
-     */
-    public TraversalsToPropertyGraph(final File inputGfa1File,
-                                     final File outputEdgesFile) {
-        this(inputGfa1File == null ? null : inputGfa1File.toPath(), outputEdgesFile);
-    }
-
-    /**
-     * Convert traversals in GFA 1.0 format to property graph CSV format.
-     *
      * @since 2.1
      * @param inputGfa1Path input GFA 1.0 path, if any
      * @param outputEdgesFile output traversal-edges.csv file, if any
