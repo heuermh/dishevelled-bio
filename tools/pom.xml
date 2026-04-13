@@ -235,6 +235,7 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>appassembler-maven-plugin</artifactId>
         <configuration>
+          <extraJvmArguments>--enable-native-access=ALL-UNNAMED</extraJvmArguments>
           <repositoryLayout>flat</repositoryLayout>
           <repositoryName>lib</repositoryName>
           <programs>
