@@ -83,7 +83,7 @@ public final class Segment extends Gfa1Record {
     /**
      * Return the identifier for this segment.
      *
-     * @deprecated replaced by name field, to be removed in version 3.0
+     * @deprecated replaced by name field, to be removed in version 4.0
      * @return the identifier for this segment
      */
     public String getId() {

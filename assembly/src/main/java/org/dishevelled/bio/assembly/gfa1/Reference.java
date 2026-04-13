@@ -64,7 +64,7 @@ public final class Reference {
     /**
      * Return the identifier for this reference.
      *
-     * @deprecated replaced by name field, to be removed in version 3.0
+     * @deprecated replaced by name field, to be removed in version 4.0
      * @return the identifier for this reference
      */
     public String getId() {
