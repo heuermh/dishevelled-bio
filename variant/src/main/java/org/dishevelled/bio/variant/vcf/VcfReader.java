@@ -34,6 +34,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 
+import java.nio.file.Path;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -146,6 +148,18 @@ public final class VcfReader {
     }
 
     /**
+     * Read the VCF header from the specified path.
+     *
+     * @param path path to read from, must not be null
+     * @return the VCF header read from the specified path
+     * @throws IOException if an I/O error occurs
+     */
+    public static VcfHeader header(final Path path) throws IOException {
+        checkNotNull(path);
+        return header(path.toFile());
+    }
+
+    /**
      * Read the VCF header from the specified URL.
      *
      * @param url URL to read from, must not be null
@@ -185,6 +199,18 @@ public final class VcfReader {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             return samples(reader);
         }
+    }
+
+    /**
+     * Read zero or more VCF samples from the specified path.
+     *
+     * @param path path to read from, must not be null
+     * @return zero or more VCF samples read from the specified path
+     * @throws IOException if an I/O error occurs
+     */
+    public static Iterable<VcfSample> samples(final Path path) throws IOException {
+        checkNotNull(path);
+        return samples(path.toFile());
     }
 
     /**
@@ -231,6 +257,18 @@ public final class VcfReader {
     }
 
     /**
+     * Read the VCF pedigree from the specified path.
+     *
+     * @param path path to read from, must not be null
+     * @return the VCF pedigree read from the specified path
+     * @throws IOException if an I/O error occurs
+     */
+    public static VcfPedigree pedigree(final Path path) throws IOException {
+        checkNotNull(path);
+        return pedigree(path.toFile());
+    }
+
+    /**
      * Read the VCF pedigree from the specified URL.
      *
      * @param url URL to read from, must not be null
@@ -270,6 +308,18 @@ public final class VcfReader {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             return records(reader);
         }
+    }
+
+    /**
+     * Read zero or more VCF records from the specified path.
+     *
+     * @param path path to read from, must not be null
+     * @return zero or more VCF records read from the specified path
+     * @throws IOException if an I/O error occurs
+     */
+    public static Iterable<VcfRecord> records(final Path path) throws IOException {
+        checkNotNull(path);
+        return records(path.toFile());
     }
 
     /**

@@ -34,6 +34,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 
+import java.nio.file.Path;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,6 +89,17 @@ public final class SamReader {
     }
 
     /**
+     * Read the SAM header from the specified path.
+     *
+     * @param path path to read from, must not be null
+     * @return the SAM header read from the specified path
+     * @throws IOException if an I/O error occurs
+     */
+    public static SamHeader header(final Path path) throws IOException {
+        return SamHeaderReader.header(path);
+    }
+
+    /**
      * Read the SAM header from the specified URL.
      *
      * @param url URL to read from, must not be null
@@ -135,6 +148,18 @@ public final class SamReader {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             return records(reader);
         }
+    }
+
+    /**
+     * Read zero or more SAM records from the specified path.
+     *
+     * @param path path to read from, must not be null
+     * @return zero or more SAM records read from the specified path
+     * @throws IOException if an I/O error occurs
+     */
+    public static Iterable<SamRecord> records(final Path path) throws IOException {
+        checkNotNull(path);
+        return records(path.toFile());
     }
 
     /**
@@ -198,6 +223,19 @@ public final class SamReader {
     }
 
     /**
+     * Stream SAM header and records if any from the specified path.
+     *
+     * @param path path to stream from, must not be null
+     * @param listener event based listener callback, must not be null
+     * @throws IOException if an I/O error occurs
+     */
+    public static void stream(final Path path, final SamListener listener) throws IOException {
+        checkNotNull(path);
+        checkNotNull(listener);
+        stream(path.toFile(), listener);
+    }
+
+    /**
      * Stream SAM header and records if any from the specified URL.
      *
      * @param url URL to stream from, must not be null
@@ -257,6 +295,19 @@ public final class SamReader {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             streamRecords(reader, listener);
         }
+    }
+
+    /**
+     * Stream SAM records if any from the specified path.
+     *
+     * @param path path to stream from, must not be null
+     * @param listener event based listener callback, must not be null
+     * @throws IOException if an I/O error occurs
+     */
+    public static void streamRecords(final Path path, final SamListener listener) throws IOException {
+        checkNotNull(path);
+        checkNotNull(listener);
+        streamRecords(path.toFile(), listener);
     }
 
     /**

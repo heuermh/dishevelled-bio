@@ -34,6 +34,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 
+import java.nio.file.Path;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,6 +89,18 @@ public final class PafReader {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             return read(reader);
         }
+    }
+
+    /**
+     * Read zero or more PAF records from the specified path.
+     *
+     * @param path path to read from, must not be null
+     * @return zero or more PAF records read from the specified path
+     * @throws IOException if an I/O error occurs
+     */
+    public static Iterable<PafRecord> read(final Path path) throws IOException {
+        checkNotNull(path);
+        return read(path.toFile());
     }
 
     /**
@@ -145,6 +159,19 @@ public final class PafReader {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             stream(reader, listener);
         }
+    }
+
+    /**
+     * Stream PAF records if any from the specified path.
+     *
+     * @param path path to stream from, must not be null
+     * @param listener event based listener callback, must not be null
+     * @throws IOException if an I/O error occurs
+     */
+    public static void stream(final Path path, final PafListener listener) throws IOException {
+        checkNotNull(path);
+        checkNotNull(listener);
+        stream(path.toFile(), listener);
     }
 
     /**

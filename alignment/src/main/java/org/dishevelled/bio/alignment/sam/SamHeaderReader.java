@@ -34,6 +34,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 
+import java.nio.file.Path;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,6 +95,18 @@ public final class SamHeaderReader {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             return header(reader);
         }
+    }
+
+    /**
+     * Read the SAM header from the specified path.
+     *
+     * @param path path to read from, must not be null
+     * @return the SAM header read from the specified path
+     * @throws IOException if an I/O error occurs
+     */
+    public static SamHeader header(final Path path) throws IOException {
+        checkNotNull(path);
+        return header(path.toFile());
     }
 
     /**
