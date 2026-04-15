@@ -49,8 +49,8 @@ commands:
   export-segments    export assembly segment sequences in GFA 1.0 format to FASTA format
   extract-fasta    extract matching DNA or protein sequences in FASTA format
   extract-fasta-kmers    extract kmers from DNA or protein sequences in FASTA format
-  extract-fasta-kmers-to-parquet    (beta) extract kmers from DNA or protein sequences in FASTA format to Parquet format
-  extract-fasta-kmers-to-parquet3    (beta) extract kmers from DNA or protein sequences in FASTA format to Parquet format
+  extract-fasta-kmers-to-parquet    extract kmers from DNA or protein sequences in FASTA format to Parquet format
+  extract-fasta-kmers-to-partitioned-parquet    extract kmers from DNA or protein sequences in FASTA format to partitioned Parquet format
   extract-fastq    extract matching DNA sequences in FASTQ format
   extract-fastq-by-length    extract DNA sequences in FASTQ format with a range of lengths
   extract-uniprot-features    extract protein features from UniProt XML format
@@ -62,12 +62,8 @@ commands:
   fasta-to-fastq    convert DNA sequences in FASTA format to FASTQ format
   fasta-to-pangenome    convert DNA sequences in FASTA format to pangenome text format
   fasta-to-pangenome-tree    convert DNA sequences in FASTA format to pangenome tree format
-  fasta-to-parquet    (beta) convert DNA or protein sequences in FASTA format to Parquet format
-  fasta-to-parquet2    (beta) convert DNA or protein sequences in FASTA format to Parquet format, with transaction size
-  fasta-to-parquet3    (beta) convert DNA or protein sequences in FASTA format to Parquet format, with partition size
-  fasta-to-parquet4    (beta) convert DNA or protein sequences in FASTA format to Parquet format, with flush after
-  fasta-to-parquet5    (beta) convert DNA or protein sequences in FASTA format to Parquet format, per thread output
-  fasta-to-parquet6    (beta) convert DNA or protein sequences in FASTA format to Parquet format, per thread output, no view
+  fasta-to-parquet    convert DNA or protein sequences in FASTA format to Parquet format
+  fasta-to-partitioned-parquet    convert DNA or protein sequences in FASTA format to partitioned Parquet format
   fasta-to-text    convert DNA or protein sequences in FASTA format to tab-separated values (tsv) text format
   fastq-description    output description lines from DNA sequences in FASTQ format
   fastq-sequence-length    output sequence lengths from DNA sequences in FASTQ format
@@ -96,6 +92,7 @@ commands:
   links-to-property-graph    convert links in GFA 1.0 format to property graph CSV format
   list-filesystems    list filesystem providers
   parquet-reads-to-fastq    convert reads in Parquet format to FASTQ format
+  parquet-sequences-to-fasta    convert sequences in Parquet format to FASTA format
   reassemble-paths    reassemble paths in GFA 1.0 format from traversal records
   remap-dbsnp    remap DB Type=String flags in VCF format to DB Type=Flag and dbsnp Type=String fields
   remap-phase-set    remap PS Type=String phase set ids in VCF format to PS Type=Integer
@@ -126,6 +123,7 @@ commands:
   vcf-pedigree    extract a pedigree from VCF format
   vcf-samples    extract samples from VCF format
   vcf-to-parquet    convert variants in VCF format to Parquet format
+  vcf-to-partitioned-parquet    convert variants in VCF format to partitioned Parquet format
 
 arguments:
    -a, --about  display about message [optional]
