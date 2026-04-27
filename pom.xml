@@ -72,7 +72,7 @@
     <dsh-compress.version>1.8.2</dsh-compress.version>
     <dsh-graph.version>1.0</dsh-graph.version>
     <duckdb.version>1.5.2.0</duckdb.version>
-    <google-cloud.version>0.130.0</google-cloud.version>
+    <google-cloud.version>0.131.0</google-cloud.version>
     <htsjdk.version>4.3.0</htsjdk.version>
     <jaxb-impl.version>4.0.7</jaxb-impl.version>
     <jaxb-maven-plugin.version>4.0.8</jaxb-maven-plugin.version>
