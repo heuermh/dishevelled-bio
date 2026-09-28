@@ -71,8 +71,8 @@
     <dsh-commandline.version>1.2</dsh-commandline.version>
     <dsh-compress.version>1.8.5</dsh-compress.version>
     <dsh-graph.version>1.0</dsh-graph.version>
-    <duckdb.version>1.5.5.1</duckdb.version>
-    <google-cloud.version>0.135.0</google-cloud.version>
+    <duckdb.version>1.5.6.0</duckdb.version>
+    <google-cloud.version>0.138.0</google-cloud.version>
     <htsjdk.version>5.0.0</htsjdk.version>
     <jaxb-impl.version>4.0.9</jaxb-impl.version>
     <jaxb-maven-plugin.version>4.0.8</jaxb-maven-plugin.version>
